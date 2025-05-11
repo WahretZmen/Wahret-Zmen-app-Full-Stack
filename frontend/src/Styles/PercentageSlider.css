@@ -1,0 +1,51 @@
+/* src/PercentageSlider.css */
+.slider-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 5px; /* Reduced margin to fit within the table cell */
+  padding: 0 5px; /* Added padding to the sides */
+}
+
+.percentage-value {
+  font-size: 14px; /* Reduced font size for better fit */
+  font-weight: 600;
+  color: #000000;
+  margin-bottom: 5px; /* Reduced margin for better fit */
+}
+
+.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 80px; /* Reduced width to make the slider shorter */
+  height: 6px; /* Reduced height for better visual alignment */
+  border-radius: 4px;
+  background: #3498db;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px; /* Reduced width for better fit */
+  height: 16px; /* Reduced height for better fit */
+  border-radius: 50%;
+  background: #2ecc71;
+  border: none;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 16px; /* Reduced width for better fit */
+  height: 16px; /* Reduced height for better fit */
+  border-radius: 50%;
+  background: #2ecc71;
+  border: none;
+  cursor: pointer;
+}
+
+.slider:focus {
+  background: #2980b9;
+}

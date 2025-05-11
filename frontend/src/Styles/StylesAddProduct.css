@@ -1,0 +1,13 @@
+.form {margin-left: 5% !important;}
+
+/* Ensure full-width input fields on smaller screens */
+input, textarea, select, button {
+    width: 100%;
+  }
+  
+  /* Additional styles for mobile */
+  @media (max-width: 768px) {
+    .max-w-md {
+      width: 100%;
+    }
+  }

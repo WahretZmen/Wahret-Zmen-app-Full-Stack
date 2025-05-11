@@ -1,0 +1,159 @@
+/* Navbar Container */
+.navbar-container {
+    width: 100%;
+    background-color: #F8F9FA;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+/* Navbar Content */
+.navbar-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #6C757D;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.logo-img {
+    width: 40px;
+    height: auto;
+    margin-right: 10px;
+}
+
+/* Navigation Menu */
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    padding: 0;
+}
+
+.nav-links li {
+    display: inline-block;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #6C757D;
+    font-weight: 500;
+    transition: color 0.3s ease-in-out;
+}
+
+/* Hover Effect: Underline Animation */
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 100%;
+    height: 2px;
+    background-color: #343A40;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease-in-out;
+}
+
+
+.nav-links a:hover {
+    color: #343A40;
+}
+
+/* Hamburger Menu Button (Mobile) */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    color: #6C757D;
+    cursor: pointer;
+}
+
+/* Mobile Menu Icon */
+.menu-icon {
+    font-size: 2rem;
+}
+
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: white;
+        flex-direction: column;
+        text-align: center;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        display: none;
+        padding: 1rem 0;
+    }
+
+    .nav-links.open {
+        display: flex;
+    }
+
+    .nav-links li {
+        margin: 10px 0;
+    }
+
+    .search-container {
+        display: none;
+    }
+}
+
+/* Right Icons */
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cart-badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background-color: #6C757D;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 50%;
+}
+
+/* User Icon */
+.user-icon {
+    font-size: 1.8rem;
+    color: #6C757D;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, color 0.3s ease-in-out;
+}
+
+.user-icon:hover {
+    transform: scale(1.1);
+}
+
+/* When user is logged in, change icon color */
+.user-icon.logged-in {
+    color: #007BFF;
+}

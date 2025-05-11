@@ -1,0 +1,71 @@
+.container-Products {
+  width: 100%;
+}
+
+.wahret-zmen-btn {
+  background-color: #a67c52;
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.wahret-zmen-btn:hover {
+  background-color: #8a5d3b;
+}
+
+@media (max-width: 768px) {
+  .category-title {
+    font-size: 1.1rem;
+  }
+
+  .wahret-zmen-btn {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Optional: Add smooth selection transition */
+label input[type="checkbox"]:checked + span {
+  font-weight: bold;
+}
+
+/* Make sure main content doesn't push footer too far when loading */
+.main-content {
+  min-height: 80vh;
+}
+
+.loader-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+/* 🌐 Responsive Products Grid */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+    gap: 1.25rem !important;
+  }
+
+  .main-content {
+    padding-bottom: 3rem;
+  }
+}
+
+/* Ensure mobile cards are centered */
+@media (max-width: 768px) {
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    justify-items: center; /* ✅ Center cards */
+    padding: 0 1rem;       /* ✅ Add horizontal padding */
+  }
+}
+
+.product-card {
+  margin: 0 auto; /* ✅ Center it */
+}

@@ -1,0 +1,24 @@
+
+.home-container {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  
+  
+  @media (max-width: 768px) {
+    .home-container section {
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
+    }
+  
+    .home-container h1,
+    .home-container h2 {
+      font-size: 1.5rem;
+    }
+  
+    .home-container p {
+      font-size: 1rem;
+    }
+  }
+  

@@ -1,0 +1,185 @@
+/* ===== Carousel Arrow Styling ===== */
+.custom-carousel .react-multiple-carousel__arrow {
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 10 !important;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  top: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.custom-carousel .react-multiple-carousel__arrow--left {
+  left: 10px;
+}
+
+.custom-carousel .react-multiple-carousel__arrow--right {
+  right: 10px;
+}
+
+html[dir="rtl"] .react-multiple-carousel__arrow--left {
+  right: 10px !important;
+  left: auto !important;
+}
+
+html[dir="rtl"] .react-multiple-carousel__arrow--right {
+  left: 10px !important;
+  right: auto !important;
+}
+
+@media (max-width: 768px) {
+  .custom-carousel .react-multiple-carousel__arrow {
+    transform: scale(0.8);
+  }
+}
+
+/* Hide dots */
+.custom-carousel .react-multi-carousel-dot-list {
+  display: none;
+}
+
+/* Center carousel items */
+.custom-carousel .react-multi-carousel-item {
+  display: flex;
+  justify-content: center;
+  padding: 0 5px;
+  box-sizing: border-box;
+}
+
+/* Prevent arrows from being hidden */
+.custom-carousel .react-multiple-carousel-list {
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+/* ===== Layout & Container Styling ===== */
+.our-sellers-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.product-card {
+  flex: 1 1 280px;
+  max-width: 100%;
+  min-width: 260px;
+  box-sizing: border-box;
+}
+
+.our-sellers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+  padding: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+body,
+html {
+  overflow-x: hidden;
+}
+
+.our-sellers-wrapper {
+  width: 100%;
+  max-width: 100vw;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  background-color: #f8f1e5;
+  border-radius: 1rem;
+  margin: 0 auto;
+  overflow-x: visible !important;
+  position: relative;
+}
+
+.our-sellers-carousel-container {
+  max-width: 100%;
+  overflow: visible !important;
+  padding: 0 1rem;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.carousel-card-wrapper {
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.carousel-wrapper {
+  width: 100%;
+  overflow: visible;
+  position: relative;
+}
+
+/* ===== Category Selector Styling ===== */
+.select-category-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #5a382d;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+/* Inside Selector.css */
+.selector-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
+.selector-wrapper select {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  color: #5a382d;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .selector-wrapper select {
+    font-size: 1rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .select-category-title {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .our-sellers-wrapper {
+    padding: 1rem 0.5rem;
+  }
+
+  .our-sellers-carousel-container {
+    padding: 0 0.5rem;
+  }
+
+  .carousel-card-wrapper {
+    padding: 0 5px;
+  }
+
+  .custom-carousel .react-multiple-carousel__arrow {
+    top: 35%;
+    transform: scale(0.7);
+  }
+
+  .product-card {
+    min-width: 90vw; /* Ensures full width usage */
+  }
+}
+
+

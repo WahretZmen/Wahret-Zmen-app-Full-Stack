@@ -1,0 +1,238 @@
+/* === Product Card Styling (Enhanced & Animated CSS) === */
+.product-card {
+    background: white;
+    border-radius: 1.25rem;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    position: relative;
+    animation: fadeInCard 0.8s ease-in-out;
+  }
+  
+  @keyframes fadeInCard {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .product-card:hover {
+    transform: scale(1.04);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
+  }
+  
+  .product-image-container {
+    position: relative;
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #fef9f5, #fffdfb);
+  }
+  
+  .product-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.5s ease;
+    padding: 0.5rem;
+    will-change: transform;
+  }
+  
+  .product-card:hover .product-image-container img {
+    transform: scale(1.1) rotate(0.5deg);
+  }
+  
+  .stock-badge,
+  .trending-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: white;
+    font-weight: 600;
+    display: inline-block;
+    animation: popBadge 0.4s ease;
+  }
+  
+  @keyframes popBadge {
+    0% {
+      transform: scale(0);
+      opacity: 0;
+    }
+    80% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .stock-badge.in-stock {
+    background-color: #16a34a;
+  }
+  
+  .stock-badge.out-of-stock {
+    background-color: #dc2626;
+  }
+  
+  .trending-badge {
+    background-color: #dc2626;
+    top: 36px;
+  }
+  
+  .product-card-body {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .product-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1f2937;
+    transition: color 0.3s ease;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .product-title::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -2px;
+    left: 50%;
+    background-color: #8B5C3E;
+    transition: all 0.3s ease;
+  }
+  
+  .product-title:hover::after {
+    left: 0;
+    width: 100%;
+  }
+  
+  .product-title:hover {
+    color: #8B5C3E;
+  }
+  
+  .product-description {
+    font-size: 0.9rem;
+    color: #6b7280;
+    min-height: 40px;
+  }
+  
+  .product-price {
+    font-size: 1.2rem;
+    color: #8B5C3E;
+    font-weight: 600;
+    margin-top: 0.3rem;
+  }
+  
+  .product-price .old {
+    font-size: 0.875rem;
+    text-decoration: line-through;
+    color: #9ca3af;
+    margin-right: 0.5rem;
+  }
+  
+  .color-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    justify-content: center;
+    font-size: 0.75rem;
+    margin-top: 0.3rem;
+  }
+  
+  .color-list li {
+    background: #f3f4f6;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    border: 1px solid #d1d5db;
+    transition: background 0.3s ease;
+  }
+  
+  .color-list li:hover {
+    background: #e2e8f0;
+  }
+  
+  .quantity-input {
+    width: 3.5rem;
+    text-align: center;
+    padding: 0.25rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+  }
+  
+  /* === Add to Cart Button (Upgraded with Shine Animation) === */
+  .add-to-cart-btn {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: all 0.4s ease;
+    background-color: #8B5C3E;
+    color: white;
+    font-size: 0.9rem;
+    padding: 0.65rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    box-shadow: 0 6px 20px rgba(139, 92, 62, 0.25);
+    position: relative;
+    overflow: hidden;
+    will-change: transform;
+  }
+  
+  .add-to-cart-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: skewX(-45deg);
+    transition: all 0.6s ease;
+  }
+  
+  .add-to-cart-btn:hover::before {
+    left: 200%;
+  }
+  
+  .add-to-cart-btn:hover {
+    background-color: #74452D;
+    box-shadow: 0 8px 24px rgba(139, 92, 62, 0.35);
+  }
+  
+  .product-card:hover .add-to-cart-btn {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  .add-to-cart-btn:disabled {
+    background-color: #d1d5db;
+    cursor: not-allowed;
+    opacity: 1;
+    transform: none;
+    box-shadow: none;
+  }
+  
+
+  

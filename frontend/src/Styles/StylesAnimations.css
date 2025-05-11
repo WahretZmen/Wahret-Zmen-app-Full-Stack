@@ -1,0 +1,149 @@
+/* ========== General Hidden State Before Scroll ========== */
+.hidden-before-scroll {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(50px); /* Default fallback for non-directional animations */
+  }
+  
+  /* ========== Fade-in from Left ========== */
+  .fade-in-left {
+    animation: fadeLeft 0.8s ease forwards;
+  }
+  @keyframes fadeLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  /* ========== Fade-in from Right ========== */
+  @keyframes fadeRight {
+    from {
+      transform: translateX(50px);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  
+  
+  /* ========== Fade-in from Top ========== */
+  .fade-in-top {
+    animation: fadeTop 0.8s ease forwards;
+  }
+  @keyframes fadeTop {
+    from {
+      opacity: 0;
+      transform: translateY(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* ========== Fade-in from Bottom ========== */
+  .fade-in-bottom {
+    animation: fadeBottom 0.8s ease forwards;
+  }
+  @keyframes fadeBottom {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .fade-in-right-to-left {
+    opacity: 0; /* Start hidden */
+    animation: fadeRightToLeft 0.8s ease forwards;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes fadeRightToLeft {
+    0% {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0); /* Stop at normal position */
+    }
+  }
+
+  .hidden-before-scroll {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+
+  .hidden-before-scroll {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .fade-in-left-to-right {
+    opacity: 0;
+    animation: fadeLeftToRight 0.8s ease forwards;
+    animation-fill-mode: forwards;
+  }
+  
+  @keyframes fadeLeftToRight {
+    0% {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  .fade-in-bottom {
+    opacity: 0;
+    animation: fadeBottom 0.8s ease forwards;
+  }
+  
+  @keyframes fadeBottom {
+    from {
+      opacity: 0;
+      transform: translateY(50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  
+  /* Fade-in from bottom with a soft rise */
+.fade-in-bottom {
+    opacity: 0;
+    animation: fadeInBottom 0.8s ease forwards;
+  }
+  
+  @keyframes fadeInBottom {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Hide before scroll */
+  .hidden-before-scroll {
+    opacity: 0;
+    transform: translateY(30px);
+    pointer-events: none;
+  }
+  

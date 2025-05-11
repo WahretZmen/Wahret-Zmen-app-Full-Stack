@@ -1,0 +1,20 @@
+.animated-text {
+  display: inline-block;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+.animated-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUpWord 0.6s forwards;
+  margin-right: 8px;
+}
+
+@keyframes fadeInUpWord {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

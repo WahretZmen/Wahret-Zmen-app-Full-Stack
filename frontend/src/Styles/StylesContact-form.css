@@ -1,0 +1,93 @@
+.contact-form-container {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background: transparent;
+  border-radius: 10px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  color: #5a382d;
+  margin-bottom: 0.5rem;
+}
+
+.contact-description {
+  font-size: 1.1rem;
+  text-align: center;
+  color: #6b4f42;
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.contact-form textarea {
+  height: 140px;
+  resize: none;
+}
+
+button {
+  padding: 12px;
+  background: #444;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #222;
+}
+
+.message-status {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+  color: green;
+}
+
+.error-message {
+  text-align: center;
+  margin-top: 10px;
+  font-weight: bold;
+  color: red;
+}
+
+@media (max-width: 768px) {
+  .contact-form-container {
+    padding: 10px;
+  }
+
+  .contact-title {
+    font-size: 1.5rem;
+  }
+
+  .contact-description {
+    font-size: 1rem;
+  }
+
+  button {
+    font-size: 0.95rem;
+  }
+}

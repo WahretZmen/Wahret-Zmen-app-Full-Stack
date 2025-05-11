@@ -1,0 +1,15 @@
+.UserDashboard-screen { margin-top: 8%;}
+
+.screen-User-Dashboard {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  @media (max-width: 768px) {
+    .screen-User-Dashboard {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+      padding: 1rem;
+    }
+  }
+  
