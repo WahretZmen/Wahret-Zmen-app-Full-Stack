@@ -1,4 +1,10 @@
-Wahret-zmen-app-full-stack - How to run this project: For Frontend
+Wahret-zmen-app-full-stack
+
+A guide video explain how to download, launch and deploy The Project Wahret Zmen in Vercel :
+
+https://drive.google.com/file/d/1XZqXK-Kkwb1xiBlAC8fLHsfB2hrF9-b-/view?usp=drive_link
+
+- How to run this project: For Frontend
 
 Follow the below steps to run the project:
 
