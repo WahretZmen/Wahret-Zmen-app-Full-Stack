@@ -31,4 +31,5 @@ CLOUDINARY_CLOUD_NAME=dcgmcqszn CLOUDINARY_API_KEY=236674418569379 CLOUDINARY_AP
 
 To connect with this account Cloudinary please connect with wahretzmensabri521@gmail.com to Cloudinary : https://cloudinary.com/ Finally, to run the project, use npm run start:dev command.
 
-![Capture frontend](https://github.com/user-attachments/assets/43ff0a8a-b6a1-4f8f-8e96-c851f742c4ac)
+![Capture backend lié au ReadMe](https://github.com/user-attachments/assets/63f2ba23-8d73-4236-869c-0180c415718e)
+
