@@ -34,13 +34,20 @@ const Navbar = () => {
     };
   }, [isDropdownOpen, isMobileMenuOpen]);
 
-  return (
+    return (
     <header className="navbar-container">
       <nav className="navbar-content" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
 
         {/* Logo Section */}
         <div className="navbar-left">
-          <Link to="/" className="logo">
+          <Link
+            to="/"
+            className="logo"
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              window.scrollTo(0, 0);
+            }}
+          >
             <img src={logoImg} alt="Wahret Zmen Logo" className="logo-img" />
             <span className="logo-text">{t("navbar.brand")}</span>
           </Link>
@@ -57,28 +64,58 @@ const Navbar = () => {
         {/* Center Navigation Links */}
         <ul className={`nav-links ${isMobileMenuOpen ? "mobile-center open" : ""}`}>
           <li>
-            <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link
+              to="/"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                window.scrollTo(0, 0);
+              }}
+            >
               {t("home")}
             </Link>
           </li>
           <li>
-            <Link to="/products" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link
+              to="/products"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                window.scrollTo(0, 0);
+              }}
+            >
               {t("products")}
             </Link>
           </li>
           <li>
-            <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link
+              to="/about"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                window.scrollTo(0, 0);
+              }}
+            >
               {t("about-menu")}
             </Link>
           </li>
           <li>
-            <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link
+              to="/contact"
+              onClick={() => {
+                setIsMobileMenuOpen(false);
+                window.scrollTo(0, 0);
+              }}
+            >
               {t("contact-menu")}
             </Link>
           </li>
           {token && (
             <li>
-              <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+              <Link
+                to="/dashboard"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  window.scrollTo(0, 0);
+                }}
+              >
                 {t("admin_dashboard")}
               </Link>
             </li>
@@ -87,7 +124,13 @@ const Navbar = () => {
 
         {/* Right Icons */}
         <div className="nav-icons">
-          <Link to="/cart" className="cart-icon">
+          <Link
+            to="/cart"
+            className="cart-icon"
+            onClick={() => {
+              window.scrollTo(0, 0);
+            }}
+          >
             <FiShoppingBag className="icon" />
             {cartItems.length > 0 && <span className="cart-badge">{cartItems.length}</span>}
           </Link>
@@ -102,36 +145,63 @@ const Navbar = () => {
               </button>
 
               {/* ✅ PROTECTED DROPDOWN */}
-             {isDropdownOpen && (
-  <div className="user-dropdown active">
-    <ul>
-      <li>
-        <Link to="/user-dashboard" onClick={() => setIsDropdownOpen(false)}>
-          {t("dashboard")}
-        </Link>
-      </li>
-      <li>
-        <Link to="/orders" onClick={() => setIsDropdownOpen(false)}>
-          {t("orders")}
-        </Link>
-      </li>
-      <li>
-        <button onClick={() => { logout(); setIsDropdownOpen(false); }}>
-          {t("logout")}
-        </button>
-      </li>
-    </ul>
-  </div>
-)}
-
+              {isDropdownOpen && (
+                <div className="user-dropdown active">
+                  <ul>
+                    <li>
+                      <Link
+                        to="/user-dashboard"
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          window.scrollTo(0, 0);
+                        }}
+                      >
+                        {t("dashboard")}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/orders"
+                        onClick={() => {
+                          setIsDropdownOpen(false);
+                          window.scrollTo(0, 0);
+                        }}
+                      >
+                        {t("orders")}
+                      </Link>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => {
+                          logout();
+                          setIsDropdownOpen(false);
+                        }}
+                      >
+                        {t("logout")}
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
           ) : token ? (
-            <Link to="/dashboard" className="dashboard-link admin-only">
-            {t("admin_dashboard")}
+            <Link
+              to="/dashboard"
+              className="dashboard-link admin-only"
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
+            >
+              {t("admin_dashboard")}
             </Link>
-
           ) : (
-            <Link to="/login" className="login-icon">
+            <Link
+              to="/login"
+              className="login-icon"
+              onClick={() => {
+                window.scrollTo(0, 0);
+              }}
+            >
               <FiUser className="icon" />
             </Link>
           )}
@@ -146,4 +216,6 @@ const Navbar = () => {
   );
 };
 
+
 export default Navbar;
+
