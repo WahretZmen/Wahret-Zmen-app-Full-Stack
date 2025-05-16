@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
+import "../Styles/StylesLogin.css";
 
 const Register = () => {
   const [message, setMessage] = useState("");
@@ -12,7 +13,13 @@ const Register = () => {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { t, i18n } = useTranslation();
-    if (!i18n.isInitialized) return null;
+
+  if (!i18n.isInitialized) return null;
+
+  // 🔼 Scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const showSuccessAlert = (title, text) => {
     Swal.fire({
@@ -60,6 +67,7 @@ const Register = () => {
       console.error(error);
     }
   };
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#F4EEE0]">
@@ -135,3 +143,4 @@ const Register = () => {
 };
 
 export default Register;
+
