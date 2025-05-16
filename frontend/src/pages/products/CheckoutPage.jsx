@@ -1,5 +1,4 @@
-// ✅ Updated CheckoutPage.jsx (with multilingual color fallback)
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,6 +11,12 @@ import { useTranslation } from "react-i18next";
 const CheckoutPage = () => {
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
+
+  // 🔼 Scroll to top on mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
   const totalPrice = cartItems
@@ -83,6 +88,7 @@ const CheckoutPage = () => {
         {t("checkout.processing")}
       </div>
     );
+
 
     return (
       <section className="min-h-screen flex items-center justify-center bg-[#F8F1E9] screen-CheckoutPage">
