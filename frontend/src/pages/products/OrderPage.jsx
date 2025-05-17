@@ -76,55 +76,67 @@ const OrderPage = () => {
     });
   };
 
+ 
+
+
   const handleDeleteProduct = async (
-    orderId,
-    productId,
-    colorNameObj,
-    maxQuantity
-  ) => {
-    const colorName = colorNameObj?.[lang] || colorNameObj?.en || "Original";
-    const productKey = `${productId}|${colorName}`;
+  orderId,
+  productId,
+  colorNameObj,
+  maxQuantity
+) => {
+  const colorName = colorNameObj?.[lang] || colorNameObj?.en || "Original";
+  const productKey = `${productId}|${colorName}`;
 
-    const { value: quantityToRemove } = await Swal.fire({
-      title: t("ordersPage.removeQuantityTitle"),
-      input: "number",
-      inputLabel: t("ordersPage.removeQuantityLabel", { max: maxQuantity }),
-      inputAttributes: {
-        min: 1,
-        max: maxQuantity,
-        step: 1,
-      },
-      inputValue: 1,
-      showCancelButton: true,
-      confirmButtonText: t("ordersPage.removeBtn"),
-      cancelButtonText: t("ordersPage.cancelBtn"),
-    });
+  const { value: quantityToRemove } = await Swal.fire({
+    title: t("ordersPage.removeQuantityTitle"),
+    input: "number",
+    inputLabel: t("ordersPage.removeQuantityLabel", { max: maxQuantity }),
+    inputAttributes: {
+      min: 1,
+      max: maxQuantity,
+      step: 1,
+    },
+    inputValue: 1,
+    showCancelButton: true,
+    confirmButtonText: t("ordersPage.removeBtn"),
+    cancelButtonText: t("ordersPage.cancelBtn"),
+  });
 
-    if (!quantityToRemove || quantityToRemove <= 0) return;
+  if (!quantityToRemove || quantityToRemove <= 0) return;
 
-    try {
-      await removeProductFromOrder({
-        orderId,
-        productKey,
-        quantityToRemove,
-      }).unwrap();
+  try {
+    const response = await removeProductFromOrder({
+      orderId,
+      productKey,
+      quantityToRemove,
+    }).unwrap();
 
-      Swal.fire(
-        t("ordersPage.removed"),
-        t("ordersPage.productRemoved", { qty: quantityToRemove }),
-        "success"
-      );
-      refetch();
-      dispatch(productEventsActions.triggerRefetch()); // ✅ Refresh product stock
-    } catch (error) {
-      console.error("❌ Failed to remove product:", error);
-      Swal.fire(
-        t("ordersPage.error"),
-        t("ordersPage.productRemoveFailed"),
-        "error"
-      );
-    }
-  };
+    // ✅ Show custom alert based on response
+    Swal.fire(
+      t("ordersPage.removed"),
+      response.message.includes("no more products")
+        ? t("ordersPage.orderDeleted")
+        : t("ordersPage.productRemoved", { qty: quantityToRemove }),
+      "success"
+    );
+
+    // ✅ Trigger full refetch
+    await refetch();
+
+    // ✅ Also re-trigger stock refresh globally
+    dispatch(productEventsActions.triggerRefetch());
+
+  } catch (error) {
+    console.error("❌ Failed to remove product:", error);
+    Swal.fire(
+      t("ordersPage.error"),
+      t("ordersPage.productRemoveFailed"),
+      "error"
+    );
+  }
+};
+
 
   
   return (
@@ -199,7 +211,8 @@ const OrderPage = () => {
                         />
                         <div className="text-center sm:text-left">
                           <p className="font-semibold text-gray-800">
-                            {product.productId.title || t("ordersPage.noTitle")}
+                            {product.productId.translations?.[lang]?.title || product.productId.title || t("ordersPage.noTitle")}
+
                           </p>
                           <p className="text-gray-600">
                             {t("ordersPage.quantity")}: {product.quantity}
@@ -253,3 +266,5 @@ const OrderPage = () => {
 };
 
 export default OrderPage;
+
+
