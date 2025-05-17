@@ -204,27 +204,30 @@ const removeProductFromOrder = async (req, res) => {
         );
 
         if (colorIndex !== -1) {
-          const qty = Number(quantityToRemove); // 👈 ensure it's a number
+          const qty = Number(quantityToRemove);
 
-          console.log("🔍 Updating stock: ", {
-            currentStock: product.colors[colorIndex].stock,
-            quantityToRemove,
-            parsedQty: Number(quantityToRemove),
-          });
+          product.colors[colorIndex].stock = Math.max(
+            (product.colors[colorIndex].stock || 0) + qty,
+            0
+          );
 
-product.colors[colorIndex].stock = Math.max(
-  (product.colors[colorIndex].stock || 0) + qty,
-  0
-);
-          product.stockQuantity = product.colors.reduce((sum, color) => sum + (color.stock || 0), 0);
+          product.stockQuantity = product.colors.reduce(
+            (sum, color) => sum + (color.stock || 0),
+            0
+          );
+
           await product.save();
-          
         }
       }
     }
 
     if (!productFound) {
       return res.status(404).json({ message: "Product not found in order" });
+    }
+
+    if (updatedProducts.length === 0) {
+      await Order.findByIdAndDelete(order._id);
+      return res.status(200).json({ message: "Order deleted because it has no more products" });
     }
 
     // 🔄 Recalculate total order price
@@ -421,4 +424,5 @@ module.exports = {
   sendOrderNotification,
   removeProductFromOrder,
 };
+
 
