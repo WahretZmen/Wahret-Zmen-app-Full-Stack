@@ -60,26 +60,27 @@ const CheckoutPage = () => {
     };
 
     try {
-      const result = await createOrder(newOrder).unwrap();
-      if (result) {
-        Swal.fire({
-          title: t("checkout.order_confirmed"),
-          text: t("checkout.success_message"),
-          icon: "success",
-          confirmButtonColor: "#A67C52",
-          confirmButtonText: t("checkout.go_to_orders"),
-        }).then(() => {
-          navigate("/orders");
-        });
-      }
-    } catch (error) {
-      Swal.fire({
-        title: t("checkout.error_title"),
-        text: error?.message || t("checkout.error_message"),
-        icon: "error",
-        confirmButtonColor: "#d33",
-      });
-    }
+  const result = await createOrder(newOrder).unwrap();
+  if (result) {
+    Swal.fire({
+  title: t("checkout.order_confirmed"),
+  text: t("checkout.success_message"),
+  icon: "success",
+  confirmButtonColor: "#A67C52",
+  confirmButtonText: t("checkout.go_to_orders"),
+}).then(() => {
+  window.location.href = "/orders";
+});
+
+  }
+} catch (error) {
+  Swal.fire({
+    title: t("checkout.error_title"),
+    text: error?.message || t("checkout.error_message"),
+    icon: "error",
+    confirmButtonColor: "#d33",
+  });
+}
   };
 
   if (isLoading)
@@ -88,6 +89,7 @@ const CheckoutPage = () => {
         {t("checkout.processing")}
       </div>
     );
+
 
 
     return (
