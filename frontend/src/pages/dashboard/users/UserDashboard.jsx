@@ -89,12 +89,12 @@ const UserDashboard = () => {
                                 ? getImgUrl(product.color.image)
                                 : getImgUrl(product.productId.coverImage)
                             }
-                            alt={product.productId.title || t("userDashboard.noTitle")}
+                            alt={product.productId.translations?.[lang]?.title || product.productId.title || t("userDashboard.noTitle")}
                             className="w-24 h-24 sm:w-32 sm:h-32 object-cover rounded-lg border-2 border-[#A67C52]"
                           />
                           <div className="text-center sm:text-left">
                             <p className="font-semibold text-gray-800">
-                              {product.productId.title || t("userDashboard.noTitle")}
+                              {product.productId.translations?.[lang]?.title || product.productId.title || t("userDashboard.noTitle")}
                             </p>
                             <p className="text-gray-600">
                               {t("userDashboard.quantity")}: {product.quantity}
@@ -122,3 +122,5 @@ const UserDashboard = () => {
 };
 
 export default UserDashboard;
+
+
