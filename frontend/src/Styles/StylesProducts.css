@@ -37,11 +37,13 @@ label input[type="checkbox"]:checked + span {
   min-height: 80vh;
 }
 
+/* 🌀 WZ Loader spacing from top */
 .loader-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100px;
+  margin-top: 100px; /* ⬅️ Spacing under Navbar */
 }
 
 /* 🌐 Responsive Products Grid */
@@ -53,6 +55,16 @@ label input[type="checkbox"]:checked + span {
 
   .main-content {
     padding-bottom: 3rem;
+  }
+
+  .loader-wrapper {
+    margin-top: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .loader-wrapper {
+    margin-top: 60px;
   }
 }
 
