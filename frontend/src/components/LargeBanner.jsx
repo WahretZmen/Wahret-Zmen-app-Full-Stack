@@ -15,9 +15,16 @@ if (!i18n.isInitialized) return null;
         alt="À propos de Wahret Zmen"
         className="wahretzmen-banner-img"
       />
-      <div className="wahretzmen-banner-title">
-        <h1>{t("Welcome_Banner_title")}</h1>
-      </div>
+      <div className="wahretzmen-banner-title-wrapper">
+  {/* Left-aligned name */}
+  <div className="wahretzmen-brand-name">Wahret Zmen</div>
+
+  {/* Centered welcome text */}
+  <div className="wahretzmen-banner-title">
+    <h1 className="wahretzmen-welcome-animated">{t("Welcome_Banner_title")}</h1>
+  </div>
+</div>
+
     </section>
   );
 };
