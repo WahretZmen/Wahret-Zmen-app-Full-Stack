@@ -1,1 +1,0 @@
-<td>{order.productTitles.join(", ") || "N/A"}</td> {/* Display product titles */}
