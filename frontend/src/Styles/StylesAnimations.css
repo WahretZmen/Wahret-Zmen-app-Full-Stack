@@ -1,149 +1,113 @@
 /* ========== General Hidden State Before Scroll ========== */
 .hidden-before-scroll {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(50px); /* Default fallback for non-directional animations */
-  }
-  
-  /* ========== Fade-in from Left ========== */
-  .fade-in-left {
-    animation: fadeLeft 0.8s ease forwards;
-  }
-  @keyframes fadeLeft {
-    from {
-      opacity: 0;
-      transform: translateX(-50px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
-  /* ========== Fade-in from Right ========== */
-  @keyframes fadeRight {
-    from {
-      transform: translateX(50px);
-    }
-    to {
-      transform: translateX(0);
-    }
-  }
-  
-  
-  /* ========== Fade-in from Top ========== */
-  .fade-in-top {
-    animation: fadeTop 0.8s ease forwards;
-  }
-  @keyframes fadeTop {
-    from {
-      opacity: 0;
-      transform: translateY(-50px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* ========== Fade-in from Bottom ========== */
-  .fade-in-bottom {
-    animation: fadeBottom 0.8s ease forwards;
-  }
-  @keyframes fadeBottom {
-    from {
-      opacity: 0;
-      transform: translateY(50px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  .fade-in-right-to-left {
-    opacity: 0; /* Start hidden */
-    animation: fadeRightToLeft 0.8s ease forwards;
-    animation-fill-mode: forwards;
-  }
-  
-  @keyframes fadeRightToLeft {
-    0% {
-      opacity: 0;
-      transform: translateX(100px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0); /* Stop at normal position */
-    }
-  }
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(50px);
+}
 
-  .hidden-before-scroll {
+/* ========== Fade-in from Left ========== */
+.fade-in-left {
+  animation: fadeLeft 0.8s ease forwards;
+}
+@keyframes fadeLeft {
+  from {
     opacity: 0;
-    pointer-events: none;
+    transform: translateX(-50px);
   }
-  
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
-  .hidden-before-scroll {
+/* ========== Fade-in from Right ========== */
+.fade-in-right {
+  animation: fadeRight 0.8s ease forwards;
+}
+@keyframes fadeRight {
+  from {
     opacity: 0;
-    pointer-events: none;
+    transform: translateX(50px);
   }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
 
-  .fade-in-left-to-right {
+/* ========== Fade-in from Top ========== */
+.fade-in-top {
+  animation: fadeTop 0.8s ease forwards;
+}
+@keyframes fadeTop {
+  from {
     opacity: 0;
-    animation: fadeLeftToRight 0.8s ease forwards;
-    animation-fill-mode: forwards;
+    transform: translateY(-50px);
   }
-  
-  @keyframes fadeLeftToRight {
-    0% {
-      opacity: 0;
-      transform: translateX(-100px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
 
-  .fade-in-bottom {
-    opacity: 0;
-    animation: fadeBottom 0.8s ease forwards;
-  }
-  
-  @keyframes fadeBottom {
-    from {
-      opacity: 0;
-      transform: translateY(50px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  
-  /* Fade-in from bottom with a soft rise */
+/* ========== Fade-in from Bottom ========== */
 .fade-in-bottom {
-    opacity: 0;
-    animation: fadeInBottom 0.8s ease forwards;
-  }
-  
-  @keyframes fadeInBottom {
-    0% {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-  /* Hide before scroll */
-  .hidden-before-scroll {
+  animation: fadeInBottom 0.8s ease forwards;
+}
+@keyframes fadeInBottom {
+  0% {
     opacity: 0;
     transform: translateY(30px);
-    pointer-events: none;
   }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========== Fade-in Right to Left ========== */
+.fade-in-right-to-left {
+  animation: fadeRightToLeft 0.8s ease forwards;
+}
+@keyframes fadeRightToLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ========== Fade-in Left to Right (for Title) ========== */
+.fade-in-left-to-right {
+  animation: fadeLeftToRight 0.8s ease forwards;
+}
+@keyframes fadeLeftToRight {
+  0% {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ========== Fade-in with Rotate and Zoom (for Image) ========== */
+.fade-in-rotate-zoom {
+  animation: fadeRotateZoom 1s ease-out forwards;
+}
+@keyframes fadeRotateZoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) rotate(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
   
