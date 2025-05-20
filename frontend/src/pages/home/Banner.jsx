@@ -18,13 +18,17 @@ const Banner = () => {
     >
       {/* 🖼 Image - Fade from Right */}
       <div className="banner-image-wrapper">
-        <ScrollFade direction="right-to-left" delay={0.5}>
-          <img
-            src={bannerImg}
-            alt={t("banner_img_alt")}
-            className="banner-img"
-          />
-        </ScrollFade>
+      <ScrollFade direction="fade-rotate-zoom" delay={0.5}>
+  <img
+    src={bannerImg}
+    alt={t("banner_img_alt")}
+    className="banner-img"
+  />
+</ScrollFade>
+
+
+
+
       </div>
 
       {/* ✨ Text Section */}
@@ -33,9 +37,11 @@ const Banner = () => {
           <h1 className="banner-title">{t("banner_title")}</h1>
         </ScrollFade>
 
+<ScrollFade>
         <div className="banner-description">
           <AnimatedText text={t("banner_description")} />
         </div>
+</ScrollFade>
 
         <ScrollFade direction="bottom" delay={0.6}>
           <button className="banner-cta-btn">
