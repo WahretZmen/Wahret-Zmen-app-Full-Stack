@@ -10,7 +10,7 @@ const ScrollFade = ({ children, direction = "right", delay = 0 }) => {
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          observer.unobserve(entry.target); // Only once
+          observer.unobserve(entry.target);
         }
       },
       { threshold: 0.1 }
@@ -25,18 +25,28 @@ const ScrollFade = ({ children, direction = "right", delay = 0 }) => {
   }, []);
 
   const directionClass = isVisible
-  ? direction === "right-to-left"
-    ? "fade-in-right-to-left"
-    : `fade-in-${direction}`
-  : "hidden-before-scroll";
+    ? direction === "fade-rotate-zoom"
+      ? "fade-in-rotate-zoom"
+      : direction === "right-to-left"
+        ? "fade-in-right-to-left"
+        : `fade-in-${direction}`
+    : "hidden-before-scroll";
 
   return (
     <div
       ref={ref}
-      className={directionClass}
       style={{ animationDelay: `${delay}s` }}
+      className={
+        typeof children?.type === "string"
+          ? "" // If the child is a native element like <img>, we pass the class inside it
+          : directionClass
+      }
     >
-      {children}
+      {typeof children?.type === "string"
+        ? React.cloneElement(children, {
+            className: `${children.props.className || ""} ${directionClass}`,
+          })
+        : children}
     </div>
   );
 };
