@@ -1,7 +1,9 @@
 import React from "react";
 import "../Styles/StylesLargeBanner.css";
 import { Trans, useTranslation } from "react-i18next";
-import bannerImg from "../assets/Banner/LargeBanner.png";
+import bannerImg from "../assets/Banner/LargeBanner.png"; // lowercase extension
+
+
 
 const LargeBanner = () => {
 const { t, i18n } = useTranslation();

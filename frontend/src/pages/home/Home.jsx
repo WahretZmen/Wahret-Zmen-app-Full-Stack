@@ -52,7 +52,13 @@ const Home = () => {
     </FadeInSection>
 
     {/* 🖼️ Banner and line */}
+
+   
+
+
     <FadeInSection delay={0.2}>
+
+
       <section className="mb-16">
         <Banner />
         <div className="text-center mt-6">
@@ -61,7 +67,9 @@ const Home = () => {
           </p>
         </div>
       </section>
+
     </FadeInSection>
+
 
     {/* 🧵 Our Sellers */}
     <FadeInSection delay={0.3}>

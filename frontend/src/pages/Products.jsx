@@ -25,6 +25,7 @@ const WahretZmenLoader = () => (
 
 
 
+
 // 🆕 Compact Loader (under SearchInput only)
 const InlineWahretZmenLoader = () => (
   <div className="loader-wrapper h-[80px]">

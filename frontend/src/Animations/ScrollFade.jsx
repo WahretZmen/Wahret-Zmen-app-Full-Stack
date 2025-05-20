@@ -51,4 +51,8 @@ const ScrollFade = ({ children, direction = "right", delay = 0 }) => {
   );
 };
 
+
 export default ScrollFade;
+
+
+
