@@ -10,7 +10,7 @@
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     position: relative;
-    animation: fadeIn 1.2s ease-in-out;
+    
     
   }
   
@@ -172,18 +172,40 @@
     text-align: center;
   }
   
-  .banner-img {
-    width: 100%;
-    max-width: 500px;
-    border-radius: 1rem;
-    transition: transform 0.5s ease;
-  }
+ .banner-img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 1rem;
+  object-fit: cover;
+  transition: transform 0.5s ease; /* ✅ hover effect only */
+  /* ❌ NO animation or opacity here */
+}
+
+
   
   .banner-img:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 30px rgba(255, 214, 150, 0.2);
-    cursor: pointer;
+  animation: spinOnce 0.8s ease-in-out;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(168, 117, 71, 0.25), 0 20px 40px rgba(255, 225, 180, 0.2);
+}
+
+@keyframes spinOnce {
+  from {
+    transform: rotate(0deg) scale(1);
   }
+  to {
+    transform: rotate(360deg) scale(1.05);
+  }
+}
+
+
+
+.banner-img {
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+
   
   .banner-text-wrapper {
     flex: 1;
@@ -200,16 +222,30 @@
   
   /* === Banner Text Styling === */
 .banner-title {
-    font-size: 3rem;
-    font-weight: 800;
-    color: #8B5C3E; /* Rich brown for heritage feel */
-    text-align: center;
-    margin-bottom: 1rem;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    font-family: 'Cairo', sans-serif;
-    letter-spacing: 1px;
-    animation: glowText 3s ease-in-out infinite alternate;
-  }
+  font-size: 3rem;
+  font-weight: 800;
+  color: #8B5C3E;
+  text-align: center;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-family: 'Cairo', sans-serif;
+  letter-spacing: 1px;
+  transition: all 0.4s ease-in-out;
+  animation: glowText 3s ease-in-out infinite alternate;
+  cursor: pointer;
+}
+
+/* 🌟 Hover effect */
+.banner-title:hover {
+  transform: scale(1.05) rotate(-1deg);
+  letter-spacing: 2.5px;
+  color: #A77C4E;
+  text-shadow:
+    0 0 5px #e2bb83,
+    0 0 10px #d4a95a,
+    0 0 15px #c89546;
+}
+
   
   @keyframes glowText {
     from {
@@ -320,6 +356,11 @@
   max-width: 100%;
   text-align: center;
 }
+
+  
+ 
+
+
 
   
  
