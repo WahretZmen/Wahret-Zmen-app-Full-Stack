@@ -4,7 +4,7 @@ import FadeInSection from "../Animations/FadeInSection.jsx";
 import aboutImage1 from "../assets/About/about-img-1.webp";
 import aboutImage2 from "../assets/About/about-img-2.webp";
 import aboutImage3 from "../assets/About/about-img-3.webp";
-import aboutImage4 from "../assets/About/About-img-Mosquee.png";
+import aboutImage4 from "../assets/About/About-img-Mosquee.webp";
 import aboutImage5 from "../assets/About/about-img-5.webp";
 import { Helmet } from "react-helmet-async";
 import { useTranslation } from "react-i18next";
@@ -38,12 +38,15 @@ const About = () => {
         <FadeInSection>
           <div className="text-center">
             <img
-              src={aboutImage1}
-              alt="Wahret Zmen Boutique Interior"
-              loading="lazy"
-              fetchpriority="low"
-              className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
-            />
+  src={aboutImage1}
+  alt="Wahret Zmen Boutique Interior"
+  loading="lazy"
+  width="400"
+  height="300"
+  fetchpriority="low"
+  className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+/>
+
           </div>
         </FadeInSection>
 
@@ -65,13 +68,16 @@ const About = () => {
         {/* Image Our Missions */}
         <FadeInSection>
           <div className="text-center">
-            <img
-              src={aboutImage2}
-              alt="Wahret Zmen Boutique Interior"
-              loading="lazy"
-              fetchpriority="low"
-              className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
-            />
+           <img
+  src={aboutImage2}
+  alt="Wahret Zmen Boutique Interior"
+  loading="lazy"
+  width="400"
+  height="300"
+  fetchpriority="low"
+  className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+/>
+
           </div>
         </FadeInSection>
 
@@ -94,13 +100,16 @@ const About = () => {
         {/* Image Our Products*/}
         <FadeInSection>
           <div className="text-center">
-            <img
-              src={aboutImage3}
-              alt="Wahret Zmen Boutique Interior"
-              loading="lazy"
-              fetchpriority="low"
-              className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
-            />
+           <img
+  src={aboutImage3}
+  alt="Wahret Zmen Boutique Interior"
+  loading="lazy"
+  width="400"
+  height="300"
+  fetchpriority="low"
+  className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+/>
+
           </div>
         </FadeInSection>
 
@@ -122,12 +131,15 @@ const About = () => {
         <FadeInSection>
           <div className="text-center">
             <img
-              src={aboutImage4}
-              alt="Wahret Zmen Boutique Interior"
-              loading="lazy"
-              fetchpriority="low"
-              className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
-            />
+  src={aboutImage4}
+  alt="Wahret Zmen Boutique Interior"
+  loading="lazy"
+  width="400"
+  height="300"
+  fetchpriority="low"
+  className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+/>
+
           </div>
         </FadeInSection>
 
@@ -153,13 +165,16 @@ const About = () => {
         {/* Join our Heritage */}
         <FadeInSection>
           <div className="text-center">
-            <img
-              src={aboutImage5}
-              alt="Wahret Zmen Boutique Interior"
-              loading="lazy"
-              fetchpriority="low"
-              className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
-            />
+           <img
+  src={aboutImage5}
+  alt="Wahret Zmen Boutique Interior"
+  loading="lazy"
+  width="400"
+  height="300"
+  fetchpriority="low"
+  className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+/>
+
           </div>
         </FadeInSection>
 
