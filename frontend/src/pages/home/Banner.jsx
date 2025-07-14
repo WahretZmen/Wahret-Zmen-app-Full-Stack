@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import ScrollFade from '../../Animations/ScrollFade.jsx';
 import AnimatedText from "../../Animations/AnimatedText.jsx";
 import '../../Styles/StylesBanner.css';
-import bannerImg from "../../assets/Banner/Banner.png";
+import bannerImg from "../../assets/Banner/Banner.webp";
 import "../../Styles/StylesAnimatedText.css";
 
 const Banner = () => {
