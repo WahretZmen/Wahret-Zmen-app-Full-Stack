@@ -53,7 +53,10 @@ const OurSellers = () => {
 
   return (
     <FadeInSection>
-      <div className="py-10 bg-[#f8f1e5] rounded-2xl shadow-md mx-4">
+      <div className="our-sellers-wrapper">
+  <div className="our-sellers-section">
+    <div className="our-sellers-container">
+
         {/* Title */}
         <ScrollFade direction="right" delay={0}>
   <h2 className="text-4xl text-[#5a382d] font-bold mb-6 text-center uppercase tracking-wide">
@@ -92,11 +95,12 @@ const OurSellers = () => {
               rtl={isRTL} // ✅ RTL support for Arabic
             >
               {filteredProducts.map((product, index) => (
-  <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>
-    <div className="p-4">
-      <ProductCard product={product} />
-    </div>
-  </FadeInSection>
+ <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>
+  <div className="carousel-card-wrapper">
+    <ProductCard product={product} />
+  </div>
+</FadeInSection>
+
 ))}
 
 
@@ -107,8 +111,11 @@ const OurSellers = () => {
             </p>
           )}
         </div>
-      </div>
-    </FadeInSection>
+          </div>
+  </div>
+</div>
+</FadeInSection>
+
   );
 };
 
