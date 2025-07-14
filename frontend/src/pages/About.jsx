@@ -40,10 +40,10 @@ const About = () => {
             <img
   src={aboutImage1}
   alt="Wahret Zmen Boutique Interior"
-  loading="lazy"
+  loading="eager"
   width="400"
   height="300"
-  fetchpriority="low"
+  fetchpriority="high"
   className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full max-w-md h-[300px] object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
 />
 
