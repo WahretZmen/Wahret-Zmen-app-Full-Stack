@@ -40,11 +40,12 @@ const About = () => {
 <FadeInSection>
   <div className="w-full px-0 sm:px-4 flex justify-center">
     <img
-      src={aboutImage1}
-      alt="Wahret Zmen Boutique"
-      loading="eager"
-      className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl w-full h-[300px] md:h-auto object-contain transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] md:max-w-xl lg:max-w-lg"
-    />
+  src={aboutImage1}
+  alt="Wahret Zmen Boutique"
+  loading="eager"
+  className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl w-full h-[260px] sm:h-[300px] md:h-auto object-cover transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] md:max-w-xl lg:max-w-lg"
+/>
+
   </div>
 </FadeInSection>
 
