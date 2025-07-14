@@ -31,6 +31,11 @@
     transform: scale(1.04);
     box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
   }
+
+  .product-card img {
+  background-color: #fff;
+  padding: 10px;
+}
   
   .product-image-container {
     position: relative;

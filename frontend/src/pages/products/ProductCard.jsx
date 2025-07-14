@@ -86,8 +86,10 @@ const ProductCard = ({ product }) => {
 
 
   return (
-    <div className="product-card group relative bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-500 hover:shadow-2xl hover:scale-[1.03] max-w-xs w-full mx-auto">
-      <div className="relative w-full h-52 overflow-hidden">
+   <div className="product-card group relative bg-white border border-gray-200 overflow-hidden transition-all duration-300 max-w-[250px] w-full mx-auto">
+
+     <div className="relative w-full aspect-[3/4] overflow-hidden bg-white">
+
         <Link to={`/products/${product._id}`} className="block w-full h-full">
           <img
             src={getImgUrl(product?.coverImage)}
@@ -95,14 +97,8 @@ const ProductCard = ({ product }) => {
             onMouseEnter={handleMouseEnter}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className={`w-full h-full object-contain p-2 transition-transform duration-500 ${
-              isHovering ? "cursor-wz-zoom" : "cursor-default"
-            }`}
-            
-            style={{
-              transform: isHovering ? "scale(2)" : "scale(1)",
-              transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-            }}
+            className={`w-full h-full object-contain transition duration-300`}
+style={{ transform: "none" }}
           />
         </Link>
   
@@ -140,7 +136,8 @@ const ProductCard = ({ product }) => {
   
       <div className="p-4 text-center space-y-2">
         <Link to={`/products/${product._id}`}>
-          <h3 className="text-lg font-bold text-gray-800 hover:text-[#8B5C3E] transition-colors duration-300">
+         <h3 className="text-base font-semibold text-gray-900 hover:text-[#8B5C3E]">
+
             {title}
           </h3>
         </Link>
@@ -171,7 +168,8 @@ const ProductCard = ({ product }) => {
           </div>
         )}
   
-        <div className="text-lg font-semibold text-[#8B5C3E]">
+        <div className="text-sm font-bold text-gray-900 mt-1">
+
           {product?.newPrice} DT
           {product?.oldPrice && (
             <span className="text-gray-400 text-sm line-through ml-2">
