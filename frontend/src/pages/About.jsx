@@ -38,15 +38,16 @@ const About = () => {
        {/* Image Wahret Zmen boutique */}
 {/* Image Wahret Zmen boutique */}
 <FadeInSection>
-  <div className="text-center">
+  <div className="w-full px-0 sm:px-4 flex justify-center">
     <img
       src={aboutImage1}
       alt="Wahret Zmen Boutique"
       loading="eager"
-      className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl mx-auto w-full object-contain max-w-md h-[300px] md:h-auto md:max-w-2xl transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+      className="rounded-2xl border-4 border-[#c69c6d] shadow-2xl w-full h-[300px] md:h-auto object-contain transition duration-700 ease-in-out hover:scale-110 hover:brightness-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] md:max-w-xl lg:max-w-lg"
     />
   </div>
 </FadeInSection>
+
 
 
 
