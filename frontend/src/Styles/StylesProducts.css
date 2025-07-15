@@ -16,6 +16,15 @@
   background-color: #8a5d3b;
 }
 
+/* 🖥️ Margin top only for desktop screens */
+@media (min-width: 1024px) {
+  .page-title-desktop {
+    margin-top: 3.5rem; /* same as mt-14 */
+  }
+}
+
+
+
 @media (max-width: 768px) {
   .category-title {
     font-size: 1.1rem;

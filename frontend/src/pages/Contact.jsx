@@ -20,9 +20,10 @@ const Contact = () => {
           <title>{t("contact.page_title")}</title>
         </Helmet>
 
-        <h2 className="contact-title text-3xl font-bold text-center text-[#5a382d] mb-2">
-          {t("contact.heading")}
-        </h2>
+       <h2 className="contact-title contact-title-desktop text-3xl font-bold text-center text-[#5a382d] mb-2">
+  {t("contact.heading")}
+</h2>
+
         <p className="contact-subtitle text-center text-gray-600 mb-6">
           {t("contact.subtitle")}
         </p>

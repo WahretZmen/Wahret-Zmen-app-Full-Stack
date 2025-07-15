@@ -146,7 +146,8 @@ const Products = () => {
           </Helmet>
 
           <FadeInSection duration={0.6}>
-           <h2 className="products-title text-3xl sm:text-4xl font-bold font-serif text-center mb-6 drop-shadow-lg bg-gradient-to-r from-[#D4AF37] to-[#A67C52] bg-clip-text text-transparent hover:scale-105 transition-transform duration-300 ease-in-out">
+           <h2 className="products-title page-title-desktop text-3xl sm:text-4xl font-bold font-serif text-center mb-6 drop-shadow-lg bg-gradient-to-r from-[#D4AF37] to-[#A67C52] bg-clip-text text-transparent hover:scale-105 transition-transform duration-300 ease-in-out">
+
 
 
               {t("products_page.title")}

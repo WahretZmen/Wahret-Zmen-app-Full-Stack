@@ -25,7 +25,8 @@ const About = () => {
         {/* Section 1 */}
         <FadeInSection>
           <div className="text-center">
-            <h1 className="text-2xl font-semibold text-[#5C3D2E] mb-4 border-b-2 border-[#c69c6d] inline-block pb-2">
+           <h1 className="about-title-desktop text-2xl font-semibold text-[#5C3D2E] mb-4 border-b-2 border-[#c69c6d] inline-block pb-2">
+
               {t('about.title')}
             </h1>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
