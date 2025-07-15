@@ -173,10 +173,11 @@ const ProductCard = ({ product }) => {
         )}
   
         <div className="text-sm font-bold text-gray-900 mt-1">
-          {product?.newPrice} $
+          ${product?.newPrice}
+
           {product?.oldPrice && (
             <span className="text-gray-400 text-sm line-through ml-2">
-              {Math.round(product?.oldPrice)} $
+              ${Math.round(product?.oldPrice)}
             </span>
           )}
         </div>
