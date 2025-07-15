@@ -87,41 +87,39 @@ const ProductCard = ({ product }) => {
 
   return (
   <div className="product-card group relative bg-white border border-gray-200 overflow-hidden transition-all duration-300 w-full sm:max-w-[250px] mx-auto">
+  <a
+    href={`/products/${product._id}`}
+    className="relative block w-full h-52 sm:h-64 overflow-hidden bg-white"
+  >
+    <img
+      src={getImgUrl(product?.coverImage)}
+      alt={title}
+      onMouseEnter={handleMouseEnter}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="w-full h-full object-contain transition duration-300"
+      style={{ transform: "none" }}
+    />
 
+    {/* 🔥 Trending Badge */}
+    {product.trending && (
+      <span className="absolute top-2 left-2 z-20 text-xs font-semibold px-2 py-1 bg-red-500 text-white rounded-full shadow-md">
+        {t("trending")}
+      </span>
+    )}
 
-      <div className="relative w-full h-52 sm:h-64 overflow-hidden bg-white">
-
-        <Link to={`/products/${product._id}`} className="block w-full h-full">
-          <img
-            src={getImgUrl(product?.coverImage)}
-            alt={title}
-            onMouseEnter={handleMouseEnter}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className={`w-full h-full object-contain transition duration-300`}
-style={{ transform: "none" }}
-          />
-        </Link>
-  
-        {/* Stock + Trending */}
-       {/* 🔥 Trending Badge (Top-left) */}
-{product.trending && (
-  <span className="absolute top-2 left-2 z-20 text-xs font-semibold px-2 py-1 bg-red-500 text-white rounded-full shadow-md">
-    {t("trending")}
-  </span>
-)}
-
-{/* 📦 Stock Badge (Bottom-left) */}
-<span
-  className={`absolute bottom-2 left-2 z-20 text-xs font-semibold px-2 py-1 rounded-full text-white shadow-md ${
-    displayedStock > 0 ? "bg-green-600" : "bg-red-500"
-  }`}
->
-  {displayedStock > 0
-    ? `${t("stock")}: ${displayedStock}`
-    : t("out_of_stock")}
-</span>
-
+    {/* 📦 Stock Badge */}
+    <span
+      className={`absolute bottom-2 left-2 z-20 text-xs font-semibold px-2 py-1 rounded-full text-white shadow-md ${
+        displayedStock > 0 ? "bg-green-600" : "bg-red-500"
+      }`}
+    >
+      {displayedStock > 0
+        ? `${t("stock")}: ${displayedStock}`
+        : t("out_of_stock")}
+    </span>
+  </a>
+</div>
 
   
         {/* Add to Cart Hover Button */}
