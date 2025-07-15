@@ -16,40 +16,36 @@ const postAProduct = async (req, res) => {
   try {
     let { title, description, category, newPrice, oldPrice, colors, trending } = req.body;
 
-    if (!Array.isArray(colors) || colors.length === 0) {
-      return res.status(400).json({ success: false, message: "At least one color must be provided." });
+    if (!title || !description || !category || !newPrice || !oldPrice || !Array.isArray(colors) || colors.length === 0) {
+      return res.status(400).json({ success: false, message: "Missing required fields." });
     }
 
     const coverImage = colors[0]?.image || "";
 
-    // 🔁 Translate colors first
+    // Translate colors
     const translatedColors = await Promise.all(
-      colors.map(async (color) => {
-        const baseColor = color.colorName;
-        return {
-          colorName: {
-            en: baseColor,
-            fr: await translateDetails(baseColor, "fr"),
-            ar: await translateDetails(baseColor, "ar"),
-          },
-          image: color.image,
-          stock: Number(color.stock) || 0,
-        };
-      })
+      colors.map(async (color) => ({
+        colorName: {
+          en: color.colorName,
+          fr: await translateDetails(color.colorName, "fr") || color.colorName,
+          ar: await translateDetails(color.colorName, "ar") || color.colorName,
+        },
+        image: color.image,
+        stock: color.stock,
+      }))
     );
 
     const stockQuantity = translatedColors[0]?.stock || 0;
 
-    // 🌐 Translate title & description first
+    // Translate title & description
     const translations = {
-      en: { title, description },
       fr: {
-        title: await translateDetails(title, "fr"),
-        description: await translateDetails(description, "fr"),
+        title: await translateDetails(title, "fr") || title,
+        description: await translateDetails(description, "fr") || description,
       },
       ar: {
-        title: await translateDetails(title, "ar"),
-        description: await translateDetails(description, "ar"),
+        title: await translateDetails(title, "ar") || title,
+        description: await translateDetails(description, "ar") || description,
       },
     };
 
@@ -76,10 +72,11 @@ const postAProduct = async (req, res) => {
       product: newProduct,
     });
   } catch (error) {
-    console.error("❌ Error creating product:", error);
-    res.status(500).json({ success: false, message: "Failed to create product" });
+    console.error("❌ Error creating product:", error.message, error.stack);
+    res.status(500).json({ success: false, message: 'Failed to create product' });
   }
 };
+
 
 
 
