@@ -113,14 +113,15 @@ const ProductCard = ({ product }) => {
 
       {/* 📦 Stock Badge */}
       <span
-        className={`absolute bottom-2 left-2 z-20 text-xs font-semibold px-2 py-1 rounded-full text-white shadow-md ${
-          displayedStock > 0 ? "bg-green-600" : "bg-red-500"
-        }`}
-      >
-        {displayedStock > 0
-          ? `${t("stock")}: ${displayedStock}`
-          : t("out_of_stock")}
-      </span>
+  className={`absolute bottom-2 left-2 z-20 text-xs font-semibold px-2 py-1 rounded-full text-white shadow-md ${
+    displayedStock > 0 ? "bg-green-600" : "bg-red-500"
+  }`}
+>
+  {displayedStock > 0
+    ? `${t("stock")}: ${displayedStock}`
+    : t("out_of_stock")}
+</span>
+
 
       {/* 🛒 Add to Cart Hover Button */}
       <button

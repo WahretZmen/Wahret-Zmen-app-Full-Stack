@@ -402,6 +402,7 @@
   transform: translateX(-50%);
 }
 
+
 /* 📱 Mobile adjustments */
 @media screen and (max-width: 768px) {
   .product-badge {
