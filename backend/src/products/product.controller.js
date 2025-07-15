@@ -1,7 +1,7 @@
 const Product = require("./product.model");
 const translate = require("translate-google");
 
-// ✅ Helper function to translate
+// ✅ Helper function to translate 
 const translateDetails = async (text, lang) => {
   try {
     return await translate(text, { to: lang });
