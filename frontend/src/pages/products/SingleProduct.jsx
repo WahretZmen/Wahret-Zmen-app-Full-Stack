@@ -108,7 +108,7 @@ const SingleProduct = () => {
           </div>
 
           <div className="text-2xl sm:text-3xl font-semibold text-[#8B5E3B]">
-            ${product?.newPrice}
+           {product?.newPrice} TND
             {product?.oldPrice && (
               <span className="text-gray-500 line-through ml-4 text-xl">{Math.round(product?.oldPrice)}TND</span>
             )}
