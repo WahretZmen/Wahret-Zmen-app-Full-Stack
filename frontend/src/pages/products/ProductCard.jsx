@@ -85,58 +85,58 @@ const ProductCard = ({ product }) => {
 
 
 
+ 
   return (
   <div className="product-card group relative bg-white border border-gray-200 overflow-hidden transition-all duration-300 w-full sm:max-w-[250px] mx-auto">
-  <a
-    href={`/products/${product._id}`}
-    className="relative block w-full h-52 sm:h-64 overflow-hidden bg-white"
-  >
-    <img
-      src={getImgUrl(product?.coverImage)}
-      alt={title}
-      onMouseEnter={handleMouseEnter}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="w-full h-full object-contain transition duration-300"
-      style={{ transform: "none" }}
-    />
-
-    {/* 🔥 Trending Badge */}
-    {product.trending && (
-      <span className="absolute top-2 left-2 z-20 text-xs font-semibold px-2 py-1 bg-red-500 text-white rounded-full shadow-md">
-        {t("trending")}
-      </span>
-    )}
-
-    {/* 📦 Stock Badge */}
-    <span
-      className={`absolute bottom-2 left-2 z-20 text-xs font-semibold px-2 py-1 rounded-full text-white shadow-md ${
-        displayedStock > 0 ? "bg-green-600" : "bg-red-500"
-      }`}
+    
+    {/* 🔗 Clickable image section */}
+    <a
+      href={`/products/${product._id}`}
+      className="relative block w-full h-52 sm:h-64 overflow-hidden bg-white"
     >
-      {displayedStock > 0
-        ? `${t("stock")}: ${displayedStock}`
-        : t("out_of_stock")}
-    </span>
-  </a>
-</div>
+      <img
+        src={getImgUrl(product?.coverImage)}
+        alt={title}
+        onMouseEnter={handleMouseEnter}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        className="w-full h-full object-contain transition duration-300"
+        style={{ transform: "none" }}
+      />
 
-  
-        {/* Add to Cart Hover Button */}
-        <button
-          onClick={handleAddToCart}
-          disabled={displayedStock === 0}
-          className={`absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-sm font-medium text-white transition-all duration-300
+      {/* 🔥 Trending Badge */}
+      {product.trending && (
+        <span className="absolute top-2 left-2 z-20 text-xs font-semibold px-2 py-1 bg-red-500 text-white rounded-full shadow-md">
+          {t("trending")}
+        </span>
+      )}
+
+      {/* 📦 Stock Badge */}
+      <span
+        className={`absolute bottom-2 left-2 z-20 text-xs font-semibold px-2 py-1 rounded-full text-white shadow-md ${
+          displayedStock > 0 ? "bg-green-600" : "bg-red-500"
+        }`}
+      >
+        {displayedStock > 0
+          ? `${t("stock")}: ${displayedStock}`
+          : t("out_of_stock")}
+      </span>
+
+      {/* 🛒 Add to Cart Hover Button */}
+      <button
+        onClick={handleAddToCart}
+        disabled={displayedStock === 0}
+        className={`absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-sm font-medium text-white transition-all duration-300
           ${
             displayedStock > 0
               ? "bg-[#8B5C3E] opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0"
               : "bg-gray-400 cursor-not-allowed"
           }`}
-        >
-          <FiShoppingCart className="inline mr-1" />
-          {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-        </button>
-      </div>
+      >
+        <FiShoppingCart className="inline mr-1" />
+        {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+      </button>
+    </a>
   
       <div className="p-4 text-center space-y-2">
         <Link to={`/products/${product._id}`}>
