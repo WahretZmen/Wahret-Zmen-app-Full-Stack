@@ -16,12 +16,17 @@ import ManageProducts from "../pages/dashboard/manageProducts/ManageProducts";
 import AddProduct from "../pages/dashboard/addProduct/AddProduct";
 import UpdateProduct from "../pages/dashboard/EditProduct/UpdateProduct";
 import UserDashboard from "../pages/dashboard/users/UserDashboard";
-import ProductsPage from "../pages/Products.jsx"
+import ProductsPage from "../pages/Products.jsx";
 import ContactPage from "../pages/Contact.jsx";
 import AboutPage from "../pages/About.jsx";
 import UpdateOrder from "../pages/dashboard/EditOrder/UpdateOrder.jsx";
 import AddOrder from "../pages/dashboard/addOrder/addOrder.jsx";
 import ManageOrders from "../pages/dashboard/manageOrders/manageOrder";
+
+
+import ForgotPassword from "../pages/products/ForgotPassword.jsx"; 
+import ResetPassword from "../pages/products/ResetPassword.jsx"; 
+import ChangePassword from "../pages/products/ChangePassword.jsx"; 
 
 const router = createBrowserRouter([
   {
@@ -30,6 +35,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <Home /> },
       { path: "/products", element: <ProductsPage /> },
+
       {
         path: "/orders",
         element: (
@@ -38,11 +44,18 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+
       { path: "/about", element: <div><AboutPage/></div> },
       { path: "/login", element: <Login /> },
       { path: "/register", element: <Register /> },
+
+      { path: "/forgot-password", element: <ForgotPassword /> },
+{ path: "/reset-password", element: <ResetPassword /> },
+{ path: "/change-password", element: <PrivateRoute><ChangePassword /></PrivateRoute> },
+
       { path: "/cart", element: <CartPage /> },
       { path: "/contact", element: <ContactPage /> },
+
       {
         path: "/checkout",
         element: (
@@ -51,7 +64,9 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+
       { path: "/products/:id", element: <SingleProduct /> },
+
       {
         path: "/user-dashboard",
         element: (
@@ -62,10 +77,14 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  // Admin login (public)
   {
     path: "/admin",
     element: <AdminLogin />,
   },
+
+  // Admin dashboard (protected)
   {
     path: "/dashboard",
     element: (
@@ -84,7 +103,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "edit-product/:id",  // Edit product route
+        path: "edit-product/:id",
         element: (
           <AdminRoute>
             <UpdateProduct />
@@ -103,12 +122,12 @@ const router = createBrowserRouter([
         path: "manage-orders",
         element: (
           <AdminRoute>
-            <ManageOrders/>
+            <ManageOrders />
           </AdminRoute>
         ),
       },
       {
-        path: "add-order",  // Add order route
+        path: "add-order",
         element: (
           <AdminRoute>
             <AddOrder />
@@ -116,7 +135,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "edit-order/:id", // Edit order route
+        path: "edit-order/:id",
         element: (
           <AdminRoute>
             <UpdateOrder />

@@ -11,7 +11,11 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const { loginUser, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const { t, i18n } = useTranslation();
 
   if (!i18n.isInitialized) return null;
@@ -30,7 +34,7 @@ const Login = () => {
       confirmButtonText: t("login.continue_shopping"),
       timer: 2000,
       showClass: { popup: "animate__animated animate__fadeInDown" },
-      hideClass: { popup: "animate__animated animate__fadeOutUp" }
+      hideClass: { popup: "animate__animated animate__fadeOutUp" },
     });
   };
 
@@ -42,7 +46,7 @@ const Login = () => {
       confirmButtonColor: "#d33",
       confirmButtonText: t("login.try_again"),
       showClass: { popup: "animate__animated animate__shakeX" },
-      hideClass: { popup: "animate__animated animate__fadeOut" }
+      hideClass: { popup: "animate__animated animate__fadeOut" },
     });
   };
 
@@ -68,7 +72,6 @@ const Login = () => {
     }
   };
 
-
   return (
     <div className="flex justify-center items-center min-h-screen bg-[#F4EEE0]">
       <div className="w-full max-w-md bg-white p-8 shadow-lg rounded-lg">
@@ -80,7 +83,10 @@ const Login = () => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
-            <label className="block text-gray-700 font-medium mb-1" htmlFor="email">
+            <label
+              className="block text-gray-700 font-medium mb-1"
+              htmlFor="email"
+            >
               {t("login.email_label")}
             </label>
             <input
@@ -91,11 +97,18 @@ const Login = () => {
               placeholder={t("login.email_placeholder")}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#8B5C3E] focus:outline-none"
             />
-            {errors.email && <p className="text-red-500 text-sm">{t("login.email_required")}</p>}
+            {errors.email && (
+              <p className="text-red-500 text-sm">
+                {t("login.email_required")}
+              </p>
+            )}
           </div>
 
           <div>
-            <label className="block text-gray-700 font-medium mb-1" htmlFor="password">
+            <label
+              className="block text-gray-700 font-medium mb-1"
+              htmlFor="password"
+            >
               {t("login.password_label")}
             </label>
             <input
@@ -106,7 +119,11 @@ const Login = () => {
               placeholder={t("login.password_placeholder")}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#8B5C3E] focus:outline-none"
             />
-            {errors.password && <p className="text-red-500 text-sm">{t("login.password_required")}</p>}
+            {errors.password && (
+              <p className="text-red-500 text-sm">
+                {t("login.password_required")}
+              </p>
+            )}
           </div>
 
           <button
@@ -117,7 +134,15 @@ const Login = () => {
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-700 mt-4">
+        {/* 🔗 Forgot password link */}
+        <p className="text-center text-sm text-gray-700 mt-3">
+          <Link to="/forgot-password" className="text-[#8B5C3E] hover:underline">
+            {t("login.forgot_password_link")}
+          </Link>
+        </p>
+
+        {/* 🔗 Register link */}
+        <p className="text-center text-sm text-gray-700 mt-3">
           {t("login.no_account")}{" "}
           <Link to="/register" className="text-[#8B5C3E] hover:underline">
             {t("login.register_link")}
@@ -142,12 +167,4 @@ const Login = () => {
   );
 };
 
-
-
-
-
 export default Login;
-
-
-
-

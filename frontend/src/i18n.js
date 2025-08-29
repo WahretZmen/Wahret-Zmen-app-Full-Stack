@@ -370,7 +370,7 @@ i18n
           
 
 
-          register: {
+         register: {
             create_account: "Créer un compte",
             email_label: "Adresse e-mail",
             email_placeholder: "Entrez votre e-mail",
@@ -390,31 +390,93 @@ i18n
             google_error_title: "Échec de la connexion Google",
             continue_shopping: "Continuer vos achats",
             try_again: "Réessayer",
-            rights: "Tous droits réservés."
+            rights: "Tous droits réservés.",
           },
-    
           login: {
-            title: "Bon retour",
-            email_label: "Adresse e-mail",
-            email_placeholder: "Entrez votre e-mail",
-            email_required: "L'e-mail est requis.",
-            password_label: "Mot de passe",
-            password_placeholder: "Entrez votre mot de passe",
-            password_required: "Le mot de passe est requis.",
-            login_btn: "Se connecter",
-            no_account: "Vous n'avez pas de compte ?",
-            register_link: "S'inscrire",
-            google_btn: "Connexion avec Google",
-            success_title: "Bon retour !",
-            success_text: "Connexion réussie.",
-            error_title: "Échec de la connexion",
-            error_text: "Veuillez fournir un e-mail et un mot de passe valides.",
-            google_success_title: "Connexion Google réussie !",
-            google_error_title: "Échec de la connexion Google",
-            continue_shopping: "Continuer vos achats",
-            try_again: "Réessayer",
-            rights: "Tous droits réservés."
-          },
+  title: "Bon retour",
+  email_label: "Adresse e-mail",
+  email_placeholder: "Entrez votre e-mail",
+  email_required: "L'e-mail est requis.",
+  password_label: "Mot de passe",
+  password_placeholder: "Entrez votre mot de passe",
+  password_required: "Le mot de passe est requis.",
+  login_btn: "Se connecter",
+  no_account: "Vous n'avez pas de compte ?",
+  register_link: "S'inscrire",
+  forgot_password_link: "Mot de passe oublié ?",   // ✅ new
+  google_btn: "Connexion avec Google",
+  success_title: "Bon retour !",
+  success_text: "Connexion réussie.",
+  error_title: "Échec de la connexion",
+  error_text: "Veuillez fournir un e-mail et un mot de passe valides.",
+  google_success_title: "Connexion Google réussie !",
+  google_error_title: "Échec de la connexion Google",
+  continue_shopping: "Continuer vos achats",
+  try_again: "Réessayer",
+  rights: "Tous droits réservés."
+}
+,
+
+forgot: {
+  title: "Mot de passe oublié",
+  subtitle: "Entrez votre adresse e-mail pour recevoir un lien de réinitialisation.",
+  email_label: "Adresse e-mail",
+  email_placeholder: "Entrez votre e-mail",
+  email_required: "L'e-mail est requis.",
+  submit_btn: "Envoyer le lien",
+  sending: "Envoi en cours...",
+  success_title: "E-mail envoyé !",
+  success_text: "Un lien de réinitialisation du mot de passe a été envoyé à votre adresse e-mail.",
+  error_title: "Erreur",
+  error_text: "Impossible d'envoyer l'e-mail de réinitialisation. Veuillez réessayer.",
+  rights: "Tous droits réservés."
+},
+
+
+reset: {
+  title: "Réinitialiser le mot de passe",
+  for_email: "Réinitialisation pour l'adresse",
+  new_password_label: "Nouveau mot de passe",
+  new_password_placeholder: "Entrez votre nouveau mot de passe",
+  password_required: "Le mot de passe est requis.",
+  password_min: "Le mot de passe doit contenir au moins 6 caractères.",
+  confirm_password_label: "Confirmez le mot de passe",
+  confirm_password_placeholder: "Confirmez votre nouveau mot de passe",
+  confirm_password_required: "La confirmation du mot de passe est requise.",
+  mismatch_title: "Les mots de passe ne correspondent pas",
+  mismatch_text: "Veuillez vous assurer que les deux mots de passe sont identiques.",
+  success_title: "Mot de passe réinitialisé !",
+  success_text: "Votre mot de passe a été mis à jour avec succès. Vous pouvez maintenant vous connecter.",
+  error_title: "Erreur",
+  error_text: "Échec de la réinitialisation du mot de passe. Veuillez réessayer.",
+  invalid_link_title: "Lien invalide",
+  invalid_link_text: "Le lien de réinitialisation est invalide ou expiré.",
+  submit_btn: "Réinitialiser le mot de passe",
+  rights: "Tous droits réservés."
+},
+
+changePassword: {
+  title: "Modifier le mot de passe",
+  open_btn: "Modifier le mot de passe",
+  current_label: "Mot de passe actuel",
+  current_placeholder: "Entrez votre mot de passe actuel",
+  current_required: "Le mot de passe actuel est requis.",
+  new_label: "Nouveau mot de passe",
+  new_placeholder: "Entrez un nouveau mot de passe (min 6)",
+  confirm_label: "Confirmer le nouveau mot de passe",
+  confirm_placeholder: "Retapez le nouveau mot de passe",
+  show: "Afficher",
+  hide: "Masquer",
+  submit_btn: "Mettre à jour le mot de passe",
+  success_title: "Mot de passe modifié",
+  success_text: "Votre mot de passe a été mis à jour avec succès.",
+  error_title: "Erreur",
+  error_text: "Impossible de changer le mot de passe. Vérifiez votre mot de passe actuel et réessayez.",
+  wrong_current: "Le mot de passe actuel est incorrect.",
+  too_many_requests: "Trop de tentatives. Réessayez plus tard.",
+  recent_login: "Par sécurité, reconnectez-vous puis réessayez.",
+  not_password_user_text: "Votre compte est connecté via Google ou un autre fournisseur. Le changement de mot de passe n’est disponible que pour les comptes e-mail/mot de passe."
+},
 
           admin: {
             title: "Connexion Administrateur",
@@ -718,78 +780,113 @@ i18n
 
        
           
-          register: {
+         register: {
             create_account: "إنشاء حساب جديد",
             email_label: "البريد الإلكتروني",
             email_placeholder: "أدخل بريدك الإلكتروني",
-
             email_required: "البريد الإلكتروني مطلوب.",
             password_label: "كلمة المرور",
             password_placeholder: "أدخل كلمة المرور",
             password_required: "كلمة المرور مطلوبة.",
-
-            
-
             register_btn: "تسجيل",
             have_account: "لديك حساب بالفعل؟",
             login_link: "تسجيل الدخول",
             google_btn: "التسجيل باستخدام جوجل",
-
             success_title: "تم التسجيل بنجاح!",
             success_text: "مرحبًا بك في بوتيك وهرة الزّمان.",
             error_title: "فشل في التسجيل",
             error_text: "يرجى إدخال بريد إلكتروني وكلمة مرور صالحين.",
-           
             google_success_title: "تم التسجيل عبر Google بنجاح!",
             google_error_title: "فشل تسجيل الدخول عبر Google",
             continue_shopping: "مواصلة التسوق",
             try_again: "أعد المحاولة",
-
-           
-
-           
-
           },
-    
           login: {
-            title: "مرحباً بعودتك",
-            email_label: "البريد الإلكتروني",
-            email_placeholder: "أدخل بريدك الإلكتروني",
+  title: "مرحباً بعودتك",
+  email_label: "البريد الإلكتروني",
+  email_placeholder: "أدخل بريدك الإلكتروني",
+  email_required: "البريد الإلكتروني مطلوب.",
+  password_label: "كلمة المرور",
+  password_placeholder: "أدخل كلمة المرور",
+  password_required: "كلمة المرور مطلوبة.",
+  login_btn: "تسجيل الدخول",
+  no_account: "ليس لديك حساب؟",
+  register_link: "إنشاء حساب",
+  forgot_password_link: "هل نسيت كلمة المرور؟",   // ✅ new
+  google_btn: "تسجيل الدخول باستخدام جوجل",
+  success_title: "مرحباً بعودتك!",
+  success_text: "تم تسجيل الدخول بنجاح.",
+  error_title: "فشل تسجيل الدخول",
+  error_text: "يرجى إدخال بريد إلكتروني وكلمة مرور صالحين.",
+  google_success_title: "تم تسجيل الدخول عبر Google!",
+  google_error_title: "فشل تسجيل الدخول عبر Google",
+  continue_shopping: "مواصلة التسوق",
+  try_again: "أعد المحاولة",
+  rights: "جميع الحقوق محفوظة."
+},
 
-            email_required: "البريد الإلكتروني مطلوب.",
-            password_label: "كلمة المرور",
-            password_placeholder: "أدخل كلمة المرور",
-            password_required: "كلمة المرور مطلوبة.",
+forgot: {
+  title: "نسيت كلمة المرور",
+  subtitle: "أدخل بريدك الإلكتروني لتلقي رابط إعادة التعيين.",
+  email_label: "البريد الإلكتروني",
+  email_placeholder: "أدخل بريدك الإلكتروني",
+  email_required: "البريد الإلكتروني مطلوب.",
+  submit_btn: "إرسال الرابط",
+  sending: "جاري الإرسال...",
+  success_title: "تم إرسال البريد الإلكتروني!",
+  success_text: "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
+  error_title: "خطأ",
+  error_text: "فشل إرسال رابط إعادة التعيين. حاول مرة أخرى.",
+  rights: "جميع الحقوق محفوظة."
+},
 
-            email_required: "البريد الإلكتروني مطلوب",
-            password_label: "كلمة المرور",
-            password_placeholder: "أدخل كلمة المرور",
-            password_required: "كلمة المرور مطلوبة",
 
-            login_btn: "تسجيل الدخول",
-            no_account: "ليس لديك حساب؟",
-            register_link: "إنشاء حساب",
-            google_btn: "تسجيل الدخول باستخدام جوجل",
-            success_title: "مرحباً بعودتك!",
+reset: {
+  title: "إعادة تعيين كلمة المرور",
+  for_email: "إعادة التعيين للبريد الإلكتروني",
+  new_password_label: "كلمة المرور الجديدة",
+  new_password_placeholder: "أدخل كلمة المرور الجديدة",
+  password_required: "كلمة المرور مطلوبة.",
+  password_min: "يجب أن تحتوي كلمة المرور على 6 أحرف على الأقل.",
+  confirm_password_label: "تأكيد كلمة المرور",
+  confirm_password_placeholder: "أدخل كلمة المرور مرة أخرى",
+  confirm_password_required: "تأكيد كلمة المرور مطلوب.",
+  mismatch_title: "كلمتا المرور غير متطابقتين",
+  mismatch_text: "يرجى التأكد من أن كلمتي المرور متطابقتان.",
+  success_title: "تمت إعادة التعيين!",
+  success_text: "تم تحديث كلمة المرور بنجاح. يمكنك الآن تسجيل الدخول.",
+  error_title: "خطأ",
+  error_text: "فشلت عملية إعادة تعيين كلمة المرور. حاول مرة أخرى.",
+  invalid_link_title: "رابط غير صالح",
+  invalid_link_text: "رابط إعادة التعيين غير صالح أو منتهي الصلاحية.",
+  submit_btn: "إعادة تعيين كلمة المرور",
+  rights: "جميع الحقوق محفوظة."
+},
 
-            success_text: "تم تسجيل الدخول بنجاح.",
-            error_title: "فشل تسجيل الدخول",
-            error_text: "يرجى إدخال بريد إلكتروني وكلمة مرور صالحين.",
+changePassword: {
+  title: "تغيير كلمة المرور",
+  open_btn: "تغيير كلمة المرور",
+  current_label: "كلمة المرور الحالية",
+  current_placeholder: "أدخل كلمة المرور الحالية",
+  current_required: "كلمة المرور الحالية مطلوبة.",
+  new_label: "كلمة المرور الجديدة",
+  new_placeholder: "أدخل كلمة مرور جديدة (6 أحرف على الأقل)",
+  confirm_label: "تأكيد كلمة المرور الجديدة",
+  confirm_placeholder: "أعد إدخال كلمة المرور الجديدة",
+  show: "إظهار",
+  hide: "إخفاء",
+  submit_btn: "تحديث كلمة المرور",
+  success_title: "تم تغيير كلمة المرور",
+  success_text: "تم تحديث كلمة المرور بنجاح.",
+  error_title: "خطأ",
+  error_text: "تعذّر تغيير كلمة المرور. يرجى التحقق من كلمة المرور الحالية والمحاولة مرة أخرى.",
+  wrong_current: "كلمة المرور الحالية غير صحيحة.",
+  too_many_requests: "محاولات كثيرة. يرجى المحاولة لاحقًا.",
+  recent_login: "لأسباب أمنية، يرجى تسجيل الدخول مرة أخرى ثم إعادة المحاولة.",
+  not_password_user_text: "تم تسجيل الدخول باستخدام Google أو مزود آخر. تغيير كلمة المرور متاح فقط للحسابات التي تستخدم البريد وكلمة المرور."
+}
+,
 
-            success_text: "تم تسجيل الدخول بنجاح",
-            error_title: "فشل تسجيل الدخول",
-            error_text: "يرجى إدخال بريد إلكتروني وكلمة مرور صالحين",
-
-            google_success_title: "تم تسجيل الدخول عبر Google!",
-            google_error_title: "فشل تسجيل الدخول عبر Google",
-            continue_shopping: "مواصلة التسوق",
-            try_again: "أعد المحاولة",
-
-            
-
-            
-
-          },
 
           admin: {
             title: "تسجيل دخول المدير",
