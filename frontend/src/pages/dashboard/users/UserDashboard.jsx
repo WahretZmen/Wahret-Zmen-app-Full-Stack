@@ -23,6 +23,9 @@ const UserDashboard = () => {
 
   // Data
   const email = currentUser?.email || "";
+  const mailName = email ? email.split("@")[0] : "";
+  const initial = mailName ? mailName.charAt(0).toUpperCase() : "U";
+
   const displayName =
     currentUser?.displayName ||
     currentUser?.username ||
@@ -74,7 +77,7 @@ const UserDashboard = () => {
   if (isLoading || isFetching) return <LoadingSpinner />;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#F8F1E9] to-[#F4EEE0]">
+    <div className="bg-[#F8F1E9] min-h-screen px-2 sm:px-4 UserDashboard-screen pt-28 md:pt-32 pb-12">
       <Helmet>
         <title>{t("userDashboard.title")}</title>
       </Helmet>
@@ -89,14 +92,8 @@ const UserDashboard = () => {
           <div className="bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 border border-[#A67C52]/20 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-6 md:p-8">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
               {/* Avatar */}
-              <div className="w-14 h-14 flex justify-end">
-  <Link
-    to="/change-password"
-    aria-label={t("changePassword.open_btn", { defaultValue: "Change Password" })}
-    title={t("changePassword.tooltip", { defaultValue: "Email & Password" })}
-    className="group relative inline-block"
-  >
-   <div className="w-14 h-14 flex justify-end">
+              {/* RIGHT: Avatar with first letter of user's email (link to change-password) */}
+<div className="w-14 h-14 flex justify-end">
   <Link
     to="/change-password"
     aria-label={t("changePassword.open_btn", { defaultValue: "Change Password" })}
@@ -107,24 +104,10 @@ const UserDashboard = () => {
       className="w-14 h-14 rounded-full overflow-hidden shadow border border-[#A67C52]/20 flex items-center justify-center select-none"
       style={{ background: "linear-gradient(135deg, #8B5C3E 0%, #74452D 100%)" }}
     >
-      {photo ? (
-        <img src={photo} alt="avatar" className="w-full h-full object-cover" />
-      ) : (
-        <span className="text-white font-bold text-xl leading-none">{initial}</span>
-      )}
+      <span className="text-white font-bold text-xl leading-none">{initial}</span>
     </div>
 
-    {/* tooltip */}
-    <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -bottom-2 translate-y-full
-                     bg-amber-50 text-amber-800 text-[11px] font-semibold px-2.5 py-1 rounded-full shadow
-                     border border-amber-200 opacity-0 group-hover:opacity-100 transition">
-      {t("changePassword.tooltip", { defaultValue: "Email & Password" })}
-    </span>
-  </Link>
-</div>
-
-
-    {/* tooltip */}
+    {/* tooltip (optional) */}
     <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -bottom-2 translate-y-full
                      bg-amber-50 text-amber-800 text-[11px] font-semibold px-2.5 py-1 rounded-full shadow
                      border border-amber-200 opacity-0 group-hover:opacity-100 transition">

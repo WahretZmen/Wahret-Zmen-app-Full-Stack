@@ -1,15 +1,69 @@
-.UserDashboard-screen { margin-top: 8%;}
+/* --- User Dashboard responsive layout --- */
 
+/* Safe-area + navbar height (tweak --navbar-h if your header is taller/shorter) */
+:root {
+  --navbar-h: 64px;
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+/* Page background wrapper */
+.UserDashboard-screen {
+  min-height: 100vh;
+  background: #F8F1E9;
+  /* padding top accounts for fixed navbar + notch; no % margins */
+  padding-top: calc(var(--navbar-h) + var(--safe-top));
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 24px;
+}
+
+/* Inner container spacing */
 .screen-User-Dashboard {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* ------ Phones (≤ 480px) ------ */
+@media (max-width: 480px) {
+  :root { --navbar-h: 56px; }               /* many Android toolbars are ~56px */
+  .UserDashboard-screen {
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 16px;
   }
-  
-  @media (max-width: 768px) {
-    .screen-User-Dashboard {
-      margin-top: 1rem;
-      margin-bottom: 1rem;
-      padding: 1rem;
-    }
+  .screen-User-Dashboard {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding: 12px;                          /* compact card padding */
   }
-  
+}
+
+/* ------ Small tablets / large phones (481–768px) ------ */
+@media (min-width: 481px) and (max-width: 768px) {
+  :root { --navbar-h: 64px; }
+  .UserDashboard-screen {
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 20px;
+  }
+  .screen-User-Dashboard {
+    margin-top: 14px;
+    margin-bottom: 14px;
+    padding: 16px;
+  }
+}
+
+/* ------ Tablets and up (≥ 769px) ------ */
+@media (min-width: 769px) {
+  :root { --navbar-h: 72px; }
+  .UserDashboard-screen {
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 28px;
+  }
+  .screen-User-Dashboard {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+}
