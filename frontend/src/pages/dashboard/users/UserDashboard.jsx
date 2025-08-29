@@ -91,31 +91,29 @@ const UserDashboard = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
           <div className="bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 border border-[#A67C52]/20 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-6 md:p-8">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-              {/* Avatar */}
               {/* RIGHT: Avatar with first letter of user's email (link to change-password) */}
-<div className="w-14 h-14 flex justify-end">
-  <Link
-    to="/change-password"
-    aria-label={t("changePassword.open_btn", { defaultValue: "Change Password" })}
-    title={t("changePassword.tooltip", { defaultValue: "Email & Password" })}
-    className="group relative inline-block"
-  >
-    <div
-      className="w-14 h-14 rounded-full overflow-hidden shadow border border-[#A67C52]/20 flex items-center justify-center select-none"
-      style={{ background: "linear-gradient(135deg, #8B5C3E 0%, #74452D 100%)" }}
-    >
-      <span className="text-white font-bold text-xl leading-none">{initial}</span>
-    </div>
+              <div className="w-14 h-14 flex justify-end">
+                <Link
+                  to="/change-password"
+                  aria-label={t("changePassword.open_btn", { defaultValue: "Change Password" })}
+                  title={t("changePassword.tooltip", { defaultValue: "Email & Password" })}
+                  className="group relative inline-block"
+                >
+                  <div
+                    className="w-14 h-14 rounded-full overflow-hidden shadow border border-[#A67C52]/20 flex items-center justify-center select-none"
+                    style={{ background: "linear-gradient(135deg, #8B5C3E 0%, #74452D 100%)" }}
+                  >
+                    <span className="text-white font-bold text-xl leading-none">{initial}</span>
+                  </div>
 
-    {/* tooltip (optional) */}
-    <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -bottom-2 translate-y-full
-                     bg-amber-50 text-amber-800 text-[11px] font-semibold px-2.5 py-1 rounded-full shadow
-                     border border-amber-200 opacity-0 group-hover:opacity-100 transition">
-      {t("changePassword.tooltip", { defaultValue: "Email & Password" })}
-    </span>
-  </Link>
-</div>
-
+                  {/* tooltip (optional) */}
+                  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -bottom-2 translate-y-full
+                                   bg-amber-50 text-amber-800 text-[11px] font-semibold px-2.5 py-1 rounded-full shadow
+                                   border border-amber-200 opacity-0 group-hover:opacity-100 transition">
+                    {t("changePassword.tooltip", { defaultValue: "Email & Password" })}
+                  </span>
+                </Link>
+              </div>
 
               {/* Info */}
               <div className="flex-1 text-center md:text-left">
@@ -126,11 +124,14 @@ const UserDashboard = () => {
                   {t("userDashboard.overview")}
                 </p>
 
-                {/* Quick actions */}
+                {/* Quick actions (UPDATED BUTTON STYLES) */}
                 <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                   <Link
                     to="/change-password"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#8B5C3E] text-white px-4 py-2.5 font-semibold shadow hover:bg-[#74452D] transition"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl
+                               bg-[#8B5C3E] text-white px-4 py-2.5 font-semibold shadow
+                               hover:bg-[#74452D] transition
+                               focus:outline-none focus:ring-2 focus:ring-[#A67C52] focus:ring-offset-2"
                     aria-label="Change password"
                   >
                     <FaKey />
@@ -141,7 +142,10 @@ const UserDashboard = () => {
 
                   <Link
                     to="/products"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white text-[#8B5C3E] border border-[#A67C52]/40 px-4 py-2.5 font-semibold shadow-sm hover:bg-[#F8F1E9] transition"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl
+                               bg-white text-[#8B5C3E] border border-[#A67C52]/40 px-4 py-2.5 font-semibold shadow-sm
+                               hover:bg-[#F8F1E9] transition
+                               focus:outline-none focus:ring-2 focus:ring-[#A67C52] focus:ring-offset-2"
                   >
                     <FaShoppingBag />
                     {t("products", { defaultValue: "Products" })}
@@ -195,7 +199,9 @@ const UserDashboard = () => {
             </p>
             <Link
               to="/products"
-              className="mt-4 inline-block rounded-xl bg-[#8B5C3E] text-white px-5 py-2.5 font-semibold shadow hover:bg-[#74452D] transition"
+              className="mt-4 inline-block rounded-xl bg-[#8B5C3E] text-white px-5 py-2.5 font-semibold shadow
+                         hover:bg-[#74452D] transition
+                         focus:outline-none focus:ring-2 focus:ring-[#A67C52] focus:ring-offset-2"
             >
               {t("products", { defaultValue: "Products" })}
             </Link>

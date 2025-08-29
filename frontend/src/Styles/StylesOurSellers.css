@@ -3,7 +3,7 @@
   width: 100%;
   max-width: 100vw;
   padding: 2rem 1.5rem;
-  background-color: #f8f1e5;
+  background: transparent !important;   /* remove pink/beige */
   border-radius: 1rem;
   margin: 0 auto;
   overflow-x: visible !important;
@@ -14,7 +14,7 @@
 .our-sellers-section {
   width: 100%;
   padding: 2rem 1rem;
-  background-color: #fdf7f2;
+  background: transparent !important;   /* remove pink/beige */
 }
 
 .our-sellers-container {
@@ -43,8 +43,8 @@
 
 /* ===== Carousel Settings ===== */
 .react-multi-carousel-item {
-  padding-top: 4rem;     /* for top badge */
-  padding-bottom: 4rem;  /* for stock badge */
+  padding-top: 4rem;     /* keep space for badges if your cards use them */
+  padding-bottom: 4rem;
   z-index: 1;
   position: relative;
 }
@@ -63,15 +63,16 @@
 @media (max-width: 768px) {
   .carousel-card-wrapper {
     padding: 0 8px;
-    width: 92vw; /* Make card take more width on small screens */
+    width: 92vw;
   }
 }
 
-
+/* ===== Arrows (on-brand, subtle) ===== */
 .custom-carousel .react-multiple-carousel__arrow {
-  background: rgba(0, 0, 0, 0.3);
+  background: #8B5C3E;  /* brand color */
+  color: #fff;
   z-index: 10;
-  border-radius: 50%;
+  border-radius: 9999px;
   width: 40px;
   height: 40px;
   top: 40%;
@@ -80,63 +81,49 @@
   justify-content: center;
   border: none;
   font-size: 18px;
-  transition: background 0.3s ease;
+  opacity: 0.9;
+  transition: opacity 0.25s ease, transform 0.1s ease;
 }
 
 .custom-carousel .react-multiple-carousel__arrow:hover {
-  background: rgba(0, 0, 0, 0.5);
+  opacity: 1;
 }
 
-.custom-carousel .react-multiple-carousel__arrow--left {
-  left: 10px;
+.custom-carousel .react-multiple-carousel__arrow:active {
+  transform: scale(0.98);
 }
 
-.custom-carousel .react-multiple-carousel__arrow--right {
-  right: 10px;
-}
+.custom-carousel .react-multiple-carousel__arrow--left { left: 10px; }
+.custom-carousel .react-multiple-carousel__arrow--right { right: 10px; }
 
 /* RTL arrows */
 html[dir="rtl"] .react-multiple-carousel__arrow--left {
-  right: 10px !important;
-  left: auto !important;
+  right: 10px !important; left: auto !important;
 }
 html[dir="rtl"] .react-multiple-carousel__arrow--right {
-  left: 10px !important;
-  right: auto !important;
+  left: 10px !important; right: auto !important;
+}
+
+/* ===== Remove the green/pink badges only inside OurSellers ===== */
+/* If you prefer to keep text without background, replace `display:none` with background:transparent */
+.our-sellers-container .stock-badge,
+.our-sellers-container .badge--stock,
+.our-sellers-container .badge--trending,
+.our-sellers-container .sale-badge,
+.our-sellers-container .badge,
+.our-sellers-container [class*="badge"] {
+  display: none !important;
 }
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
-  .our-sellers-title {
-    font-size: 1.5rem;
-  }
-
-  .our-sellers-filters {
-    gap: 1rem;
-  }
-
-  .custom-carousel .react-multiple-carousel__arrow {
-    width: 32px;
-    height: 32px;
-    font-size: 14px;
-  }
-
-  .react-multi-carousel-item {
-    padding-top: 4.5rem;
-    padding-bottom: 4.5rem;
-  }
-
-  .our-sellers-wrapper {
-    padding: 2rem 1rem;
-  }
-
-  .our-sellers-container {
-    padding: 0;
-  }
+  .our-sellers-title { font-size: 1.5rem; }
+  .our-sellers-filters { gap: 1rem; }
+  .custom-carousel .react-multiple-carousel__arrow { width: 32px; height: 32px; font-size: 14px; }
+  .react-multi-carousel-item { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+  .our-sellers-wrapper { padding: 2rem 1rem; }
+  .our-sellers-container { padding: 0; }
 }
 
-/* ===== Remove horizontal scroll if caused by carousel overflow ===== */
-body,
-html {
-  overflow-x: hidden;
-}
+/* ===== No horizontal scroll ===== */
+body, html { overflow-x: hidden; }

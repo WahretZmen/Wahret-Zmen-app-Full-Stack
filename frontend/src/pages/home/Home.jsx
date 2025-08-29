@@ -81,7 +81,7 @@ const Home = () => {
 
     {/* 🧵 Our Sellers */}
     <FadeInSection delay={0.3}>
-      <section className="py-12 bg-[#F9F6F2] rounded-2xl shadow-xl mt-12">
+      <section className="py-12 bg-[#ffffff] rounded-2xl shadow-xl mt-12">
         <div className="text-center px-4">
           <h2 className="text-3xl font-bold text-[#8A5D3B] drop-shadow-sm">
             {t("our_collections", "Our Traditional Treasures")}

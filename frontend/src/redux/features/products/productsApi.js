@@ -1,5 +1,20 @@
+// src/redux/features/products/productsApi.js
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import getBaseUrl from "../../../utils/baseURL";
+
+// Normalize colors to always have `images[]`
+// and keep a backward-compatible `image` equal to images[0]
+const normalizeColors = (colors, coverImage) =>
+  (colors || []).map((c) => {
+    const images = Array.isArray(c.images) && c.images.length
+      ? c.images
+      : (c.image ? [c.image] : []);
+    return {
+      ...c,
+      images,
+      image: images[0] || c.image || coverImage || "", // compat for UIs that expect `.image`
+    };
+  });
 
 const baseQuery = fetchBaseQuery({
   baseUrl: `${getBaseUrl().replace(/\/$/, "")}/api/products`,
@@ -24,9 +39,7 @@ const productsApi = createApi({
       transformResponse: (response) =>
         response.map((product) => ({
           ...product,
-          colors: product.colors?.length
-            ? product.colors
-            : [{ colorName: "Default", image: product.coverImage }],
+          colors: normalizeColors(product.colors, product.coverImage),
         })),
       providesTags: (result) =>
         result
@@ -42,9 +55,7 @@ const productsApi = createApi({
       query: (id) => `/${id}`,
       transformResponse: (product) => ({
         ...product,
-        colors: product.colors?.length
-          ? product.colors
-          : [{ colorName: "Default", image: product.coverImage }],
+        colors: normalizeColors(product.colors, product.coverImage),
       }),
       providesTags: (result, error, id) => [{ type: "Products", id }],
     }),
@@ -55,32 +66,38 @@ const productsApi = createApi({
       providesTags: [{ type: "Products", id: "LIST" }],
     }),
 
-    // ✅ Add a new product
+    // ✅ Add a new product (supports multiple images per color)
     addProduct: builder.mutation({
       query: (newProduct) => ({
         url: "/create-product",
         method: "POST",
         body: {
           ...newProduct,
-          colors: newProduct.colors?.length
-            ? newProduct.colors
-            : [{ colorName: "Default", image: newProduct.coverImage }],
+          coverImage: newProduct.coverImage,
+          colors: (newProduct.colors || []).map((c) => ({
+            colorName: c.colorName, // EN; backend translates to FR/AR
+            images: Array.isArray(c.images) ? c.images : (c.image ? [c.image] : []),
+            stock: Number(c.stock) || 0,
+          })),
         },
         headers: { "Content-Type": "application/json" },
       }),
       invalidatesTags: [{ type: "Products", id: "LIST" }],
     }),
 
-    // ✅ Update a product
+    // ✅ Update a product (supports multiple images per color)
     updateProduct: builder.mutation({
       query: ({ id, ...rest }) => ({
         url: `/edit/${id}`,
         method: "PUT",
         body: {
           ...rest,
-          colors: rest.colors?.length
-            ? rest.colors
-            : [{ colorName: "Default", image: rest.coverImage }],
+          coverImage: rest.coverImage,
+          colors: (rest.colors || []).map((c) => ({
+            colorName: c.colorName, // EN; backend translates to FR/AR
+            images: Array.isArray(c.images) ? c.images : (c.image ? [c.image] : []),
+            stock: Number(c.stock) || 0,
+          })),
         },
         headers: { "Content-Type": "application/json" },
       }),

@@ -500,7 +500,7 @@ changePassword: {
           
          userDashboard: {
   title: "Mon tableau de bord - Wahret Zmen",
-  welcome: "Bienvenue, {{name}} !",
+  welcome: "Bonjour, {{name}} !",
   overview: "Voici un aperçu de vos commandes récentes.",
   yourOrders: "Vos commandes",
   orderId: "ID de commande",
@@ -511,7 +511,7 @@ changePassword: {
   original: "Original",
   noTitle: "Produit sans titre",
   noOrders: "Vous n'avez aucune commande récente.",
-  defaultUser: "Utilisateur"
+  defaultUser: "Client",
 },
 
 
@@ -916,7 +916,7 @@ changePassword: {
           userDashboard: {
 
             title: "لوحة التحكم الخاصة بي - وهرة الزّمان",
-            welcome: "! مرحباً، {{name}}",
+            welcome: "مرحبًا، {{name}}!",
             overview: "إليك نظرة عامة على طلباتك الأخيرة.",
             yourOrders: "طلباتك",
             orderId: "رقم الطلب",
@@ -930,7 +930,7 @@ changePassword: {
             noOrders: "ليس لديك طلبات حديثة.",
 
             noOrders: "ليس لديك طلبات حديثة",
-            defaultUser: "مستخدم"
+            defaultUser: "العميل"
           },
           
           

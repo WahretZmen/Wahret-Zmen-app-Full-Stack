@@ -1,1 +1,108 @@
 .OrderPage-screen {margin-top: 8%;}
+
+/* ------------------------------
+   Order Page — Responsive Styles
+   ------------------------------ */
+
+/* Tweak this if your navbar is taller/shorter */
+:root {
+  --navbar-h: 64px;
+  --safe-top: env(safe-area-inset-top, 0px);
+}
+
+/* Page wrapper (replaces margin-top: 8%) */
+.OrderPage-screen {
+  min-height: 100vh;
+  background: #f9fafb;                 /* Tailwind gray-50 */
+  padding-top: calc(var(--navbar-h) + var(--safe-top) + 8px);
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 24px;
+}
+
+/* Pretty order card shell */
+.order-card {
+  background: #f3f4f6;                  /* gray-100 */
+  border: 1px solid rgba(166, 124, 82, 0.25); /* brand-ish border */
+  border-left: 4px solid #A67C52;       /* brand accent */
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+/* Header row inside each order card */
+.order-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* Product line item */
+.order-item {
+  border: 1px solid rgba(166, 124, 82, 0.2);
+  border-radius: 12px;
+}
+
+/* Product thumbnail */
+.order-item img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: 2px solid rgba(166, 124, 82, 0.4);
+}
+
+/* Action area (optional helper if you group buttons) */
+.order-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.order-actions .btn {
+  flex: 1 1 auto;
+}
+
+/* ---------- Phones (≤ 480px) ---------- */
+@media (max-width: 480px) {
+  :root { --navbar-h: 56px; } /* many Android toolbars ~56px */
+
+  .OrderPage-screen {
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 16px;
+  }
+
+  .order-card {
+    padding: 16px !important; /* make inner spacing comfy on small screens */
+  }
+
+  .order-item {
+    padding: 12px !important;
+  }
+
+  .order-item img {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+/* ---------- Tablets / small laptops (481–1024px) ---------- */
+@media (min-width: 481px) and (max-width: 1024px) {
+  .OrderPage-screen {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* ---------- Desktops (≥ 1025px) ---------- */
+@media (min-width: 1025px) {
+  :root { --navbar-h: 72px; }
+
+  .OrderPage-screen {
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-bottom: 28px;
+  }
+}

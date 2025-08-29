@@ -1,3 +1,4 @@
+// src/pages/dashboard/products/UpdateProduct.jsx
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
@@ -8,6 +9,7 @@ import {
 import Loading from "../../../components/Loading";
 import Swal from "sweetalert2";
 import axios from "axios";
+import imageCompression from "browser-image-compression";
 import getBaseUrl from "../../../utils/baseURL";
 
 const UpdateProduct = () => {
@@ -16,127 +18,224 @@ const UpdateProduct = () => {
   const { register, handleSubmit, setValue } = useForm();
   const [updateProduct, { isLoading: updating }] = useUpdateProductMutation();
 
-  const [imageFile, setImageFile] = useState(null);
-  const [previewURL, setPreviewURL] = useState("");
+  // Cover image
+  const [coverFile, setCoverFile] = useState(null);
+  const [coverPreview, setCoverPreview] = useState("");
+
+  // Colors state
+  /**
+   * each color:
+   * {
+   *   colorName: string (EN),
+   *   stock: number,
+   *   images: string[],          // uploaded URLs for this color
+   *   pendingFile: File|null,    // not-yet-uploaded
+   *   pendingPreview: string,    // objectURL
+   *   uploading: boolean
+   * }
+   */
   const [colors, setColors] = useState([]);
 
-  useEffect(() => {
-    if (productData) {
-      setValue("title", productData.title);
-      setValue("description", productData.description);
-      setValue("category", productData.category);
-      setValue("trending", productData.trending);
-      setValue("oldPrice", productData.oldPrice);
-      setValue("newPrice", productData.newPrice);
-      setValue("stockQuantity", productData.stockQuantity);
-
-      let coverImageUrl = productData.coverImage || "";
-      if (coverImageUrl) {
-        setPreviewURL(
-          coverImageUrl.startsWith("http")
-            ? coverImageUrl
-            : `${getBaseUrl()}${coverImageUrl}`
-        );
-      }
-
-      if (Array.isArray(productData.colors)) {
-        const formattedColors = productData.colors.map((color) => ({
-          colorName:
-            typeof color.colorName === "object"
-              ? color.colorName.en
-              : color.colorName || "",
-          image: color.image || "",
-          stock: color.stock || 0,
-          imageFile: null,
-          previewURL:
-            color.image && color.image.startsWith("http")
-              ? color.image
-              : `${getBaseUrl()}${color.image}`,
-        }));
-        setColors(formattedColors);
-      }
-    }
-  }, [productData, setValue]);
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
-      setPreviewURL(URL.createObjectURL(file));
-    }
-  };
-
-  const handleColorChange = (index, field, value) => {
-    const updatedColors = [...colors];
-    if (field === "imageFile") {
-      updatedColors[index][field] = value;
-      updatedColors[index].previewURL = URL.createObjectURL(value);
-    } else {
-      updatedColors[index][field] = value;
-    }
-    setColors(updatedColors);
-  };
-
-  const addColor = () => {
-    setColors([
-      ...colors,
-      { colorName: "", stock: 0, imageFile: null, previewURL: "" },
-    ]);
-  };
-
-  const deleteColor = (index) => {
-    setColors(colors.filter((_, i) => i !== index));
+  // ---------- helpers ----------
+  const compressImage = async (file) => {
+    const options = { maxSizeMB: 1, maxWidthOrHeight: 1024, useWebWorker: true };
+    return await imageCompression(file, options);
   };
 
   const uploadImage = async (file) => {
     if (!file) return "";
-    const formData = new FormData();
-    formData.append("image", file);
-    const res = await axios.post(`${getBaseUrl()}/api/upload`, formData);
-    return res.data.image;
+    try {
+      const compressed = await compressImage(file);
+      const formData = new FormData();
+      formData.append("image", compressed);
+      const res = await axios.post(`${getBaseUrl()}/api/upload`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      return res.data.image; // relative path or full URL
+    } catch (err) {
+      console.error("❌ Image upload failed:", err);
+      Swal.fire("Erreur", "Échec de l’envoi de l’image. Réessayez.", "error");
+      return "";
+    }
   };
 
-  const onSubmit = async (data) => {
-    let coverImage = productData.coverImage || "";
-    if (imageFile) {
-      coverImage = await uploadImage(imageFile);
+  const fullUrl = (url) => (url?.startsWith("http") ? url : `${getBaseUrl()}${url}`);
+
+  // ---------- init from API ----------
+  useEffect(() => {
+    if (!productData) return;
+
+    // fill simple fields
+    setValue("title", productData.title);
+    setValue("description", productData.description);
+    setValue("category", productData.category);
+    setValue("trending", !!productData.trending);
+    setValue("oldPrice", productData.oldPrice);
+    setValue("newPrice", productData.newPrice);
+    setValue("stockQuantity", productData.stockQuantity || 0);
+
+    // cover preview
+    const cover = productData.coverImage || "";
+    setCoverPreview(cover ? fullUrl(cover) : "");
+
+    // prepare colors with images array
+    const prepared =
+      Array.isArray(productData.colors) && productData.colors.length
+        ? productData.colors.map((c) => {
+            const name =
+              typeof c.colorName === "object" ? c.colorName.en : c.colorName || "";
+            const imgs =
+              Array.isArray(c.images) && c.images.length
+                ? c.images
+                : c.image
+                ? [c.image]
+                : [];
+            return {
+              colorName: name,
+              stock: Number(c.stock) || 0,
+              images: imgs, // keep as relative; we’ll display with fullUrl
+              pendingFile: null,
+              pendingPreview: "",
+              uploading: false,
+            };
+          })
+        : [
+            {
+              colorName: "",
+              stock: 0,
+              images: [],
+              pendingFile: null,
+              pendingPreview: "",
+              uploading: false,
+            },
+          ];
+
+    setColors(prepared);
+  }, [productData, setValue]);
+
+  // ---------- small state utils ----------
+  const setColorAt = (index, patch) => {
+    setColors((prev) => prev.map((c, i) => (i === index ? { ...c, ...patch } : c)));
+  };
+
+  const handleColorField = (index, field, value) => setColorAt(index, { [field]: value });
+
+  const addColor = () =>
+    setColors((prev) => [
+      ...prev,
+      { colorName: "", stock: 0, images: [], pendingFile: null, pendingPreview: "", uploading: false },
+    ]);
+
+  const deleteColor = (index) =>
+    setColors((prev) => prev.filter((_, i) => i !== index));
+
+  const pickColorFile = (index, file) => {
+    if (file && file.type.startsWith("image/")) {
+      setColorAt(index, {
+        pendingFile: file,
+        pendingPreview: URL.createObjectURL(file),
+      });
     }
+  };
 
-    const updatedColors = await Promise.all(
-      colors.map(async (color) => {
-        let imageUrl = color.image || "";
-        if (color.imageFile) {
-          imageUrl = await uploadImage(color.imageFile);
-        }
+  const cancelPending = (index) =>
+    setColorAt(index, { pendingFile: null, pendingPreview: "" });
 
-        return {
-          colorName: color.colorName, // ✅ Send as EN string, let backend translate
-          image: imageUrl,
-          stock: Number(color.stock) || 0,
-        };
-      })
+  const uploadPending = async (index) => {
+    const color = colors[index];
+    if (!color.pendingFile) return;
+    try {
+      setColorAt(index, { uploading: true });
+      const url = await uploadImage(color.pendingFile);
+      if (url) {
+        setColorAt(index, {
+          images: [...color.images, url],
+          pendingFile: null,
+          pendingPreview: "",
+        });
+      }
+    } finally {
+      setColorAt(index, { uploading: false });
+    }
+  };
+
+  const removeImage = (cIdx, imgIdx) =>
+    setColors((prev) =>
+      prev.map((c, i) =>
+        i === cIdx ? { ...c, images: c.images.filter((_, j) => j !== imgIdx) } : c
+      )
     );
 
-    const allowedCategories = ["Men", "Women", "Children"];
-    const finalCategory = allowedCategories.includes(data.category)
-      ? data.category
-      : "Men";
+  const handleCover = (e) => {
+    const f = e.target.files?.[0];
+    if (f && f.type.startsWith("image/")) {
+      setCoverFile(f);
+      setCoverPreview(URL.createObjectURL(f));
+    }
+  };
 
-    const updatedProductData = {
-      ...data,
-      category: finalCategory,
-      coverImage,
-      colors: updatedColors,
-      oldPrice: Number(data.oldPrice),
-      newPrice: Number(data.newPrice),
-      stockQuantity: updatedColors[0]?.stock || 0, // ✅ Use first color's stock
-    };
+  const cancelCover = () => {
+    setCoverFile(null);
+    setCoverPreview(productData?.coverImage ? fullUrl(productData.coverImage) : "");
+  };
 
+  // ---------- submit ----------
+  const onSubmit = async (data) => {
     try {
-      await updateProduct({ id, ...updatedProductData }).unwrap();
+      // upload cover if changed
+      let coverImage = productData.coverImage || "";
+      if (coverFile) {
+        const url = await uploadImage(coverFile);
+        if (url) coverImage = url;
+      }
+
+      // opportunistically upload any pending files
+      const prepared = [...colors];
+      for (let i = 0; i < prepared.length; i++) {
+        const c = prepared[i];
+        if (c.pendingFile) {
+          const url = await uploadImage(c.pendingFile);
+          if (url) {
+            prepared[i] = {
+              ...c,
+              images: [...c.images, url],
+              pendingFile: null,
+              pendingPreview: "",
+            };
+          }
+        }
+      }
+
+      const colorsForServer = prepared
+        .filter((c) => c.colorName && (c.images.length > 0))
+        .map((c) => ({
+          colorName: c.colorName, // EN; backend translates
+          image: c.images[0] || "",
+          images: c.images,
+          stock: Number(c.stock) || 0,
+        }));
+
+      const allowedCategories = ["Men", "Women", "Children"];
+      const finalCategory = allowedCategories.includes(data.category) ? data.category : "Men";
+
+      const payload = {
+        title: data.title,
+        description: data.description,
+        category: finalCategory,
+        coverImage,
+        colors: colorsForServer,
+        oldPrice: Number(data.oldPrice),
+        newPrice: Number(data.newPrice),
+        stockQuantity: Number(data.stockQuantity) || colorsForServer[0]?.stock || 0,
+        trending: !!data.trending,
+      };
+
+      await updateProduct({ id, ...payload }).unwrap();
+
       Swal.fire("Succès !", "Produit mis à jour avec succès !", "success");
       refetch();
     } catch (error) {
+      console.error(error);
       Swal.fire("Erreur !", "Échec de la mise à jour du produit.", "error");
     }
   };
@@ -144,119 +243,205 @@ const UpdateProduct = () => {
   useEffect(() => {
     document.documentElement.dir = "ltr";
   }, []);
-  
 
+  if (isLoading) return <Loading />;
+  if (isError) return <div className="text-center text-red-500">Erreur lors du chargement du produit.</div>;
 
-if (isLoading) return <Loading />;
-if (isError) return <div className="text-center text-red-500">Erreur lors de la récupération des données du produit.</div>;
+  return (
+    <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md w-full">
+      <h2 className="text-2xl font-bold text-center text-[#A67C52] mb-4">
+        Mettre à Jour le Produit
+      </h2>
 
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <input {...register("title")} className="w-full p-2 border rounded" required />
+        <textarea {...register("description")} className="w-full p-2 border rounded" required />
 
-return (
-  <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
-    <h2 className="text-2xl font-bold text-center text-[#A67C52] mb-4">Mettre à Jour le Produit</h2>
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <select {...register("category")} className="w-full p-2 border rounded" required>
+          <option value="">Sélectionner une Catégorie</option>
+          <option value="Men">Homme</option>
+          <option value="Women">Femme</option>
+          <option value="Children">Enfants</option>
+        </select>
 
-      <label className="font-semibold text-gray-700">Nom du Produit</label>
-      <input {...register("title")} className="w-full p-2 border rounded" required />
+        <div className="grid grid-cols-2 gap-4">
+          <input {...register("oldPrice")} type="number" className="w-full p-2 border rounded" required />
+          <input {...register("newPrice")} type="number" className="w-full p-2 border rounded" required />
+        </div>
 
-      <label className="font-semibold text-gray-700">Description</label>
-      <textarea {...register("description")} className="w-full p-2 border rounded" required />
-
-      <label className="font-semibold text-gray-700">Catégorie</label>
-      <select {...register("category")} className="w-full p-2 border rounded" required>
-        <option value="">Sélectionner une Catégorie</option>
-        <option value="Men">Homme</option>
-        <option value="Women">Femme</option>
-        <option value="Children">Enfants</option>
-      </select>
-
-      <label className="font-semibold text-gray-700">Ancien Prix (USD)</label>
-      <input {...register("oldPrice")} type="number" className="w-full p-2 border rounded" required />
-
-      <label className="font-semibold text-gray-700">Nouveau Prix (USD)</label>
-      <input {...register("newPrice")} type="number" className="w-full p-2 border rounded" required />
-
-      <label className="font-semibold text-gray-700">Quantité en Stock (Totale)</label>
-      <input {...register("stockQuantity")} type="number" className="w-full p-2 border rounded" min="0" required />
-
-      <label className="flex items-center justify-center w-full">
-        <input type="checkbox" {...register("trending")} className="mr-2" />
-        Définir comme Produit Tendance
-      </label>
-
-      <label className="font-semibold text-gray-700">Image Principale</label>
-      <input type="file" accept="image/*" onChange={handleFileChange} className="w-full p-2 border rounded" />
-      {previewURL && (
-        <img
-          src={previewURL}
-          alt="Aperçu"
-          className="w-64 h-64 object-cover border rounded-md mt-4 mx-auto"
+        <input
+          {...register("stockQuantity")}
+          type="number"
+          className="w-full p-2 border rounded"
+          min="0"
+          placeholder="Quantité en Stock (Totale)"
+          required
         />
-      )}
 
-      <label className="font-semibold text-gray-700">Couleurs</label>
-      {colors.map((color, index) => (
-        <div key={index} className="space-y-2 border p-3 rounded-md">
-          <input
-            type="text"
-            value={color.colorName}
-            onChange={(e) => handleColorChange(index, "colorName", e.target.value)}
-            className="w-full p-2 border rounded"
-            placeholder="Nom de la Couleur (EN)"
-            required
-          />
+        <label className="inline-flex items-center">
+          <input type="checkbox" {...register("trending")} className="mr-2" />
+          Produit Tendance
+        </label>
 
-          <input
-            type="number"
-            value={color.stock}
-            onChange={(e) => handleColorChange(index, "stock", Number(e.target.value))}
-            className="w-full p-2 border rounded"
-            placeholder="Stock pour cette couleur"
-            required
-          />
+        {/* Cover image */}
+        <div>
+          <label className="block font-medium mb-1">Image Principale</label>
+          <div className="flex items-center gap-2">
+            <label
+              htmlFor="cover-upload"
+              className="inline-flex items-center px-3 py-2 rounded-md border border-gray-300 bg-gray-50 hover:bg-gray-100 text-sm cursor-pointer"
+            >
+              Choisir une image
+            </label>
+            <input id="cover-upload" type="file" accept="image/*" className="hidden" onChange={handleCover} />
 
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleColorChange(index, "imageFile", e.target.files[0])}
-            className="w-full p-2 border rounded"
-          />
+            {coverPreview && (
+              <button
+                type="button"
+                onClick={cancelCover}
+                className="px-3 py-2 rounded-md border text-sm bg-gray-100 hover:bg-gray-200"
+              >
+                Annuler la sélection
+              </button>
+            )}
+          </div>
 
-          {color.previewURL && (
+          {coverPreview && (
             <img
-              src={color.previewURL}
-              alt="Aperçu de la Couleur"
-              className="w-20 h-20 mt-2 object-cover border rounded"
+              src={coverPreview}
+              alt="Aperçu"
+              className="w-32 h-32 object-cover border rounded mt-2"
             />
           )}
+        </div>
+
+        {/* Colors */}
+        <div>
+          <label className="block font-medium mb-2">Couleurs</label>
+
+          {colors.map((c, index) => (
+            <div key={index} className="space-y-3 border border-gray-200 p-3 rounded-md">
+              <input
+                type="text"
+                value={c.colorName}
+                onChange={(e) => handleColorField(index, "colorName", e.target.value)}
+                className="w-full p-2 border rounded"
+                placeholder="Nom de la Couleur (EN)"
+                required
+              />
+
+              <input
+                type="number"
+                value={c.stock}
+                onChange={(e) => handleColorField(index, "stock", Number(e.target.value) || 0)}
+                className="w-full p-2 border rounded"
+                placeholder="Stock"
+                required
+              />
+
+              <div className="flex items-center gap-2">
+                <input
+                  id={`pick-${index}`}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => pickColorFile(index, e.target.files?.[0])}
+                />
+                <label
+                  htmlFor={`pick-${index}`}
+                  className="inline-flex items-center px-3 py-2 rounded-md border border-gray-300 bg-gray-50 hover:bg-gray-100 text-sm cursor-pointer"
+                >
+                  Choisir une image
+                </label>
+
+                <button
+                  type="button"
+                  onClick={() => uploadPending(index)}
+                  disabled={!c.pendingFile || c.uploading}
+                  className={`px-4 py-2 rounded-md text-white text-sm ${
+                    c.pendingFile && !c.uploading
+                      ? "bg-[#2F3A4A] hover:bg-[#232c39]"
+                      : "bg-gray-300 cursor-not-allowed"
+                  }`}
+                >
+                  {c.uploading ? "Envoi..." : "Upload"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => cancelPending(index)}
+                  disabled={!c.pendingFile || c.uploading}
+                  className={`px-4 py-2 rounded-md text-sm border ${
+                    c.pendingFile && !c.uploading
+                      ? "bg-gray-100 hover:bg-gray-200"
+                      : "bg-gray-100 opacity-60 cursor-not-allowed"
+                  }`}
+                >
+                  Annuler la sélection
+                </button>
+              </div>
+
+              {c.pendingPreview && (
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-gray-600">Aperçu (non envoyé) :</span>
+                  <img
+                    src={c.pendingPreview}
+                    alt="pending"
+                    className="w-16 h-16 object-cover rounded border"
+                  />
+                </div>
+              )}
+
+              {c.images.length > 0 && (
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                  {c.images.map((img, imgIdx) => (
+                    <div key={imgIdx} className="relative">
+                      <img
+                        src={fullUrl(img)}
+                        alt={`color-${index}-img-${imgIdx}`}
+                        className="w-20 h-20 object-cover rounded border"
+                      />
+                      <button
+                        type="button"
+                        title="Supprimer l'image"
+                        onClick={() => removeImage(index, imgIdx)}
+                        className="absolute -top-2 -right-2 bg-red-600 hover:bg-red-700 text-white rounded-full w-6 h-6 flex items-center justify-center shadow"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={() => deleteColor(index)}
+                className="w-full px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+              >
+                Supprimer la Couleur
+              </button>
+            </div>
+          ))}
 
           <button
             type="button"
-            onClick={() => deleteColor(index)}
-            className="px-3 py-1 bg-red-500 text-white rounded"
+            onClick={addColor}
+            className="w-full mt-3 px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded"
           >
-            Supprimer la Couleur
+            Ajouter une Couleur
           </button>
         </div>
-      ))}
 
-      <button
-        type="button"
-        onClick={addColor}
-        className="px-3 py-2 bg-gray-300 rounded"
-      >
-        Ajouter une Couleur
-      </button>
-
-      <button
-        type="submit"
-        className="w-full py-2 bg-[#A67C52] text-white rounded-md hover:bg-[#8a5d3b] transition-colors duration-300"
-      >
-        {updating ? "Mise à jour en cours..." : "Mettre à Jour le Produit"}
-      </button>
-    </form>
-  </div>
-);
+        <button
+          type="submit"
+          className="w-full py-3 bg-[#A67C52] text-white rounded-md hover:bg-[#8a5d3b] transition"
+        >
+          {updating ? "Mise à jour en cours..." : "Mettre à Jour le Produit"}
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default UpdateProduct;
