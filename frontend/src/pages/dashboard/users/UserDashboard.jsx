@@ -47,6 +47,13 @@ const UserDashboard = () => {
     return { totalOrders: count, totalSpent: spent.toFixed(2) };
   }, [orders]);
 
+  
+  // Oldest -> newest for the list visual order
+  const sortedOrders = useMemo(
+    () => [...orders].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
+    [orders]
+  );
+
   // Helpers
   const initials = (name) =>
     name
@@ -208,7 +215,7 @@ const UserDashboard = () => {
           </div>
         ) : (
           <div className="grid gap-6">
-            {orders.map((order) => (
+            {sortedOrders.map((order) => (
               <article
                 key={order._id}
                 className="bg-white rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.06)] border border-[#A67C52]/20 overflow-hidden"

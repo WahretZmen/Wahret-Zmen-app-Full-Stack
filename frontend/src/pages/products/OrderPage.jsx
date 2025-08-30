@@ -45,6 +45,11 @@ const OrderPage = () => {
 
   if (isLoading) return <LoadingSpinner />;
 
+    // Always oldest -> newest for display numbering
+  const sortedOrders = [...orders].sort(
+    (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
+  );
+
   const handleDelete = async (orderId) => {
   console.log("Deleting order id:", orderId); // quick sanity check
   Swal.fire({
@@ -147,7 +152,7 @@ const OrderPage = () => {
           </div>
         ) : (
           <div className="mt-8 space-y-6">
-            {orders.map((order, index) => (
+            {sortedOrders.map((order, index) => (
               <div
                 key={order._id}
                 className="bg-gray-50 p-6 rounded-xl shadow-sm border border-[#A67C52]/30"
