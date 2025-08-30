@@ -46,78 +46,87 @@ const OrderPage = () => {
   if (isLoading) return <LoadingSpinner />;
 
   const handleDelete = async (orderId) => {
-    Swal.fire({
-      title: t("ordersPage.confirmDeleteTitle"),
-      text: t("ordersPage.confirmDeleteText"),
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#8B5C3E", // brand
-      cancelButtonColor: "#A67C52",  // brand accent
-      confirmButtonText: t("ordersPage.confirmDeleteBtn"),
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          await deleteOrder({ orderId }).unwrap();
-          Swal.fire(t("ordersPage.deleted"), t("ordersPage.orderDeleted"), "success");
-          refetch();
-          dispatch(productEventsActions.triggerRefetch());
-        } catch (error) {
-          Swal.fire(t("ordersPage.error"), t("ordersPage.orderDeleteFailed"), "error");
-        }
-      }
-    });
-  };
-
-  const handleDeleteProduct = async (
-    orderId,
-    productId,
-    colorNameObj,
-    maxQuantity
-  ) => {
-    const colorName = colorNameObj?.[lang] || colorNameObj?.en || "Original";
-    const productKey = `${productId}|${colorName}`;
-
-    const { value: quantityToRemove } = await Swal.fire({
-      title: t("ordersPage.removeQuantityTitle"),
-      input: "number",
-      inputLabel: t("ordersPage.removeQuantityLabel", { max: maxQuantity }),
-      inputAttributes: {
-        min: 1,
-        max: maxQuantity,
-        step: 1,
-      },
-      inputValue: 1,
-      showCancelButton: true,
-      confirmButtonText: t("ordersPage.removeBtn"),
-      cancelButtonText: t("ordersPage.cancelBtn"),
-      confirmButtonColor: "#8B5C3E", // brand
-      cancelButtonColor: "#A67C52",  // brand accent
-    });
-
-    if (!quantityToRemove || quantityToRemove <= 0) return;
+  console.log("Deleting order id:", orderId); // quick sanity check
+  Swal.fire({
+    title: t("ordersPage.confirmDeleteTitle"),
+    text: t("ordersPage.confirmDeleteText"),
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#8B5C3E",
+    cancelButtonColor: "#A67C52",
+    confirmButtonText: t("ordersPage.confirmDeleteBtn"),
+  }).then(async (result) => {
+    if (!result.isConfirmed) return;
 
     try {
-      const response = await removeProductFromOrder({
-        orderId,
-        productKey,
-        quantityToRemove,
-      }).unwrap();
+      // ⬅ pass the raw id (string)
+      await deleteOrder(orderId).unwrap();
 
-      Swal.fire(
-        t("ordersPage.removed"),
-        response.message.includes("no more products")
-          ? t("ordersPage.orderDeleted")
-          : t("ordersPage.productRemoved", { qty: quantityToRemove }),
-        "success"
-      );
-
-      await refetch();
+      Swal.fire(t("ordersPage.deleted"), t("ordersPage.orderDeleted"), "success");
+      await refetch(); // still good even with tag invalidation
       dispatch(productEventsActions.triggerRefetch());
-    } catch (error) {
-      console.error("❌ Failed to remove product:", error);
-      Swal.fire(t("ordersPage.error"), t("ordersPage.productRemoveFailed"), "error");
+    } catch (err) {
+      console.error("Delete order failed:", err); // see exact error in console
+      Swal.fire(t("ordersPage.error"), t("ordersPage.orderDeleteFailed"), "error");
     }
-  };
+  });
+};
+
+
+  const handleDeleteProduct = async (
+  orderId,
+  productId,
+  colorNameObj,
+  maxQuantity
+) => {
+  // Canonical color name: en -> fr -> ar -> "Original"
+  const canonicalColorName = (() => {
+    if (!colorNameObj) return "Original";
+    if (typeof colorNameObj === "string") return colorNameObj;
+    return colorNameObj.en || colorNameObj.fr || colorNameObj.ar || "Original";
+  })();
+
+  const productKey = `${productId}|${canonicalColorName}`;
+
+  const { value } = await Swal.fire({
+    title: t("ordersPage.removeQuantityTitle"),
+    input: "number",
+    inputLabel: t("ordersPage.removeQuantityLabel", { max: maxQuantity }),
+    inputAttributes: { min: 1, max: maxQuantity, step: 1 },
+    inputValue: 1,
+    showCancelButton: true,
+    confirmButtonText: t("ordersPage.removeBtn"),
+    cancelButtonText: t("ordersPage.cancelBtn"),
+    confirmButtonColor: "#8B5C3E",
+    cancelButtonColor: "#A67C52",
+  });
+
+  const quantityToRemove = Number(value);
+  if (!quantityToRemove || quantityToRemove <= 0) return;
+
+  try {
+    const response = await removeProductFromOrder({
+      orderId,
+      productKey,
+      quantityToRemove,
+    }).unwrap();
+
+    Swal.fire(
+      t("ordersPage.removed"),
+      response?.message?.toLowerCase?.().includes("no more products")
+        ? t("ordersPage.orderDeleted")
+        : t("ordersPage.productRemoved", { qty: quantityToRemove }),
+      "success"
+    );
+
+    await refetch();
+    dispatch(productEventsActions.triggerRefetch());
+  } catch (err) {
+    console.error("❌ Failed to remove product:", err);
+    Swal.fire(t("ordersPage.error"), t("ordersPage.productRemoveFailed"), "error");
+  }
+};
+
 
   return (
     <div className="bg-[#F8F1E9] min-h-screen px-4 sm:px-6 OrderPage-screen pt-28 md:pt-32 pb-12">
@@ -226,20 +235,21 @@ const OrderPage = () => {
 
                           {/* Delete product (brand colors) */}
                           <button
-                            onClick={() =>
-                              handleDeleteProduct(
-                                order._id,
-                                product.productId._id,
-                                product.color?.colorName,
-                                product.quantity
-                              )
-                            }
-                            className="mt-2 inline-flex items-center justify-center px-4 py-2 rounded-md font-medium
-                                       text-white bg-[#8B5C3E] hover:bg-[#74452D] transition shadow-sm
-                                       focus:outline-none focus:ring-2 focus:ring-[#A67C52] focus:ring-offset-2"
-                          >
-                            {t("ordersPage.removeProduct")}
-                          </button>
+  onClick={() =>
+    handleDeleteProduct(
+      order._id,
+      product.productId._id,
+      product.color?.colorName, // can be object or string
+      product.quantity
+    )
+  }
+  className="mt-2 inline-flex items-center justify-center px-4 py-2 rounded-md font-medium
+             text-white bg-[#8B5C3E] hover:bg-[#74452D] transition shadow-sm
+             focus:outline-none focus:ring-2 focus:ring-[#A67C52] focus:ring-offset-2"
+>
+  {t("ordersPage.removeProduct")}
+</button>
+
                         </div>
                       </li>
                     );
@@ -248,18 +258,16 @@ const OrderPage = () => {
 
                 {/* Delete whole order (brand colors + disabled state) */}
                 <div className="flex justify-end">
-                  <button
-                    onClick={() => handleDelete(order._id)}
-                    disabled={isDeleting}
-                    className={`mt-5 px-5 py-2 rounded-lg text-white transition shadow-sm
-                      focus:outline-none focus:ring-2 focus:ring-[#A67C52] focus:ring-offset-2
-                      ${isDeleting
-                        ? "bg-[#C6A990] cursor-not-allowed opacity-70"
-                        : "bg-[#8B5C3E] hover:bg-[#74452D]"
-                      }`}
-                  >
-                    {isDeleting ? t("ordersPage.deleting") : t("ordersPage.deleteOrder")}
-                  </button>
+                <button
+  onClick={() => handleDelete(order._id)}
+  disabled={isDeleting}
+  className={`mt-5 px-5 py-2 rounded-lg text-white transition shadow-sm
+    focus:outline-none focus:ring-2 focus:ring-[#A67C52] focus:ring-offset-2
+    ${isDeleting ? "bg-[#C6A990] cursor-not-allowed opacity-70" : "bg-[#8B5C3E] hover:bg-[#74452D]"}`}
+>
+  {isDeleting ? t("ordersPage.deleting") : t("ordersPage.deleteOrder")}
+</button>
+
                 </div>
               </div>
             ))}

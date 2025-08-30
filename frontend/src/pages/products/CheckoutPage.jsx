@@ -7,8 +7,12 @@ import Swal from "sweetalert2";
 import { useCreateOrderMutation } from "../../redux/features/orders/ordersApi";
 import "../../Styles/StylesCheckoutPage.css";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../../redux/features/cart/cartSlice";
 
 const CheckoutPage = () => {
+
+  const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
 
@@ -29,59 +33,63 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
 
-  const onSubmit = async (data) => {
-    const newOrder = {
-      name: data.name,
-      email: currentUser?.email,
-      address: {
-        street: data.address,
-        city: data.city,
-        country: data.country,
-        state: data.state,
-        zipcode: data.zipcode,
-      },
-      phone: data.phone,
-      products: cartItems.map((item) => ({
-        productId: item._id,
-        quantity: item.quantity,
-        color:
-          typeof item.color?.colorName === "object"
-            ? item.color
-            : {
-                colorName: {
-                  en: item.color?.colorName || "Original",
-                  fr: item.color?.colorName || "Original",
-                  ar: "أصلي",
-                },
-                image: item.color?.image || item.coverImage || "/assets/default-image.png",
+  
+
+const onSubmit = async (data) => {
+  const newOrder = {
+    name: data.name,
+    email: currentUser?.email,
+    address: {
+      street: data.address,
+      city: data.city,
+      country: data.country,
+      state: data.state,
+      zipcode: data.zipcode,
+    },
+    phone: data.phone,
+    products: cartItems.map((item) => ({
+      productId: item._id,
+      quantity: item.quantity,
+      color:
+        typeof item.color?.colorName === "object"
+          ? item.color
+          : {
+              colorName: {
+                en: item.color?.colorName || "Original",
+                fr: item.color?.colorName || "Original",
+                ar: "أصلي",
               },
-      })),
-      totalPrice: totalPrice,
-    };
-
-    try {
-  const result = await createOrder(newOrder).unwrap();
-  if (result) {
-    Swal.fire({
-  title: t("checkout.order_confirmed"),
-  text: t("checkout.success_message"),
-  icon: "success",
-  confirmButtonColor: "#A67C52",
-  confirmButtonText: t("checkout.go_to_orders"),
-}).then(() => {
-  window.location.href = "/orders";
-});
-
-  }
-} catch (error) {
-  Swal.fire({
-    title: t("checkout.error_title"),
-    text: error?.message || t("checkout.error_message"),
-    icon: "error",
-    confirmButtonColor: "#d33",
-  });
-}
+              image:
+                item.color?.image ||
+                item.coverImage ||
+                "/assets/default-image.png",
+            },
+    })),
+    totalPrice: Number(totalPrice),
   };
+
+  try {
+    await createOrder(newOrder).unwrap();
+    dispatch(clearCart()); // ✅ clear local cart
+    await Swal.fire({
+      title: t("checkout.order_confirmed"),
+      text: t("checkout.success_message"),
+      icon: "success",
+      confirmButtonColor: "#A67C52",
+      confirmButtonText: t("checkout.go_to_orders"),
+    });
+    // Better than window.location.href (keeps SPA state)
+    navigate("/orders", { replace: true });
+  } catch (error) {
+    Swal.fire({
+      title: t("checkout.error_title"),
+      text: error?.data?.message || error?.message || t("checkout.error_message"),
+      icon: "error",
+      confirmButtonColor: "#d33",
+    });
+  }
+};
+
 
   if (isLoading)
     return (

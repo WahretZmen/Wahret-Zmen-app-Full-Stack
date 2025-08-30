@@ -62,7 +62,7 @@ const productsApi = createApi({
 
     // ✅ Search products
     searchProducts: builder.query({
-      query: (searchTerm) => `/search?query=${searchTerm}`,
+      query: (searchTerm) => `/search?query=${encodeURIComponent(searchTerm)}`,
       providesTags: [{ type: "Products", id: "LIST" }],
     }),
 

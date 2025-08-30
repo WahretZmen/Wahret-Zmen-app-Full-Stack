@@ -6,57 +6,80 @@ import logoImg from "../../src/assets/Logo/Logo Boutique Wahret Zmen.jpg";
 import "../Styles/StylesNavbar.css";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const headerRef = useRef(null);
 
   const cartItems = useSelector((state) => state.cart.cartItems);
   const { currentUser, logout } = useAuth();
   const token = localStorage.getItem("token");
 
   const { t, i18n } = useTranslation();
+  const dir = i18n.language === "ar" ? "rtl" : "ltr";
+  const navigate = useNavigate();
 
+  // Expose navbar height as a CSS variable so the fixed dropdown can sit below it
+  useEffect(() => {
+    const setNavHeightVar = () => {
+      const h = headerRef.current?.offsetHeight || 60;
+      document.documentElement.style.setProperty("--navbar-height", `${h}px`);
+    };
+    setNavHeightVar();
+    window.addEventListener("resize", setNavHeightVar);
+    return () => window.removeEventListener("resize", setNavHeightVar);
+  }, []);
+
+  // Click outside + close mobile menu when clicking outside navbar
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
-      if (isMobileMenuOpen && !event.target.closest(".navbar-content")) {
+      const navbarEl = document.querySelector(".navbar-content");
+      if (isMobileMenuOpen && navbarEl && !navbarEl.contains(event.target)) {
         setIsMobileMenuOpen(false);
       }
     };
+
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setIsDropdownOpen(false);
+        setIsMobileMenuOpen(false);
+      }
+    };
+
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isDropdownOpen, isMobileMenuOpen]);
+  }, [isMobileMenuOpen]);
 
-
-    return (
-    <header className="navbar-container">
-      <nav className="navbar-content" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-
+  return (
+    <header className="navbar-container" ref={headerRef}>
+      <nav className="navbar-content" dir={dir}>
         {/* Logo Section */}
         <div className="navbar-left">
-          
-          <a
-  href="/"
-  className="logo"
-  onClick={() => setIsMobileMenuOpen(false)}
->
-  <img src={logoImg} alt="Wahret Zmen Logo" className="logo-img" />
-  <span className="logo-text">{t("navbar.brand")}</span>
-</a>
-
+          <Link
+            to="/"
+            className="logo"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <img src={logoImg} alt="Wahret Zmen Logo" className="logo-img" />
+            <span className="logo-text">{t("navbar.brand")}</span>
+          </Link>
         </div>
 
         {/* Mobile Toggle */}
         <button
           className="mobile-menu-btn"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Toggle menu"
+          onClick={() => setIsMobileMenuOpen((s) => !s)}
         >
           {isMobileMenuOpen ? <FiX className="menu-icon" /> : <FiMenu className="menu-icon" />}
         </button>
@@ -64,36 +87,30 @@ const Navbar = () => {
         {/* Center Navigation Links */}
         <ul className={`nav-links ${isMobileMenuOpen ? "mobile-center open" : ""}`}>
           <li>
-            <a href="/" onClick={() => setIsMobileMenuOpen(false)}>
-  {t("home")}
-</a>
-
+            <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
+              {t("home")}
+            </Link>
           </li>
           <li>
-            <a href="/products" onClick={() => setIsMobileMenuOpen(false)}>
-  {t("products")}
-</a>
-
+            <Link to="/products" onClick={() => setIsMobileMenuOpen(false)}>
+              {t("products")}
+            </Link>
           </li>
           <li>
-            <a href="/about" onClick={() => setIsMobileMenuOpen(false)}>
-  {t("about-menu")}
-</a>
-
-              
+            <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>
+              {t("about-menu")}
+            </Link>
           </li>
           <li>
-            <a href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
-  {t("contact-menu")}
-</a>
-
+            <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+              {t("contact-menu")}
+            </Link>
           </li>
           {token && (
             <li>
-              <a href="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
-  {t("admin_dashboard")}
-</a>
-
+              <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+                {t("admin_dashboard")}
+              </Link>
             </li>
           )}
         </ul>
@@ -101,86 +118,86 @@ const Navbar = () => {
         {/* Right Icons */}
         <div className="nav-icons">
           <Link
-  to="/cart"
-  className="cart-icon"
-  onClick={() => {
-    window.scrollTo(0, 0);
-  }}
->
-  <FiShoppingBag className="icon" />
-  {cartItems.length > 0 && <span className="cart-badge">{cartItems.length}</span>}
-</Link>
-
+            to="/cart"
+            className="cart-icon"
+            onClick={() => window.scrollTo(0, 0)}
+            aria-label={t("cart")}
+          >
+            <FiShoppingBag className="icon" />
+            {cartItems.length > 0 && <span className="cart-badge">{cartItems.length}</span>}
+          </Link>
 
           {currentUser ? (
             <div className="user-menu" ref={dropdownRef}>
               <button
                 className="user-avatar-btn"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                aria-haspopup="menu"
+                aria-expanded={isDropdownOpen}
+                aria-controls="profile-menu"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsDropdownOpen((s) => !s);
+                }}
               >
                 <FiUser className="user-icon logged-in" />
               </button>
 
-              {/* ✅ PROTECTED DROPDOWN */}
-              {isDropdownOpen && (
-                <div className="user-dropdown active">
-                  <ul>
-                    <li>
-                      <a href="/user-dashboard" onClick={() => setIsDropdownOpen(false)}>
-  {t("dashboard")}
-</a>
-
-                    </li>
-                    <li>
-                      <a href="/orders" onClick={() => setIsDropdownOpen(false)}>
-  {t("orders")}
-</a>
-
-                    </li>
-                    <li>
-                      <button
-                        onClick={() => {
-                          logout();
-                          setIsDropdownOpen(false);
-                        }}
-                      >
-                        {t("logout")}
-                      </button>
-                    </li>
-                  </ul>
-                </div>
-              )}
+              {/* Fixed, high z-index, scrollable dropdown */}
+              <div
+                id="profile-menu"
+                className={`user-dropdown ${isDropdownOpen ? "active" : ""} ${dir === "rtl" ? "rtl" : "ltr"}`}
+                role="menu"
+              >
+                <ul>
+                  <li role="menuitem">
+                    <Link
+                      to="/user-dashboard"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      {t("dashboard")}
+                    </Link>
+                  </li>
+                  <li role="menuitem">
+                    <Link
+                      to="/orders"
+                      onClick={() => setIsDropdownOpen(false)}
+                    >
+                      {t("orders")}
+                    </Link>
+                  </li>
+                  <li role="menuitem">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        logout();
+                        setIsDropdownOpen(false);
+                        navigate("/");
+                      }}
+                    >
+                      {t("logout")}
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
           ) : token ? (
-            <a href="/dashboard" className="dashboard-link admin-only">
-  {t("admin_dashboard")}
-</a>
-
+            <Link to="/dashboard" className="dashboard-link admin-only">
+              {t("admin_dashboard")}
+            </Link>
           ) : (
-            <a href="/login" className="login-icon">
-  <FiUser className="icon" />
-</a>
-
+            <Link to="/login" className="login-icon" aria-label={t("login")}>
+              <FiUser className="icon" />
+            </Link>
           )}
 
-          {/* Language Switcher */}
-          <div className="language-switcher-wrapper">
+          {/* Optional: language switcher spot (if you want it visible on the right) */}
+          {/* <div className="language-switcher-wrapper">
             <LanguageSwitcher />
-          </div>
+          </div> */}
         </div>
       </nav>
     </header>
   );
 };
 
-
-
-
-
-
 export default Navbar;
-
-
-
-
-
