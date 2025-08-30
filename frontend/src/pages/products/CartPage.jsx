@@ -15,31 +15,45 @@ const CartPage = () => {
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
 
+  const lang = i18n.language;
   const cartItems = useSelector((state) => state.cart.cartItems);
   const dispatch = useDispatch();
 
   const totalPrice = cartItems
-    .reduce((acc, item) => acc + item.newPrice * item.quantity, 0)
+    .reduce((acc, item) => acc + Number(item.newPrice || 0) * Number(item.quantity || 0), 0)
     .toFixed(2);
 
   const handleRemoveFromCart = (product) => dispatch(removeFromCart(product));
-  const handleClearCart = () => cartItems.length && dispatch(clearCart());
+  const handleClearCart = () => {
+    if (cartItems.length) dispatch(clearCart());
+  };
 
+  // Clamp quantity to [1, stock] and dispatch only on change
   const setQuantity = (product, quantity) => {
-    const max = product?.color?.stock ?? 999;
-    const next = Math.min(Math.max(1, quantity), max);
+    const max = typeof product?.color?.stock === "number" ? product.color.stock : 999;
+    const next = Math.min(Math.max(1, Number(quantity) || 1), max);
     if (next !== product.quantity) {
       dispatch(
         updateQuantity({
           _id: product._id,
-          color: product.color,
+          color: product.color, // use color object to uniquely identify the variant
           quantity: next,
         })
       );
     }
   };
+
   const inc = (p) => setQuantity(p, p.quantity + 1);
   const dec = (p) => setQuantity(p, p.quantity - 1);
+
+  const titleFor = (p) =>
+    p?.translations?.[lang]?.title || p?.title || t("ordersPage.noTitle");
+
+  const categoryFor = (p) => {
+    const key = (p?.category || "").toLowerCase();
+    const fromI18n = t(`categories.${key}`, p?.category || "");
+    return fromI18n;
+  };
 
   return (
     <div className="main-content">
@@ -71,20 +85,42 @@ const CartPage = () => {
             {cartItems.length > 0 ? (
               <ul className="space-y-4">
                 {cartItems.map((product) => {
-                  const linePrice = (product.newPrice * product.quantity).toFixed(2);
-                  const maxStock = product?.color?.stock ?? undefined;
+                  const keyColor =
+                    product?.color?.image ||
+                    product?.color?.colorName?.en ||
+                    product?.color?.colorName?.fr ||
+                    product?.color?.colorName?.ar ||
+                    "default";
+
+                  const linePrice = (
+                    Number(product.newPrice || 0) * Number(product.quantity || 0)
+                  ).toFixed(2);
+
+                  const maxStock =
+                    typeof product?.color?.stock === "number"
+                      ? product.color.stock
+                      : undefined;
+
+                  const disableMinus = product.quantity <= 1;
+                  const disablePlus =
+                    typeof maxStock === "number" ? product.quantity >= maxStock : false;
+
+                  const imgSrc = getImgUrl(product.color?.image || product.coverImage);
 
                   return (
                     <li
-                      key={`${product._id}-${product.color?.colorName?.en ?? "default"}`}
+                      key={`${product._id}-${keyColor}`}
                       className="flex flex-col sm:flex-row items-center sm:items-start bg-gray-50 p-4 rounded-xl shadow-sm border border-[#A67C52]/50 gap-4"
                     >
                       {/* Image */}
                       <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-lg border-2 border-[#A67C52]/80 shadow-sm">
                         <img
-                          src={getImgUrl(product.color?.image || product.coverImage)}
-                          alt={product.title}
+                          src={imgSrc}
+                          alt={titleFor(product)}
                           className="h-full w-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = "/assets/default-image.png";
+                          }}
                         />
                       </div>
 
@@ -96,20 +132,24 @@ const CartPage = () => {
                               to={`/products/${product._id}`}
                               className="hover:text-[#8B5C3E] transition-colors"
                             >
-                              {product.title}
+                              {titleFor(product)}
                             </Link>
                           </h3>
-                          <p className="text-xl font-bold text-[#8B5C3E]">${linePrice}</p>
+                          <p className="text-xl font-bold text-[#8B5C3E]">
+                            ${linePrice}
+                          </p>
                         </div>
 
                         <div className="mt-1 text-sm text-gray-600">
                           <p>
                             {t("cart.category")}:{" "}
-                            <span className="capitalize">{product.category}</span>
+                            <span className="capitalize">{categoryFor(product)}</span>
                           </p>
                           <p className="capitalize">
                             {t("cart.color")}:{" "}
-                            {product.color?.colorName?.[i18n.language] || t("cart.original")}
+                            {product.color?.colorName?.[lang] ||
+                              product.color?.colorName ||
+                              t("cart.original")}
                           </p>
                           {typeof maxStock === "number" && (
                             <p className="text-xs text-gray-500">
@@ -125,23 +165,37 @@ const CartPage = () => {
                             <span className="mr-3 text-gray-700">{t("cart.qty")}:</span>
                             <div className="inline-flex items-stretch rounded-xl border border-[#A67C52] overflow-hidden shadow-sm">
                               <button
-                                onClick={() => dec(product)}
-                                className="px-3 py-2 bg-[#F7F1EA] hover:bg-[#F0E6DA] active:scale-[.98] transition-colors text-[#8B5C3E] focus:outline-none"
+                                onClick={() => !disableMinus && dec(product)}
+                                disabled={disableMinus}
+                                className={`px-3 py-2 transition-colors focus:outline-none ${
+                                  disableMinus
+                                    ? "bg-[#EFE7DD] text-[#B89A7E] cursor-not-allowed"
+                                    : "bg-[#F7F1EA] hover:bg-[#F0E6DA] text-[#8B5C3E] active:scale-[.98]"
+                                }`}
                                 aria-label="decrease quantity"
                               >
                                 <FiMinus />
                               </button>
+
                               <input
                                 type="number"
                                 min={1}
                                 max={maxStock}
                                 value={product.quantity}
-                                onChange={(e) => setQuantity(product, Number(e.target.value))}
+                                onChange={(e) =>
+                                  setQuantity(product, Number(e.target.value))
+                                }
                                 className="w-16 text-center outline-none px-2 py-2 bg-white"
                               />
+
                               <button
-                                onClick={() => inc(product)}
-                                className="px-3 py-2 bg-[#8B5C3E] text-white hover:bg-[#74452D] active:scale-[.98] transition-colors focus:outline-none"
+                                onClick={() => !disablePlus && inc(product)}
+                                disabled={disablePlus}
+                                className={`px-3 py-2 transition-colors focus:outline-none ${
+                                  disablePlus
+                                    ? "bg-[#CBB39A] text-white cursor-not-allowed"
+                                    : "bg-[#8B5C3E] text-white hover:bg-[#74452D] active:scale-[.98]"
+                                }`}
                                 aria-label="increase quantity"
                               >
                                 <FiPlus />
@@ -149,7 +203,7 @@ const CartPage = () => {
                             </div>
                           </div>
 
-                          {/* Remove Button — new style */}
+                          {/* Remove Button */}
                           <button
                             onClick={() => handleRemoveFromCart(product)}
                             className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl

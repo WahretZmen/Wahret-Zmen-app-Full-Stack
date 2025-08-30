@@ -12,16 +12,27 @@ const AddProduct = () => {
   const { register, handleSubmit, reset } = useForm();
   const [addProduct, { isLoading }] = useAddProductMutation();
 
-  // Cover
+  // ---- Cover image state ----
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [coverPreviewURL, setCoverPreviewURL] = useState("");
 
-  // Colors
+  // ---- Colors state ----
+  /**
+   * Each color element:
+   * {
+   *   colorName: string,         // EN source; backend will translate
+   *   stock: number,
+   *   images: string[],          // uploaded URLs for this color
+   *   pendingFile: File|null,    // selected but not uploaded yet
+   *   pendingPreview: string,    // objectURL for preview
+   *   uploading: boolean
+   * }
+   */
   const [colorInputs, setColorInputs] = useState([
     { colorName: "", stock: 0, images: [], pendingFile: null, pendingPreview: "", uploading: false },
   ]);
 
-  // ------- utils -------
+  // ================= Utils =================
   const compressImage = async (file) => {
     const options = { maxSizeMB: 1, maxWidthOrHeight: 1024, useWebWorker: true };
     return await imageCompression(file, options);
@@ -36,7 +47,8 @@ const AddProduct = () => {
       const res = await axios.post(`${getBaseUrl()}/api/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      return res.data.image; // server returns relative path or full URL
+      // server returns a relative path or full URL in res.data.image
+      return res.data.image;
     } catch (err) {
       console.error("❌ Image upload failed:", err);
       Swal.fire("Erreur", "Échec de l’envoi de l’image. Réessayez.", "error");
@@ -44,7 +56,7 @@ const AddProduct = () => {
     }
   };
 
-  // ------- cover handlers -------
+  // ================= Cover handlers =================
   const handleCoverImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
@@ -56,7 +68,7 @@ const AddProduct = () => {
     }
   };
 
-  // ------- color handlers -------
+  // ================= Color handlers =================
   const setColorAt = (index, patch) => {
     setColorInputs((prev) => prev.map((c, i) => (i === index ? { ...c, ...patch } : c)));
   };
@@ -112,37 +124,58 @@ const AddProduct = () => {
     );
   };
 
-  // ------- submit -------
+  // ================= Submit =================
   const onSubmit = async (data) => {
     try {
-      // upload cover if selected
+      // 1) Upload cover if selected
       let coverImage = "";
       if (coverImageFile) {
         coverImage = await uploadImage(coverImageFile);
       }
 
-      // build colors payload
+      // 2) Build filtered copy of colors (keep only valid rows)
       const preparedColors = colorInputs
-        .filter((c) => c.colorName && (c.images.length > 0 || c.pendingFile)) // at least one image intended
-        .map((c) => {
-          const images = [...c.images]; // already uploaded images
-          // If user forgot to click "Upload" for the pending image, try to upload it now:
-          return { ...c, images };
-        });
+        .filter((c) => c.colorName && (c.images.length > 0 || c.pendingFile))
+        .map((c) => ({ ...c, images: [...c.images] })); // clone arrays
 
-      // opportunistic upload of any leftover pending files (if any)
+      // 3) ✅ Upload any leftover pending files **on preparedColors itself** (fixed index bug)
       for (let i = 0; i < preparedColors.length; i++) {
-        const color = colorInputs[i];
+        const color = preparedColors[i];
         if (color.pendingFile) {
           const url = await uploadImage(color.pendingFile);
-          if (url) preparedColors[i].images.push(url);
+          if (url) {
+            color.images.push(url);
+            color.pendingFile = null;
+            color.pendingPreview = "";
+          }
         }
       }
 
+      // 4) Guards
+      if (preparedColors.length === 0) {
+        Swal.fire("Données manquantes", "Ajoutez au moins une couleur avec une image.", "warning");
+        return;
+      }
+
+      if (preparedColors.some((c) => !Array.isArray(c.images) || c.images.length === 0)) {
+        Swal.fire("Image manquante", "Chaque couleur doit avoir au moins une image.", "warning");
+        return;
+      }
+
+      // If cover is still empty, use first color's first image
+      if (!coverImage) {
+        coverImage = preparedColors[0]?.images?.[0] || "";
+      }
+      if (!coverImage) {
+        Swal.fire("Image principale", "Veuillez fournir une image principale.", "warning");
+        return;
+      }
+
+      // 5) Map payload for server
       const colorsForServer = preparedColors.map((c) => ({
-        colorName: c.colorName, // EN name; backend will translate
-        image: c.images[0] || "", // first image as "main"
-        images: c.images, // full gallery for this color
+        colorName: c.colorName,         // EN; backend translates to FR/AR
+        image: c.images[0] || "",       // main image for that color
+        images: c.images,               // full gallery for the color
         stock: Number(c.stock) || 0,
       }));
 
@@ -157,12 +190,14 @@ const AddProduct = () => {
         colors: colorsForServer,
         oldPrice: Number(data.oldPrice),
         newPrice: Number(data.newPrice),
-        stockQuantity: colorsForServer[0]?.stock || 0,
+        stockQuantity: colorsForServer.reduce((sum, c) => sum + (c.stock || 0), 0),
         trending: !!data.trending,
       };
 
+      // 6) Send
       await addProduct(payload).unwrap();
 
+      // 7) Done
       Swal.fire("Succès", "Produit ajouté avec succès !", "success");
       reset();
       setCoverImageFile(null);
@@ -172,13 +207,17 @@ const AddProduct = () => {
       ]);
     } catch (error) {
       console.error("❌ Error adding product:", error?.data || error);
-      Swal.fire("Erreur", "Échec de l’ajout du produit.", "error");
+      Swal.fire("Erreur", error?.data?.message || "Échec de l’ajout du produit.", "error");
     }
   };
 
   useEffect(() => {
+    // Force LTR in dashboard
     document.documentElement.dir = "ltr";
   }, []);
+
+  // Helper to show uploaded images whether URL is relative or absolute
+  const fullUrl = (url) => (url?.startsWith("http") ? url : `${getBaseUrl()}${url}`);
 
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md w-full">
@@ -246,7 +285,6 @@ const AddProduct = () => {
               accept="image/*"
               className="hidden"
               onChange={handleCoverImageChange}
-              required
             />
             {coverPreviewURL && (
               <button
@@ -358,7 +396,7 @@ const AddProduct = () => {
                   {color.images.map((img, imgIdx) => (
                     <div key={imgIdx} className="relative">
                       <img
-                        src={img.startsWith("http") ? img : `${getBaseUrl()}${img}`}
+                        src={fullUrl(img)}
                         alt={`color-${index}-img-${imgIdx}`}
                         className="w-20 h-20 object-cover rounded border"
                       />
