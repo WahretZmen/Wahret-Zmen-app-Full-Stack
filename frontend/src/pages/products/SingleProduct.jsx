@@ -97,6 +97,12 @@ const SingleProduct = () => {
     setZoomPosition({ x, y });
   };
 
+  // ---- NEW: discount & price helpers (kept non-destructive) ----
+  const oldP = Number(product?.oldPrice || 0);
+  const newP = Number(product?.newPrice || 0);
+  const hasDiscount = oldP > 0 && newP > 0 && oldP > newP;
+  const saveAmount = hasDiscount ? (oldP - newP) : 0;
+
   if (isLoading) {
     return (
       <div className="max-w-6xl mx-auto p-8">
@@ -114,14 +120,14 @@ const SingleProduct = () => {
   }
 
   return (
-    <div className="product-cart px-4 sm:px-6 md:px-8 py-6 bg-[#F5EFE6] border border-[#A67C52] rounded-lg shadow-lg max-w-6xl mx-auto">
-      <h1 className="text-3xl sm:text-4xl font-bold text-center text-[#8B5E3B] font-serif mb-6">
+    <div className="product-cart px-4 sm:px-6 md:px-8 py-6 bg-white border border-[#A67C52] rounded-lg shadow-lg max-w-6xl mx-auto sp-page sp-square">
+      <h1 className="text-3xl sm:text-4xl font-bold text-center text-[#8B5E3B] font-serif mb-6 sp-title">
         {translatedTitle}
       </h1>
 
-      <div className="flex flex-col md:flex-row gap-8">
+      <div className="flex flex-col md:flex-row gap-8 sp-card">
         {/* IMAGES AREA */}
-        <div className="flex-1 md:flex md:gap-4">
+        <div className="flex-1 md:flex md:gap-4 sp-media">
           {/* Desktop: vertical thumbs — ring is NOT clipped */}
           <div className="hidden md:flex md:flex-col gap-3 w-20 overflow-visible">
             {activeGallery.map((img, idx) => {
@@ -133,8 +139,8 @@ const SingleProduct = () => {
                   onClick={() => setSelectedImageIndex(idx)}
                   className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden transition-all bg-white border ${
                     isActive
-                      ? "ring-2 ring-[#8B5E3B] ring-offset-2 ring-offset-[#F5EFE6] border-transparent"
-                      : "border-[#E7D9CC] hover:border-[#C9AF97]"
+                      ? "ring-2 ring-[#8B5E3B] ring-offset-2 ring-offset-[#F5EFE6] border-transparent sp-thumb is-active"
+                      : "border-[#E7D9CC] hover:border-[#C9AF97] sp-thumb"
                   }`}
                 >
                   <img
@@ -148,33 +154,70 @@ const SingleProduct = () => {
           </div>
 
           {/* Main image */}
-          <div className="relative border border-[#A67C52] rounded-lg overflow-hidden group w-full">
-            <img
-              src={getImgUrl(activeGallery[selectedImageIndex] || selectedColor?.image)}
-              alt={translatedTitle}
-              onMouseEnter={handleMouseEnter}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              className="w-full rounded-lg transition-transform duration-300 cursor-zoom-in object-cover"
-              style={{
-                transform:
-                  isHovering && window.innerWidth > 768 ? "scale(2)" : "scale(1)",
-                transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-              }}
-            />
-            <div
-              className={`absolute top-2 left-2 px-2 py-1 text-xs font-bold rounded-full text-white ${
-                selectedColor?.stock > 0 ? "bg-green-600" : "bg-red-500"
-              }`}
-            >
-              {selectedColor?.stock > 0
-                ? `${t("stock")}: ${selectedColor?.stock}`
-                : t("out_of_stock")}
-            </div>
-          </div>
+          {/* Main image with arrows */}
+<div className="relative border border-[#A67C52] overflow-hidden group w-full sp-mainimg">
+  {/* Left Arrow */}
+  {activeGallery.length > 1 && (
+    <button
+      type="button"
+      className="sp-arrow sp-arrow-left"
+      onClick={() =>
+        setSelectedImageIndex(
+          (prev) => (prev - 1 + activeGallery.length) % activeGallery.length
+        )
+      }
+    >
+      ‹
+    </button>
+  )}
+
+  {/* Main Image */}
+  <img
+    src={getImgUrl(activeGallery[selectedImageIndex] || selectedColor?.image)}
+    alt={translatedTitle}
+    onMouseEnter={handleMouseEnter}
+    onMouseMove={handleMouseMove}
+    onMouseLeave={handleMouseLeave}
+    className="w-full transition-transform duration-300 cursor-zoom-in object-contain"
+    style={{
+      transform:
+        isHovering && window.innerWidth > 768 ? "scale(2)" : "scale(1)",
+      transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+    }}
+  />
+
+  {/* Right Arrow */}
+  {activeGallery.length > 1 && (
+    <button
+      type="button"
+      className="sp-arrow sp-arrow-right"
+      onClick={() =>
+        setSelectedImageIndex(
+          (prev) => (prev + 1) % activeGallery.length
+        )
+      }
+    >
+      ›
+    </button>
+  )}
+
+  {/* Stock Badge */}
+  <div
+    className={`absolute top-2 left-2 px-2 py-1 text-xs font-bold rounded-full text-white ${
+      selectedColor?.stock > 0
+        ? "bg-green-600 sp-stock sp-stock--ok"
+        : "bg-red-500 sp-stock sp-stock--out"
+    }`}
+  >
+    {selectedColor?.stock > 0
+      ? `${t("stock")}: ${selectedColor?.stock}`
+      : t("out_of_stock")}
+  </div>
+</div>
+
 
           {/* Mobile: thumbs wrap */}
-          <div className="mt-3 md:hidden flex flex-wrap gap-3">
+          <div className="mt-3 md:hidden flex flex-wrap gap-3 sp-thumbs">
             {activeGallery.map((img, idx) => {
               const isActive = idx === selectedImageIndex;
               return (
@@ -182,9 +225,9 @@ const SingleProduct = () => {
                   key={idx}
                   type="button"
                   onClick={() => setSelectedImageIndex(idx)}
-                  className={`w-16 h-16 rounded-lg overflow-hidden transition-all bg-white border ${
+                  className={`w-16 h-16 rounded-lg overflow-hidden transition-all bg-white border sp-thumb ${
                     isActive
-                      ? "ring-2 ring-[#8B5E3B] ring-offset-2 ring-offset-[#F5EFE6] border-transparent"
+                      ? "ring-2 ring-[#8B5E3B] ring-offset-2 ring-offset-[#F5EFE6] border-transparent is-active"
                       : "border-[#E7D9CC] hover:border-[#C9AF97]"
                   }`}
                 >
@@ -200,8 +243,8 @@ const SingleProduct = () => {
         </div>
 
         {/* DETAILS AREA */}
-        <div className="flex-1 flex flex-col gap-4">
-          <p className="text-gray-700 text-base">{translatedDescription}</p>
+        <div className="flex-1 flex flex-col gap-4 sp-right">
+          <p className="text-gray-700 text-base sp-desc">{translatedDescription}</p>
 
           <div className="text-[#6B4226] space-y-2 text-base">
             <p>
@@ -218,21 +261,29 @@ const SingleProduct = () => {
             </p>
           </div>
 
-          <div className="text-2xl sm:text-3xl font-semibold text-[#8B5E3B]">
-            ${product?.newPrice}
-            {!!product?.oldPrice && (
-              <span className="text-gray-500 line-through ml-4 text-xl">
-                ${Math.round(product.oldPrice)}
-              </span>
+          {/* ---- UPDATED PRICE ROW (Chill & Lit style) ---- */}
+          <div className="sp-price-row">
+            {hasDiscount ? (
+              <>
+                <span className="sp-old">{oldP.toFixed(2)} $</span>
+                <span className="sp-new">{newP.toFixed(2)} $</span>
+                <span className="sp-save">
+                  {t("save") || "ÉCONOMISEZ"} {saveAmount.toFixed(2)} $
+                </span>
+              </>
+            ) : (
+              <span className="sp-new">{(newP || oldP).toFixed(2)} $</span>
             )}
           </div>
 
-          {/* Color selector */}
-          <div>
-            <p className="text-lg font-medium text-[#6B4226] mb-2">
+         
+
+          {/* Color selector (kept) */}
+          <div className="sp-block">
+            <p className="text-lg font-medium text-[#6B4226] mb-2 sp-block-label">
               {t("select_color")}:
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-4 sp-colors">
               {product?.colors?.map((color, index) => {
                 const translatedName =
                   color?.colorName?.[lang] || color?.colorName?.en || "Default";
@@ -271,12 +322,16 @@ const SingleProduct = () => {
             </p>
           </div>
 
-          {/* Qty + Add to cart */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-4">
-            <div className="flex items-center gap-3">
-              <label className="text-lg font-medium text-[#6B4226]">
-                {t("quantity")}:
-              </label>
+          {/* Qty + Add to cart (kept) */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-4 sp-cta-row">
+            <div className="flex items-center gap-3 sp-qty">
+              <button
+                type="button"
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                disabled={(selectedColor?.stock ?? 0) === 0}
+              >
+                –
+              </button>
               <input
                 type="number"
                 min="1"
@@ -286,21 +341,34 @@ const SingleProduct = () => {
                 className="border rounded px-4 py-2 w-24 text-center border-[#A67C52]"
                 disabled={selectedColor?.stock === 0}
               />
+              <button
+                type="button"
+                onClick={() =>
+                  setQuantity((q) =>
+                    Math.min((selectedColor?.stock ?? 1), q + 1)
+                  )
+                }
+                disabled={(selectedColor?.stock ?? 0) === 0 || quantity >= (selectedColor?.stock ?? 1)}
+              >
+                +
+              </button>
             </div>
 
             <button
               onClick={handleAddToCart}
               disabled={selectedColor?.stock === 0}
-              className={`w-full sm:w-auto py-3 px-6 rounded-lg text-white font-medium text-lg transition-all ${
+              className={`w-full sm:w-auto py-3 px-6 rounded-lg text-white font-medium text-lg transition-all sp-add ${
                 selectedColor?.stock > 0
                   ? "bg-[#8B5E3B] hover:bg-[#6B4226]"
-                  : "bg-gray-300 cursor-not-allowed"
+                  : "bg-gray-300 cursor-not-allowed is-disabled"
               }`}
             >
               <FiShoppingCart className="inline mr-2" />
               {selectedColor?.stock > 0 ? t("add_to_cart") : t("out_of_stock")}
             </button>
           </div>
+
+         
         </div>
       </div>
     </div>

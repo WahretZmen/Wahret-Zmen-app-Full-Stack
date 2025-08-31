@@ -1,24 +1,19 @@
-/* === Enhanced Single Product CSS with Premium Animations and Polish === */
+/* === Enhanced Single Product CSS with Premium Animations and Polish (clean white bg) === */
 .product-cart {
+  margin-top: 85px !important;
   margin: 8% auto 5%;
   padding-bottom: 2rem;
   animation: fadeInUp 0.8s ease-in-out;
-  background: linear-gradient(to bottom, #fffdf9, #f5efe6);
+  /* Removed beige gradient → pure white card */
+  background: #ffffff;
   border: 1px solid #a67c52;
-  border-radius: 16px;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   transition: background 0.5s ease;
 }
 
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .single-product-title {
@@ -40,19 +35,11 @@
   width: 80px;
   height: 3px;
   background-color: #8b5e3b;
-  border-radius: 999px;
   animation: underlineFadeIn 0.6s ease forwards;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes underlineFadeIn {
-  from { width: 0; }
-  to { width: 80px; }
-}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes underlineFadeIn { from { width: 0; } to { width: 80px; } }
 
 .single-product-content {
   display: flex;
@@ -62,6 +49,7 @@
   animation: fadeInUp 1s ease-in-out;
 }
 
+/* Image container background: was beige gradient → now white */
 .single-product-image-container {
   flex: 1;
   min-width: 300px;
@@ -69,7 +57,7 @@
   border-radius: 16px;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(135deg, #fcf5ee, #f5efe6);
+  background: #ffffff; /* cleaned */
   border: 1px solid #a67c52;
   transition: transform 0.5s ease;
 }
@@ -81,20 +69,56 @@
   cursor: zoom-in;
   padding: 0.5rem;
   will-change: transform;
-  border-radius: 12px;
+  
 }
 
-.single-product-image:hover {
-  transform: scale(1.05) rotate(0.2deg);
+.single-product-image:hover { transform: scale(1.05) rotate(0.2deg); }
+
+/* === Premium Arrows for Single Product Gallery === */
+.sp-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%; /* round button */
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
 }
 
+.sp-arrow:hover {
+  background: #000000; /* brand brown */
+  color: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.sp-arrow-left {
+  left: 12px;
+}
+
+.sp-arrow-right {
+  right: 12px;
+}
+
+
+/* Details panel: keep subtle card look but remove tinted overlay */
 .single-product-details {
   flex: 1;
   max-width: 50%;
   animation: fadeInUp 1.2s ease;
-  background: rgba(255, 255, 255, 0.8);
+  background: #ffffff; /* was rgba(255,255,255,0.8) */
   padding: 1rem;
-  border-radius: 12px;
+  
 }
 
 .single-product-heading {
@@ -114,10 +138,7 @@
   background-color: #8b5e3b;
   transition: width 0.3s ease;
 }
-
-.single-product-heading:hover::after {
-  width: 100%;
-}
+.single-product-heading:hover::after { width: 100%; }
 
 .single-product-description {
   font-size: 1.05rem;
@@ -155,64 +176,447 @@
   border: 1px solid #a67c52;
   padding: 6px 8px;
   font-size: 1rem;
-  border-radius: 8px;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
-
 .single-product-quantity input:focus {
   box-shadow: 0 0 0 2px rgba(139, 94, 59, 0.3);
   transform: scale(1.05);
   outline: none;
 }
 
-.add-to-cart-btn {
-  width: 100%;
-  padding: 1rem 1.5rem;
-  font-size: 1rem;
-  border-radius: 10px;
+/* Keep brand accent on CTA but card stays white */
+/* ==== Add to Cart Button: Flat Rectangular Style ==== */
+.sp-square .sp-add,
+.sp-square .add-to-cart-btn {
+  border-radius: 0 !important;      /* sharp edges */
+  width: 100% !important;
+  background: #2c2c2c !important;
+  margin-left: 50px !important;   /* dark neutral (like capture) */
+  color: #fff !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.3px;
+  padding: 14px 18px !important;
+  text-transform: uppercase;
+  text-align: center;
+  border: none !important;
+  box-shadow: none !important;
+  transition: background 0.25s ease;
   cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  background-color: #8b5e3b;
-  color: white;
-  box-shadow: 0 8px 20px rgba(139, 94, 59, 0.25);
 }
 
-.add-to-cart-btn::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.2);
-  transform: skewX(-45deg);
-  transition: all 0.6s ease;
+.sp-square .sp-add:hover,
+.sp-square .add-to-cart-btn:hover {
+  background: #000 !important;      /* deeper on hover */
 }
 
-.add-to-cart-btn:hover::before {
-  left: 200%;
-}
-
-.add-to-cart-btn:hover {
-  background-color: #6b4226;
-  box-shadow: 0 10px 30px rgba(139, 94, 59, 0.4);
-}
-
-.add-to-cart-btn.disabled {
-  background-color: gray;
+.sp-square .sp-add:disabled,
+.sp-square .add-to-cart-btn:disabled {
+  background: #ccc !important;      /* greyed out if no stock */
   cursor: not-allowed;
-  box-shadow: none;
 }
 
 @media (max-width: 768px) {
-  .single-product-content {
-    flex-direction: column;
-  }
+  .single-product-content { flex-direction: column; }
   .single-product-image-container,
-  .single-product-details {
-    max-width: 100%;
+  .single-product-details { max-width: 100%; }
+}
+
+/* ==== Extra classes used by your JSX (from previous step) ==== */
+
+/* Price row & badges */
+.sp-price-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:6px 0 4px; }
+.sp-old { text-decoration: line-through; color:#8f8f8f; font-weight:600; }
+.sp-new { color:#e11d48; font-weight:800; }
+.sp-save { background:#dc2626; color:#fff; font-weight:800; padding:6px 10px; border-radius:6px; font-size:13px; }
+.sp-shipping { font-size:12px; color:#6b7280; margin-bottom:10px; }
+
+/* Thumbs / image */
+/* === Main Product Image Container === */
+.sp-mainimg {
+  position: relative;
+  display: flex;               /* let image center inside */
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e5e7eb;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  padding: 8px;                /* small padding around img */
+  width: 100%;
+  max-height: 550px;           /* keep consistent product view */
+}
+
+/* Image adjusts inside container */
+/* === Main Product Image Container (Smaller & Balanced) === */
+.sp-mainimg {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e5e7eb;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 6px;                 /* thinner padding */
+  width: 100%;
+  max-height: 420px;            /* 🔥 smaller than before */
+  min-height: 320px;            /* keep nice balance */
+}
+
+/* Image fits neatly inside */
+.sp-mainimg img {
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+
+.sp-stock { position:absolute; top:10px; left:10px; font-size:12px; color:#fff; padding:4px 8px; border-radius:999px; font-weight:700; }
+.sp-stock--ok { background:#16a34a; } .sp-stock--out { background:#ef4444; }
+.sp-thumbs { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+.sp-thumb { width:72px; height:72px; border:1px solid #e6e6e6; border-radius:6px; background:#fff; overflow:hidden; padding:0; }
+.sp-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.sp-thumb.is-active { outline:2px solid #111; outline-offset:2px; }
+
+/* Blocks */
+.sp-block { margin-bottom: 16px; }
+.sp-block-label { font-weight:700; margin-bottom:6px; color:#111; }
+.sp-colors { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.sp-cta-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:8px; }
+
+/* Qty stepper visual (matches your JSX button/input) */
+.sp-qty { display:inline-flex; align-items:center; border:1px solid #ddd; border-radius:8px; overflow:hidden; background:#fff; }
+.sp-qty > button { width:36px; height:38px; border:none; background:#f5f5f5; font-size:20px; line-height:1; cursor:pointer; }
+.sp-qty > button:disabled { opacity:.5; cursor:not-allowed; }
+.sp-qty input { width:56px; height:38px; border:none; text-align:center; font-weight:600; outline:none; }
+
+/* CTA override for black/brand style if needed */
+.sp-add.is-disabled, .sp-add:disabled { background:#bdbdbd !important; cursor:not-allowed; }
+
+/* Final line */
+.sp-last { margin-top:14px; font-size:14px; color:#111; display:flex; align-items:center; gap:6px; }
+.sp-last::before { content:"▸"; }
+
+/* Layout helpers */
+.sp-page { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+.sp-card { display: grid; grid-template-columns: 1fr; gap: 28px; }
+@media (min-width: 992px) { .sp-card { grid-template-columns: 54% 46%; } }
+
+/* ==== Quantity stepper: fix layout, hide native spinners, RTL aware ==== */
+
+/* Hide native spinners (Chrome/Safari/Edge) */
+.sp-cta-row .sp-qty input[type="number"]::-webkit-outer-spin-button,
+.sp-cta-row .sp-qty input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Hide native spinners (Firefox) */
+.sp-cta-row .sp-qty input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Container */
+.sp-qty {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;
+  border: 1px solid var(--stroke-2, #d1d5db);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+}
+
+/* Buttons */
+.sp-qty > button {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: none;
+  background: #f5f5f5;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 200ms ease;
+  user-select: none;
+}
+.sp-qty > button:hover { background: #efefef; }
+.sp-qty > button:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Input — override the Tailwind border coming from JSX */
+.sp-qty input {
+  width: 64px;
+  height: 40px;
+  text-align: center;
+  font-weight: 700;
+  outline: none;
+  border: none !important;               /* nuke tailwind border */
+  background: #fff;
+  /* vertical separators (both sides) */
+  border-inline: 1px solid var(--stroke-2, #d1d5db) !important;
+}
+
+/* Segment dividers for LTR */
+.sp-qty > button:first-child { border-right: 1px solid var(--stroke-2, #d1d5db); }
+.sp-qty > button:last-child  { border-left: 1px solid var(--stroke-2, #d1d5db); }
+
+/* RTL: flip order & separators automatically */
+[dir="rtl"] .sp-qty { flex-direction: row-reverse; }
+[dir="rtl"] .sp-qty > button:first-child { border-right: none; border-left: 1px solid var(--stroke-2, #d1d5db); }
+[dir="rtl"] .sp-qty > button:last-child  { border-left: none;  border-right: 1px solid var(--stroke-2, #d1d5db); }
+
+/* Focus ring for accessibility */
+.sp-qty input:focus-visible,
+.sp-qty > button:focus-visible {
+  outline: 2px solid rgba(17,17,17,.5);
+  outline-offset: 2px;
+}
+
+
+/* Keep only the LEFT thumbnail column on desktop and force its side in RTL */
+
+/* (A) On desktop/tablet, make sure the mobile wrap thumbs are hidden */
+@media (min-width: 768px) {
+  /* Your mobile-only thumbnails already use md:hidden in JSX,
+     but we harden it here in case any utility clash happens */
+  .sp-thumbs { display: none !important; }
+}
+
+/* (B) Ensure the vertical thumbs stay on the LEFT in RTL */
+[dir="rtl"] .sp-media {
+  /* The first child is the thumbs column; reverse the row
+     so the first child appears on the left even in RTL */
+  flex-direction: row-reverse;
+}
+
+/* (C) Reserve a tidy width for the vertical thumbs column */
+.sp-media > .md\\:flex.md\\:flex-col.w-20 {
+  /* make sure it’s a fixed narrow rail next to the main image */
+  flex: 0 0 84px;           /* 84 = 80px + gaps; matches w-20 look */
+}
+
+/* (D) Main image takes the rest */
+.sp-media > .group.w-full,
+.sp-media > .sp-mainimg {
+  flex: 1 1 auto;
+}
+
+/* (E) Optional: if any extra gallery happens to render on the right
+       (from a plugin or duplicate mapping), hide it safely on desktop. */
+@media (min-width: 768px) {
+  .sp-media > .sp-gallery-right,
+  .sp-media + .sp-gallery-right {
+    display: none !important;
   }
+}
+
+/* =======================
+   Square theme (no radius)
+   Scope: only inside .sp-square
+   ======================= */
+.sp-square,
+.sp-square * {
+  border-radius: 0 !important;
+}
+
+/* Make sure “pill”/circle helpers don’t sneak in */
+.sp-square .rounded,
+.sp-square .rounded-sm,
+.sp-square .rounded-md,
+.sp-square .rounded-lg,
+.sp-square .rounded-xl,
+.sp-square .rounded-2xl,
+.sp-square .rounded-3xl,
+.sp-square .rounded-full,
+.sp-square .ring-offset-2,
+.sp-square .ring-offset-4 {
+  border-radius: 0 !important;
+}
+
+/* Specific elements that had radius previously */
+.sp-square .product-cart,
+.sp-square .sp-mainimg,
+.sp-square .sp-thumb,
+.sp-square .sp-qty,
+.sp-square .sp-add,
+.sp-square .add-to-cart-btn,
+.sp-square .single-product-image-container,
+.sp-square .single-product-details,
+.sp-square .single-product-title::after {
+  border-radius: 0 !important;
+}
+
+/* Badges: make them rectangular too */
+.sp-square .sp-stock,
+.sp-square .sp-save {
+  border-radius: 0 !important;
+}
+
+/* Keep borders crisp and consistent like the reference */
+.sp-square .sp-mainimg,
+.sp-square .single-product-image-container {
+  border-width: 2px !important;
+  border-color: #e5e7eb !important; /* neutral gray */
+  box-shadow: none;                  /* flat */
+}
+
+/* Thumbnails: square corners + neat border */
+.sp-square .sp-thumb {
+  border: 1px solid #e5e7eb !important;
+  box-shadow: none !important;
+}
+
+/* Quantity stepper segments square */
+.sp-square .sp-qty {
+  border: 1px solid #d1d5db !important;
+  box-shadow: none !important;
+}
+.sp-square .sp-qty > button:first-child { border-right: 1px solid #d1d5db !important; }
+.sp-square .sp-qty > button:last-child  { border-left: 1px solid #d1d5db !important; }
+[dir="rtl"] .sp-square .sp-qty > button:first-child { border-right: none !important; border-left: 1px solid #d1d5db !important; }
+[dir="rtl"] .sp-square .sp-qty > button:last-child  { border-left: none  !important; border-right: 1px solid #d1d5db !important; }
+
+/* CTA: keep your colors, just remove rounding and extra glow for a flat look */
+.sp-square .sp-add,
+.sp-square .add-to-cart-btn {
+  box-shadow: none !important;
+}
+
+/* ===============================
+   SINGLE PRODUCT — TYPOGRAPHY & COLORS (clean, pro)
+   =============================== */
+
+/* 1) Title: darker, crisper, better spacing */
+.sp-title,
+.single-product-title {
+  color: #1f2937 !important;           /* slate-800 */
+  font-weight: 800 !important;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  margin: 6px 0 18px !important;
+}
+
+/* optional underline accent for the title */
+.single-product-title::after {
+  background: #111827 !important;      /* slate-900 */
+}
+
+/* 2) Body description: comfortable reading color/size */
+.sp-desc,
+.single-product-description {
+  color: #374151 !important;           /* gray-700 */
+  font-size: 16px;
+  line-height: 1.9;
+}
+
+/* 3) Any of those brown meta texts → neutral, readable slate */
+.sp-right .text-[#6B4226],
+.product-cart .text-[#6B4226] {
+  color: #4b5563 !important;           /* gray-600 */
+}
+
+/* Meta rows (Published, ID, Category) */
+.sp-right .text-base,
+.single-product-category,
+.single-product-published {
+  color: #6b7280 !important;           /* gray-500 */
+  font-size: 14px;
+  line-height: 1.6;
+}
+.sp-right strong { color: #111827; }
+
+/* 4) Price row look: strong new price, softer old price, badge red kept */
+.sp-price-row { gap: 10px; }
+.sp-new {
+  color: #111827 !important;           /* near-black for price like ref site */
+  font-weight: 800 !important;
+}
+.sp-old {
+  color: #9ca3af !important;           /* gray-400 */
+  font-weight: 600;
+}
+.sp-save {
+  background: #dc2626 !important;
+  color: #fff !important;
+  font-weight: 800;
+}
+
+/* 5) Section labels like “اختر اللون” */
+.sp-block-label {
+  color: #111827 !important;           /* slate-900 */
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.1px;
+}
+
+/* 6) Selected color line */
+.sp-block + p,
+.sp-block ~ p {
+  color: #4b5563 !important;           /* gray-600 */
+}
+
+/* 7) Thumbnails: remove brown ring look; use clean black focus/active */
+.sp-thumb { border: 1px solid #e5e7eb !important; }
+.sp-thumb.is-active { outline: 2px solid #111827; }
+
+/* 8) Quantity label in ProductCard/SingleProduct if present */
+.product-card .flex.items-center.justify-center.text-sm label,
+.sp-cta-row label {
+  color: #4b5563;
+  font-weight: 600;
+}
+
+/* 9) Arabic/RTL niceties: right-align body copy; keep numbers readable */
+[dir="rtl"] .sp-desc,
+[dir="rtl"] .single-product-description {
+  text-align: justify;
+  hyphens: auto;
+}
+[dir="rtl"] .sp-title { letter-spacing: 0; }
+
+/* 10) Space between color block and quantity row (kept from earlier, tuned) */
+.sp-block { margin-bottom: 26px; }
+.sp-colors { margin-bottom: 10px; }
+.sp-cta-row { margin-top: 18px; }
+
+/* 11) Optional: small caps for minor labels (looks neat in FR/EN) */
+.sp-shipping { color: #6b7280 !important; letter-spacing: .3px; }
+
+/* 12) Make the “brown” heading in your navbar card area match the new tone, if any remain */
+.product-cart .text-[#8B5E3B] { color: #1f2937 !important; }  /* override leftover brown */
+
+/* === Fix text overflowing on the left in Single Product === */
+
+/* 1) Let grid children shrink instead of overflowing */
+.sp-card > * {
+  min-width: 0;                /* 👈 important for CSS Grid */
+}
+
+/* 2) Make sure the text column itself can’t push outside */
+.sp-right {
+  min-width: 0;
+  padding-inline: clamp(8px, 2vw, 16px);  /* gentle side padding */
+}
+
+/* 3) Stronger wrapping for Arabic/long words */
+.sp-desc,
+.single-product-description {
+  overflow-wrap: anywhere;     /* modern */
+  word-break: break-word;      /* legacy safety */
+  hyphens: auto;
+}
+
+/* 4) Keep the overall card padding so content never kisses the edge */
+.product-cart.sp-page {
+  padding-inline: clamp(12px, 3vw, 24px);
+}
+
+/* 5) RTL niceties: keep text aligned and avoid optical overflow */
+[dir="rtl"] .sp-desc,
+[dir="rtl"] .single-product-description {
+  text-align: justify;
 }

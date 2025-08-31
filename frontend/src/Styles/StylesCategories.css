@@ -1,0 +1,106 @@
+/* ============================
+   Categories (like last capture)
+   ============================ */
+.shop-by-cat {
+  margin: 3rem auto;
+  text-align: center;
+}
+
+.shop-by-cat__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #222;
+}
+
+.shop-by-cat__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 big items */
+  gap: 3rem;
+  justify-items: center;
+}
+
+.shop-by-cat__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.shop-by-cat__item:hover {
+  transform: translateY(-8px);
+}
+
+.shop-by-cat__avatar {
+  width: 180px;   /* 🔥 bigger circle */
+  height: 180px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.shop-by-cat__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shop-by-cat__item:hover .shop-by-cat__avatar {
+  transform: scale(1.05);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
+.shop-by-cat__label {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #333;
+}
+
+
+/* Hover / focus */
+.shop-by-cat__item:hover .shop-by-cat__avatar,
+.shop-by-cat__item:focus-visible .shop-by-cat__avatar {
+  transform: var(--hover);
+  border-color: #111827;
+  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+}
+
+.shop-by-cat__item:hover .shop-by-cat__label,
+.shop-by-cat__item:focus-visible .shop-by-cat__label {
+  opacity: .92;
+}
+
+/* Accessibility: visible focus ring */
+.shop-by-cat__item:focus-visible {
+  outline: 2px solid #111827;
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* Responsive: more columns on wider screens (like capture’s dense grid) */
+@media (min-width: 640px) {   /* sm */
+  .shop-by-cat__grid { grid-template-columns: repeat(6, 1fr); }
+}
+@media (min-width: 1024px) {  /* lg */
+  .shop-by-cat__grid { grid-template-columns: repeat(9, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .shop-by-cat__grid {
+    flex-direction: column; /* ⬅️ stacks items vertically on small screens */
+    gap: 18px;
+  }
+}
+
+/* RTL niceties */
+[dir="rtl"] .shop-by-cat__title,
+[dir="rtl"] .shop-by-cat__label { letter-spacing: .14em; }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .shop-by-cat__avatar { transition: none; }
+}

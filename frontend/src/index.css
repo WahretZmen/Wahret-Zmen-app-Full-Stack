@@ -1,14 +1,101 @@
+/* Tailwind layers */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Google fonts */
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Playfair+Display:wght@400;700;900&display=swap");
+
+/* =========================
+   Design tokens (CSS vars)
+   ========================= */
+:root {
+  --background: 248 246 242;             /* parchment */
+  --foreground: 33 24 18;                /* deep brown */
+  --primary: 162 100 63;                 /* brand */
+  --primary-foreground: 255 255 255;     /* white */
+  --secondary: 216 168 101;              /* warm gold */
+  --secondary-foreground: 33 24 18;      /* dark text on gold */
+  --muted-foreground: 110 86 66;         /* softer brown */
+}
+
+/* Optional dark theme */
+.dark {
+  --background: 18 14 10;
+  --foreground: 247 243 236;
+  --primary: 216 168 101;
+  --primary-foreground: 33 24 18;
+  --secondary: 162 100 63;
+  --secondary-foreground: 255 255 255;
+  --muted-foreground: 201 177 150;
+}
+
+/* =========================
+   Base element styling
+   ========================= */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, Segoe UI,
+      Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", sans-serif;
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
+    min-height: 100vh;
+  }
+
+  h1, h2, h3, .font-secondary {
+    font-family: "Playfair Display", serif;
+  }
+}
+
+/* =========================
+   Components (safe @apply)
+   ========================= */
+@layer components {
+  /* Shared large button shape */
+  .btn-lg {
+    @apply inline-flex items-center justify-center h-12 px-6 rounded-xl
+           font-semibold tracking-wide transition-colors duration-200
+           focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  /* Orange gradient button (Explore Collection) */
+.btn-primary-gradient {
+  background-image: linear-gradient(135deg, #c9853f 0%, #dca35b 100%);
+  @apply text-white shadow-md focus:ring-[#e9d4b8]/50 ring-offset-transparent
+         transition-all duration-300 transform;
+}
+
+.btn-primary-gradient:hover {
+  background-image: linear-gradient(135deg, #dca35b 0%, #e6b97a 100%);
+  @apply scale-105 shadow-lg;
+}
 
 
+  /* White outline button (Learn Our Story) */
+  .btn-outline-light {
+    @apply bg-white/90 text-[#8b5c3e] border-2 border-[#cfa255] shadow-sm;
+  }
+  .btn-outline-light:hover {
+    @apply bg-[#cfa255] text-white;
+  }
+}
+
+/* =========================
+   RTL / LTR support
+   ========================= */
 body[dir="rtl"] {
-    direction: rtl;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  body[dir="ltr"] {
-    direction: ltr;
-  }
+  direction: rtl;
+}
+
+body[dir="ltr"] {
+  direction: ltr;
+}
+
+/* Optional: align text automatically */
+[dir="rtl"] .text-start { text-align: right; }
+[dir="rtl"] .text-end   { text-align: left;  }

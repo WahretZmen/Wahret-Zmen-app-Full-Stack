@@ -242,107 +242,115 @@ i18n
           
         }
       },
-        
-      fr: {
-        translation: {
-          "navbar": {
-            "brand": "Wahret Zmen"
-          },
-          home: "Accueil",
-    products: "Produits",
-    "about-menu": "À propos",  // ✅ as you asked
-    "contact-menu": "Contactez-nous",  // ✅ as you asked
-    "admin_dashboard":"Tableau de bord",
-          search_input: {
-            placeholder: "Rechercher des produits...",
+       fr: {
+    translation: {
+      navbar: { brand: "Wahret Zmen" },
+      home: "Accueil",
+      products: "Produits",
+      "about-menu": "À propos",
+      "contact-menu": "Contactez-nous",
+      admin_dashboard: "Tableau de bord",
 
-            
-            
-          },
-          dashboard: "Tableau de bord",
-          orders: "Commandes",
-          logout: "Se déconnecter",
-          select_category: "Sélectionner une catégorie",
-          categories: {
-            all: "Tous",
-            men: "Hommes",
-            women: "Femmes",
-            children: "Enfants",
-          },
-          product_filters: {
-            label: "Sélectionner les produits", // French translation of the label
-            men: "Hommes",
-            women: "Femmes",
-            children: "Enfants",
-            "all": "Tous",  // French translation for "All"
+      search_input: { placeholder: "Rechercher des produits..." },
+
+      dashboard: "Tableau de bord",
+      orders: "Commandes",
+      logout: "Se déconnecter",
+      select_category: "Sélectionner une catégorie",
+      categories: { all: "Tous", men: "Hommes", women: "Femmes", children: "Enfants" },
+      product_filters: {
+        label: "Sélectionner les produits",
+        men: "Hommes",
+        women: "Femmes",
+        children: "Enfants",
+        all: "Tous"
+      },
+      loading: { brand_loading: "Wahret Zmen..." },
+
+      home_title: "Wahret Zmen - Vêtements traditionnels et nos vendeurs",
+      home_meta_description:
+        "Bienvenue chez Wahret Zmen, explorez notre collection de vêtements traditionnels, nos nouveautés et les dernières tendances.",
+      home_intro_html:
+        "Bienvenue à la <strong>Boutique Wahret Zmen</strong>, où la tradition rencontre l'élégance. Explorez nos vêtements faits main, inspirés du riche patrimoine culturel tunisien. Découvrez une mode intemporelle mêlant histoire et raffinement moderne.",
+      home_banner_text:
+        "Entrez dans la tradition avec élégance. La boutique Wahret Zmen vous propose une collection intemporelle de tenues tunisiennes authentiques, confectionnées avec passion et héritage.",
+      our_collections: "Nos Collections",
+      our_collections_intro:
+        "Découvrez notre collection de vêtements traditionnels, confectionnés avec soin et authenticité culturelle. Des Kaftans élégants aux Jebbas classiques, explorez la beauté du patrimoine dans chaque pièce.",
+      latest_news: "Actualités & Tendances",
+      latest_news_intro:
+        "Restez informé des nouveautés de Wahret Zmen ! Découvrez nos nouvelles collections, conseils mode, et offres exclusives qui font vivre la tradition dans un monde moderne.",
+      banner_img_alt: "Vêtements traditionnels tunisiens",
+      banner_title:
+        "Wahret Zmen par Sabri – Préserver l'héritage tunisien avec élégance",
+      banner_description:
+        "Wahret Zmen est une boutique unique de vêtements traditionnels tunisiens située à El Aswak, Tunis, rue Essouf...",
+      discover_now: "Découvrir maintenant",
+      wahret_zmen_collection: "Collection Wahret Zmen",
+      no_products_found: "Aucun produit trouvé.",
+
+      largebanner: {
+  banner_aria: "Grande bannière de présentation",
+  banner_img_alt: "Bannière de collection de Jebbas traditionnelles",
+  brand: "Wahret Zmen",
+  by_sabri: "Par Sabri",
+  description:
+    "Découvrez notre collection exquise de Jebbas traditionnelles, où l’élégance intemporelle rencontre l’artisanat contemporain. Chaque pièce raconte une histoire de patrimoine et de style.",
+  explore: "Découvrir la collection",
+  learn: "Notre histoire"
 },
-          loading: {
-  brand_loading: "Wahret Zmen..."
-},
 
-          home_title: "Wahret Zmen - Vêtements traditionnels et nos vendeurs",
-          home_meta_description: "Bienvenue chez Wahret Zmen, explorez notre collection de vêtements traditionnels, nos nouveautés et les dernières tendances.",
-          home_intro_html: "Bienvenue à la <strong>Boutique Wahret Zmen</strong>, où la tradition rencontre l'élégance. Explorez nos vêtements faits main, inspirés du riche patrimoine culturel tunisien. Découvrez une mode intemporelle mêlant histoire et raffinement moderne.",
-          home_banner_text: "Entrez dans la tradition avec élégance. La boutique Wahret Zmen vous propose une collection intemporelle de tenues tunisiennes authentiques, confectionnées avec passion et héritage.",
-          our_collections: "Nos Collections",
-          our_collections_intro: "Découvrez notre collection de vêtements traditionnels, confectionnés avec soin et authenticité culturelle. Des Kaftans élégants aux Jebbas classiques, explorez la beauté du patrimoine dans chaque pièce.",
-          latest_news: "Actualités & Tendances",
-          latest_news_intro: "Restez informé des nouveautés de Wahret Zmen ! Découvrez nos nouvelles collections, conseils mode, et offres exclusives qui font vivre la tradition dans un monde moderne.",
-          banner_img_alt: "Vêtements traditionnels tunisiens",
-          banner_title: "Wahret Zmen par Sabri – Préserver l'héritage tunisien avec élégance",
-          banner_description: "Wahret Zmen est une boutique unique de vêtements traditionnels tunisiens située à El Aswak, Tunis, rue Essouf. La boutique propose une sélection soignée de vêtements tunisiens authentiques, dont la célèbre Jebba, réputée pour son artisanat raffiné et sa valeur culturelle.",
-          discover_now: "Découvrir maintenant",
-          wahret_zmen_collection: "Collection Wahret Zmen",
-          no_products_found: "Aucun produit trouvé.",
-          our_sellers_intro_html: "Découvrez notre collection de vêtements traditionnels, confectionnés avec soin et authenticité culturelle. Des <strong>Caftans</strong> élégants aux <strong>Jebbas</strong> classiques, explorez la beauté du patrimoine dans chaque pièce.",
 
-          load_more: "Charger plus",
-          products_page: {
-            title: "Collection Wahret Zmen",
-            overview: "Chez Wahret Zmen, nous préservons l’essence de l’artisanat tunisien en mêlant techniques classiques et raffinement moderne. Que vous cherchiez une pièce luxueuse ou une tenue intemporelle, notre collection célèbre la beauté de la tradition."
+      contentshowcase: {
+        showcase_aria: "Collections à la une",
+        showcase_title: "Élégance intemporelle, héritage vivant",
+        showcase_subtitle:
+          "Découvrez des pièces raffinées, confectionnées avec passion et <strong>savoir-faire tunisien</strong>.",
+        badge_artisan: "Artisanat",
+        badge_fait_main: "Fait main",
+        badge_nouveaute: "Nouveauté",
+        cs_hommes_alt: "Jebba homme",
+        cs_hommes_title: "Collection Hommes",
+        cs_hommes_desc:
+          "Des coupes nobles et des tissus premium pour une allure <strong>distinguée</strong>. Chaque détail raconte une histoire.",
+        shop_men: "Découvrir Hommes",
+        cs_femmes_alt: "Jebba femme",
+        cs_femmes_title: "Collection Femmes",
+        cs_femmes_desc:
+          "Des silhouettes gracieuses, des broderies délicates, une <strong>élégance naturelle</strong> pour sublimer chaque instant.",
+        shop_women: "Découvrir Femmes",
+        cs_enfants_alt: "Jebba enfant",
+        cs_enfants_title: "Collection Enfants",
+        cs_enfants_desc:
+          "Confort, douceur et tradition pour les plus jeunes — un <strong>héritage</strong> qui se porte avec fierté.",
+        shop_children: "Découvrir Enfants",
+        cs_cta_text:
+          "Personnalisez votre tenue : couleurs, broderies et tailles sur demande.",
+        browse_all: "Voir tous les articles"
+      },
+
+      news: {
+        section_title: "Actualités",
+        items: [
+          {
+            title:
+              "Wahret Zmen par Sabri : Une boutique d'élégance tunisienne traditionnelle",
+            description:
+              "Wahret Zmen par Sabri est une boutique spécialisée dans les vêtements traditionnels tunisiens..."
           },
-
-         
-
-          
-
-         
-
-
-
-          stock: "Stock",
-          out_of_stock: "Rupture de stock",
-          trending: "Tendance",
-          color: "Couleur",
-          quantity: "Qté",
-          add_to_cart: "Ajouter au panier",
-          unknown_product: "Produit inconnu",
-          category: "Catégorie",
-          published: "Publié le",
-          unknown: "Inconnu",
-          no_description: "Aucune description disponible.",
-          select_color: "Choisir une couleur",
-          selected: "Sélectionné",
-          default: "Défaut",
-          available_colors: "Couleurs disponibles",
-
-          news: {
-            section_title: "Actualités",
-            items: [
-              {
-                title: "Wahret Zmen par Sabri : Une boutique d'élégance tunisienne traditionnelle",
-                description: "Wahret Zmen par Sabri est une boutique spécialisée dans les vêtements traditionnels tunisiens, notamment les vêtements faits main avec des broderies délicates en fil de soie."
-              },
-              {
-                title: "Découvrez l'essence de la tradition tunisienne",
-                description: "Pour les amateurs de mode tunisienne authentique, Wahret Zmen par Sabri est une destination où la tradition rencontre la créativité !"
-              },
-              {
-                title: "Nouvelle mission spatiale visant à explorer des galaxies lointaines",
-                description: "Pour les amateurs de mode tunisienne authentique, Wahret Zmen par Sabri est une destination où la tradition rencontre la créativité !"
-              }
-            ]
+          {
+            title: "Découvrez l'essence de la tradition tunisienne",
+            description:
+              "Pour les amateurs de mode tunisienne authentique, Wahret Zmen par Sabri est une destination..."
           },
+          {
+            title:
+              "Nouvelle mission spatiale visant à explorer des galaxies lointaines",
+            description:
+              "Pour les amateurs de mode tunisienne authentique, Wahret Zmen par Sabri est une destination..."
+          }
+        ]
+      },
 
 
           footer: {
@@ -635,74 +643,76 @@ changePassword: {
         }
       },
       
-      ar: {
-        translation: {
-          navbar: {
+     ar: {
+    translation: {
+      navbar: { brand: "وهرة الزّمان" },
+      home: "الرئيسية",
+      products: "المنتجات",
+      "about-menu": "من نحن",
+      "contact-menu": "اتصل بنا",
+      dashboard: "لوحة التحكم",
+      admin_dashboard: "لوحة التّحكّم المدير",
+      orders: "الطلبات",
+      logout: "تسجيل الخروج",
 
-            brand: "وهرة الزّمان", // Logo text
+      Welcome_Banner_title: "مرحبًا بكم في وهرة الزّمان",
+      banner_img_alt: "لافتة وهرة الزّمان التقليدية",
 
-                      },
-          home: "الرئيسية",
-          products: "المنتجات",
-          "about-menu": "من نحن",
-          "contact-menu": "اتصل بنا",
-          dashboard: "لوحة التحكم",
-          "admin_dashboard":"لوحة التّحكّم المدير",
-          orders: "الطلبات",
-          logout: "تسجيل الخروج",
+      loading: { brand_loading: "وهرة الزّمان..." },
 
-          
-          Welcome_Banner_title: "مرحبًا بكم في وهرة الزّمان",
-          banner_img_alt: "لافتة وهرة الزّمان التقليدية",
+      select_category: "اختر الفئة",
+      categories: { all: "الكل", men: "رجال", women: "نساء", children: "أطفال" },
+      product_filters: {
+        label: "اختر المنتجات",
+        men: "رجال",
+        women: "نساء",
+        children: "أطفال",
+        all: "الكل"
+      },
 
-          loading: {
-  brand_loading: "وهرة الزّمان..."
-},
+      search_input: { placeholder: "ابحث عن المنتجات..." },
 
+      contentshowcase: {
+        showcase_aria: "مجموعات مميزة",
+        showcase_title: "أناقة خالدة، إرث حيّ",
+        showcase_subtitle:
+          "اكتشفوا قطعًا راقية صُنعت بشغف و<strong>بخبرة تونسية</strong>.",
+        badge_artisan: "حِرَفِي",
+        badge_fait_main: "صُنع يدوي",
+        badge_nouveaute: "جديد",
+        cs_hommes_alt: "جبّة رجالية",
+        cs_hommes_title: "مجموعة الرجال",
+        cs_hommes_desc:
+          "قصّات نبيلة وأقمشة فاخرة لإطلالة <strong>راقية</strong>. كل تفصيلة تحكي حكاية.",
+        shop_men: "اكتشف الرجال",
+        cs_femmes_alt: "جبّة نسائية",
+        cs_femmes_title: "مجموعة النساء",
+        cs_femmes_desc:
+          "قصّات رشيقة وتطريزات أنيقة وأناقة <strong>طبيعية</strong> تُميّز كل لحظة.",
+        shop_women: "اكتشف النساء",
+        cs_enfants_alt: "جبّة أطفال",
+        cs_enfants_title: "مجموعة الأطفال",
+        cs_enfants_desc:
+          "راحة ونعومة وتقاليد للصغار — <strong>إرث</strong> يُرتدى بفخر.",
+        shop_children: "اكتشف الأطفال",
+        cs_cta_text: "خصّصوا إطلالتكم: ألوان وتطريزات ومقاسات حسب الطلب.",
+        browse_all: "عرض كل المنتجات"
+      },
 
-          select_category: "اختر الفئة",
-          categories: {
-          all: "الكل",
-          men: "رجال",
-          women: "نساء",
-         children: "أطفال",
-         },
-         product_filters: {
-         label: "اختر المنتجات", 
-         men: "رجال",
-         women: "نساء",
-         children: "أطفال",
-         all: "الكل",
-         },
-
-         
-
-      
-          search_input: {
-
-            placeholder: "ابحث عن المنتجات..."
-
-                  },
-          
-      
-          footer: {
-
-            brand: "وهرة الزّمان",
-            description: "ملابس تقليدية تونسية تجمع بين التراث والأناقة العصرية. موقعنا: سوق السوف، تونس.",
-
-            brand: "وهرة الزّمان",
-            description: " ملابس تقليدية تونسية تجمع بين التراث والأناقة العصرية. موقعنا: سوق السوف، تونس",
-            quickLinks: "روابط سريعة",
-            home: "الرئيسية",
-            products: "المنتجات",
-            about: "من نحن",
-            contact: "اتصل بنا",
-            contactUs: "اتصل بنا",
-            location: "سوق السوف، تونس",
-            followUs: "تابعونا",
-
-            rights: "جميع الحقوق محفوظة.",
-          },
+      footer: {
+        brand: "وهرة الزّمان",
+        description:
+          "ملابس تقليدية تونسية تجمع بين التراث والأناقة العصرية. موقعنا: سوق السوف، تونس.",
+        quickLinks: "روابط سريعة",
+        home: "الرئيسية",
+        products: "المنتجات",
+        about: "من نحن",
+        contact: "اتصل بنا",
+        contactUs: "اتصل بنا",
+        location: "سوق السوف، تونس",
+        followUs: "تابعونا",
+        rights: "جميع الحقوق محفوظة."
+      },
 
           home_title: "وهرة الزّمان - الملابس التقليدية وبائعونا",
           home_meta_description: "مرحبًا بكم في وهرة الزّمان، استكشفوا مجموعتنا من الملابس التقليدية، والوافدات الجديدة، وآخر صيحات الموضة.",
@@ -732,7 +742,17 @@ changePassword: {
           },
 
           
-                  
+            largebanner: {
+  banner_aria: "قسم البانر الرئيسي",
+  banner_img_alt: "لافتة مجموعة الجبب التقليدية",
+  brand: "وهرة الزّمان",
+  by_sabri: "بإدارة صبري",
+  description:
+    "اكتشفوا مجموعتنا الراقية من الجبب التقليدية، حيث تلتقي الأناقة الخالدة بالحرفية العصرية. كل قطعة تحكي قصة تراث وأسلوب.",
+  explore: "اكتشف المجموعة",
+  learn: "تعرّف على قصتنا"
+},
+      
           
         
           stock: "المخزون",

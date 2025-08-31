@@ -1,152 +1,141 @@
-.wahretzmen-banner {
-    position: relative;
-    width: 1500 px !important;
-    height: 1000px;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: -25% !important;
-    margin-left: -25% !important;
-  }
-
-  /* Example */
-.large-banner-wrapper {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  
-  .wahretzmen-banner-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .wahretzmen-banner-title {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    color: white;
-    text-align: center;
-    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
-  }
-  
-  .wahretzmen-banner-title h1 {
-    font-size: 3rem;
-    font-weight: bold;
-    margin: 0;
-    margin-top: 20%;
-  }
-
- /* 🔸 Brand Name Styling */
-.wahretzmen-brand-name {
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -250%);
-  font-size: 5rem;
-  font-weight: 900;
-  font-family: 'Playfair Display', serif;
-  color: white;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
-  z-index: 3;
-  transition: transform 0.5s ease, text-shadow 0.5s ease, color 0.5s ease;
-  cursor: pointer;
-}
-
-/* ✨ Hover Effect: Light glow, scale up, gentle lift */
-.wahretzmen-brand-name:hover {
-  transform: translate(-50%, -270%) scale(1.05) rotate(-1deg);
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(255, 222, 173, 0.7);
-  color: #fbe5be;
-}
-
-
-
-  /* 🔮 Elegant Zoom + Fade + Lift Animation */
-@keyframes zoomFadeUp {
-  0% {
-    opacity: 0;
-    transform: scale(0.8) translateY(40px);
-    text-shadow: none;
-  }
-  60% {
-    opacity: 0.8;
-    transform: scale(1.03) translateY(-5px);
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
-  }
-}
-
-.wahretzmen-welcome-animated {
-  animation: zoomFadeUp 1.5s ease-out forwards;
-  opacity: 0;
-}
-
-.wahretzmen-welcome-animated {
-  animation: zoomFadeUp 1.5s ease-out forwards;
-  opacity: 0;
+/* === HERO WRAPPER === */
+.hz-hero {
   position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
   overflow: hidden;
+  width: 100%;
 }
 
-.wahretzmen-welcome-animated::after {
-  content: '';
+/* === MEDIA (BACKGROUND) === */
+.hz-hero__media {
   position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
+  inset: 0;
+  z-index: 0;
+}
+
+.hz-hero__img {
+  width: 100%;
   height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
-  transform: skewX(-20deg);
-  animation: shimmer 2.5s ease-in-out 1.2s forwards;
+  object-fit: cover;
+  transform: scale(1.02);
+  filter: saturate(0.95);
 }
 
-@keyframes shimmer {
-  0% {
-    left: -75%;
-  }
-  100% {
-    left: 125%;
-  }
+/* soft gradient overlay: darker on left, lighter on right */
+.hz-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(20, 14, 10, 0.70) 0%,
+    rgba(20, 14, 10, 0.55) 35%,
+    rgba(20, 14, 10, 0.35) 65%,
+    rgba(20, 14, 10, 0.15) 100%
+  );
 }
 
-  
-  /* 📱 Mobile responsive */
-  @media (max-width: 768px) {
-    .wahretzmen-banner {
-      height: 300px;
-    }
-  
-    .wahretzmen-banner-img {
-      height: 300px;
-    }
-  
-    .wahretzmen-banner-title h1 {
-      font-size: 1.6rem;
-    }
-  }
+/* === CONTENT === */
+.hz-hero__inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(1rem, 2.5vw, 2rem);
+}
 
-  
+.hz-hero__content {
+  max-width: 700px;
+  color: #fff;
+  text-align: left;
+}
 
+/* RTL: flip alignment automatically */
+[dir="rtl"] .hz-hero__content { text-align: right; }
 
+/* Title block */
+.hz-hero__title {
+  margin: 0 0 0.75rem;
+  line-height: 1.1;
+}
 
+.hz-hero__brand {
+  display: block;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
 
-  
+.hz-hero__by {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  font-weight: 500;
+  color: #e3b57a; /* warm brand accent */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
 
+/* Description */
+.hz-hero__desc {
+  margin: 1rem 0 1.75rem;
+  font-size: clamp(1rem, 1.8vw, 1.125rem);
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 48ch;
+}
 
-  
+/* Actions (buttons) */
+.hz-hero__actions {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
 
+/* Buttons */
+.hz-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem;
+  padding: 0 1.25rem;
+  border-radius: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  will-change: transform, box-shadow;
+}
+
+.hz-btn:hover { transform: translateY(-2px); }
+
+.hz-btn--primary {
+  background: linear-gradient(135deg, #a2643f, #d8a865);
+  color: #fff;
+  box-shadow: 0 10px 30px rgba(191, 143, 84, 0.35);
+}
+
+.hz-btn--primary:hover {
+  background: linear-gradient(135deg, #875430, #cfa255);
+  box-shadow: 0 12px 34px rgba(191, 143, 84, 0.45);
+}
+
+.hz-btn--outline {
+  background: transparent;
+  color: #e3b57a;
+  border: 2px solid #e3b57a;
+}
+
+.hz-btn--outline:hover {
+  background: #e3b57a;
+  color: #2a1a10;
+  box-shadow: 0 10px 26px rgba(227, 181, 122, 0.35);
+}
+
+/* Responsive fixes */
+@media (max-width: 768px) {
+  .hz-hero { min-height: 60vh; }
+  .hz-hero__desc { max-width: none; }
+}
