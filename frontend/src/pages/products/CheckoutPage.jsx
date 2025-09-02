@@ -1,263 +1,394 @@
+// src/pages/checkout/CheckoutPage.jsx
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 import Swal from "sweetalert2";
-import { useCreateOrderMutation } from "../../redux/features/orders/ordersApi";
-import "../../Styles/StylesCheckoutPage.css";
 import { useTranslation } from "react-i18next";
-import { useDispatch } from "react-redux";
+import { useAuth } from "../../context/AuthContext";
+import { useCreateOrderMutation } from "../../redux/features/orders/ordersApi";
 import { clearCart } from "../../redux/features/cart/cartSlice";
+import { Truck, Lock } from "lucide-react";
+import "../../Styles/StylesCheckoutPage.css";
 
 const CheckoutPage = () => {
-
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
 
-  // 🔼 Scroll to top on mount
+  // Scroll to top on mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const cartItems = useSelector((state) => state.cart.cartItems);
-  const totalItems = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const cartItems = useSelector((s) => s.cart.cartItems || []);
+  const totalItems = cartItems.reduce((acc, item) => acc + Number(item.quantity || 0), 0);
   const totalPrice = cartItems
-    .reduce((acc, item) => acc + item.newPrice * item.quantity, 0)
+    .reduce((acc, item) => acc + Number(item.newPrice || 0) * Number(item.quantity || 0), 0)
     .toFixed(2);
 
   const { currentUser } = useAuth();
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const [createOrder, { isLoading }] = useCreateOrderMutation();
-  const navigate = useNavigate();
   const [isChecked, setIsChecked] = useState(false);
 
-  
+  // Submit handler — normalized to what backend expects
+  const onSubmit = async (data) => {
+    // Guards
+    if (!currentUser?.email) {
+      Swal.fire({
+        icon: "error",
+        title: t("checkout.error_title"),
+        text: t("login.no_account") || "Please log in first.",
+        confirmButtonColor: "#d33",
+      });
+      return;
+    }
+    if (!cartItems || cartItems.length === 0) {
+      Swal.fire({
+        icon: "error",
+        title: t("checkout.error_title"),
+        text: t("cart.empty") || "Your cart is empty.",
+        confirmButtonColor: "#d33",
+      });
+      return;
+    }
 
-const onSubmit = async (data) => {
-  const newOrder = {
-    name: data.name,
-    email: currentUser?.email,
-    address: {
-      street: data.address,
-      city: data.city,
-      country: data.country,
-      state: data.state,
-      zipcode: data.zipcode,
-    },
-    phone: data.phone,
-    products: cartItems.map((item) => ({
-      productId: item._id,
-      quantity: item.quantity,
-      color:
-        typeof item.color?.colorName === "object"
-          ? item.color
-          : {
-              colorName: {
-                en: item.color?.colorName || "Original",
-                fr: item.color?.colorName || "Original",
-                ar: "أصلي",
-              },
-              image:
-                item.color?.image ||
-                item.coverImage ||
-                "/assets/default-image.png",
-            },
-    })),
-    totalPrice: Number(totalPrice),
+    // Normalize address (server also defaults, but we help from client side)
+    const street = (data.address || "").trim();
+    const city = (data.city || "").trim();
+    const country = (data.country || "Tunisia").trim();
+    const state = (data.state || "—").trim();
+    const zipcode = ((data.zipcode ?? "0000") + "").trim();
+
+    if (!street || !city) {
+      Swal.fire({
+        icon: "error",
+        title: t("checkout.error_title"),
+        text: t("checkout.error_message") || "Failed to place an order",
+        confirmButtonColor: "#d33",
+      });
+      return;
+    }
+
+    // Build products with guaranteed multilingual color + image
+    const products = cartItems.map((item) => {
+      const rawCn = item?.color?.colorName;
+      const hasObj = rawCn && typeof rawCn === "object";
+      const colorName = hasObj
+        ? rawCn
+        : {
+            en: (rawCn && String(rawCn)) || "Original",
+            fr: (rawCn && String(rawCn)) || "Original",
+            ar: "أصلي",
+          };
+
+      const image =
+        item?.color?.image || item?.coverImage || "/assets/default-image.png";
+
+      return {
+        productId: item._id,
+        quantity: Number(item.quantity || 0),
+        color: {
+          colorName,
+          image,
+          ...(item?.color?._id ? { _id: item.color._id } : {}),
+        },
+      };
+    });
+
+    const newOrder = {
+      name: data.name,
+      email: currentUser.email,
+      phone: data.phone,
+      address: { street, city, country, state, zipcode },
+      products,
+      totalPrice: Number(totalPrice),
+      paymentMethod: "Cash on Delivery",
+    };
+
+    try {
+      await createOrder(newOrder).unwrap();
+      dispatch(clearCart());
+      await Swal.fire({
+        title: t("checkout.order_confirmed"),
+        text: t("checkout.success_message"),
+        icon: "success",
+        confirmButtonColor: "#A67C52",
+        confirmButtonText: t("checkout.go_to_orders"),
+      });
+      navigate("/orders", { replace: true });
+    } catch (error) {
+      Swal.fire({
+        title: t("checkout.error_title"),
+        text:
+          error?.data?.message ||
+          error?.message ||
+          t("checkout.error_message"),
+        icon: "error",
+        confirmButtonColor: "#d33",
+      });
+    }
   };
 
-  try {
-    await createOrder(newOrder).unwrap();
-    dispatch(clearCart()); // ✅ clear local cart
-    await Swal.fire({
-      title: t("checkout.order_confirmed"),
-      text: t("checkout.success_message"),
-      icon: "success",
-      confirmButtonColor: "#A67C52",
-      confirmButtonText: t("checkout.go_to_orders"),
-    });
-    // Better than window.location.href (keeps SPA state)
-    navigate("/orders", { replace: true });
-  } catch (error) {
-    Swal.fire({
-      title: t("checkout.error_title"),
-      text: error?.data?.message || error?.message || t("checkout.error_message"),
-      icon: "error",
-      confirmButtonColor: "#d33",
-    });
-  }
-};
-
-
-  if (isLoading)
+  if (isLoading) {
     return (
       <div className="text-center text-lg font-semibold py-10 text-[#A67C52]">
         {t("checkout.processing")}
       </div>
     );
+  }
 
+  const isRTL =
+    i18n.language === "ar" ||
+    i18n.language === "ar-SA" ||
+    (typeof i18n.language === "string" && i18n.language.startsWith("ar"));
 
-
-    return (
-      <section className="min-h-screen flex items-center justify-center bg-[#F8F1E9] screen-CheckoutPage">
-        <div className="max-w-5xl w-full bg-white shadow-lg  p-8 border border-[#A67C52]">
-          <h2 className="text-3xl font-bold text-[#A67C52] text-center mb-6">
+  return (
+    <section className="min-h-screen bg-[#F8F4EF]" dir={isRTL ? "rtl" : "ltr"}>
+      <div className="container mx-auto max-w-6xl px-4 py-16">
+        {/* Page heading */}
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold text-[#2b2b2b] mb-2">
             {t("checkout.title")}
-          </h2>
-    
-          <div className="bg-[#F5EFE6]  shadow-md p-6 mb-6">
-            <h3 className="text-lg font-semibold text-gray-800">
-              {t("checkout.payment_method")}
-            </h3>
-            <p className="text-gray-700">
-              {t("checkout.total_price")}{" "}
-              <span className="font-bold text-[#A67C52]">${totalPrice}</span>
-            </p>
-            <p className="text-gray-700">
-              {t("checkout.items")}: <span className="font-bold">{totalItems}</span>
-            </p>
-          </div>
-    
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          >
-            {/* Left - Personal Details */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-800">
-                {t("checkout.personal_details")}
-              </h3>
-    
-              <div>
-                <label className="block font-medium">{t("checkout.full_name")}</label>
-                <input
-                  {...register("name", { required: true })}
-                  type="text"
-                  className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#ffffff]"
-                />
+          </h1>
+          <p className="text-[color:var(--muted-foreground,#6b7280)]">
+            {t("checkout.subtitle") || "Complete your order securely"}
+          </p>
+        </div>
+
+        {/* Two-column layout (no order summary) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* LEFT: Shipping Information (form) */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Shipping card */}
+            <div className="rounded-2xl border border-[#E5D9C9] bg-white shadow-sm animate-fade-in">
+              <div className="p-6 border-b border-[#F0E7DA]">
+                <h2 className="flex items-center gap-2 text-xl font-semibold text-[#2b2b2b]">
+                  <Truck className="h-5 w-5 text-[#A67C52]" />
+                  {t("checkout.shipping_address")}
+                </h2>
               </div>
-    
-              <div>
-                <label className="block font-medium">{t("checkout.email")}</label>
-                <input
-                  type="email"
-                  className="w-full px-4 py-2 border  bg-gray-100 cursor-not-allowed"
-                  disabled
-                  defaultValue={currentUser?.email}
-                />
-              </div>
-    
-              <div>
-                <label className="block font-medium">{t("checkout.phone")}</label>
-                <input
-                  {...register("phone", { required: true })}
-                  type="text"
-                  className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#ffffff]"
-                />
+
+              <div className="p-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      {t("checkout.full_name")}
+                    </label>
+                    <input
+                      {...register("name", { required: true })}
+                      type="text"
+                      placeholder="Ahmed Ben Ali"
+                      className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
+                        errors.name ? "border-red-400" : "border-[#E6D3BF]"
+                      }`}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      {t("checkout.email")}
+                    </label>
+                    <input
+                      type="email"
+                      disabled
+                      defaultValue={currentUser?.email || ""}
+                      className="w-full px-4 py-2 rounded-lg border border-[#E6D3BF] bg-gray-100 cursor-not-allowed"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {t("checkout.phone")}
+                  </label>
+                  <input
+                    {...register("phone", { required: true })}
+                    type="tel"
+                    placeholder="+216 XX XXX XXX"
+                    className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
+                      errors.phone ? "border-red-400" : "border-[#E6D3BF]"
+                    }`}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {t("checkout.address")}
+                  </label>
+                  <input
+                    {...register("address", { required: true })}
+                    type="text"
+                    placeholder={isRTL ? "شارع..." : "Street address"}
+                    className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
+                      errors.address ? "border-red-400" : "border-[#E6D3BF]"
+                    }`}
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      {t("checkout.city")}
+                    </label>
+                    <input
+                      {...register("city", { required: true })}
+                      type="text"
+                      placeholder={isRTL ? "المدينة" : "City"}
+                      className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
+                        errors.city ? "border-red-400" : "border-[#E6D3BF]"
+                      }`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      {t("checkout.state")}
+                    </label>
+                    <input
+                      {...register("state")}
+                      type="text"
+                      placeholder={isRTL ? "المنطقة" : "State/Region"}
+                      className="w-full px-4 py-2 rounded-lg border border-[#E6D3BF] focus:outline-none focus:ring-2 focus:ring-[#E6D3BF]"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1">
+                      {t("checkout.zipcode")}
+                    </label>
+                    <input
+                      {...register("zipcode")}
+                      type="text"
+                      placeholder="0000"
+                      className="w-full px-4 py-2 rounded-lg border border-[#E6D3BF] focus:outline-none focus:ring-2 focus:ring-[#E6D3BF]"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-1">
+                    {t("checkout.country")}
+                  </label>
+                  <input
+                    {...register("country")}
+                    type="text"
+                    placeholder={isRTL ? "تونس" : "Tunisia"}
+                    className="w-full px-4 py-2 rounded-lg border border-[#E6D3BF] focus:outline-none focus:ring-2 focus:ring-[#E6D3BF]"
+                  />
+                </div>
               </div>
             </div>
-    
-            {/* Right - Address Details */}
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-black-800">
-                {t("checkout.shipping_address")}
-              </h3>
-    
-              <div>
-                <label className="block font-medium">{t("checkout.address")}</label>
-                <input
-                  {...register("address", { required: true })}
-                  type="text"
-                  className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#fafafa]"
-                />
-              </div>
-    
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-medium">{t("checkout.city")}</label>
-                  <input
-                    {...register("city", { required: true })}
-                    type="text"
-                    className="w-full px-4 py-2 border  focus:ring-[#f6f6f6] focus:border-[#ffffff]"
-                  />
-                </div>
-                <div>
-                  <label className="block font-medium">{t("checkout.country")}</label>
-                  <input
-                    {...register("country", { required: true })}
-                    type="text"
-                    className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#ffffff]"
-                  />
-                </div>
-              </div>
-    
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-medium">{t("checkout.state")}</label>
-                  <input
-                    {...register("state", { required: true })}
-                    type="text"
-                    className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#A67C52]"
-                  />
-                </div>
-                <div>
-                  <label className="block font-medium">{t("checkout.zipcode")}</label>
-                  <input
-                    {...register("zipcode", { required: true })}
-                    type="text"
-                    className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#A67C52]"
-                  />
-                </div>
-              </div>
-            </div>
-    
-            {/* Terms and Place Order */}
-            <div className="md:col-span-2 flex flex-col items-center mt-4 w-full">
+
+            {/* Terms + Submit */}
+            <div className="rounded-2xl border border-[#E5D9C9] bg-white shadow-sm p-6">
               <div
-                className={`w-full flex items-center ${
-                  i18n.language === "ar"
-                    ? "flex-row-reverse justify-end gap-2"
-                    : "flex-row justify-start gap-2"
-                }`}
+                className={`flex ${isRTL ? "flex-row-reverse" : "flex-row"} items-start gap-3`}
               >
                 <input
-                  onChange={(e) => setIsChecked(e.target.checked)}
+                  id="agree"
                   type="checkbox"
-                  className="form-checkbox h-5 w-5 text-[#A67C52] focus:ring-[#A67C52]"
+                  onChange={(e) => setIsChecked(e.target.checked)}
+                  className="mt-1 h-5 w-5 rounded border-[#E6D3BF] text-[#A67C52] focus:ring-[#A67C52]"
                 />
-                <label className="text-black-600 text-sm">
+                <label htmlFor="agree" className="text-sm text-[#2b2b2b]">
                   {t("checkout.agree")}{" "}
-                  <Link className="text-[#A67C52] underline">{t("checkout.terms")}</Link>{" "}
+                  <Link to="#" className="text-[#A67C52] underline">
+                    {t("checkout.terms")}
+                  </Link>{" "}
                   {t("checkout.and")}{" "}
-                  <Link className="text-[#A67C52] underline">{t("checkout.policy")}</Link>.
+                  <Link to="#" className="text-[#A67C52] underline">
+                    {t("checkout.policy")}
+                  </Link>
+                  .
                 </label>
               </div>
-    
+
               <button
-                disabled={!isChecked}
-                className={`mt-4 px-6 py-3 text-white font-bold  transition-all duration-200 ${
-                  isChecked ? "bg-[#A67C52] hover:bg-[#fcfcfc]" : "bg-gray-400 cursor-not-allowed"
-                }`}
+                type="submit"
+                disabled={!isChecked || isLoading}
+                className={`mt-6 w-full rounded-xl px-6 py-3 font-semibold transition-all duration-200
+                  ${
+                    isChecked && !isLoading
+                      ? "bg-[#A67C52] text-white hover:bg-[#8E683F] focus:ring-2 focus:ring-offset-2 focus:ring-[#E6D3BF]"
+                      : "bg-gray-300 text-white cursor-not-allowed"
+                  }`}
               >
-                {t("checkout.place_order")}
+                {isLoading ? t("checkout.processing") : t("checkout.place_order")}
               </button>
+
+              {/* Small recap line (no order summary) */}
+              <p className="mt-3 text-center text-sm text-gray-600">
+                {t("checkout.items")}: <span className="font-medium">{totalItems}</span> ·{" "}
+                {t("checkout.total_price")}{" "}
+                <span className="font-semibold text-[#A67C52]">${totalPrice}</span>
+              </p>
             </div>
           </form>
-        </div>
-      </section>
-    );
-      
-      };
 
+          {/* RIGHT: Payment (Cash on Delivery) */}
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-[#E5D9C9] bg-white shadow-sm animate-fade-in delay-100">
+              <div className="p-6 border-b border-[#F0E7DA]">
+                <h2 className="flex items-center gap-2 text-xl font-semibold text-[#2b2b2b]">
+                  <Lock className="h-5 w-5 text-[#A67C52]" />
+                  {t("checkout.payment_method")}
+                </h2>
+              </div>
+              <div className="p-6 space-y-3 text-[15px] leading-relaxed text-[#444]">
+                <p>
+                  <strong>{t("checkout.cod_title") || "Cash on Delivery"}</strong> —{" "}
+                  {t("checkout.cod_desc") ||
+                    "You will pay in cash when your order is delivered. No online payment is required."}
+                </p>
+                <ul className="list-disc ps-5 space-y-1">
+                  <li>
+                    {t("checkout.cod_point1") ||
+                      "Please prepare the exact amount if possible."}
+                  </li>
+                  <li>
+                    {t("checkout.cod_point2") ||
+                      "Our delivery agent will contact you before arrival."}
+                  </li>
+                  <li>
+                    {t("checkout.cod_point3") ||
+                      "Returns and exchanges follow our standard policy."}
+                  </li>
+                </ul>
+                <div className="rounded-lg bg-[#F8F4EF] border border-[#E6D3BF] p-4 text-sm">
+                  <span className="font-medium">
+                    {t("checkout.security_note") || "Secure & Encrypted:"}
+                  </span>{" "}
+                  {t("checkout.security_desc") ||
+                    "Your personal information is transmitted securely."}
+                </div>
+              </div>
+            </div>
+
+            {/* Delivery info card */}
+            <div className="rounded-2xl border border-[#E5D9C9] bg-white shadow-sm">
+              <div className="p-6 flex items-start gap-3">
+                <Truck className="h-6 w-6 mt-0.5 text-[#A67C52]" />
+                <div className="text-[15px] text-[#444]">
+                  <p className="font-semibold">
+                    {t("checkout.delivery_info_title") || "Delivery Information"}
+                  </p>
+                  <p>
+                    {t("checkout.delivery_info_desc") ||
+                      "Standard delivery in 24–72h depending on your city."}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
 
 export default CheckoutPage;
-
-
-
-
-
-
-
-

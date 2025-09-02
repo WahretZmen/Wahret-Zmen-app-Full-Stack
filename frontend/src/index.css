@@ -1,13 +1,13 @@
-<<<<<<< HEAD
+
 /* HSL design tokens */
-=======
+
 /* Tailwind layers */
->>>>>>> 1e8f5082f548298b745607be41c678f7c24d3772
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-<<<<<<< HEAD
+
 /* Design tokens */
 :root {
   --background: 0 0% 100%;
@@ -43,10 +43,10 @@
   animation-delay: var(--d, 0ms);
 }
 
-=======
+
 /* Google fonts */
 @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Playfair+Display:wght@400;700;900&display=swap");
->>>>>>> 1e8f5082f548298b745607be41c678f7c24d3772
+
 
 /* =========================
    Design tokens (CSS vars)
@@ -80,7 +80,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-<<<<<<< HEAD
+
   
   body[dir="ltr"] {
     direction: ltr;
@@ -88,7 +88,7 @@
   
 
   
-=======
+
 
   body {
     font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, Segoe UI,
@@ -150,4 +150,4 @@ body[dir="ltr"] {
 /* Optional: align text automatically */
 [dir="rtl"] .text-start { text-align: right; }
 [dir="rtl"] .text-end   { text-align: left;  }
->>>>>>> 1e8f5082f548298b745607be41c678f7c24d3772
+

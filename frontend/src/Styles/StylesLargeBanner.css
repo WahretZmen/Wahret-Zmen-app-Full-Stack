@@ -1,14 +1,16 @@
-<<<<<<< HEAD
-/* ================== design tokens ================== */
-:root{
-  --foreground: #111827;
-  --muted-foreground: #6b7280;
-  /* These rely on your Tailwind CSS variables (already in index.css) */
-  --primary-hsl: 35 80% 52%;
-  --primary-glow-hsl: 35 80% 55%;
+/* ================== Design tokens ================== */
+:root {
+  /* text */
+  --foreground: #111827;            /* slate-900 */
+  --muted-foreground: #6b7280;      /* slate-500 */
+
+  /* brand (warm amber/orange) */
+  --primary-hsl: 28 86% 48%;        /* ~amber-600 */
+  --primary-glow-hsl: 28 92% 58%;   /* lighter end */
+  --primary-foreground: #ffffff;    /* white on filled button */
 }
 
-/* ================== layout ================== */
+/* ================== Layout / Structure ================== */
 .hz-hero {
   position: relative;
   min-height: 80vh;
@@ -16,292 +18,305 @@
   align-items: center;
   overflow: hidden;
   isolation: isolate;
-  background: #000;
+  background: #000; /* hidden by overlay gradient */
 }
-.hz-hero__bg { position: absolute; inset: 0; z-index: 0; }
-.hz-hero__bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-/* lighter overlay so CTAs pop */
-.hz-hero__overlay{
-  position: absolute; inset: 0;
+.hz-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.hz-hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hz-hero__overlay {
+  position: absolute;
+  inset: 0;
   background: linear-gradient(
     to right,
-    rgba(255,255,255,.90),
-    rgba(255,255,255,.70),
-    rgba(255,255,255,.40)
+    rgba(255, 255, 255, 0.88),
+    rgba(255, 255, 255, 0.70),
+    rgba(255, 255, 255, 0.42)
   );
 }
 
-.hz-hero__container{
-  position: relative; z-index: 1; width: 100%;
-  padding-inline: 1rem; margin-inline: auto; max-width: 1280px;
+.hz-hero__container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding-inline: 1rem;
+  margin-inline: auto;
+  max-width: 1280px;
 }
-.hz-hero__content{ max-width: 680px; }
+.hz-hero__content {
+  max-width: 680px;
+}
 
-/* ================== type ================== */
-.hz-hero__title{
+/* ================== Typography ================== */
+.hz-hero__title {
   color: var(--foreground);
   margin: 0 0 1.5rem 0;
   line-height: 1.1;
   font-weight: 800;
   font-size: clamp(2.5rem, 6vw, 4.5rem);
 }
-.hz-hero__by{
-  display: block; margin-top: .5rem;
-  color: hsl(var(--primary));
+
+.hz-hero__by {
+  display: block;
+  margin-top: 0.5rem;
+  color: hsl(var(--primary-hsl));
   font-weight: 300;
   font-size: clamp(1.25rem, 2.5vw, 2rem);
 }
-.hz-hero__subtitle{
+
+.hz-hero__subtitle {
   color: var(--muted-foreground);
-  font-size: 1.25rem;
+  font-size: 1.125rem;
   line-height: 1.7;
   margin: 0 0 2rem 0;
   max-width: 44ch;
 }
 
-/* ================== buttons ================== */
-.hz-btn{
+.hz-inline { display: inline-block; }
+
+/* ================== Buttons (pure CSS) ================== */
+.hz-btn {
   -webkit-font-smoothing: antialiased;
-  appearance: none; border: 0; cursor: pointer;
-  font-weight: 700; line-height: 1; letter-spacing: .01em;
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
   border-radius: 12px;
   transition:
-    transform .3s ease,
-    box-shadow .3s ease,
-    background .3s ease,
-    color .3s ease,
-    border-color .3s ease;
+    transform .25s ease,
+    box-shadow .25s ease,
+    background .25s ease,
+    color .25s ease,
+    border-color .25s ease;
   will-change: transform, box-shadow, background, color, border-color;
-}
-.hz-btn--xl{ height: 56px; padding: 0 2.5rem; font-size: 1.125rem; }
 
-/* HERO button: gradient background */
-.hz-btn--hero{
-  color: hsl(var(--primary-foreground));
-  background-image: linear-gradient(
-    to right,
-    hsl(var(--primary)),
-    hsl(var(--primary-glow))
-  );
-  box-shadow: 0 8px 20px hsl(var(--foreground) / 0.08);
+  /* size XL */
+  height: 56px;
+  padding: 0 2.25rem;
+  font-size: 1.0625rem;
 }
-.hz-animate-glow{ animation: hzBtnGlow 1.6s ease-in-out infinite alternate; }
-.hz-btn--hero:hover{
-  transform: scale(1.05);
-  box-shadow: 0 16px 36px hsl(var(--foreground) / 0.14);
-  background-image: linear-gradient(
-    to right,
-    hsl(var(--primary)),
-    hsl(var(--primary-glow))
-  );
-}
-.hz-btn--hero:hover.hz-animate-glow{ animation: none; }
 
-/* OUTLINE button */
-.hz-btn--outline{
-  background: transparent;
-  color: hsl(var(--primary));
-  border: 2px solid hsl(var(--primary));
-=======
-/* === HERO WRAPPER === */
-.hz-hero {
->>>>>>> 1e8f5082f548298b745607be41c678f7c24d3772
+/* PRIMARY (Explore Collection) — warm gradient + glow */
+/* PRIMARY (Explore Collection) — warm gradient + SUN SHINE */
+.hz-btn--primary{
   position: relative;
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-<<<<<<< HEAD
+  overflow: visible;                 /* let halo breathe */
+  color: var(--primary-foreground);
+  text-shadow: 0 1px 1px rgba(0,0,0,.18);
+  background-image: linear-gradient(135deg, #c9853f 0%, #dca35b 100%);
+  box-shadow: 0 10px 24px rgba(17,24,39,.12);
+  transform: translateZ(0);          /* create a layer for smoother anims */
+}
+
+/* 💫 Outer halo (soft pulse) */
+.hz-btn--primary::before{
+  content:"";
+  position:absolute;
+  inset:-34%;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 50% 50%,
+      hsla(var(--primary-glow-hsl), .38),
+      hsla(var(--primary-glow-hsl), .24) 35%,
+      transparent 62%);
+  filter: blur(18px);
+  pointer-events:none;
+  animation: hzSunPulse 2.6s ease-in-out infinite;
+  opacity:.65;
   z-index: 0;
 }
-.hz-btn--outline::before {
-  content: "";
-  position: absolute; inset: 0;
-  background-image: linear-gradient(
-    to right,
-    hsl(var(--primary)),
-    hsl(var(--primary-glow))
-  );
-  opacity: 0;
-  transition: opacity .3s ease;
-  z-index: -1;
-}
-.hz-btn--outline:hover::before { opacity: 1; }
-.hz-btn--outline:hover {
-  color: hsl(var(--primary-foreground));
-  transform: scale(1.05);
-  box-shadow: 0 12px 28px hsl(var(--foreground) / 0.12);
+
+/* 🌞 Rays + ✨ sweeping sheen (inside the button) */
+.hz-btn--primary::after{
+  content:"";
+  position:absolute;
+  inset:0;                           /* clip sheen to button shape */
+  border-radius: inherit;
+  pointer-events:none;
+  mix-blend-mode: screen;
+  z-index: 1;
+
+  /* 1) faint radial glow in the center
+     2) subtle spinning rays
+     3) moving sheen strip that sweeps left→right */
+  background:
+    radial-gradient(circle at 50% 50%,
+      rgba(255,255,255,.16) 0%,
+      rgba(255,255,255,0) 55%),
+    repeating-conic-gradient(
+      from 0deg,
+      hsla(var(--primary-glow-hsl), .28) 0 8deg,
+      transparent 8deg 22deg
+    ),
+    linear-gradient(100deg,
+      rgba(255,255,255,0) 40%,
+      rgba(255,255,255,.85) 50%,
+      rgba(255,255,255,0) 60%
+    );
+
+  /* Keep first two centered; sweep the 3rd */
+  background-position: center, center, -220% 0;
+  background-size: 100% 100%, 100% 100%, 260% 100%;
+
+  animation:
+    hzSunSpin 6s linear infinite,        /* rays slow spin */
+    hzSheenSweep 3.4s ease-in-out infinite; /* sheen pass */
+  opacity:.75;
 }
 
-/* keyboard focus */
-.hz-btn:focus-visible{
+/* hover: brighten & quicken the shine */
+.hz-btn--primary:hover{
+  transform: translateY(-1px) scale(1.03);
+  background-image: linear-gradient(135deg, #dca35b 0%, #e6b97a 100%);
+  box-shadow: 0 18px 38px rgba(17,24,39,.18);
+}
+.hz-btn--primary:hover::before{ opacity:.82; }
+.hz-btn--primary:hover::after{
+  animation:
+    hzSunSpin 3.2s linear infinite,
+    hzSheenSweep 2.1s ease-in-out infinite;
+}
+
+
+/* SECONDARY (Learn Our Story) — white outline, invert on hover */
+.hz-btn--secondary {
+  background: #ffffff;
+  color: #c9853f;
+  border: 2px solid #c9853f;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+/* keep hover self-contained to avoid Tailwind conflicts -> no black bg */
+.hz-btn--secondary:hover {
+  color: #ffffff;
+  background: #c9853f;
+  transform: translateY(-1px) scale(1.03);
+  box-shadow: 0 12px 28px rgba(17, 24, 39, .14);
+  border-color: transparent;
+}
+
+/* Keyboard focus */
+.hz-btn:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px #fff, 0 0 0 6px hsla(var(--primary-hsl), .6);
+  /* white ring + brand ring */
+  box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px hsl(var(--primary-hsl) / .55);
 }
 
 /* CTA layout */
-.hz-hero__ctas{ display: flex; gap: 1rem; flex-direction: column; }
-@media (min-width:640px){ .hz-hero__ctas{ flex-direction: row; } }
-.hz-hero[dir="rtl"] .hz-hero__ctas{ flex-direction: row-reverse; }
+.hz-hero__ctas {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+@media (min-width: 640px) {
+  .hz-hero__ctas { flex-direction: row; }
+}
+.hz-hero[dir="rtl"] .hz-hero__ctas { flex-direction: row-reverse; }
 
-/* ================== animations ================== */
-.hz-fade-in-up{ opacity: 0; transform: translateY(16px); animation: hzFadeInUp .7s ease forwards; }
-.hz-slide-in-left{ display: inline-block; opacity: 0; transform: translateX(-18px); animation: hzSlideInLeft .6s ease forwards; }
-.hz-slide-in-right{ display: inline-block; opacity: 0; transform: translateX(18px); animation: hzSlideInRight .6s ease forwards; }
-.hz-delay-200{ animation-delay: 200ms; }
-.hz-delay-300{ animation-delay: 300ms; }
-.hz-delay-400{ animation-delay: 400ms; }
+/* ================== Animations (matching Hero) ================== */
+/* Title base */
+.animate-fade-in-up {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: hzFadeInUp .7s ease forwards;
+}
 
-@keyframes hzFadeInUp{ to{ opacity: 1; transform: translateY(0);} }
-@keyframes hzSlideInLeft{ to{ opacity: 1; transform: translateX(0);} }
-@keyframes hzSlideInRight{ to{ opacity: 1; transform: translateX(0);} }
+/* split words motion */
+.animate-slide-in-left {
+  opacity: 0;
+  transform: translateX(-18px);
+  animation: hzSlideInLeft .6s ease forwards;
+}
+.animate-slide-in-right {
+  opacity: 0;
+  transform: translateX(18px);
+  animation: hzSlideInRight .6s ease forwards;
+}
+
+/* delays (like Hero.tsx) */
+.animation-delay-200 { animation-delay: 200ms; }
+.animate-fade-in-delay-300 {
+  opacity: 0;
+  animation: hzFadeInUp .7s ease forwards;
+  animation-delay: 300ms;
+}
+.animate-fade-in-delay-400 {
+  opacity: 0;
+  animation: hzFadeInUp .7s ease forwards;
+  animation-delay: 400ms;
+}
+
+/* Keyframes */
+@keyframes hzFadeInUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes hzSlideInLeft { to { opacity: 1; transform: translateX(0); } }
+@keyframes hzSlideInRight { to { opacity: 1; transform: translateX(0); } }
+
+@keyframes hzBtnGlow {
+  from { box-shadow: 0 8px 20px rgba(0,0,0,.16), 0 0 0 rgba(255,184,77,0); }
+  to   { box-shadow: 0 14px 34px rgba(0,0,0,.24), 0 0 22px rgba(255,184,77,.38); }
+}
+@keyframes hzSunPulse {
+  0%,100% { transform: scale(1);    opacity: .50; }
+  50%     { transform: scale(1.10); opacity: .85; }
+}
+@keyframes hzSunSpin { to { transform: rotate(360deg) scale(1.05); } }
+
+/* ================== Reduced Motion ================== */
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-slide-in-left,
+  .animate-slide-in-right,
+  .animate-fade-in-delay-300,
+  .animate-fade-in-delay-400,
+  .animate-glow,
+  .hz-btn--primary::before,
+  .hz-btn--primary::after {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+@keyframes hzSunPulse{
+  0%,100% { transform: scale(1);    opacity:.55; }
+  50%     { transform: scale(1.12); opacity:.88; }
+}
+
+@keyframes hzSunSpin{
+  to { transform: rotate(360deg); }
+}
+
+/* ➡️ Moves the sheen from left (off) to right (off) while keeping other backgrounds centered */
+@keyframes hzSheenSweep{
+  0%   { background-position: center, center, -220% 0; }
+  45%  { background-position: center, center,  125% 0; }
+  100% { background-position: center, center,  125% 0; }
+}
+
+/* keep your existing glow pulse for the button body if you use .animate-glow */
 @keyframes hzBtnGlow{
   from{ box-shadow: 0 8px 20px rgba(0,0,0,.16), 0 0 0 rgba(255,184,77,0); }
-  to  { box-shadow: 0 14px 34px rgba(0,0,0,.26), 0 0 22px rgba(255,184,77,.40); }
+  to  { box-shadow: 0 14px 34px rgba(0,0,0,.24), 0 0 22px rgba(255,184,77,.38); }
 }
 
-/* reduced motion */
+/* reduced motion safety */
 @media (prefers-reduced-motion: reduce){
-  .hz-fade-in-up,
-  .hz-slide-in-left,
-  .hz-slide-in-right,
-  .hz-animate-glow{
-    animation: none; opacity: 1; transform: none;
+  .hz-btn--primary::before,
+  .hz-btn--primary::after{
+    animation:none !important;
+    opacity:1 !important;
   }
-=======
-  width: 100%;
-}
-
-/* === MEDIA (BACKGROUND) === */
-.hz-hero__media {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.hz-hero__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transform: scale(1.02);
-  filter: saturate(0.95);
-}
-
-/* soft gradient overlay: darker on left, lighter on right */
-.hz-hero__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(20, 14, 10, 0.70) 0%,
-    rgba(20, 14, 10, 0.55) 35%,
-    rgba(20, 14, 10, 0.35) 65%,
-    rgba(20, 14, 10, 0.15) 100%
-  );
-}
-
-/* === CONTENT === */
-.hz-hero__inner {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: clamp(1rem, 2.5vw, 2rem);
-}
-
-.hz-hero__content {
-  max-width: 700px;
-  color: #fff;
-  text-align: left;
-}
-
-/* RTL: flip alignment automatically */
-[dir="rtl"] .hz-hero__content { text-align: right; }
-
-/* Title block */
-.hz-hero__title {
-  margin: 0 0 0.75rem;
-  line-height: 1.1;
-}
-
-.hz-hero__brand {
-  display: block;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 800;
-  letter-spacing: 0.5px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
-}
-
-.hz-hero__by {
-  display: inline-block;
-  margin-top: 0.25rem;
-  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
-  font-weight: 500;
-  color: #e3b57a; /* warm brand accent */
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-/* Description */
-.hz-hero__desc {
-  margin: 1rem 0 1.75rem;
-  font-size: clamp(1rem, 1.8vw, 1.125rem);
-  line-height: 1.8;
-  color: rgba(255, 255, 255, 0.92);
-  max-width: 48ch;
-}
-
-/* Actions (buttons) */
-.hz-hero__actions {
-  display: flex;
-  gap: 0.85rem;
-  flex-wrap: wrap;
-}
-
-/* Buttons */
-.hz-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 3rem;
-  padding: 0 1.25rem;
-  border-radius: 12px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  text-decoration: none;
-  transition: transform 0.15s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-  will-change: transform, box-shadow;
-}
-
-.hz-btn:hover { transform: translateY(-2px); }
-
-.hz-btn--primary {
-  background: linear-gradient(135deg, #a2643f, #d8a865);
-  color: #fff;
-  box-shadow: 0 10px 30px rgba(191, 143, 84, 0.35);
-}
-
-.hz-btn--primary:hover {
-  background: linear-gradient(135deg, #875430, #cfa255);
-  box-shadow: 0 12px 34px rgba(191, 143, 84, 0.45);
-}
-
-.hz-btn--outline {
-  background: transparent;
-  color: #e3b57a;
-  border: 2px solid #e3b57a;
-}
-
-.hz-btn--outline:hover {
-  background: #e3b57a;
-  color: #2a1a10;
-  box-shadow: 0 10px 26px rgba(227, 181, 122, 0.35);
-}
-
-/* Responsive fixes */
-@media (max-width: 768px) {
-  .hz-hero { min-height: 60vh; }
-  .hz-hero__desc { max-width: none; }
->>>>>>> 1e8f5082f548298b745607be41c678f7c24d3772
 }

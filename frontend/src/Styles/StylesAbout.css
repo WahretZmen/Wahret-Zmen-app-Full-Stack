@@ -48,12 +48,20 @@
   text-align: center;
 }
 
-.about-hero__title {
+/* =========================================================
+   HERO TITLE – Wave Letter Animation
+   ========================================================= */
+/* HERO title base — gradient text */
+.about-hero__title{
   font-size: clamp(2.2rem, 5vw, 3.5rem);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: .015em;
   margin-bottom: .6rem;
+  display: inline-block;
+  white-space: nowrap;
+
+  /* the gradient */
   background: linear-gradient(90deg, #8a5d3b 0%, #d2a679 45%, #8a5d3b 100%);
   -webkit-background-clip: text;
   background-clip: text;
@@ -61,6 +69,48 @@
   -webkit-text-fill-color: transparent;
   filter: drop-shadow(0 2px 10px rgba(0,0,0,.08));
 }
+
+/* Each LTR letter inherits the gradient so color returns */
+.about-hero__title .title-letter{
+  display: inline-block;
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: waveRise 3.5s ease-in-out infinite;
+}
+
+/* stagger for nicer wave */
+.about-hero__title .title-letter:nth-child(1){ animation-delay: 0s; }
+.about-hero__title .title-letter:nth-child(2){ animation-delay: .08s; }
+.about-hero__title .title-letter:nth-child(3){ animation-delay: .16s; }
+.about-hero__title .title-letter:nth-child(4){ animation-delay: .24s; }
+.about-hero__title .title-letter:nth-child(5){ animation-delay: .32s; }
+/* add more if your LTR title is longer */
+
+/* Wave motion */
+@keyframes waveRise{
+  0%,100%{ transform: translateY(0); }
+  40%    { transform: translateY(-10px); }
+  60%    { transform: translateY(5px); }
+}
+
+/* RTL/Arabic: animate whole title smoothly (keeps shaping perfect) */
+.about-hero__title--rtl .title-rtl-inner{
+  display:inline-block;
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: rtlFloat 3.2s ease-in-out infinite;
+}
+
+@keyframes rtlFloat{
+  0%,100%{ transform: translateY(0); opacity:1; }
+  50%    { transform: translateY(-6px); opacity:.98; }
+}
+
+
 
 .about-hero__subtitle {
   font-size: clamp(1.05rem, 2.1vw, 1.25rem);
@@ -76,9 +126,310 @@
   justify-content: center;
 }
 
+/* Fade-in reusable */
+.animate-fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.9s ease forwards;
+}
+
+.animate-fade-in.delay-100 { animation-delay: 0.1s; }
+.animate-fade-in.delay-150 { animation-delay: 0.15s; }
+.animate-fade-in.delay-200 { animation-delay: 0.2s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 /* ================================
    MAIN CONTENT
    ================================ */
+/* ================================
+   OUR VALUES — exact look from screenshots
+   ================================ */
+
+   /* =========================================================
+   Section Spacing
+   ========================================================= */
+
+/* General section wrapper */
+.section,
+.about-section {
+  padding-block: clamp(2rem, 5vw, 4rem); /* responsive vertical padding */
+  margin-block: clamp(2rem, 6vw, 4.5rem); /* space between sections */
+  border-bottom: 1px solid rgba(0,0,0,0.05); /* subtle divider */
+}
+
+/* Remove divider on last section */
+.section:last-child,
+.about-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+/* Inner container spacing */
+.section__inner,
+.about-grid,
+.about-col {
+  margin-inline: auto;
+  max-width: 1100px;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+
+/* Light beige band behind the whole Values section */
+.section.section--values {
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+}
+
+/* Title/subtitle spacing in the values section */
+.section--values .section__inner--center {
+  max-width: 860px;
+  margin-inline: auto;
+  text-align: center;
+  margin-bottom: 18px;
+}
+
+/* Fix alignment/styling for "Our Values" header area */
+.section.section--values { 
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+}
+
+/* Force block layout & center */
+.section--values .section__inner--center{
+  display: block !important;         /* overrides any flex from global styles */
+  text-align: center;
+  max-width: 860px;
+  margin: 0 auto 22px;
+  padding-inline: 16px;
+}
+
+/* Title */
+.section--values .section__inner--center .h2{
+  display: block;                    /* prevents inline layout next to the paragraph */
+  margin: 0 0 8px;
+  font-weight: 800;
+  font-size: clamp(24px, 4vw, 34px);
+  line-height: 1.2;
+  color: #2b2b2b;
+  letter-spacing: .2px;
+}
+
+/* =========================
+   Our Values Title Animation
+   ========================= */
+.section--values .h2 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: #2b2b2b;
+  margin-bottom: 0.75rem;
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+/* Shine effect */
+.section--values .h2::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-20deg);
+  animation: shineSweep 3s linear infinite; /* 🔥 loops every 3s */
+}
+
+@keyframes shineSweep {
+  0%   { left: -75%; }
+  50%  { left: 125%; }
+  100% { left: 125%; }
+}
+
+
+/* Subtitle paragraph */
+.section--values .section__inner--center .p{
+  display: block;
+  margin: 0 auto;
+  max-width: 72ch;                   /* neat readable width */
+  color: #6b7280;                    /* muted like the cards */
+  font-size: clamp(14px, 2vw, 16px);
+  line-height: 1.8;
+}
+
+/* Optional: small spacing tweak on very small screens */
+@media (max-width: 480px){
+  .section--values .section__inner--center{
+    margin-bottom: 16px;
+  }
+}
+
+
+/* Grid */
+.values-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 across on desktop */
+  gap: 22px;
+  margin-top: 22px;
+}
+
+/* Card */
+.value-card{
+  background: #fff;
+  border: 1px solid rgba(31,31,31,0.10);         /* very light border */
+  border-radius: 18px;
+  padding: 26px 22px;
+  text-align: center;
+  box-shadow: 0 10px 24px -18px rgba(0,0,0,.18); /* subtle shadow like screenshot */
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+}
+
+.value-card:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px -18px rgba(0,0,0,.22);
+  border-color: rgba(31,31,31,0.16);
+}
+
+/* Icon badge (tinted circle) */
+.value-card__icon{
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  /* warm primary tint like the capture */
+  background: rgba(138, 59, 26, 0.10);         /* #8a3b1a @ 10% */
+  outline: 1px solid rgba(138, 59, 26, 0.18);  /* thin ring */
+}
+
+.value-card__icon svg{
+  width: 28px;
+  height: 28px;
+  color: #8a3b1a; /* primary */
+}
+
+/* Heading + copy inside cards (matches capture) */
+.value-card .h3{
+  margin: 8px 0 10px;
+  font-weight: 800;
+  font-size: clamp(18px, 2.2vw, 20px);
+  color: #2b2b2b;
+}
+
+.value-card .p{
+  margin: 0;
+  color: #7a7a7a; /* muted gray like screenshot */
+  line-height: 1.8;
+  font-size: clamp(14px, 2vw, 16px);
+}
+
+/* Responsive: 2 cards per row on tablets, 1 per row on phones */
+@media (max-width: 1024px){
+  .values-grid{ grid-template-columns: repeat(2, 1fr); gap: 18px; }
+}
+@media (max-width: 640px){
+  .values-grid{ grid-template-columns: 1fr; gap: 16px; }
+  
+}
+
+
+/* Optional: gentle float for the icon, subtle and professional */
+/* Faster bounce for icons */
+@keyframes floatYQuick {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
+.value-card__icon {
+  animation: floatYQuick 1s ease-in-out infinite; /* much faster */
+}
+
+
+/* RTL niceties (keeps same look but respects direction) */
+[dir="rtl"] .values-grid{ direction: rtl; }
+
+/* ================================
+   GALLERY SECTION
+   ================================ */
+.section--gallery {
+  background: #fff;
+  padding-block: clamp(2rem, 6vw, 4rem);
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 1.5rem;
+}
+
+.gallery-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #f9f9f9;
+  box-shadow: 0 10px 22px -12px rgba(0,0,0,0.15);
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.gallery-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 32px -12px rgba(0,0,0,0.22);
+}
+
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .5s ease, filter .4s ease;
+}
+
+.gallery-card:hover .gallery-img {
+  transform: scale(1.08);
+  filter: brightness(1.05) saturate(1.1);
+}
+
+/* Responsive tweaks */
+@media (max-width: 1024px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* General section spacing */
+.section,
+.about-section {
+  padding-block: clamp(1.5rem, 4vw, 3rem);   /* smaller padding */
+  margin-block: clamp(1.5rem, 4vw, 3rem);    /* smaller margin */
+}
+
+/* Gallery specifically */
+.section--gallery {
+  padding-block: clamp(1.5rem, 4vw, 2.5rem); /* tighter */
+  margin-bottom: 1rem;                       /* reduced gap below */
+}
+
+
+   
 .about-container {
   max-width: 1200px;
   margin-inline: auto;
@@ -222,4 +573,403 @@
     opacity: 1 !important;
     transform: none !important;
   }
+}
+/* =========================================================
+   HERO: low-opacity banner image under your gradient
+   ========================================================= */
+.about-hero.about-hero--banner {
+  position: relative;
+  isolation: isolate; /* keep pseudo-layers behind content */
+}
+
+/* The banner image sits UNDER the overlay + content */
+.about-hero.about-hero--banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../assets/about/hero-banner.jpg") center/cover no-repeat;
+  opacity: 0.18;                 /* <— tune 0.12–0.28 as you like */
+  z-index: 0;                    /* behind overlay */
+  transform: scale(1);           /* for Ken Burns */
+  animation: heroKenBurns 18s ease-in-out infinite alternate;
+}
+
+/* Keep your gradient overlay above the image */
+.about-hero.about-hero--banner .about-hero__overlay {
+  z-index: 1;
+}
+
+/* Content stays on top */
+.about-hero.about-hero--banner .about-hero__content {
+  z-index: 2;
+}
+
+/* Gentle Ken Burns pan/zoom (professional & subtle) */
+@keyframes heroKenBurns {
+  0%   { transform: scale(1) translateY(0);     filter: saturate(100%); }
+  100% { transform: scale(1.06) translateY(-1%); filter: saturate(108%); }
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .about-hero.about-hero--banner::before { animation: none; }
+}
+
+/* =========================================================
+   VALUES: professional staggered reveal & micro-interactions
+   ========================================================= */
+
+/* Base card fade-in (applies once on load) */
+.value-card{
+  opacity: 0;
+  transform: translateY(14px);
+  animation: cardFade .7s cubic-bezier(.2,.8,.2,1) both;
+}
+
+/* Stagger timing (1..6) to match your six cards */
+.values-grid .value-card:nth-child(1){ animation-delay: .05s; }
+.values-grid .value-card:nth-child(2){ animation-delay: .12s; }
+.values-grid .value-card:nth-child(3){ animation-delay: .19s; }
+.values-grid .value-card:nth-child(4){ animation-delay: .26s; }
+.values-grid .value-card:nth-child(5){ animation-delay: .33s; }
+.values-grid .value-card:nth-child(6){ animation-delay: .40s; }
+
+@keyframes cardFade {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Micro-interaction on hover: icon lifts slightly */
+.value-card__icon{
+  transition: transform .25s ease;
+}
+.value-card:hover .value-card__icon{
+  transform: translateY(-2px);
+}
+
+/* =========================================================
+   Buttons: subtle “press” + focus ring
+   ========================================================= */
+.btn-luxury, .btn-outline{
+  transition: transform .18s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease, border-color .25s ease;
+}
+.btn-luxury:active,
+.btn-outline:active{
+  transform: translateY(1px);
+}
+
+.btn-luxury:focus-visible,
+.btn-outline:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(198,156,109,.35);
+}
+
+/* =========================================================
+   Section headings: graceful slide-up on entry
+   ========================================================= */
+.about-h2, .h2{
+  will-change: transform, opacity;
+  animation: headRise .6s cubic-bezier(.2,.8,.2,1) .04s both;
+}
+@keyframes headRise{
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+   TITLES – premium fade + slight upward slide
+   ========================================================= */
+.about-h2,
+.h2 {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: titleReveal .85s cubic-bezier(.2,.8,.25,1) forwards;
+}
+
+/* Nice gradient text for hero/section titles */
+.about-h2,
+.h2 {
+  background: linear-gradient(90deg, #8a5d3b, #c69c6d);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+@keyframes titleReveal {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(.98);
+    letter-spacing: .5px;
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    letter-spacing: 0;
+  }
+}
+
+
+/* =========================================================
+   HERO – subtitle + actions fade & slide
+   ========================================================= */
+.about-hero__subtitle {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: subRise .7s cubic-bezier(.2,.8,.2,1) .25s both;
+}
+@keyframes subRise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.about-hero__actions {
+  opacity: 0;
+  transform: translateY(14px);
+  animation: actionsRise .8s cubic-bezier(.2,.8,.2,1) .45s both;
+}
+@keyframes actionsRise {
+  from { opacity: 0; transform: translateY(14px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* =========================================================
+   PARAGRAPHS inside sections – graceful fade-up
+   ========================================================= */
+.about-p, 
+.section .p {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: paraFade .8s ease forwards;
+}
+@keyframes paraFade {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Stagger paragraphs within sections */
+.about-p:nth-of-type(1),
+.section .p:nth-of-type(1){ animation-delay: .1s; }
+.about-p:nth-of-type(2),
+.section .p:nth-of-type(2){ animation-delay: .22s; }
+.about-p:nth-of-type(3),
+.section .p:nth-of-type(3){ animation-delay: .34s; }
+
+/* =========================================================
+   VALUES CARDS – already staggered in previous snippet
+   Add gentle scale pop on hover
+   ========================================================= */
+.value-card {
+  transition: transform .22s ease, box-shadow .25s ease;
+}
+.value-card:hover {
+  transform: translateY(-4px) scale(1.015);
+}
+
+/* =========================================================
+   CTA BUTTONS – pulse & glow
+   ========================================================= */
+.btn-luxury {
+  position: relative;
+  overflow: hidden;
+}
+.btn-luxury::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 60%);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity .4s ease, transform .4s ease;
+}
+.btn-luxury:hover::after {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Bounce on click */
+.btn-luxury:active,
+.btn-outline:active {
+  animation: bounceTap .25s ease;
+}
+@keyframes bounceTap {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(.94); }
+  100% { transform: scale(1); }
+}
+
+/* =========================================================
+   MEDIA CARDS (gallery) – fade-in zoom
+   ========================================================= */
+
+/* =========================
+   GALLERY SECTION (taller images with autoplay)
+   ========================= */
+.section--gallery {
+  background: #fff;
+  padding: clamp(2rem, 5vw, 3rem) 0;
+  text-align: center;
+}
+
+/* Title + subtitle animations */
+.section--gallery .h2 {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: #2b2b2b;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+  position: relative;
+  animation: titlePulse 3s ease-in-out infinite; /* 🔥 replay every 3s */
+}
+
+.section--gallery .p {
+  font-size: clamp(1rem, 2.2vw, 1.125rem);
+  color: #666;
+  max-width: 70ch;
+  margin: 0 auto 1.5rem;
+  line-height: 1.7;
+}
+
+/* Title animation */
+@keyframes titlePulse {
+  0%   { transform: scale(1); opacity: 1; }
+  25%  { transform: scale(1.05); opacity: 0.95; }
+  50%  { transform: scale(0.98); opacity: 1; }
+  75%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+
+/* Grid for gallery */
+.gallery-grid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;     
+  gap: 16px;
+  margin-top: 1.5rem;
+}
+
+/* Gallery card with autoplay animation */
+.gallery-card {
+  flex: 0 0 auto;
+  width: 200px;        
+  height: 280px;       /* taller than before */
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 8px 20px -12px rgba(0,0,0,.18);
+  transition: transform .25s ease, box-shadow .25s ease;
+  animation: galleryLoop 4.5s ease-in-out infinite; /* autoplay every 4.5s */
+}
+
+/* Stagger each card so they don’t move all at once */
+.gallery-card:nth-child(1) { animation-delay: 0s; }
+.gallery-card:nth-child(2) { animation-delay: 0.5s; }
+.gallery-card:nth-child(3) { animation-delay: 1s; }
+.gallery-card:nth-child(4) { animation-delay: 1.5s; }
+.gallery-card:nth-child(5) { animation-delay: 2s; }
+.gallery-card:nth-child(6) { animation-delay: 2.5s; }
+
+@keyframes galleryLoop {
+  0%   { opacity: 0; transform: translateY(20px) scale(0.96); }
+  10%  { opacity: 1; transform: translateY(0) scale(1); }
+  70%  { opacity: 1; transform: translateY(0) scale(1); }
+  90%  { opacity: 0; transform: translateY(-15px) scale(0.98); }
+  100% { opacity: 0; transform: translateY(20px) scale(0.96); }
+}
+
+/* Image inside card */
+.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .45s ease, filter .25s ease;
+}
+
+.gallery-card:hover .gallery-img {
+  transform: scale(1.06);
+  filter: brightness(1.08);
+}
+
+
+
+
+.media-card {
+  opacity: 0;
+  transform: scale(.96) translateY(12px);
+  animation: galleryFade .7s cubic-bezier(.2,.8,.2,1) both;
+}
+.media-card:nth-child(1){ animation-delay: .1s; }
+.media-card:nth-child(2){ animation-delay: .2s; }
+.media-card:nth-child(3){ animation-delay: .3s; }
+.media-card:nth-child(4){ animation-delay: .4s; }
+
+@keyframes galleryFade {
+  from { opacity: 0; transform: scale(.96) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Small bottom button */
+.about-actions .btn-outline.small-btn {
+  min-width: 160px;          /* fixed smaller width */
+  max-width: 200px;
+  height: 40px;              /* a bit shorter */
+  font-size: 0.95rem;
+  padding: 0 1rem;
+  margin: 1rem auto 2rem;    /* centered with extra bottom space */
+  display: block;            /* force centering */
+}
+
+
+/* =====================
+   Bottom CTA buttons
+   ===================== */
+.about-cta {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;              /* spacing between buttons */
+  margin: 2rem auto 3rem; /* space above footer */
+  flex-wrap: wrap;        /* responsive for mobile */
+  text-align: center;
+}
+
+.about-cta a {
+  text-decoration: none;
+}
+
+/* Main gold button */
+.btn-luxury {
+  background: linear-gradient(135deg, #a87344, #c49a6c);
+  color: #fff;
+  padding: 0.65rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  min-width: 170px;
+  text-align: center;
+}
+.btn-luxury:hover {
+  background: linear-gradient(135deg, #8a5a34, #b5895a);
+  transform: translateY(-2px);
+}
+
+/* Outline button (Contact Us) */
+.btn-outline.small-btn {
+  border: 2px solid #a87344;
+  color: #a87344;
+  padding: 0.55rem 1.3rem;
+  border-radius: 25px;
+  font-size: 0.95rem;
+  min-width: 150px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+.btn-outline.small-btn:hover {
+  background: #a87344;
+  color: #fff;
+  transform: translateY(-2px);
 }
