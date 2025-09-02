@@ -7,10 +7,13 @@ import "../Styles/StylesNavbar.css";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
+import InputSearch from "./SearchInput";
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [navQuery, setNavQuery] = useState(""); // ✅ search input state (kept)
+
   const dropdownRef = useRef(null);
   const headerRef = useRef(null);
 
@@ -115,8 +118,10 @@ const Navbar = () => {
           )}
         </ul>
 
-        {/* Right Icons */}
+        {/* Right area: Search placed right before icons */}
         <div className="nav-icons">
+          
+
           <Link
             to="/cart"
             className="cart-icon"
@@ -190,7 +195,7 @@ const Navbar = () => {
             </Link>
           )}
 
-          {/* Optional: language switcher spot (if you want it visible on the right) */}
+          {/* Optional: language switcher spot */}
           {/* <div className="language-switcher-wrapper">
             <LanguageSwitcher />
           </div> */}

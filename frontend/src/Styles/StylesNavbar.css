@@ -118,6 +118,8 @@
   left: 0;
 }
 
+
+
 /* ========================== */
 /* 📱 Mobile Nav Menu Styles */
 /* ========================== */
@@ -254,6 +256,21 @@ html[dir="rtl"] .mobile-menu-btn {
     margin-inline-end: 1.5%;
   }
 }
+
+/* keep search inline near right-side icons */
+.nav-icons + .input-search,
+.input-search + .nav-icons,
+.navbar-content .input-search {
+  order: 2;
+  margin-inline: 12px;
+  z-index: 2; /* stay above hero image edge */
+}
+
+/* make sure the search never shrinks into nothing when space is tight */
+.navbar-content {
+  gap: 8px;
+}
+
 
 /* ========================== */
 /* 🛍️ Cart Icon Badge */
@@ -674,6 +691,79 @@ html[dir="rtl"] .mobile-menu-btn {
   }
 }
 
+
+/* --- Keep the search bar clean white inside the navbar --- */
+.nav-search {
+  display: flex;
+  align-items: center;
+  margin-inline-end: 1rem;      /* space before icons */
+  position: relative;
+  z-index: 5;
+}
+
+/* Nuke any navbar “tint” on the search group & children */
+.navbar-content .nav-search,
+.navbar-content .nav-search *,
+.navbar-content .nav-search input,
+.navbar-content .nav-search button {
+  background: #fff !important;
+  box-shadow: none !important;
+}
+
+/* Make sure the join looks like the reference (square, thin border) */
+.navbar-content .nav-search .input-search__field {
+  border: 1px solid #cfcfd3 !important;
+  border-right: none !important;
+  color: #111 !important;
+  border-radius: 0 !important;
+  height: 42px !important;
+  line-height: 42px !important;
+}
+
+.navbar-content .nav-search .input-search__btn {
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 42px !important;
+  border: 1px solid #cfcfd3 !important;
+  border-left: none !important;
+  border-radius: 0 !important;
+  color: #111 !important;
+}
+
+/* Hover border nuance like retail UI */
+.navbar-content .nav-search .input-search__field:hover,
+.navbar-content .nav-search .input-search__btn:hover {
+  border-color: #a9afb6 !important;
+}
+
+/* RTL: swap the seam borders cleanly */
+[dir="rtl"] .navbar-content .nav-search .input-search__field {
+  border-left: none !important;
+  border-right: 1px solid #cfcfd3 !important;
+}
+[dir="rtl"] .navbar-content .nav-search .input-search__btn {
+  border-right: none !important;
+  border-left: 1px solid #cfcfd3 !important;
+}
+
+/* Guard against dark-mode/global autofill styles */
+@media (prefers-color-scheme: dark) {
+  .navbar-content .nav-search,
+  .navbar-content .nav-search * {
+    background: #fff !important;
+    color: #111 !important;
+  }
+}
+.navbar-content .nav-search .input-search__field:-webkit-autofill,
+.navbar-content .nav-search .input-search__field:-webkit-autofill:hover,
+.navbar-content .nav-search .input-search__field:-webkit-autofill:focus {
+  -webkit-text-fill-color: #111 !important;
+  transition: background-color 9999s ease-in-out 0s;
+  box-shadow: 0 0 0 1000px #fff inset !important;
+}
+
+/* place near icons, consistent spacing */
+.nav-search { display:flex; align-items:center; margin-inline-end: 12px; }
 
 
  
