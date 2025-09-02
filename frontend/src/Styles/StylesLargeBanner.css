@@ -1,13 +1,12 @@
 /* ================== Design tokens ================== */
 :root {
-  /* text */
-  --foreground: #111827;            /* slate-900 */
-  --muted-foreground: #6b7280;      /* slate-500 */
+  --foreground: #111827;
+  --muted-foreground: #6b7280;
 
   /* brand (warm amber/orange) */
-  --primary-hsl: 28 86% 48%;        /* ~amber-600 */
-  --primary-glow-hsl: 28 92% 58%;   /* lighter end */
-  --primary-foreground: #ffffff;    /* white on filled button */
+  --primary-hsl: 28 86% 48%;
+  --primary-glow-hsl: 28 92% 58%;
+  --primary-foreground: #ffffff;
 }
 
 /* ================== Layout / Structure ================== */
@@ -21,40 +20,45 @@
   background: #000; /* hidden by overlay gradient */
 }
 
-.hz-hero__bg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-.hz-hero__bg img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+/* Make the hero content a vertical stack (title → subtitle → buttons) */
+.hz-hero__content{
+  margin-left: 900px !important;
+  max-width: 680px;
+  display: flex;             /* NEW */
+  flex-direction: column;    /* NEW */
+  align-items: flex-start;   /* NEW: left align in LTR */
 }
 
+/* Right-align the stack in Arabic */
+.hz-hero[dir="rtl"] .hz-hero__content{
+  align-items: flex-end;     /* NEW */
+}
+
+/* Ensure the buttons sit *under* the subtitle with some space */
+.hz-hero__ctas{
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  margin-top: 0.75rem;       /* NEW: space below the paragraph */
+}
+@media (min-width:640px){
+  .hz-hero__ctas{ flex-direction: row; }
+}
+
+.hz-hero__bg { position: absolute; inset: 0; z-index: 0; }
+.hz-hero__bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
 .hz-hero__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.88),
-    rgba(255, 255, 255, 0.70),
-    rgba(255, 255, 255, 0.42)
+  position: absolute; inset: 0;
+  background: linear-gradient(to right,
+    rgba(255,255,255,.88),
+    rgba(255,255,255,.70),
+    rgba(255,255,255,.42)
   );
 }
 
-.hz-hero__container {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  padding-inline: 1rem;
-  margin-inline: auto;
-  max-width: 1280px;
-}
-.hz-hero__content {
-  max-width: 680px;
-}
+.hz-hero__container { position: relative; z-index: 1; width: 100%; padding-inline: 1rem; margin-inline: auto; max-width: 1280px; }
+.hz-hero__content { max-width: 680px; }
 
 /* ================== Typography ================== */
 .hz-hero__title {
@@ -64,15 +68,13 @@
   font-weight: 800;
   font-size: clamp(2.5rem, 6vw, 4.5rem);
 }
-
 .hz-hero__by {
   display: block;
-  margin-top: 0.5rem;
+  margin-top: .5rem;
   color: hsl(var(--primary-hsl));
   font-weight: 300;
   font-size: clamp(1.25rem, 2.5vw, 2rem);
 }
-
 .hz-hero__subtitle {
   color: var(--muted-foreground);
   font-size: 1.125rem;
@@ -80,202 +82,117 @@
   margin: 0 0 2rem 0;
   max-width: 44ch;
 }
-
 .hz-inline { display: inline-block; }
 
 /* ================== Buttons (pure CSS) ================== */
-.hz-btn {
+.hz-btn{
+  position:relative;
+  display:inline-flex; align-items:center; justify-content:center;
+  text-decoration:none;
   -webkit-font-smoothing: antialiased;
-  appearance: none;
-  border: none;
-  cursor: pointer;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.01em;
-  border-radius: 12px;
-  transition:
-    transform .25s ease,
-    box-shadow .25s ease,
-    background .25s ease,
-    color .25s ease,
-    border-color .25s ease;
-  will-change: transform, box-shadow, background, color, border-color;
-
-  /* size XL */
-  height: 56px;
-  padding: 0 2.25rem;
-  font-size: 1.0625rem;
+  border:0; cursor:pointer; border-radius:12px;
+  font-weight:700; letter-spacing:.01em;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
+  box-sizing:border-box;
 }
+.hz-btn--xl{ height:56px; padding:0 2.25rem; font-size:1.0625rem; }
 
-/* PRIMARY (Explore Collection) — warm gradient + glow */
-/* PRIMARY (Explore Collection) — warm gradient + SUN SHINE */
+/* Ensure label is above glow layers */
+.hz-btn__label{ position:relative; z-index:2; color:inherit; white-space:nowrap; }
+
+/* 🔶 Primary (Explore) — gradient + sun glow */
 .hz-btn--primary{
-  position: relative;
-  overflow: visible;                 /* let halo breathe */
-  color: var(--primary-foreground);
-  text-shadow: 0 1px 1px rgba(0,0,0,.18);
-  background-image: linear-gradient(135deg, #c9853f 0%, #dca35b 100%);
-  box-shadow: 0 10px 24px rgba(17,24,39,.12);
-  transform: translateZ(0);          /* create a layer for smoother anims */
+  color:#fff;
+  background-image:linear-gradient(135deg, #c9853f 0%, #dca35b 100%);
+  box-shadow:0 10px 24px rgba(17,24,39,.12);
 }
-
-/* 💫 Outer halo (soft pulse) */
+.hz-btn--primary::before,
+.hz-btn--primary::after{
+  content:""; position:absolute; pointer-events:none;
+}
 .hz-btn--primary::before{
-  content:"";
-  position:absolute;
-  inset:-34%;
-  border-radius: 999px;
+  inset:-34%; border-radius:999px; z-index:0;
   background:
     radial-gradient(circle at 50% 50%,
       hsla(var(--primary-glow-hsl), .38),
       hsla(var(--primary-glow-hsl), .24) 35%,
       transparent 62%);
-  filter: blur(18px);
-  pointer-events:none;
+  filter:blur(18px); opacity:.65;
   animation: hzSunPulse 2.6s ease-in-out infinite;
-  opacity:.65;
-  z-index: 0;
 }
-
-/* 🌞 Rays + ✨ sweeping sheen (inside the button) */
 .hz-btn--primary::after{
-  content:"";
-  position:absolute;
-  inset:0;                           /* clip sheen to button shape */
-  border-radius: inherit;
-  pointer-events:none;
-  mix-blend-mode: screen;
-  z-index: 1;
-
-  /* 1) faint radial glow in the center
-     2) subtle spinning rays
-     3) moving sheen strip that sweeps left→right */
+  inset:0; border-radius:inherit; z-index:1; mix-blend-mode:screen;
   background:
-    radial-gradient(circle at 50% 50%,
-      rgba(255,255,255,.16) 0%,
-      rgba(255,255,255,0) 55%),
-    repeating-conic-gradient(
-      from 0deg,
-      hsla(var(--primary-glow-hsl), .28) 0 8deg,
-      transparent 8deg 22deg
-    ),
-    linear-gradient(100deg,
-      rgba(255,255,255,0) 40%,
-      rgba(255,255,255,.85) 50%,
-      rgba(255,255,255,0) 60%
-    );
-
-  /* Keep first two centered; sweep the 3rd */
-  background-position: center, center, -220% 0;
-  background-size: 100% 100%, 100% 100%, 260% 100%;
-
-  animation:
-    hzSunSpin 6s linear infinite,        /* rays slow spin */
-    hzSheenSweep 3.4s ease-in-out infinite; /* sheen pass */
-  opacity:.75;
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,.16) 0%, rgba(255,255,255,0) 55%),
+    repeating-conic-gradient(from 0deg, hsla(var(--primary-glow-hsl), .28) 0 8deg, transparent 8deg 22deg),
+    linear-gradient(100deg, rgba(255,255,255,0) 40%, rgba(255,255,255,.85) 50%, rgba(255,255,255,0) 60%);
+  background-position:center, center, -220% 0;
+  background-size:100% 100%, 100% 100%, 260% 100%;
+  animation: hzSunSpin 6s linear infinite, hzSheenSweep 3.4s ease-in-out infinite;
 }
-
-/* hover: brighten & quicken the shine */
 .hz-btn--primary:hover{
   transform: translateY(-1px) scale(1.03);
-  background-image: linear-gradient(135deg, #dca35b 0%, #e6b97a 100%);
-  box-shadow: 0 18px 38px rgba(17,24,39,.18);
+  background-image:linear-gradient(135deg, #dca35b 0%, #e6b97a 100%);
+  box-shadow:0 18px 38px rgba(17,24,39,.18);
 }
 .hz-btn--primary:hover::before{ opacity:.82; }
 .hz-btn--primary:hover::after{
-  animation:
-    hzSunSpin 3.2s linear infinite,
-    hzSheenSweep 2.1s ease-in-out infinite;
+  animation: hzSunSpin 3.2s linear infinite, hzSheenSweep 2.1s ease-in-out infinite;
 }
 
-
-/* SECONDARY (Learn Our Story) — white outline, invert on hover */
-.hz-btn--secondary {
-  background: #ffffff;
-  color: #c9853f;
-  border: 2px solid #c9853f;
-  position: relative;
-  overflow: hidden;
-  z-index: 0;
+/* 🟠 Secondary (Learn) — white outline, fill on hover */
+.hz-btn--secondary{
+  background:#fff; color:#c9853f; border:2px solid #c9853f;
+  overflow:hidden; z-index:0;
 }
-
-/* keep hover self-contained to avoid Tailwind conflicts -> no black bg */
-.hz-btn--secondary:hover {
-  color: #ffffff;
-  background: #c9853f;
+.hz-btn--secondary:hover{
+  color:#fff; background:#c9853f; border-color:transparent;
   transform: translateY(-1px) scale(1.03);
-  box-shadow: 0 12px 28px rgba(17, 24, 39, .14);
-  border-color: transparent;
+  box-shadow:0 12px 28px rgba(17,24,39,.14);
 }
 
-/* Keyboard focus */
-.hz-btn:focus-visible {
-  outline: none;
-  /* white ring + brand ring */
-  box-shadow: 0 0 0 3px #ffffff, 0 0 0 6px hsl(var(--primary-hsl) / .55);
+/* Focus ring */
+.hz-btn:focus-visible{
+  outline:none;
+  box-shadow:0 0 0 3px #fff, 0 0 0 6px hsl(var(--primary-hsl) / .55);
 }
 
-/* CTA layout */
-.hz-hero__ctas {
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
-}
-@media (min-width: 640px) {
-  .hz-hero__ctas { flex-direction: row; }
-}
-.hz-hero[dir="rtl"] .hz-hero__ctas { flex-direction: row-reverse; }
+/* CTA row */
+.hz-hero__ctas{ display:flex; gap:1rem; flex-direction:column; }
+@media (min-width:640px){ .hz-hero__ctas{ flex-direction:row; } }
+.hz-hero[dir="rtl"] .hz-hero__ctas{ flex-direction:row-reverse; }
 
-/* ================== Animations (matching Hero) ================== */
-/* Title base */
-.animate-fade-in-up {
-  opacity: 0;
-  transform: translateY(16px);
-  animation: hzFadeInUp .7s ease forwards;
-}
+/* ================== Animations (match Hero) ================== */
+.animate-fade-in-up{ opacity:0; transform: translateY(16px); animation: hzFadeInUp .7s ease forwards; }
+.animate-slide-in-left{ opacity:0; transform: translateX(-18px); animation: hzSlideInLeft .6s ease forwards; }
+.animate-slide-in-right{ opacity:0; transform: translateX(18px); animation: hzSlideInRight .6s ease forwards; }
+.animation-delay-200{ animation-delay:200ms; }
+.animate-fade-in-delay-300{ opacity:0; animation: hzFadeInUp .7s ease forwards; animation-delay:300ms; }
+.animate-fade-in-delay-400{ opacity:0; animation: hzFadeInUp .7s ease forwards; animation-delay:400ms; }
 
-/* split words motion */
-.animate-slide-in-left {
-  opacity: 0;
-  transform: translateX(-18px);
-  animation: hzSlideInLeft .6s ease forwards;
-}
-.animate-slide-in-right {
-  opacity: 0;
-  transform: translateX(18px);
-  animation: hzSlideInRight .6s ease forwards;
+@keyframes hzFadeInUp{ to{ opacity:1; transform: translateY(0);} }
+@keyframes hzSlideInLeft{ to{ opacity:1; transform: translateX(0);} }
+@keyframes hzSlideInRight{ to{ opacity:1; transform: translateX(0);} }
+
+@keyframes hzSunPulse{ 0%,100%{transform:scale(1);opacity:.55;} 50%{transform:scale(1.12);opacity:.88;} }
+@keyframes hzSunSpin{ to{ transform: rotate(360deg) scale(1.05);} }
+
+/* Sweeping sheen for primary button */
+@keyframes hzSheenSweep{
+  0%   { background-position: center, center, -220% 0; }
+  45%  { background-position: center, center,  125% 0; }
+  100% { background-position: center, center,  125% 0; }
 }
 
-/* delays (like Hero.tsx) */
-.animation-delay-200 { animation-delay: 200ms; }
-.animate-fade-in-delay-300 {
-  opacity: 0;
-  animation: hzFadeInUp .7s ease forwards;
-  animation-delay: 300ms;
-}
-.animate-fade-in-delay-400 {
-  opacity: 0;
-  animation: hzFadeInUp .7s ease forwards;
-  animation-delay: 400ms;
+/* Extra glow pulse if you add .animate-glow */
+.animate-glow{ animation: hzBtnGlow 1.6s ease-in-out infinite alternate; }
+@keyframes hzBtnGlow{
+  from{ box-shadow: 0 8px 20px rgba(0,0,0,.16), 0 0 0 rgba(255,184,77,0); }
+  to  { box-shadow: 0 14px 34px rgba(0,0,0,.24), 0 0 22px rgba(255,184,77,.38); }
 }
 
-/* Keyframes */
-@keyframes hzFadeInUp { to { opacity: 1; transform: translateY(0); } }
-@keyframes hzSlideInLeft { to { opacity: 1; transform: translateX(0); } }
-@keyframes hzSlideInRight { to { opacity: 1; transform: translateX(0); } }
-
-@keyframes hzBtnGlow {
-  from { box-shadow: 0 8px 20px rgba(0,0,0,.16), 0 0 0 rgba(255,184,77,0); }
-  to   { box-shadow: 0 14px 34px rgba(0,0,0,.24), 0 0 22px rgba(255,184,77,.38); }
-}
-@keyframes hzSunPulse {
-  0%,100% { transform: scale(1);    opacity: .50; }
-  50%     { transform: scale(1.10); opacity: .85; }
-}
-@keyframes hzSunSpin { to { transform: rotate(360deg) scale(1.05); } }
-
-/* ================== Reduced Motion ================== */
-@media (prefers-reduced-motion: reduce) {
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
   .animate-fade-in-up,
   .animate-slide-in-left,
   .animate-slide-in-right,
@@ -283,40 +200,7 @@
   .animate-fade-in-delay-400,
   .animate-glow,
   .hz-btn--primary::before,
-  .hz-btn--primary::after {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
-
-@keyframes hzSunPulse{
-  0%,100% { transform: scale(1);    opacity:.55; }
-  50%     { transform: scale(1.12); opacity:.88; }
-}
-
-@keyframes hzSunSpin{
-  to { transform: rotate(360deg); }
-}
-
-/* ➡️ Moves the sheen from left (off) to right (off) while keeping other backgrounds centered */
-@keyframes hzSheenSweep{
-  0%   { background-position: center, center, -220% 0; }
-  45%  { background-position: center, center,  125% 0; }
-  100% { background-position: center, center,  125% 0; }
-}
-
-/* keep your existing glow pulse for the button body if you use .animate-glow */
-@keyframes hzBtnGlow{
-  from{ box-shadow: 0 8px 20px rgba(0,0,0,.16), 0 0 0 rgba(255,184,77,0); }
-  to  { box-shadow: 0 14px 34px rgba(0,0,0,.24), 0 0 22px rgba(255,184,77,.38); }
-}
-
-/* reduced motion safety */
-@media (prefers-reduced-motion: reduce){
-  .hz-btn--primary::before,
   .hz-btn--primary::after{
-    animation:none !important;
-    opacity:1 !important;
+    animation:none !important; opacity:1 !important; transform:none !important;
   }
 }

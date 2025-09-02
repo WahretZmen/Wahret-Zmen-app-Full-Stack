@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";            // ✅ correct Link
 import heroAvif from "../assets/Jebbas/LargeBanner/Jebba-tunisienne-LargeBanner.avif";
 import "../Styles/StylesLargeBanner.css";
 
@@ -38,7 +39,7 @@ const LargeBanner = () => {
       {/* Content */}
       <div className="hz-hero__container">
         <div className="hz-hero__content">
-          {/* Title — same classes as Hero.tsx */}
+          {/* Title */}
           <h2 className="hz-hero__title animate-fade-in-up">
             <span className="hz-inline animate-slide-in-left">{firstWord}</span>{" "}
             {secondWord ? (
@@ -49,7 +50,7 @@ const LargeBanner = () => {
             <span className="hz-hero__by animate-fade-in-delay-400">{bySabri}</span>
           </h2>
 
-          {/* Subtitle — same delayed fade as Hero.tsx */}
+          {/* Subtitle */}
           <p className="hz-hero__subtitle animate-fade-in-delay-300">
             {t(
               "banner_description",
@@ -57,16 +58,27 @@ const LargeBanner = () => {
             )}
           </p>
 
-          {/* CTAs — container fades in same delay as Hero.tsx, primary has glow */}
-          <div className="hz-hero__ctas animate-fade-in-delay-400">
-           <button type="button" className="hz-btn hz-btn--xl hz-btn--primary animate-glow">
-  {t("wahret_zmen_collection", "Explore Collection")}
-</button>
+          {/* CTAs (right under subtitle) */}
+          <div className="hz-hero__ctas hz-delay-400">
+            <Link
+              to="/products"
+              reloadDocument
+              className="hz-btn hz-btn--xl hz-btn--primary animate-glow"
+            >
+              <span className="hz-btn__label">
+                {t("wahret_zmen_collection", "Explore Collection")}
+              </span>
+            </Link>
 
-
-            <button type="button" className="hz-btn hz-btn--xl hz-btn--secondary">
-              {t("about.title", "Learn Our Story")}
-            </button>
+            <Link
+              to="/about"
+              reloadDocument
+              className="hz-btn hz-btn--xl hz-btn--secondary"
+            >
+              <span className="hz-btn__label">
+                {t("about.title", "Learn Our Story")}
+              </span>
+            </Link>
           </div>
         </div>
       </div>

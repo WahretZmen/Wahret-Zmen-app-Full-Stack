@@ -334,3 +334,151 @@
 }
 
 
+
+
+/* ===========================
+   HOME TITLE — PREMIUM MOTION
+   Works with:
+   <h1 class="home-title">
+     <span class="home-title__text">...</span>
+     <span class="home-title__underline"></span>
+   </h1>
+   =========================== */
+
+/* Wrapper */
+.home-title{
+  position: relative;
+  display: inline-block;
+  margin: 0 auto 0.75rem auto;
+  font-weight: 900;
+  font-size: clamp(2.2rem, 5.5vw, 3.25rem);
+  line-height: 1.1;
+  text-align: center;
+  letter-spacing: .02em;
+  will-change: transform, filter, opacity;
+  /* subtle breathing so it feels alive */
+  animation: hzTitleBreath 6.5s ease-in-out infinite;
+}
+
+/* Golden gradient text with a cinematic entrance + looping sheen */
+.home-title__text{
+  position: relative;
+  display: inline-block;
+  padding-inline: .15em;
+  color: #8b5c3e; /* fallback */
+  background-image: linear-gradient(180deg,#a57a52 0%,#d7b287 50%,#9f744d 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  text-shadow: 0 2px 0 rgba(0,0,0,.08);
+  /* entrance (tracking + blur → crisp) repeats every 7s to feel “fresh” */
+  animation: hzTitleIntro 7s ease-in-out infinite;
+}
+
+/* Moving sheen across the text (loop) */
+.home-title__text::after{
+  content:"";
+  position:absolute;
+  inset:-6% -14%;
+  border-radius: 12px;
+  pointer-events:none;
+  background:
+    linear-gradient(100deg,
+      rgba(255,255,255,0) 42%,
+      rgba(255,255,255,.8) 50%,
+      rgba(255,255,255,0) 58%);
+  transform: skewX(-18deg);
+  mix-blend-mode: screen;
+  opacity:.0;
+  animation: hzTitleSheen 3.6s ease-in-out infinite;
+}
+
+/* Underline that draws from center and glows, auto replays */
+.home-title__underline{
+  --line-h: 6px;
+  display:block;
+  height: var(--line-h);
+  width: 0;
+  margin: .65rem auto 0 auto;
+  border-radius: 999px;
+  background-image: linear-gradient(90deg,#c9853f 0%, #e2b87a 50%, #c9853f 100%);
+  box-shadow: 0 0 0 rgba(255,184,77,0), 0 0 0 rgba(0,0,0,0);
+  position: relative;
+  overflow: visible;
+  animation: hzUnderlineDraw 3.8s ease-in-out infinite;
+}
+
+/* Spark that runs along the underline when it appears */
+.home-title__underline::after{
+  content:"";
+  position:absolute;
+  top: 50%;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-top: calc(var(--line-h) * -0.5);
+  border-radius: 50%;
+  background: radial-gradient(circle,#fff 0%, rgba(255,255,255,.65) 45%, rgba(255,255,255,0) 70%);
+  filter: blur(0.5px);
+  transform: translate(-50%, -50%) scale(.4);
+  opacity: 0;
+  animation: hzUnderlineSpark 3.8s ease-in-out infinite;
+}
+
+/* ===========================
+   Keyframes
+   =========================== */
+
+/* Gentle breathing of the whole title block */
+@keyframes hzTitleBreath{
+  0%, 100% { transform: translateY(0) scale(1);   filter: none; }
+  50%      { transform: translateY(-2px) scale(1.008); filter: drop-shadow(0 1px 0 rgba(0,0,0,.04)); }
+}
+
+/* Entrance that also “replays”: blur/offset → crisp, then relax */
+@keyframes hzTitleIntro{
+  0%   { opacity: 0; filter: blur(2px); transform: translateY(8px); letter-spacing: .01em; }
+  12%  { opacity: 1; filter: blur(0);   transform: translateY(0);    letter-spacing: .03em; }
+  22%  { letter-spacing: .015em; }
+  80%  { opacity: 1; }
+  100% { opacity: 1; } /* stays visible; loop restarts smoothly */
+}
+
+/* Sheen sweep over the text */
+@keyframes hzTitleSheen{
+  0%   { opacity: 0; transform: skewX(-18deg) translateX(-130%); }
+  35%  { opacity: .95; transform: skewX(-18deg) translateX(10%); }
+  55%  { opacity: .0;  transform: skewX(-18deg) translateX(120%); }
+  100% { opacity: 0;   transform: skewX(-18deg) translateX(120%); }
+}
+
+/* Underline grows from center and glows */
+@keyframes hzUnderlineDraw{
+  0%   { width: 0; box-shadow: 0 0 0 rgba(255,184,77,0); }
+  22%  { width: 62%; box-shadow: 0 6px 18px rgba(201,133,63,.25); }
+  45%  { width: 62%; box-shadow: 0 8px 24px rgba(201,133,63,.32), 0 0 20px rgba(255,198,120,.25); }
+  70%  { width: 62%; box-shadow: 0 6px 18px rgba(201,133,63,.22); }
+  100% { width: 0;  box-shadow: 0 0 0 rgba(255,184,77,0); }
+}
+
+/* Spark dot runs along underline while it draws */
+@keyframes hzUnderlineSpark{
+  0%   { opacity: 0; left: 50%; transform: translate(-50%, -50%) scale(.4); }
+  15%  { opacity: 1; left: 50%; transform: translate(-50%, -50%) scale(.9); }
+  45%  { opacity: 1; left: 81%; transform: translate(-50%, -50%) scale(1); }
+  70%  { opacity: .8; left: 19%; transform: translate(-50%, -50%) scale(.85); }
+  100% { opacity: 0; left: 50%; transform: translate(-50%, -50%) scale(.4); }
+}
+
+/* Reduced-motion safety */
+@media (prefers-reduced-motion: reduce){
+  .home-title,
+  .home-title__text,
+  .home-title__text::after,
+  .home-title__underline,
+  .home-title__underline::after{
+    animation: none !important;
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}
