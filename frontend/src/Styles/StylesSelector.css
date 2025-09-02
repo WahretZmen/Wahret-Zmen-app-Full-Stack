@@ -1,0 +1,155 @@
+/* =========================================
+   Selector — Professional Boutique Style
+   File: src/Styles/StylesSelector.css
+   ========================================= */
+
+/* Wrapper */
+.selector {
+  width: 100%;
+  max-width: 520px;
+  margin: 0.5rem auto 1.25rem;
+}
+
+/* Label */
+.selector__label {
+  display: block;
+  font-weight: 700;
+  font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+  letter-spacing: .02em;
+  margin-bottom: .55rem;
+  color: #5c3d2e; /* brand brown */
+  text-align: center;
+}
+
+/* Field wrapper with soft halo + underline accent */
+.selector__field {
+  position: relative;
+  display: block;
+}
+
+/* Subtle gradient halo behind the control */
+.selector__halo {
+  position: absolute;
+  inset: -6px -8px -10px;
+  border-radius: 16px;
+  background:
+    radial-gradient(120% 90% at 50% -10%, rgba(166,124,82,.14), transparent 55%),
+    radial-gradient(120% 90% at 50% 120%, rgba(210,166,121,.08), transparent 65%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Animated underline bar */
+.selector__underline {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 8px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #a67c52, #d7b28a, #a67c52);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .45s cubic-bezier(.2,.7,.2,1);
+  opacity: .9;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* The select control */
+.selector__control {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  box-sizing: border-box;
+  /* padding leaves room for the custom caret */
+  padding: 0.85rem 3rem 0.85rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(92,61,46,.25);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.94)) padding-box,
+    linear-gradient(180deg, rgba(92,61,46,.25), rgba(210,166,121,.25)) border-box;
+  box-shadow:
+    0 10px 28px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.65);
+  color: #2a2a2a;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: .01em;
+  appearance: none;           /* custom style */
+  -webkit-appearance: none;
+  outline: none;
+  transition: border-color .25s ease, box-shadow .25s ease, background-color .25s ease;
+  cursor: pointer;
+}
+
+/* Placeholder (first option disabled) */
+.selector__control:required:invalid {
+  color: #8a8a8a;
+  font-weight: 600;
+}
+
+/* Custom caret (LTR) */
+.selector__control {
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%238a5d3b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px 18px;
+}
+
+/* RTL: move caret to the left side and flip */
+[dir="rtl"] .selector__control {
+  padding: 0.85rem 1rem 0.85rem 3rem;
+  background-position: left 12px center;
+  transform-origin: right center;
+}
+
+/* Hover / Focus */
+.selector__control:hover {
+  border-color: rgba(166,124,82,.45);
+  box-shadow:
+    0 12px 32px rgba(0,0,0,.08),
+    0 0 0 2px rgba(166,124,82,.10) inset;
+}
+
+.selector__control:focus-visible {
+  border-color: rgba(166,124,82,.75);
+  box-shadow:
+    0 14px 36px rgba(0,0,0,.10),
+    0 0 0 3px rgba(210,166,121,.28);
+}
+
+/* When focused, expand the underline */
+.selector__control:focus-visible ~ .selector__underline,
+.selector__control:hover ~ .selector__underline {
+  transform: scaleX(1);
+}
+
+/* Options — limited styling support across browsers */
+.selector__control option {
+  font-weight: 600;
+  color: #2f2f2f;
+  background: #fff;
+}
+.selector__control option:disabled {
+  color: #9a9a9a;
+}
+
+/* Compact on small screens */
+@media (max-width: 480px) {
+  .selector__control {
+    padding: 0.78rem 2.75rem 0.78rem 0.9rem;
+    border-radius: 12px;
+    font-size: .97rem;
+  }
+  [dir="rtl"] .selector__control {
+    padding: 0.78rem 0.9rem 0.78rem 2.75rem;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .selector__underline { transition: none !important; }
+  .selector__control   { transition: none !important; }
+}

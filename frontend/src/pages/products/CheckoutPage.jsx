@@ -102,12 +102,12 @@ const onSubmit = async (data) => {
 
     return (
       <section className="min-h-screen flex items-center justify-center bg-[#F8F1E9] screen-CheckoutPage">
-        <div className="max-w-5xl w-full bg-white shadow-lg rounded-lg p-8 border border-[#A67C52]">
+        <div className="max-w-5xl w-full bg-white shadow-lg  p-8 border border-[#A67C52]">
           <h2 className="text-3xl font-bold text-[#A67C52] text-center mb-6">
             {t("checkout.title")}
           </h2>
     
-          <div className="bg-[#F5EFE6] rounded-lg shadow-md p-6 mb-6">
+          <div className="bg-[#F5EFE6]  shadow-md p-6 mb-6">
             <h3 className="text-lg font-semibold text-gray-800">
               {t("checkout.payment_method")}
             </h3>
@@ -135,7 +135,7 @@ const onSubmit = async (data) => {
                 <input
                   {...register("name", { required: true })}
                   type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-[#A67C52] focus:border-[#A67C52]"
+                  className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#ffffff]"
                 />
               </div>
     
@@ -143,7 +143,7 @@ const onSubmit = async (data) => {
                 <label className="block font-medium">{t("checkout.email")}</label>
                 <input
                   type="email"
-                  className="w-full px-4 py-2 border rounded-lg bg-gray-100 cursor-not-allowed"
+                  className="w-full px-4 py-2 border  bg-gray-100 cursor-not-allowed"
                   disabled
                   defaultValue={currentUser?.email}
                 />
@@ -154,14 +154,14 @@ const onSubmit = async (data) => {
                 <input
                   {...register("phone", { required: true })}
                   type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-[#A67C52] focus:border-[#A67C52]"
+                  className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#ffffff]"
                 />
               </div>
             </div>
     
             {/* Right - Address Details */}
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-800">
+              <h3 className="text-xl font-semibold text-black-800">
                 {t("checkout.shipping_address")}
               </h3>
     
@@ -170,7 +170,7 @@ const onSubmit = async (data) => {
                 <input
                   {...register("address", { required: true })}
                   type="text"
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-[#A67C52] focus:border-[#A67C52]"
+                  className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#fafafa]"
                 />
               </div>
     
@@ -180,7 +180,7 @@ const onSubmit = async (data) => {
                   <input
                     {...register("city", { required: true })}
                     type="text"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-[#A67C52] focus:border-[#A67C52]"
+                    className="w-full px-4 py-2 border  focus:ring-[#f6f6f6] focus:border-[#ffffff]"
                   />
                 </div>
                 <div>
@@ -188,7 +188,7 @@ const onSubmit = async (data) => {
                   <input
                     {...register("country", { required: true })}
                     type="text"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-[#A67C52] focus:border-[#A67C52]"
+                    className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#ffffff]"
                   />
                 </div>
               </div>
@@ -199,7 +199,7 @@ const onSubmit = async (data) => {
                   <input
                     {...register("state", { required: true })}
                     type="text"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-[#A67C52] focus:border-[#A67C52]"
+                    className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#A67C52]"
                   />
                 </div>
                 <div>
@@ -207,7 +207,7 @@ const onSubmit = async (data) => {
                   <input
                     {...register("zipcode", { required: true })}
                     type="text"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-[#A67C52] focus:border-[#A67C52]"
+                    className="w-full px-4 py-2 border  focus:ring-[#ffffff] focus:border-[#A67C52]"
                   />
                 </div>
               </div>
@@ -227,7 +227,7 @@ const onSubmit = async (data) => {
                   type="checkbox"
                   className="form-checkbox h-5 w-5 text-[#A67C52] focus:ring-[#A67C52]"
                 />
-                <label className="text-gray-600 text-sm">
+                <label className="text-black-600 text-sm">
                   {t("checkout.agree")}{" "}
                   <Link className="text-[#A67C52] underline">{t("checkout.terms")}</Link>{" "}
                   {t("checkout.and")}{" "}
@@ -237,8 +237,8 @@ const onSubmit = async (data) => {
     
               <button
                 disabled={!isChecked}
-                className={`mt-4 px-6 py-3 text-white font-bold rounded-lg transition-all duration-200 ${
-                  isChecked ? "bg-[#A67C52] hover:bg-[#8a5d3b]" : "bg-gray-400 cursor-not-allowed"
+                className={`mt-4 px-6 py-3 text-white font-bold  transition-all duration-200 ${
+                  isChecked ? "bg-[#A67C52] hover:bg-[#fcfcfc]" : "bg-gray-400 cursor-not-allowed"
                 }`}
               >
                 {t("checkout.place_order")}

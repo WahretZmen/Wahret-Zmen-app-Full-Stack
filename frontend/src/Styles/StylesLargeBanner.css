@@ -1,152 +1,163 @@
-.wahretzmen-banner {
-    position: relative;
-    width: 1500 px !important;
-    height: 1000px;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: -25% !important;
-    margin-left: -25% !important;
-  }
-
-  /* Example */
-.large-banner-wrapper {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
-  
-  
-  .wahretzmen-banner-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .wahretzmen-banner-title {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    color: white;
-    text-align: center;
-    text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.6);
-  }
-  
-  .wahretzmen-banner-title h1 {
-    font-size: 3rem;
-    font-weight: bold;
-    margin: 0;
-    margin-top: 20%;
-  }
-
- /* 🔸 Brand Name Styling */
-.wahretzmen-brand-name {
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -250%);
-  font-size: 5rem;
-  font-weight: 900;
-  font-family: 'Playfair Display', serif;
-  color: white;
-  text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
-  z-index: 3;
-  transition: transform 0.5s ease, text-shadow 0.5s ease, color 0.5s ease;
-  cursor: pointer;
+/* ================== design tokens ================== */
+:root{
+  --foreground: #111827;
+  --muted-foreground: #6b7280;
+  /* These rely on your Tailwind CSS variables (already in index.css) */
+  --primary-hsl: 35 80% 52%;
+  --primary-glow-hsl: 35 80% 55%;
 }
 
-/* ✨ Hover Effect: Light glow, scale up, gentle lift */
-.wahretzmen-brand-name:hover {
-  transform: translate(-50%, -270%) scale(1.05) rotate(-1deg);
-  text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(255, 222, 173, 0.7);
-  color: #fbe5be;
+/* ================== layout ================== */
+.hz-hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  background: #000;
+}
+.hz-hero__bg { position: absolute; inset: 0; z-index: 0; }
+.hz-hero__bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* lighter overlay so CTAs pop */
+.hz-hero__overlay{
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(255,255,255,.90),
+    rgba(255,255,255,.70),
+    rgba(255,255,255,.40)
+  );
 }
 
+.hz-hero__container{
+  position: relative; z-index: 1; width: 100%;
+  padding-inline: 1rem; margin-inline: auto; max-width: 1280px;
+}
+.hz-hero__content{ max-width: 680px; }
 
-
-  /* 🔮 Elegant Zoom + Fade + Lift Animation */
-@keyframes zoomFadeUp {
-  0% {
-    opacity: 0;
-    transform: scale(0.8) translateY(40px);
-    text-shadow: none;
-  }
-  60% {
-    opacity: 0.8;
-    transform: scale(1.03) translateY(-5px);
-    text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.15);
-  }
+/* ================== type ================== */
+.hz-hero__title{
+  color: var(--foreground);
+  margin: 0 0 1.5rem 0;
+  line-height: 1.1;
+  font-weight: 800;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+}
+.hz-hero__by{
+  display: block; margin-top: .5rem;
+  color: hsl(var(--primary));
+  font-weight: 300;
+  font-size: clamp(1.25rem, 2.5vw, 2rem);
+}
+.hz-hero__subtitle{
+  color: var(--muted-foreground);
+  font-size: 1.25rem;
+  line-height: 1.7;
+  margin: 0 0 2rem 0;
+  max-width: 44ch;
 }
 
-.wahretzmen-welcome-animated {
-  animation: zoomFadeUp 1.5s ease-out forwards;
-  opacity: 0;
+/* ================== buttons ================== */
+.hz-btn{
+  -webkit-font-smoothing: antialiased;
+  appearance: none; border: 0; cursor: pointer;
+  font-weight: 700; line-height: 1; letter-spacing: .01em;
+  border-radius: 12px;
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    background .3s ease,
+    color .3s ease,
+    border-color .3s ease;
+  will-change: transform, box-shadow, background, color, border-color;
 }
+.hz-btn--xl{ height: 56px; padding: 0 2.5rem; font-size: 1.125rem; }
 
-.wahretzmen-welcome-animated {
-  animation: zoomFadeUp 1.5s ease-out forwards;
-  opacity: 0;
+/* HERO button: gradient background */
+.hz-btn--hero{
+  color: hsl(var(--primary-foreground));
+  background-image: linear-gradient(
+    to right,
+    hsl(var(--primary)),
+    hsl(var(--primary-glow))
+  );
+  box-shadow: 0 8px 20px hsl(var(--foreground) / 0.08);
+}
+.hz-animate-glow{ animation: hzBtnGlow 1.6s ease-in-out infinite alternate; }
+.hz-btn--hero:hover{
+  transform: scale(1.05);
+  box-shadow: 0 16px 36px hsl(var(--foreground) / 0.14);
+  background-image: linear-gradient(
+    to right,
+    hsl(var(--primary)),
+    hsl(var(--primary-glow))
+  );
+}
+.hz-btn--hero:hover.hz-animate-glow{ animation: none; }
+
+/* OUTLINE button */
+.hz-btn--outline{
+  background: transparent;
+  color: hsl(var(--primary));
+  border: 2px solid hsl(var(--primary));
   position: relative;
   overflow: hidden;
+  z-index: 0;
+}
+.hz-btn--outline::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image: linear-gradient(
+    to right,
+    hsl(var(--primary)),
+    hsl(var(--primary-glow))
+  );
+  opacity: 0;
+  transition: opacity .3s ease;
+  z-index: -1;
+}
+.hz-btn--outline:hover::before { opacity: 1; }
+.hz-btn--outline:hover {
+  color: hsl(var(--primary-foreground));
+  transform: scale(1.05);
+  box-shadow: 0 12px 28px hsl(var(--foreground) / 0.12);
 }
 
-.wahretzmen-welcome-animated::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
-  transform: skewX(-20deg);
-  animation: shimmer 2.5s ease-in-out 1.2s forwards;
+/* keyboard focus */
+.hz-btn:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px hsla(var(--primary-hsl), .6);
 }
 
-@keyframes shimmer {
-  0% {
-    left: -75%;
-  }
-  100% {
-    left: 125%;
-  }
+/* CTA layout */
+.hz-hero__ctas{ display: flex; gap: 1rem; flex-direction: column; }
+@media (min-width:640px){ .hz-hero__ctas{ flex-direction: row; } }
+.hz-hero[dir="rtl"] .hz-hero__ctas{ flex-direction: row-reverse; }
+
+/* ================== animations ================== */
+.hz-fade-in-up{ opacity: 0; transform: translateY(16px); animation: hzFadeInUp .7s ease forwards; }
+.hz-slide-in-left{ display: inline-block; opacity: 0; transform: translateX(-18px); animation: hzSlideInLeft .6s ease forwards; }
+.hz-slide-in-right{ display: inline-block; opacity: 0; transform: translateX(18px); animation: hzSlideInRight .6s ease forwards; }
+.hz-delay-200{ animation-delay: 200ms; }
+.hz-delay-300{ animation-delay: 300ms; }
+.hz-delay-400{ animation-delay: 400ms; }
+
+@keyframes hzFadeInUp{ to{ opacity: 1; transform: translateY(0);} }
+@keyframes hzSlideInLeft{ to{ opacity: 1; transform: translateX(0);} }
+@keyframes hzSlideInRight{ to{ opacity: 1; transform: translateX(0);} }
+@keyframes hzBtnGlow{
+  from{ box-shadow: 0 8px 20px rgba(0,0,0,.16), 0 0 0 rgba(255,184,77,0); }
+  to  { box-shadow: 0 14px 34px rgba(0,0,0,.26), 0 0 22px rgba(255,184,77,.40); }
 }
 
-  
-  /* 📱 Mobile responsive */
-  @media (max-width: 768px) {
-    .wahretzmen-banner {
-      height: 300px;
-    }
-  
-    .wahretzmen-banner-img {
-      height: 300px;
-    }
-  
-    .wahretzmen-banner-title h1 {
-      font-size: 1.6rem;
-    }
+/* reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .hz-fade-in-up,
+  .hz-slide-in-left,
+  .hz-slide-in-right,
+  .hz-animate-glow{
+    animation: none; opacity: 1; transform: none;
   }
-
-  
-
-
-
-
-  
-
-
-  
-
+}

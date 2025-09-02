@@ -1,0 +1,281 @@
+/* ============================================================
+   StylesCategories.css  —  ShopByCategory (Wahret Zmen)
+   ============================================================ */
+
+/* ---------- Title container ---------- */
+.shop-title-wrap {
+  text-align: center;
+  margin-bottom: 2.25rem;
+  position: relative;
+}
+
+.shop-title-row {
+  display: inline-flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+/* ---------- Emblem icon (gold badge) ---------- */
+.title-emblem {
+  display: inline-grid;
+  place-items: center;
+  width: clamp(34px, 2.2vw + 26px, 46px);
+  height: clamp(34px, 2.2vw + 26px, 46px);
+  border-radius: 999px;
+  background:
+    radial-gradient(55% 55% at 35% 30%, rgba(255,255,255,0.6), rgba(255,255,255,0) 60%),
+    linear-gradient(135deg, #c6a34f, #e8d08a, #a87b22);
+  box-shadow:
+    0 6px 14px rgba(0,0,0,0.10),
+    inset 0 0 0 1px rgba(255,255,255,0.5);
+  position: relative;
+  overflow: hidden;
+  animation: icon-float 2400ms ease-in-out infinite;
+}
+
+.title-emblem::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg,
+    rgba(255,255,255,0) 20%,
+    rgba(255,255,255,0.42) 50%,
+    rgba(255,255,255,0) 80%);
+  transform: translateX(-140%);
+  animation: emblem-sheen 2200ms ease 500ms infinite;
+  pointer-events: none;
+}
+
+.title-emblem-icon {
+  width: 60%;
+  height: 60%;
+  color: #4a3412;
+  opacity: .9;
+  filter: drop-shadow(0 1px 0 rgba(255,255,255,0.4));
+}
+
+@keyframes icon-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+@keyframes emblem-sheen { 0%,60%{transform:translateX(-140%)} 100%{transform:translateX(140%)} }
+
+
+/* ===========================
+   Shop By Category Hover Animations
+   =========================== */
+
+/* Wrapper for each category (image + label) */
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.35s ease;
+}
+
+/* Circular image container */
+.category-item img {
+  border-radius: 50%;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+/* Hover effect on image */
+.category-item:hover img {
+  transform: scale(1.08) rotate(-2deg);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+/* Category name (label under circle) */
+.category-item .category-label {
+  margin-top: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #5c3d2e;
+  position: relative;
+  display: inline-block;
+  transition: color 0.35s ease;
+}
+
+/* Underline animation on hover */
+.category-item .category-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 3px;
+  background: linear-gradient(90deg, #a67c52, #d7b28a, #a67c52);
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* On hover: text color + underline sweep */
+.category-item:hover .category-label {
+  color: #a67c52;
+}
+
+.category-item:hover .category-label::after {
+  width: 100%;
+}
+
+/* Subtle floating effect on whole block */
+.category-item:hover {
+  transform: translateY(-6px);
+}
+
+
+/* ---------- Section title (animated gradient text) ---------- */
+.shop-title-pro {
+  display: inline-block;
+  position: relative;
+  margin: 0 auto;
+  padding: .15rem .35rem;
+  font-weight: 900;
+  letter-spacing: .6px;
+  color: #2b2620; /* fallback solid color */
+  font-size: clamp(1.3rem, 1.4vw + 1.1rem, 2.2rem);
+  line-height: 1.25;
+  isolation: isolate;
+}
+
+/* Base word style (fallback visible color) */
+.title-word {
+  display: inline-block;
+  margin: 0 .28rem;
+  opacity: 0;
+  transform: translateY(14px);
+  animation: title-rise 720ms cubic-bezier(.22,.8,.24,1) forwards;
+  animation-delay: var(--delay, 0ms);
+  color: #2b2620;  /* readable charcoal fallback */
+  text-shadow: 0 1px 0 rgba(255,255,255,0.18);
+}
+
+@keyframes title-rise { to { opacity: 1; transform: translateY(0); } }
+
+/* 🟡 Animated gradient ON the text (when background-clip is supported) */
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .title-word {
+    /* Elegant animated gradient sweep: charcoal → warm golds → charcoal */
+    background-image: linear-gradient(
+      90deg,
+      #2b2620 0%,
+      #9b7a2e 15%,
+      #c6a34f 30%,
+      #e8d08a 45%,
+      #c6a34f 60%,
+      #9b7a2e 75%,
+      #2b2620 100%
+    );
+    background-size: 200% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+            background-clip: text;
+    -webkit-text-fill-color: transparent;
+            color: transparent;
+    animation:
+      title-rise 720ms cubic-bezier(.22,.8,.24,1) forwards var(--delay, 0ms),
+      title-gradient-move 6s ease-in-out infinite 600ms; /* slight delay so rise finishes first */
+  }
+
+  @keyframes title-gradient-move {
+    0%   { background-position:   0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position:   0% 50%; }
+  }
+}
+
+/* Gentle shimmer layer over the whole title (kept subtle) */
+.title-shimmer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg,
+    rgba(255,255,255,0) 20%,
+    rgba(255,255,255,0.35) 48%,
+    rgba(255,255,255,0) 75%);
+  transform: translateX(-140%);
+  animation: title-sheen 1100ms ease 520ms both;
+  border-radius: 8px;
+  mix-blend-mode: screen;
+}
+@keyframes title-sheen { to { transform: translateX(140%); } }
+
+/* Elegant gold underline */
+.title-underline {
+  display: block;
+  height: 3px;
+  width: 0%;
+  margin: .6rem auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #c6a34f, #e8d08a, #a87b22);
+  animation: underline-grow 900ms ease forwards;
+  animation-delay: 360ms;
+}
+@keyframes underline-grow { from{width:0%;opacity:.2} to{width:58%;opacity:1} }
+
+/* ---------- Category items (avatars) ---------- */
+.shadow-elev {
+  box-shadow:
+    0 10px 20px rgba(0,0,0,0.08),
+    0 2px 8px rgba(0,0,0,0.04);
+}
+
+.cat-img { transition: transform 500ms cubic-bezier(.2,.8,.2,1); transform-origin: center; }
+.group:hover .cat-img { transform: scale(1.06); }
+
+.shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg,
+    rgba(255,255,255,0) 20%,
+    rgba(255,255,255,0.38) 48%,
+    rgba(255,255,255,0) 75%);
+  transform: translateX(-130%) rotate(0.5deg);
+  transition: transform 900ms ease;
+}
+.group:hover .shine { transform: translateX(130%) rotate(0.5deg); }
+
+.anim-fade-up {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: cat-fade-up 700ms ease-out forwards;
+}
+@keyframes cat-fade-up { to { opacity: 1; transform: translateY(0); } }
+
+/* Label with subtle dark gradient */
+.label-gradient {
+  background: linear-gradient(90deg, #1e1a16, #3b332b);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+}
+
+/* Item feedback */
+.category-item {
+  transition: transform 280ms cubic-bezier(.2,.8,.2,1), filter 240ms ease;
+}
+.category-item:hover {
+  transform: translateY(-2px);
+  filter: saturate(1.02);
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .title-word,
+  .title-underline,
+  .title-shimmer,
+  .anim-fade-up,
+  .title-emblem,
+  .title-emblem::after {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    width: auto !important;
+    background-position: 0% 50% !important;
+  }
+  .cat-img,
+  .shine,
+  .category-item {
+    transition: none !important;
+  }
+}

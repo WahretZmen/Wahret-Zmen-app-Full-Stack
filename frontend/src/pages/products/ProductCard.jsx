@@ -6,17 +6,16 @@ import { useTranslation } from "react-i18next";
 import { getImgUrl } from "../../utils/getImgUrl";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 
-
-
+// ensure CSS is loaded
+import "../../Styles/StylesProductCard.css";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   if (!i18n.isInitialized) return null;
-  const [quantity, setQuantity] = useState(1);
 
-  // ✅ Zoom state
+  const [quantity, setQuantity] = useState(1);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
   const [isHovering, setIsHovering] = useState(false);
 
@@ -47,176 +46,158 @@ const ProductCard = ({ product }) => {
 
   const handleAddToCart = () => {
     const defaultColor = product?.colors?.[0] || {
-      colorName: {
-        en: "Original",
-        fr: "Original",
-        ar: "أصلي",
-      },
+      colorName: { en: "Original", fr: "Original", ar: "أصلي" },
       image: product?.coverImage,
       stock: product?.stockQuantity,
     };
 
     if ((defaultColor?.stock ?? 0) > 0 && quantity > 0) {
-      dispatch(
-        addToCart({
-          ...product,
-          quantity,
-          color: defaultColor,
-        })
-      );
+      dispatch(addToCart({ ...product, quantity, color: defaultColor }));
     }
   };
 
-  // 🖱️ Zoom handlers (hover only)
+  // hover zoom (kept for future)
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setZoomPosition({ x, y });
   };
-
   const handleMouseEnter = () => setIsHovering(true);
-
   const handleMouseLeave = () => {
     setIsHovering(false);
     setZoomPosition({ x: 50, y: 50 });
   };
 
+  const hasOld = Number(product?.oldPrice) > Number(product?.newPrice || 0);
+  const shopName = product?.storeName || product?.vendor || product?.brand || "";
 
-
-
- 
   return (
-  <div className="product-card group relative bg-white border border-gray-200 overflow-hidden transition-all duration-300 w-full sm:max-w-[250px] mx-auto">
-    
-    {/* 🔗 Clickable image section */}
-    <a
-      href={`/products/${product._id}`}
-      className="relative block w-full h-52 sm:h-64 overflow-hidden bg-white"
-    >
-      <img
-        src={getImgUrl(product?.coverImage)}
-        alt={title}
-        onMouseEnter={handleMouseEnter}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        className="w-full h-full object-contain transition duration-300"
-        style={{ transform: "none" }}
-      />
+    <div className="product-card pc-card group relative bg-white border border-gray-200 overflow-hidden transition-all duration-300 w-full sm:max-w-[280px] mx-auto">
+      {/* IMAGE */}
+      <a
+        href={`/products/${product._id}`}
+        className="pc-imgwrap relative block w-full bg-white"
+      >
+        <img
+          src={getImgUrl(product?.coverImage)}
+          alt={title}
+          onMouseEnter={handleMouseEnter}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          className="pc-img w-full h-full object-contain transition duration-300"
+          style={{ transform: "none" }}
+        />
 
-      {/* 🔥 Trending Badge */}
-      {product.trending && (
-        <span className="absolute top-2 left-2 z-20 text-xs font-semibold px-2 py-1 bg-red-500 text-white rounded-full shadow-md">
-          {t("trending")}
+        {/* badges (kept) */}
+        {product.trending && (
+          <span className="product-badge trending-badge absolute z-20 text-xs font-semibold px-2 py-1 bg-red-500 text-white shadow-md">
+            {t("trending")}
+          </span>
+        )}
+
+        <span
+          className={`product-badge stock-badge absolute z-20 text-xs font-semibold px-2 py-1 text-white shadow-md ${
+            displayedStock > 0 ? "in-stock bg-green-600" : "out-of-stock bg-red-500"
+          }`}
+        >
+          {displayedStock > 0 ? `${t("stock")}: ${displayedStock}` : t("out_of_stock")}
         </span>
-      )}
 
-      {/* 📦 Stock Badge */}
-      <span
-  className={`absolute bottom-2 left-2 z-20 text-xs font-semibold px-2 py-1 rounded-full text-white shadow-md ${
-    displayedStock > 0 ? "bg-green-600" : "bg-red-500"
-  }`}
->
-  {displayedStock > 0
-    ? `${t("stock")}: ${displayedStock}`
-    : t("out_of_stock")}
-</span>
-
-
-      {/* 🛒 Add to Cart Hover Button */}
-      <button
-        onClick={handleAddToCart}
-        disabled={displayedStock === 0}
-        className={`absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-sm font-medium text-white transition-all duration-300
-          ${
+        {/* hover CTA (kept) */}
+        <button
+          onClick={handleAddToCart}
+          disabled={displayedStock === 0}
+          className={`pc-cta-ontop absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 text-sm font-medium text-white transition-all duration-300 ${
             displayedStock > 0
-              ? "bg-[#8B5C3E] opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0"
+              ? "bg-[#111111] opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0"
               : "bg-gray-400 cursor-not-allowed"
           }`}
-      >
-        <FiShoppingCart className="inline mr-1" />
-        {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-      </button>
-    </a>
-  
-      <div className="p-4 text-center space-y-2">
-        <Link to={`/products/${product._id}`}>
-          <h3 className="text-lg font-bold text-gray-800 hover:text-[#8B5C3E] transition-colors duration-300">
+        >
+          <FiShoppingCart className="inline mr-1" />
+          {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+        </button>
+      </a>
 
+      {/* thin divider just like ref */}
+      <div className="pc-divider" />
+
+      {/* BODY */}
+      <div className="pc-body p-4 text-center space-y-2">
+        <Link to={`/products/${product._id}`}>
+          <h3 className="pc-title text-lg font-bold text-gray-800 hover:text-[#111] transition-colors duration-300">
             {title}
           </h3>
         </Link>
-  
-        <p className="text-sm text-gray-500">
-          {description.length > 60 ? `${description.slice(0, 60)}...` : description}
-        </p>
-  
-        {displayedColor && (
-          <p className="text-sm italic text-gray-500">
-            {t("color")}: <span className="text-gray-700 font-medium">{displayedColor}</span>
-          </p>
-        )}
-  
-        {product.colors?.length > 0 && (
-          <div className="text-sm text-gray-600">
-            <p className="font-medium">{t("available_colors")}:</p>
-            <ul className="flex flex-wrap justify-center gap-2 mt-1">
-              {product.colors.map((colorObj, idx) => (
-                <li
-                  key={colorObj.colorName?.[lang] || colorObj.colorName?.en || idx}
-                  className="px-2 py-1 border rounded text-xs bg-gray-100"
-                >
-                  {colorObj.colorName?.[lang] || colorObj.colorName?.en || "-"}
-                </li>
-              ))}
-            </ul>  
+
+        {shopName && (
+          <div className="pc-shop">
+            <span className="pc-shop-label">{t("boutique") || "Boutique:"}</span>{" "}
+            <a href="#" className="pc-shop-name">{shopName}</a>
           </div>
         )}
-  
-        <div className="text-sm font-bold text-gray-900 mt-1">
-          ${product?.newPrice}
 
-          {product?.oldPrice && (
-            <span className="text-gray-400 text-sm line-through ml-2">
-              ${Math.round(product?.oldPrice)}
-            </span>
+        {/* price row */}
+        <div className="pc-price text-sm font-bold text-gray-900 mt-1">
+          {hasOld && <span className="pc-old">{Number(product?.oldPrice).toFixed(2)} $</span>}
+          <span className="pc-new">{Number(product?.newPrice || 0).toFixed(2)} $</span>
+        </div>
+
+        {/* HOVER PANEL (kept content) */}
+        <div className="pc-extra">
+          <p className="product-description text-sm text-gray-500">
+            {description.length > 60 ? `${description.slice(0, 60)}...` : description}
+          </p>
+
+          {displayedColor && (
+            <p className="text-sm italic text-gray-500">
+              {t("color")}: <span className="text-gray-700 font-medium">{displayedColor}</span>
+            </p>
           )}
+
+          {product.colors?.length > 0 && (
+            <div className="text-sm text-gray-600">
+              <p className="font-medium">{t("available_colors")}:</p>
+              <ul className="color-list flex flex-wrap justify-center gap-2 mt-1">
+                {product.colors.map((colorObj, idx) => (
+                  <li
+                    key={colorObj.colorName?.[lang] || colorObj.colorName?.en || idx}
+                    className="px-2 py-1 border text-xs bg-gray-100"
+                  >
+                    {colorObj.colorName?.[lang] || colorObj.colorName?.en || "-"}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="flex items-center justify-center text-sm">
+            <label className="mr-2">{t("quantity")}:</label>
+            <input
+              type="number"
+              min="1"
+              max={displayedStock}
+              value={quantity}
+              onChange={handleQuantityChange}
+              className="quantity-input border px-2 w-14 text-center"
+              disabled={displayedStock === 0}
+            />
+          </div>
+
+          <div className="mt-3">
+            <button
+              onClick={handleAddToCart}
+              disabled={displayedStock === 0}
+              className={`add-to-cart-btn ${displayedStock > 0 ? "" : "bg-gray-300 cursor-not-allowed"}`}
+            >
+              <FiShoppingCart className="inline mr-1" />
+              {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+            </button>
+          </div>
         </div>
-  
-        <div className="flex items-center justify-center text-sm">
-          <label className="mr-2">{t("quantity")}:</label>
-          <input
-            type="number"
-            min="1"
-            max={displayedStock}
-            value={quantity}
-            onChange={handleQuantityChange}
-            className="border rounded px-2 w-14 text-center"
-            disabled={displayedStock === 0}
-          />
-        </div>
-        <div className="mt-3">
-        <button
-  onClick={handleAddToCart}
-  disabled={displayedStock === 0}
-  className={`add-to-cart-btn ${
-    displayedStock > 0 ? "" : "bg-gray-300 cursor-not-allowed"
-  }`}
->
-  <FiShoppingCart className="inline mr-1" />
-  {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-</button>
-
-</div>
-
-
       </div>
     </div>
   );
-  
- 
 };
 
 export default ProductCard;
-
-

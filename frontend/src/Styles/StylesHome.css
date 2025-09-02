@@ -1,30 +1,336 @@
 
-.home-container {
-    width: 100%;
-    box-sizing: border-box;
+
+
+
+/* =========================================
+   Shop By Category — Grid, Circles, Labels
+   File: src/Styles/StylesCategories.css
+   ========================================= */
+
+   /* ==== FIXED: Home Page Title “الرئيسية” / “Home” ==== */
+/* Stronger specificity so it wins over Tailwind text colors */
+.home-container .home-title {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  margin-inline: auto;
+  line-height: 1.05;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+}
+
+.home-container .home-title.rtl .home-title__text {
+  font-size: clamp(2.25rem, 5vw, 4rem);
+}
+.home-container .home-title.ltr .home-title__text {
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+}
+
+.home-container .home-title__text {
+  display: inline-block;                 /* important for gradient text */
+  background: linear-gradient(90deg, #8a5d3b 0%, #d2a679 45%, #8a5d3b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent !important;         /* beat any .text-* utilities */
+  -webkit-text-fill-color: transparent;  /* ✅ fixes black text on Chrome/Safari */
+  filter: drop-shadow(0 2px 10px rgba(0,0,0,.08));
+  opacity: 0;
+  transform: translateY(16px) scale(0.98);
+  animation: homeTitleIn 700ms cubic-bezier(.2,.8,.2,1) forwards;
+  will-change: transform, opacity;
+}
+
+.home-container .home-title__underline {
+  display: block;
+  height: 3px;
+  width: 0%;
+  margin-top: .6rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #d2a679, #8a5d3b);
+  opacity: .9;
+  animation: homeUnderline 720ms 180ms cubic-bezier(.2,.8,.2,1) forwards;
+}
+
+.home-container .home-title__sub {
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  color: #5f5f5f;
+  max-width: 60ch;
+  margin: .85rem auto 0;
+  opacity: 0;
+  transform: translateY(10px);
+  animation: subFadeUp 500ms 320ms ease-out forwards;
+  text-wrap: pretty;
+}
+
+.home-container .home-title__text:after {
+  content: "";
+  position: absolute;
+  inset-inline: -6px;
+  bottom: -2px;
+  height: 20%;
+  filter: blur(14px);
+  background: radial-gradient(60% 60% at 50% 100%, rgba(210,166,121,.18), transparent 70%);
+  opacity: 0;
+  animation: textGlow 900ms 300ms ease-out forwards;
+}
+
+/* =========================
+   Brown CTA Button
+   ========================= */
+.brown-btn {
+  -webkit-font-smoothing: antialiased;
+  font-weight: 700;
+  letter-spacing: .02em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 3.25rem; /* 52px */
+  padding: 0 1.75rem;
+  border-radius: 14px;
+  position: relative;
+  text-decoration: none;
+  user-select: none;
+  color: #fff;
+  background: linear-gradient(135deg, #8B5E3C, #C49A6C); /* brown → gold */
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.12),
+    0 0 0 rgba(196,154,108,0);
+  transition:
+    transform .35s cubic-bezier(.2,.7,.2,1),
+    box-shadow .35s cubic-bezier(.2,.7,.2,1);
+  animation: brownGlow 1.8s ease-in-out infinite alternate;
+}
+
+/* Hover lift + sweep effect */
+.brown-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow:
+    0 16px 40px rgba(0,0,0,.18),
+    0 0 24px rgba(196,154,108,.45);
+}
+.brown-btn:active {
+  transform: translateY(0) scale(.98);
+}
+
+/* Focus ring */
+.brown-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px #fff,
+    0 0 0 6px rgba(196,154,108,.55),
+    0 16px 40px rgba(0,0,0,.16),
+    0 0 24px rgba(196,154,108,.45);
+}
+
+/* Hover sweep highlight */
+.brown-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.22) 45%,
+    rgba(255,255,255,0) 60%
+  );
+  transform: translateX(-120%);
+  opacity: 0;
+  transition: transform .7s cubic-bezier(.2,.7,.2,1), opacity .3s ease;
+  z-index: 1;
+}
+.brown-btn:hover::after {
+  transform: translateX(120%);
+  opacity: 1;
+}
+
+/* Keyframes: breathing glow */
+@keyframes brownGlow {
+  from {
+    box-shadow:
+      0 10px 22px rgba(0,0,0,.12),
+      0 0 0 rgba(196,154,108,0);
   }
-  
-  
-  
-  @media (max-width: 768px) {
-    .home-container section {
-      padding-left: 0.5rem;
-      padding-right: 0.5rem;
-    }
-  
-    .home-container h1,
-    .home-container h2 {
-      font-size: 1.5rem;
-    }
-  
-    .home-container p {
-      font-size: 1rem;
-    }
+  to {
+    box-shadow:
+      0 14px 34px rgba(0,0,0,.18),
+      0 0 22px rgba(196,154,108,.40);
   }
+}
 
 
-  
+/* Keyframes (unchanged) */
+@keyframes homeTitleIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes homeUnderline { to { width: 56%; } }
+@keyframes subFadeUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes textGlow { to { opacity: 1; } }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .home-container .home-title__text,
+  .home-container .home-title__underline,
+  .home-container .home-title__sub {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    width: auto !important;
+  }
+}
 
 
+/* -------- Grid Layout -------- */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: start;
+  justify-items: center;
+  margin: 0 auto;
+  max-width: 1200px;
+}
 
-  
+@media (max-width: 992px) {
+  .categories-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .categories-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* -------- Category Item (wrapper for img + label) -------- */
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.35s ease;
+  will-change: transform;
+  /* initial state for staggered reveal */
+  opacity: 0;
+  transform: translateY(14px);
+  animation: catFadeUp 0.6s cubic-bezier(.2,.7,.2,1) forwards;
+  animation-delay: var(--stagger, 0ms);
+}
+
+/* If you don’t set --stagger inline, we’ll auto-stagger via nth-child */
+.categories-grid .category-item:nth-child(1) { --stagger: 60ms; }
+.categories-grid .category-item:nth-child(2) { --stagger: 140ms; }
+.categories-grid .category-item:nth-child(3) { --stagger: 220ms; }
+.categories-grid .category-item:nth-child(4) { --stagger: 300ms; }
+.categories-grid .category-item:nth-child(5) { --stagger: 380ms; }
+.categories-grid .category-item:nth-child(6) { --stagger: 460ms; }
+
+/* -------- Circular Image -------- */
+.category-circle {
+  width: clamp(170px, 22vw, 240px);
+  height: clamp(170px, 22vw, 240px);
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
+  transition: transform 0.45s ease, box-shadow 0.45s ease;
+  will-change: transform, box-shadow;
+  background: #fff;
+}
+
+.category-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 0.45s ease;
+}
+
+/* Hover on the whole item affects circle and label */
+.category-item:hover .category-circle {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.16);
+}
+.category-item:hover .category-circle img {
+  transform: scale(1.08) rotate(-2deg);
+}
+
+/* Optional: subtle highlight ring on hover */
+.category-circle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0 rgba(166,124,82,0.35);
+  transition: box-shadow 0.45s ease;
+}
+.category-item:hover .category-circle::after {
+  box-shadow: inset 0 0 0 6px rgba(166,124,82,0.18);
+}
+
+/* -------- Category Label (under circle) -------- */
+.category-label {
+  margin-top: 0.85rem;
+  font-size: clamp(1.02rem, 2.2vw, 1.18rem);
+  font-weight: 700;
+  color: #2f2f2f;
+  position: relative;
+  display: inline-block;
+  transition: color 0.35s ease, transform 0.35s ease, text-shadow 0.35s ease;
+  cursor: pointer;
+  line-height: 1.15;
+}
+
+/* Gold underline sweep */
+.category-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #a67c52, #d7b28a, #a67c52);
+  transition: width 0.45s ease;
+  opacity: 0.95;
+}
+
+/* Hover effects on label (triggered by item hover) */
+.category-item:hover .category-label {
+  color: #a67c52;
+  transform: translateY(-3px);
+  text-shadow: 0 3px 12px rgba(166, 124, 82, 0.25);
+}
+.category-item:hover .category-label::after {
+  width: 100%;
+}
+
+/* -------- Reduced Motion -------- */
+@media (prefers-reduced-motion: reduce) {
+  .category-item,
+  .category-circle,
+  .category-circle img,
+  .category-label::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+  .category-item { opacity: 1 !important; }
+}
+
+/* -------- Keyframes -------- */
+@keyframes catFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+

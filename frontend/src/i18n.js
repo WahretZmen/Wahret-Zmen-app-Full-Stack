@@ -242,107 +242,143 @@ i18n
           
         }
       },
-        
-      fr: {
-        translation: {
-          "navbar": {
-            "brand": "Wahret Zmen"
-          },
-          home: "Accueil",
+    
+     fr: {
+  translation: {
+    navbar: { brand: "Wahret Zmen" },
+    home: "Accueil",
     products: "Produits",
-    "about-menu": "À propos",  // ✅ as you asked
-    "contact-menu": "Contactez-nous",  // ✅ as you asked
-    "admin_dashboard":"Tableau de bord",
-          search_input: {
-            placeholder: "Rechercher des produits...",
+    "about-menu": "À propos",
+    "contact-menu": "Contactez-nous",
+    admin_dashboard: "Tableau de bord",
 
-            
-            
-          },
-          dashboard: "Tableau de bord",
-          orders: "Commandes",
-          logout: "Se déconnecter",
-          select_category: "Sélectionner une catégorie",
-          categories: {
-            all: "Tous",
-            men: "Hommes",
-            women: "Femmes",
-            children: "Enfants",
-          },
-          product_filters: {
-            label: "Sélectionner les produits", // French translation of the label
-            men: "Hommes",
-            women: "Femmes",
-            children: "Enfants",
-            "all": "Tous",  // French translation for "All"
-},
-          loading: {
-  brand_loading: "Wahret Zmen..."
-},
+    search_input: { placeholder: "Rechercher des produits..." },
 
-          home_title: "Wahret Zmen - Vêtements traditionnels et nos vendeurs",
-          home_meta_description: "Bienvenue chez Wahret Zmen, explorez notre collection de vêtements traditionnels, nos nouveautés et les dernières tendances.",
-          home_intro_html: "Bienvenue à la <strong>Boutique Wahret Zmen</strong>, où la tradition rencontre l'élégance. Explorez nos vêtements faits main, inspirés du riche patrimoine culturel tunisien. Découvrez une mode intemporelle mêlant histoire et raffinement moderne.",
-          home_banner_text: "Entrez dans la tradition avec élégance. La boutique Wahret Zmen vous propose une collection intemporelle de tenues tunisiennes authentiques, confectionnées avec passion et héritage.",
-          our_collections: "Nos Collections",
-          our_collections_intro: "Découvrez notre collection de vêtements traditionnels, confectionnés avec soin et authenticité culturelle. Des Kaftans élégants aux Jebbas classiques, explorez la beauté du patrimoine dans chaque pièce.",
-          latest_news: "Actualités & Tendances",
-          latest_news_intro: "Restez informé des nouveautés de Wahret Zmen ! Découvrez nos nouvelles collections, conseils mode, et offres exclusives qui font vivre la tradition dans un monde moderne.",
-          banner_img_alt: "Vêtements traditionnels tunisiens",
-          banner_title: "Wahret Zmen par Sabri – Préserver l'héritage tunisien avec élégance",
-          banner_description: "Wahret Zmen est une boutique unique de vêtements traditionnels tunisiens située à El Aswak, Tunis, rue Essouf. La boutique propose une sélection soignée de vêtements tunisiens authentiques, dont la célèbre Jebba, réputée pour son artisanat raffiné et sa valeur culturelle.",
-          discover_now: "Découvrir maintenant",
-          wahret_zmen_collection: "Collection Wahret Zmen",
-          no_products_found: "Aucun produit trouvé.",
-          our_sellers_intro_html: "Découvrez notre collection de vêtements traditionnels, confectionnés avec soin et authenticité culturelle. Des <strong>Caftans</strong> élégants aux <strong>Jebbas</strong> classiques, explorez la beauté du patrimoine dans chaque pièce.",
+    dashboard: "Tableau de bord",
+    orders: "Commandes",
+    logout: "Se déconnecter",
+    select_category: "Sélectionner une catégorie",
+    categories: { all: "Tous", men: "Hommes", women: "Femmes", children: "Enfants" },
+    product_filters: {
+      label: "Sélectionner les produits",
+      men: "Hommes",
+      women: "Femmes",
+      children: "Enfants",
+      all: "Tous"
+    },
+    loading: { brand_loading: "Wahret Zmen..." },
 
-          load_more: "Charger plus",
-          products_page: {
-            title: "Collection Wahret Zmen",
-            overview: "Chez Wahret Zmen, nous préservons l’essence de l’artisanat tunisien en mêlant techniques classiques et raffinement moderne. Que vous cherchiez une pièce luxueuse ou une tenue intemporelle, notre collection célèbre la beauté de la tradition."
-          },
+    home_title: "Wahret Zmen - Vêtements traditionnels et nos vendeurs",
+    home_meta_description:
+      "Bienvenue chez Wahret Zmen, explorez notre collection de vêtements traditionnels, nos nouveautés et les dernières tendances.",
+    home_intro_html:
+      "Bienvenue à la <strong>Boutique Wahret Zmen</strong>, où la tradition rencontre l'élégance. Explorez nos vêtements faits main, inspirés du riche patrimoine culturel tunisien. Découvrez une mode intemporelle mêlant histoire et raffinement moderne.",
+    home_banner_text:
+      "Entrez dans la tradition avec élégance. La boutique Wahret Zmen vous propose une collection intemporelle de tenues tunisiennes authentiques, confectionnées avec passion et héritage.",
+    our_collections: "Nos Collections",
+    our_collections_intro:
+      "Découvrez notre collection de vêtements traditionnels, confectionnés avec soin et authenticité culturelle. Des Kaftans élégants aux Jebbas classiques, explorez la beauté du patrimoine dans chaque pièce.",
+    latest_news: "Actualités & Tendances",
+    latest_news_intro:
+      "Restez informé des nouveautés de Wahret Zmen ! Découvrez nos nouvelles collections, conseils mode, et offres exclusives qui font vivre la tradition dans un monde moderne.",
+    banner_img_alt: "Vêtements traditionnels tunisiens",
+    banner_title:
+      "Wahret Zmen par Sabri – Préserver l'héritage tunisien avec élégance",
+    banner_description:
+      "Wahret Zmen est une boutique unique de vêtements traditionnels tunisiens située à El Aswak, Tunis, rue Essouf...",
+    discover_now: "Découvrir maintenant",
+    wahret_zmen_collection: "Collection Wahret Zmen",
+    no_products_found: "Aucun produit trouvé.",
 
-         
+    largebanner: {
+      banner_aria: "Grande bannière de présentation",
+      banner_img_alt: "Bannière de collection de Jebbas traditionnelles",
+      brand: "Wahret Zmen",
+      by_sabri: "Par Sabri",
+      description:
+        "Découvrez notre collection exquise de Jebbas traditionnelles, où l’élégance intemporelle rencontre l’artisanat contemporain. Chaque pièce raconte une histoire de patrimoine et de style.",
+      explore: "Découvrir la collection",
+      learn: "Notre histoire"
+    },
 
-          
+    
+  "shop_by_category": { "title": "Achetez par Catégorie" },
+   
 
-         
+   
+
+    news: {
+      section_title: "Actualités",
+      items: [
+        {
+          title:
+            "Wahret Zmen par Sabri : Une boutique d'élégance tunisienne traditionnelle",
+          description:
+            "Wahret Zmen par Sabri est une boutique spécialisée dans les vêtements traditionnels tunisiens..."
+        },
+        {
+          title: "Découvrez l'essence de la tradition tunisienne",
+          description:
+            "Pour les amateurs de mode tunisienne authentique, Wahret Zmen par Sabri est une destination..."
+        },
+        {
+          title:
+            "Nouvelle mission spatiale visant à explorer des galaxies lointaines",
+          description:
+            "Pour les amateurs de mode tunisienne authentique, Wahret Zmen par Sabri est une destination..."
+        }
+      ]
+    },
+
+   
+   "craftsmanship": {
+    "aria": "L’art du savoir-faire",
+    "title": "L’art du savoir-faire",
+    "subtitle": "Découvrez le processus minutieux derrière chaque jebba, où les techniques traditionnelles rencontrent la précision moderne pour créer des pièces intemporelles.",
+    "items": [
+      {
+        "title": "Sélection de tissus premium",
+        "desc": "Nous sélectionnons uniquement les meilleurs tissus auprès d’artisans textiles marocains renommés, pour que chaque jebba soit aussi luxueuse qu’elle en a l’air."
+      },
+      {
+        "title": "Maîtrise de la coupe",
+        "desc": "Chaque point est réalisé avec précision par des artisans chevronnés, héritiers de générations de techniques de couture traditionnelles."
+      },
+      {
+        "title": "Finitions à la main",
+        "desc": "De la broderie délicate aux boutons décoratifs, chaque détail est méticuleusement fini à la main."
+      },
+      {
+        "title": "Contrôle qualité",
+        "desc": "Chaque pièce subit des contrôles rigoureux afin de répondre à nos exigences d’excellence et de durabilité."
+      }
+    ]
+  },
 
 
-
-          stock: "Stock",
-          out_of_stock: "Rupture de stock",
-          trending: "Tendance",
-          color: "Couleur",
-          quantity: "Qté",
-          add_to_cart: "Ajouter au panier",
-          unknown_product: "Produit inconnu",
-          category: "Catégorie",
-          published: "Publié le",
-          unknown: "Inconnu",
-          no_description: "Aucune description disponible.",
-          select_color: "Choisir une couleur",
-          selected: "Sélectionné",
-          default: "Défaut",
-          available_colors: "Couleurs disponibles",
-
-          news: {
-            section_title: "Actualités",
-            items: [
-              {
-                title: "Wahret Zmen par Sabri : Une boutique d'élégance tunisienne traditionnelle",
-                description: "Wahret Zmen par Sabri est une boutique spécialisée dans les vêtements traditionnels tunisiens, notamment les vêtements faits main avec des broderies délicates en fil de soie."
-              },
-              {
-                title: "Découvrez l'essence de la tradition tunisienne",
-                description: "Pour les amateurs de mode tunisienne authentique, Wahret Zmen par Sabri est une destination où la tradition rencontre la créativité !"
-              },
-              {
-                title: "Nouvelle mission spatiale visant à explorer des galaxies lointaines",
-                description: "Pour les amateurs de mode tunisienne authentique, Wahret Zmen par Sabri est une destination où la tradition rencontre la créativité !"
-              }
-            ]
-          },
+    AboutWahretZmen: {
+      title: "L’art de l’élégance traditionnelle",
+      p1: "Chez Wahret Zmen By Sabri, nous préservons l’héritage d’un savoir-faire artisanal tout en embrassant un design contemporain. Chaque Jebba est réalisée avec soin par des artisans chevronnés.",
+      p2: "Notre engagement pour l’authenticité et la qualité garantit que chaque pièce honore le passé et célèbre la beauté intemporelle de la tenue traditionnelle.",
+      cta: "Découvrir Notre Héritage",
+      features: {
+        craftsmanship: {
+          title: "Maîtrise Artisanale",
+          desc:
+            "Chaque pièce est façonnée à la main par des artisans expérimentés, maîtres des techniques traditionnelles."
+        },
+        heritage: {
+          title: "Héritage Authentique",
+          desc:
+            "Nous respectons les codes traditionnels tout en les adaptant au confort et au style modernes."
+        },
+        quality: {
+          title: "Qualité Premium",
+          desc:
+            "Nous sélectionnons les tissus et matériaux les plus nobles pour une beauté durable et un confort absolu."
+        }
+      }
+    },
 
 
           footer: {
@@ -514,85 +550,94 @@ changePassword: {
   defaultUser: "Client",
 },
 
+"ordersPage": {
+  "title": "Mes commandes",
+  "yourOrders": "Vos commandes",
+  "pleaseLogin": "Veuillez vous connecter pour voir vos commandes.",
+  "noOrders": "Vous n'avez aucune commande pour le moment.",
+  "orderNumber": "Commande n°",
+  "orderId": "ID de commande",
+  "name": "Nom",
+  "email": "Email",
+  "phone": "Téléphone",
+  "total": "Prix total",
+  "orderedProducts": "Produits commandés",
+  "quantity": "Quantité",
+  "color": "Couleur",
+  "original": "Original",
+  "noTitle": "Produit sans titre",
+  "removeProduct": "Supprimer le produit",
+  "deleting": "Suppression...",
+  "deleteOrder": "Supprimer la commande",
+  "confirmDeleteTitle": "Êtes-vous sûr(e) ?",
+  "confirmDeleteText": "Cette action est irréversible. Votre commande sera définitivement supprimée.",
+  "confirmDeleteBtn": "Oui, supprimer !",
+  "deleted": "Supprimée !",
+  "orderDeleted": "Votre commande a été supprimée avec succès.",
+  "error": "Erreur",
+  "orderDeleteFailed": "Échec de la suppression de la commande. Veuillez réessayer.",
+  "removeQuantityTitle": "Supprimer une quantité",
+  "removeQuantityLabel": "Vous avez {{max}} dans votre commande. Entrez la quantité à supprimer :",
+  "removeBtn": "Supprimer",
+  "cancelBtn": "Annuler",
+  "removed": "Quantité supprimée !",
+  "productRemoved": "{{qty}} produit(s) supprimé(s) de votre commande.",
+  "productRemoveFailed": "Échec de la suppression du produit. Veuillez réessayer."
+},
 
-          ordersPage: {
-            title: "Mes commandes",
-            yourOrders: "Vos commandes",
-            pleaseLogin: "Veuillez vous connecter pour voir vos commandes.",
-            noOrders: "Vous n'avez aucune commande pour le moment.",
-            orderNumber: "Commande n°",
-            orderId: "ID de commande",
-            name: "Nom",
-            email: "Email",
-            phone: "Téléphone",
-            total: "Prix total",
-            orderedProducts: "Produits commandés",
-            quantity: "Quantité",
-            color: "Couleur",
-            original: "Original",
-            noTitle: "Produit sans titre",
-            removeProduct: "Supprimer le produit",
-            deleting: "Suppression...",
-            deleteOrder: "Supprimer la commande",
-            confirmDeleteTitle: "Êtes-vous sûr(e) ?",
-            confirmDeleteText: "Cette action est irréversible. Votre commande sera définitivement supprimée.",
-            confirmDeleteBtn: "Oui, supprimer !",
-            deleted: "Supprimée !",
-            orderDeleted: "Votre commande a été supprimée avec succès.",
-            error: "Erreur",
-            orderDeleteFailed: "Échec de la suppression de la commande. Veuillez réessayer.",
-            removeQuantityTitle: "Supprimer une quantité",
-            removeQuantityLabel: "Vous avez {{max}} dans votre commande. Entrez la quantité à supprimer :",
-            removeBtn: "Supprimer",
-            cancelBtn: "Annuler",
-            removed: "Quantité supprimée !",
-            productRemoved: "{{qty}} produit(s) supprimé(s) de votre commande.",
-            productRemoveFailed: "Échec de la suppression du produit. Veuillez réessayer."
-          },
-          
+"cart": {
+  "title": "Panier",
+  "review": "Vérifiez vos articles sélectionnés",
+  "summary": "Récapitulatif de la commande",
+  "shipping": "Livraison",
+  "decrease_qty": "Diminuer la quantité",
+  "increase_qty": "Augmenter la quantité",
+  "empty_hint": "Découvrez notre belle collection de jebbas traditionnelles",
+  "clear_cart": "Vider le panier",
+  "category": "Catégorie",
+  "color": "Couleur",
+  "original": "Original",
+  "qty": "Qté",
+  "remove": "Supprimer",
+  "empty": "Votre panier est vide !",
+  "subtotal": "Sous-total",
+  "proceed_to_checkout": "Passer à la caisse"
+},
 
+"stock": "Stock",
+"free": "Gratuit",
+"total": "Total",
+"continue_shopping": "Continuer vos achats",
+"start_shopping": "Commencer les achats",
 
-         
-          cart: {
-            title: "Panier",
-            clear_cart: "Vider le panier",
-            category: "Catégorie",
-            color: "Couleur",
-            original: "Original",
-            qty: "Qté",
-            remove: "Supprimer",
-            empty: "Votre panier est vide !",
-            subtotal: "Sous-total",
-            proceed_to_checkout: "Passer à la caisse"
-          },
-          
-          checkout: {
-            title: "Paiement sécurisé",
-            payment_method: "Paiement à la livraison",
-            total_price: "Prix total:",
-            items: "Articles",
-            personal_details: "Informations personnelles",
-            full_name: "Nom complet",
-            email: "Adresse e-mail",
-            phone: "Numéro de téléphone",
-            shipping_address: "Adresse de livraison",
-            address: "Adresse / Rue",
-            city: "Ville",
-            country: "Pays",
-            state: "Région",
-            zipcode: "Code postal",
-            agree: "J'accepte les",
-            terms: "Conditions générales",
-            policy: "Conditions d'achat",
-            and: "et",
-            place_order: "Passer la commande",
-            processing: "Traitement de votre commande...",
-            order_confirmed: "Commande confirmée",
-            success_message: "Votre commande a été passée avec succès!",
-            go_to_orders: "Voir les commandes",
-            error_title: "Erreur!",
-            error_message: "Échec de la commande"
-          },
+"checkout": {
+  "title": "Paiement sécurisé",
+  "payment_method": "Paiement à la livraison",
+  "total_price": "Prix total:",
+  "items": "Articles",
+  "personal_details": "Informations personnelles",
+  "full_name": "Nom complet",
+  "email": "Adresse e-mail",
+  "phone": "Numéro de téléphone",
+  "shipping_address": "Adresse de livraison",
+  "address": "Adresse / Rue",
+  "city": "Ville",
+  "country": "Pays",
+  "state": "Région",
+  "zipcode": "Code postal",
+  "agree": "J'accepte les",
+  "terms": "Conditions générales",
+  "policy": "Conditions d'achat",
+  "and": "et",
+  "place_order": "Passer la commande",
+  "processing": "Traitement de votre commande...",
+  "order_confirmed": "Commande confirmée",
+  "success_message": "Votre commande a été passée avec succès!",
+  "go_to_orders": "Voir les commandes",
+  "error_title": "Erreur!",
+  "error_message": "Échec de la commande"
+},
+
           about: {
             title: "À propos de nous",
             description: "Jebba tunisienne authentique, brodée à la main avec une touche traditionnelle et une vision moderne en soie naturelle.",
@@ -635,75 +680,19 @@ changePassword: {
         }
       },
       
-      ar: {
-        translation: {
-          navbar: {
-
-            brand: "وهرة الزّمان", // Logo text
-
-                      },
-          home: "الرئيسية",
-          products: "المنتجات",
-          "about-menu": "من نحن",
-          "contact-menu": "اتصل بنا",
-          dashboard: "لوحة التحكم",
-          "admin_dashboard":"لوحة التّحكّم المدير",
-          orders: "الطلبات",
-          logout: "تسجيل الخروج",
-
-          
-          Welcome_Banner_title: "مرحبًا بكم في وهرة الزّمان",
-          banner_img_alt: "لافتة وهرة الزّمان التقليدية",
-
-          loading: {
-  brand_loading: "وهرة الزّمان..."
-},
-
-
-          select_category: "اختر الفئة",
-          categories: {
-          all: "الكل",
-          men: "رجال",
-          women: "نساء",
-         children: "أطفال",
-         },
-         product_filters: {
-         label: "اختر المنتجات", 
-         men: "رجال",
-         women: "نساء",
-         children: "أطفال",
-         all: "الكل",
-         },
-
-         
+     ar: {
+    translation: {
+      navbar: { brand: "وهرة الزّمان" },
+      home: "الرئيسية",
+      products: "المنتجات",
+      "about-menu": "من نحن",
+      "contact-menu": "اتصل بنا",
+      dashboard: "لوحة التحكم",
+      admin_dashboard: "لوحة التّحكّم المدير",
+      orders: "الطلبات",
+      logout: "تسجيل الخروج",
 
       
-          search_input: {
-
-            placeholder: "ابحث عن المنتجات..."
-
-                  },
-          
-      
-          footer: {
-
-            brand: "وهرة الزّمان",
-            description: "ملابس تقليدية تونسية تجمع بين التراث والأناقة العصرية. موقعنا: سوق السوف، تونس.",
-
-            brand: "وهرة الزّمان",
-            description: " ملابس تقليدية تونسية تجمع بين التراث والأناقة العصرية. موقعنا: سوق السوف، تونس",
-            quickLinks: "روابط سريعة",
-            home: "الرئيسية",
-            products: "المنتجات",
-            about: "من نحن",
-            contact: "اتصل بنا",
-            contactUs: "اتصل بنا",
-            location: "سوق السوف، تونس",
-            followUs: "تابعونا",
-
-            rights: "جميع الحقوق محفوظة.",
-          },
-
           home_title: "وهرة الزّمان - الملابس التقليدية وبائعونا",
           home_meta_description: "مرحبًا بكم في وهرة الزّمان، استكشفوا مجموعتنا من الملابس التقليدية، والوافدات الجديدة، وآخر صيحات الموضة.",
           home_intro_html: "مرحبًا بكم في <strong>بوتيك وهرة الزّمان</strong>، حيث تلتقي التقاليد بالأناقة. اكتشفوا ملابسنا المصنوعة يدويًا، المستوحاة من التراث الثقافي التونسي الغني. عيشوا تجربة أزياء خالدة تمزج بين التاريخ والرقي الحديث.",
@@ -724,15 +713,96 @@ changePassword: {
           products_page: {
             title: "مجموعة وهرة الزّمان",
             overview: "في وهرة الزّمان، نحافظ على جوهر الحرفية التونسية من خلال مزج التقنيات التقليدية مع اللمسات العصرية. سواء كنت تبحث عن قطعة فاخرة لمناسبة خاصة أو زيٍّ خالد، فإن مجموعتنا مصممة لتحتفل بجمال التراث."
-
+          },
             
-          
+ "shop_by_category": {
+        "title": "تسوق حسب الفئة"
+      },
 
          
-          },
+         
 
-          
-                  
+
+      loading: { brand_loading: "وهرة الزّمان..." },
+
+      select_category: "اختر الفئة",
+      categories: { all: "الكل", men: "رجال", women: "نساء", children: "أطفال" },
+      product_filters: {
+        label: "اختر المنتجات",
+        men: "رجال",
+        women: "نساء",
+        children: "أطفال",
+        all: "الكل"
+      },
+
+      search_input: { placeholder: "ابحث عن المنتجات..." },
+
+     "craftsmanship": {
+    "aria": "فنّ الحِرَف",
+    "title": "فنّ الحِرَف",
+    "subtitle": "اكتشفوا العملية الدقيقة خلف كل جبّة، حيث تلتقي التقنيات التقليدية بالدقة الحديثة لابتكار قطع خالدة.",
+    "items": [
+      {
+        "title": "اختيار أقمشة فاخرة",
+        "desc": "ننتقي أجود الأقمشة من أمهر حرفيي النسيج في المغرب، لتمنح كل جبّة إحساسًا بالفخامة يضاهي مظهرها."
+      },
+      {
+        "title": "تفصيل احترافي",
+        "desc": "توضع كل غرزة بدقة على يد حرفيين مهرة توارثوا أجيالًا من تقنيات الخياطة التقليدية."
+      },
+      {
+        "title": "تشطيبات يدويّة",
+        "desc": "من التطريز الدقيق إلى الأزرار والزخارف، يُنجز كل تفصيل بعناية يدويّة متقنة."
+      },
+      {
+        "title": "مراقبة الجودة",
+        "desc": "تمرّ كل قطعة بفحوصات صارمة لضمان توافقها مع معاييرنا العالية في الجودة والمتانة."
+      }
+    ]
+  },
+  AboutWahretZmen: {
+        title: "فنّ الأناقة التقليدية",
+        p1: "في واهرت زمن باي صبري، نحافظ على تراث الحِرَف التقليدية مع لمسات عصرية. كل جلّابية تُنجز بعناية على يد حرفيين مهرة.",
+        p2: "التزامنا بالأصالة والجودة يضمن أن تحتفي كل قطعة بالماضي وتُبرز جمال الزيّ التقليدي الخالد.",
+        cta: "اكتشفوا إرثنا",
+        features: {
+          craftsmanship: { title: "حِرَفية متقنة", desc: "كل قطعة تُصنع يدويًا على يد حرفيين ذوي خبرة طويلة في التقنيات التقليدية." },
+          heritage:      { title: "تراث أصيل",    desc: "نحترم العناصر التقليدية ونطوّعها لراحةٍ وأسلوبٍ حديث." },
+          quality:       { title: "جودة فاخرة",   desc: "نختار أفضل الأقمشة والمواد لضمان جمال يدوم وراحة مميّزة." }
+        }
+      },
+
+      /* ⬇ everything stays INSIDE ar.translation ⬇ */
+      footer: {
+        brand: "وهرة الزّمان",
+        description: "ملابس تقليدية تونسية تجمع بين التراث والأناقة العصرية. موقعنا: سوق السوف، تونس.",
+        quickLinks: "روابط سريعة",
+        home: "الرئيسية",
+        products: "المنتجات",
+        about: "من نحن",
+        contact: "اتصل بنا",
+        contactUs: "اتصل بنا",
+        location: "سوق السوف، تونس",
+        followUs: "تابعونا",
+        rights: "جميع الحقوق محفوظة."
+      },
+
+
+      products_page: {
+        title: "مجموعة وهرة الزّمان",
+        overview: "في وهرة الزّمان، نحافظ على جوهر الحرفية التونسية ..."
+      },
+
+      largebanner: {
+        banner_aria: "قسم البانر الرئيسي",
+        banner_img_alt: "لافتة مجموعة الجبب التقليدية",
+        brand: "وهرة الزّمان",
+        by_sabri: "بإدارة صبري",
+        description: "ااكتشف مجموعتنا الرائعة من الجبّايات التقليدية، حيث تلتقي الأناقة الخالدة بالحرفية المعاصرة. كل قطعة تروي قصة تراثية وأسلوبًا فريدًا.",
+        explore: "اكتشف المجموعة",
+        learn: "تعرّف على قصتنا"
+      },
+      
           
         
           stock: "المخزون",
@@ -755,23 +825,25 @@ changePassword: {
           default: "افتراضي",
           available_colors: "الألوان المتوفرة",
 
-          news: {
-            section_title: "آخر الأخبار",
-            items: [
-              {
-
-                title: "وهرة الزّمان بإدارة صبري: بوتيك للأناقة التونسية التقليدية",
-                description: "وهرة الزّمان بإدارة صبري هو بوتيك متخصص في الملابس التقليدية التونسية، وخاصة الملابس المصنوعة يدويًا بتطريزات حريرية دقيقة."
-              },
-              {
-                title: "اكتشف جوهر التقاليد التونسية",
-                description: "لعشاق الأزياء التونسية الأصيلة، وهرة الزّمان بإدارة صبري هو وجهة تلتقي فيها التقاليد مع الإبداع!"
-              },
-              {
-                title: "مهمة فضائية جديدة لاستكشاف مجرات بعيدة",
-                description: "لعشاق الأزياء التونسية الأصيلة، وهرة الزّمان بإدارة صبري هو وجهة تلتقي فيها التقاليد مع الإبداع!"
-
-              },
+          "news": {
+    "section_title": "أحدث الإلهامات",
+    "subtitle": "أبرز ما لدينا في وهرة الزمان — الحِرَف، الإصدارات الجديدة، وحكايات تقف وراء تصاميمنا.",
+    "read_more": "اكتشف المزيد",
+    "fallback_title": "أخبار وهرة الزمان",
+    "fallback_desc": "تعرّفوا إلى أحدث مجموعاتنا ولقطات من داخل الأتيليه.",
+    "items": [
+      {
+        "title": "كبسولة المدينة • جبّات مطرّزة يدويًا",
+        "description": "سلسلة محدودة مستوحاة من أقواس المدينة وزخارفها الجصّية. كل قطعة تُنهى يدويًا بخيوط حرير."
+      },
+      {
+        "title": "من قلب الأتيليه • من القماش إلى القَصّة",
+        "description": "رحلة اختيار الأقمشة الفاخرة وصولًا إلى التفصيل الدقيق — احتفاء بالحرفية التونسية."
+      },
+      {
+        "title": "وصل حديثًا • اختيارات الأعراس والمناسبات",
+        "description": "قصّات أنيقة، تشطيبات راقية، ونقوش تراثية لمناسباتٍ لا تُنسى."
+      },
               
               
             ]
@@ -935,81 +1007,95 @@ changePassword: {
           
           
 
-          ordersPage: {
-            title: "طلباتي",
-            yourOrders: "طلباتك",
-            noOrders: "! لا توجد طلبات",
-            orderNumber: "الطلب رقم",
-            orderId: "رقم الطلب",
-            name: "الاسم",
-            email: "البريد الإلكتروني",
-            phone: "الهاتف",
-            total: "السعر الإجمالي",
-            orderedProducts: " :المنتجات المطلوبة",
-            quantity: "الكمية",
-            color: "اللون",
-            original: "المنتج الأصلي",
-            noTitle: "بدون عنوان",
-            removeProduct: "إزالة المنتج",
-            deleteOrder: "حذف الطلب",
-            deleting: "... جارٍ الحذف ",
-            pleaseLogin: "يرجى تسجيل الدخول لعرض طلباتك",
-            confirmDeleteTitle: "هل أنت متأكد؟",
-            confirmDeleteText: " .يمكن التراجع عن هذا الإجراء. سيتم حذف طلبك نهائيًا",
-            confirmDeleteBtn: "نعم، احذفه!",
-            deleted: "تم الحذف!",
-            orderDeleted: " .تم حذف طلبك",
-            error: "خطأ",
-            orderDeleteFailed: " .فشل في حذف الطلب. حاول مرة أخرى",
-            removeQuantityTitle: "إزالة كمية",
-            removeQuantityLabel: " :لديك {{max}} في طلبك. أدخل الكمية المراد إزالتها",
-            removeBtn: "إزالة",
-            cancelBtn: "إلغاء",
-            removed: "تمت الإزالة!",
-            productRemoved: " .تمت إزالة {{qty}} عنصر(عناصر) من الطلب",
-            productRemoveFailed: " .فشل في إزالة المنتج. حاول مرة أخرى"
-          },
-          cart: {
-            title: "عربة التسوق",
-            clear_cart: "تفريغ العربة",
-            category: "الفئة",
-            color: "اللون",
-            original: "أصلي",
-            qty: "الكمية",
-            remove: "إزالة",
-            empty: "عربة التسوق فارغة!",
-            subtotal: "المجموع الفرعي",
-            proceed_to_checkout: "المتابعة للدفع"
-          },
-          
+          "ordersPage": {
+  "title": "طلباتي",
+  "yourOrders": "طلباتك",
+  "noOrders": "لا توجد طلبات!",
+  "orderNumber": "الطلب رقم",
+  "orderId": "رقم الطلب",
+  "name": "الاسم",
+  "email": "البريد الإلكتروني",
+  "phone": "الهاتف",
+  "total": "السعر الإجمالي",
+  "orderedProducts": "المنتجات المطلوبة:",
+  "quantity": "الكمية",
+  "color": "اللون",
+  "original": "المنتج الأصلي",
+  "noTitle": "بدون عنوان",
+  "removeProduct": "إزالة المنتج",
+  "deleteOrder": "حذف الطلب",
+  "deleting": "جارٍ الحذف...",
+  "pleaseLogin": "يرجى تسجيل الدخول لعرض طلباتك",
+  "confirmDeleteTitle": "هل أنت متأكد؟",
+  "confirmDeleteText": "هذا الإجراء غير قابل للاسترجاع. سيتم حذف طلبك نهائيًا.",
+  "confirmDeleteBtn": "نعم، احذفه!",
+  "deleted": "تم الحذف!",
+  "orderDeleted": "تم حذف طلبك.",
+  "error": "خطأ",
+  "orderDeleteFailed": "فشل في حذف الطلب. حاول مرة أخرى.",
+  "removeQuantityTitle": "إزالة كمية",
+  "removeQuantityLabel": "لديك {{max}} في طلبك. أدخل الكمية المراد إزالتها:",
+  "removeBtn": "إزالة",
+  "cancelBtn": "إلغاء",
+  "removed": "تمت الإزالة!",
+  "productRemoved": "تمت إزالة {{qty}} عنصر(عناصر) من الطلب.",
+  "productRemoveFailed": "فشل في إزالة المنتج. حاول مرة أخرى."
+},
 
-          checkout: {
-            title: "إتمام الطلب الآمن",
-            payment_method: "الدفع عند الاستلام",
-            total_price: "السعر الإجمالي:",
-            items: "المنتجات",
-            personal_details: "المعلومات الشخصية",
-            full_name: "الاسم الكامل",
-            email: "البريد الإلكتروني",
-            phone: "رقم الهاتف",
-            shipping_address: "عنوان الشحن",
-            address: "العنوان / الشارع",
-            city: "المدينة",
-            country: "الدولة",
-            state: "المنطقة",
-            zipcode: "الرمز البريدي",
-            agree: "أوافق على",
-            terms: "الشروط والأحكام",
-            policy: "سياسة الشراء",
-            and: "و",
-            place_order: "إتمام الطلب",
-            processing: "جارٍ معالجة طلبك...",
-            order_confirmed: "تم تأكيد الطلب",
-            success_message: "تم إرسال طلبك بنجاح!",
-            go_to_orders: "عرض الطلبات",
-            error_title: "خطأ!",
-            error_message: "فشل في إرسال الطلب"
-          },  // ✅ ADD COMMA HERE!
+"cart": {
+  "title": "عربة التسوق",
+  "clear_cart": "تفريغ العربة",
+  "category": "الفئة",
+  "color": "اللون",
+  "original": "أصلي",
+  "qty": "الكمية",
+  "remove": "إزالة",
+  "empty": "عربة التسوق فارغة!",
+  "subtotal": "المجموع الفرعي",
+  "proceed_to_checkout": "المتابعة للدفع",
+
+  "review": "راجع المنتجات التي اخترتها",
+  "summary": "ملخص الطلب",
+  "shipping": "الشحن",
+  "decrease_qty": "تقليل الكمية",
+  "increase_qty": "زيادة الكمية",
+  "empty_hint": "اكتشفوا مجموعتنا الجميلة من الجبب التقليدية"
+},
+
+"stock": "المخزون",
+"free": "مجاني",
+"total": "الإجمالي",
+"continue_shopping": "مواصلة التسوق",
+"start_shopping": "ابدأ التسوق",
+
+"checkout": {
+  "title": "إتمام الطلب الآمن",
+  "payment_method": "الدفع عند الاستلام",
+  "total_price": "السعر الإجمالي:",
+  "items": "المنتجات",
+  "personal_details": "المعلومات الشخصية",
+  "full_name": "الاسم الكامل",
+  "email": "البريد الإلكتروني",
+  "phone": "رقم الهاتف",
+  "shipping_address": "عنوان الشحن",
+  "address": "العنوان / الشارع",
+  "city": "المدينة",
+  "country": "الدولة",
+  "state": "المنطقة",
+  "zipcode": "الرمز البريدي",
+  "agree": "أوافق على",
+  "terms": "الشروط والأحكام",
+  "policy": "سياسة الشراء",
+  "and": "و",
+  "place_order": "إتمام الطلب",
+  "processing": "جارٍ معالجة طلبك...",
+  "order_confirmed": "تم تأكيد الطلب",
+  "success_message": "تم إرسال طلبك بنجاح!",
+  "go_to_orders": "عرض الطلبات",
+  "error_title": "خطأ!",
+  "error_message": "فشل في إرسال الطلب"
+},
+
           
           about: {
 

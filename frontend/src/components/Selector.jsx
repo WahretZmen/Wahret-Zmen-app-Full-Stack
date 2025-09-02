@@ -1,38 +1,55 @@
-import React from "react";
+// src/components/Selector.jsx
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import "../Styles/StylesSelector.css"; // ⬅️ import the CSS file
 
-const Selector = ({ onSelect, label }) => {
+const DEFAULT_OPTIONS = ["All", "Men", "Women", "Children"];
+
+export default function Selector({ onSelect, label, options = DEFAULT_OPTIONS, value = "" }) {
   const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === "ar" || i18n.language === "ar-SA"; // 🆕 detect RTL
+  const isRTL = i18n.language === "ar" || i18n.language === "ar-SA";
 
-  const options = ["All", "Men", "Women", "Children"];
+  const translated = useMemo(() => {
+    const key = (k) => `categories.${String(k).toLowerCase()}`;
+    return options.map((opt) => ({
+      raw: opt,
+      text: t(key(opt), opt), // fallback to raw if missing in i18n
+    }));
+  }, [options, t]);
 
   return (
-    <div className="selector-wrapper mx-auto mb-4" dir={isRTL ? "rtl" : "ltr"}> {/* ✅ dynamic dir */}
+    <div className="selector" dir={isRTL ? "rtl" : "ltr"}>
       {label && (
-        <label className="text-lg font-medium mb-2 text-gray-700 text-center block">
-          {label}
+        <label className="selector__label" htmlFor="category-select">
+          {t(label, label)}
         </label>
       )}
-      <select
-        defaultValue=""
-        onChange={(e) => onSelect(e.target.value)}
-        className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm 
-                   focus:outline-none focus:ring-2 focus:ring-gray-500 
-                   focus:border-gray-500 bg-white text-gray-700 cursor-pointer 
-                   transition duration-200 ease-in-out"
-      >
-        <option value="" disabled className="text-gray-500">
-          {t("select_category")}
-        </option>
-        {options.map((option, index) => (
-          <option key={index} value={option} className="text-gray-900">
-            {t(`categories.${option.toLowerCase()}`)}
+
+      <div className="selector__field">
+        {/* shimmer halo backdrop */}
+        <span aria-hidden className="selector__halo" />
+        {/* animated underline */}
+        <span aria-hidden className="selector__underline" />
+
+        <select
+          id="category-select"
+          value={value}
+          required
+          /* 'required' + disabled first option => shows placeholder styling */
+          onChange={(e) => onSelect?.(e.target.value)}
+          className="selector__control"
+        >
+          <option value="" disabled>
+            {t("select_category", "Select category")}
           </option>
-        ))}
-      </select>
+
+          {translated.map(({ raw, text }) => (
+            <option key={raw} value={raw}>
+              {text}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
-};
-
-export default Selector;
+}
