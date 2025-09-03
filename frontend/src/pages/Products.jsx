@@ -1,4 +1,3 @@
-// src/pages/Products.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import ProductCard from "./products/ProductCard.jsx";
 import { useGetAllProductsQuery } from "../redux/features/products/productsApi.js";
@@ -57,9 +56,9 @@ const CATEGORY_ALIAS_TO_UI = {
   femme: "Women",
   enfant: "Children",
   // AR
-  "رجال": "Men",
-  "نساء": "Women",
-  "أطفال": "Children",
+  رجال: "Men",
+  نساء: "Women",
+  أطفال: "Children",
 };
 const mapURLCategoryToUI = (raw) => CATEGORY_ALIAS_TO_UI[normalize(raw)] || "";
 
@@ -95,9 +94,6 @@ const productColorNames = (p) => {
 
 /* ============================ Component ============================ */
 const Products = () => {
-  // 🔒 list-only (no view toggle)
-  // const [viewMode, setViewMode] = useState("grid");  // removed
-
   const [showFilters, setShowFilters] = useState(false);
 
   // filters (no size)
@@ -130,7 +126,9 @@ const Products = () => {
     refetchOnReconnect: true,
   });
 
-  const shouldRefetch = useSelector((state) => state.productEvents.shouldRefetch);
+  const shouldRefetch = useSelector(
+    (state) => state.productEvents.shouldRefetch
+  );
 
   useEffect(() => {
     if (shouldRefetch) {
@@ -228,7 +226,6 @@ const Products = () => {
       return catOk && colorOk && priceOk && searchOk;
     });
 
-    // NOTE: removed any grid/list sorting/toggling logic
     return list.slice(0, loadMore);
   }, [products, categorySel, colorSel, priceRange, searchTerm, loadMore]);
 
@@ -260,35 +257,32 @@ const Products = () => {
           <Helmet>
             <title>{t("products_page.title")} - Wahret Zmen</title>
           </Helmet>
-{/* Title */}
-<FadeInSection duration={0.6}>
- <h2 className="products-title bounce page-title-desktop text-3xl sm:text-4xl font-bold font-serif text-center mb-6 drop-shadow-lg">
-  {t("products_page.title")}
-</h2>
 
-</FadeInSection>
+          {/* Title + Overview */}
+          <FadeInSection duration={0.6}>
+            <header
+              className="wz-collections-header"
+              dir={isRTL ? "rtl" : "ltr"}
+            >
+              <h1 className="wz-collections-title premium-gradient">
+                {t("products_page.title")}
+              </h1>
+              <p className="wz-collections-sub">
+                {t("products_page.overview")}
+              </p>
+            </header>
+          </FadeInSection>
 
-{/* Overview + Search */}
-<FadeInSection delay={0.2} duration={0.6}>
-  <div className="text-center text-gray-700 max-w-3xl mx-auto mb-6 leading-relaxed px-2">
-    <p className="text-base sm:text-lg">
-      {t("products_page.overview")}
-    </p>
-    {isError && (
-      <p className="text-sm text-red-500 mt-2">
-        {t("error_loading_products") || "An error occurred while loading products."}
-      </p>
-    )}
-  </div>
-  <div className="products-grid grid gap-6 grid-cols-1">
-    <SearchInput
-      setSearchTerm={handleSearchChange}
-      placeholder={t("search_placeholder")}
-    />
-    {searchLoading && <InlineWahretZmenLoader />}
-  </div>
-</FadeInSection>
-
+          {/* Search */}
+          <FadeInSection delay={0.2} duration={0.6}>
+            <div className="products-grid grid gap-6 grid-cols-1">
+              <SearchInput
+                setSearchTerm={handleSearchChange}
+                placeholder={t("search_placeholder")}
+              />
+              {searchLoading && <InlineWahretZmenLoader />}
+            </div>
+          </FadeInSection>
 
           {/* ===== Two-column layout (sidebar must be on the right) ===== */}
           <div className="flex flex-col lg:flex-row gap-8 mt-4">
@@ -310,7 +304,6 @@ const Products = () => {
 
             {/* MAIN: products (list-only) */}
             <div className="flex-1">
-              {/* Products */}
               <div className="grid gap-6 grid-cols-1">
                 {filtered.length > 0 ? (
                   filtered.map((product, index) => (
@@ -353,7 +346,7 @@ const Products = () => {
                 setCategorySel={setCategorySel}
                 categories={categories}
                 colorSel={colorSel}
-                setColorSel={setColorSel}c
+                setColorSel={setColorSel}
                 colors={colors}
                 priceRange={priceRange}
                 setPriceRange={setPriceRange}
