@@ -132,6 +132,16 @@
 .sp-card > * { min-width:0; }
 .sp-right { min-width:0; padding-inline: clamp(8px, 2vw, 16px); }
 
+/* in StylesSingleProduct.css or a shared CSS */
+.sp-add {
+  background: #000 !important;
+  color: #fff !important;
+}
+.sp-add:hover {
+  background: #111 !important;
+}
+
+
 /* Desktop: keep only left thumbs column visible in RTL as well */
 @media (min-width: 768px){
   .sp-thumbs { display:none !important; }

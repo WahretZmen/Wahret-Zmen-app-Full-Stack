@@ -203,6 +203,17 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   cursor: pointer;
   transition: background .2s ease, transform .08s ease, box-shadow .2s ease;
 }
+
+/* in StylesSingleProduct.css or a shared CSS */
+.sp-add {
+  background: #000 !important;
+  color: #fff !important;
+}
+.sp-add:hover {
+  background: #111 !important;
+}
+
+
 .add-to-cart-btn .icon { margin-inline-end: 4px; }
 .add-to-cart-btn:hover { background: #000; }
 .add-to-cart-btn:active { transform: translateY(1px); }
