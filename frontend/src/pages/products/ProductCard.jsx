@@ -239,20 +239,17 @@ const ProductCard = ({ product }) => {
           {/* Primary CTA (always visible; mobile-friendly) */}
           <div className="mt-3">
             <button
-              onClick={handleAddToCart}
-              disabled={displayedStock === 0}
-              className={`add-to-cart-btn ${
-                displayedStock > 0 ? "" : "is-disabled"
-              }`}
-              aria-label={
-                displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")
-              }
-            >
-              <FiShoppingCart className="inline icon" />
-              <span className="label">
-                {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-              </span>
-            </button>
+                type="button"
+                onClick={() =>
+                  setQuantity((q) => Math.min((selectedColor?.stock ?? 1), q + 1))
+                }
+                disabled={
+                  (selectedColor?.stock ?? 0) === 0 ||
+                  quantity >= (selectedColor?.stock ?? 1)
+                }
+              >
+                +
+              </button>
           </div>
         </div>
       </div>
