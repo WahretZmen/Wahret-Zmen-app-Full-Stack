@@ -67,6 +67,33 @@
   scroll-margin-top: 90px; /* matches your fixed navbar offset */
 }
 
+/* ---- Prevent top clipping of Arabic title on Android ---- */
+.home-title-block{
+  /* a touch more space below the LargeBanner */
+  margin-top: clamp(56px, 13svh, 180px);
+}
+
+.home-title{
+  line-height: 1.28;        /* was ~1.1; gives diacritics room */
+  padding-top: 6px;         /* nudge down to avoid visual crop */
+  overflow: visible;        /* make sure nothing gets clipped */
+}
+
+.home-title__text{
+  overflow: visible;        /* keep glow/sheen & diacritics visible */
+  padding-top: .12em;       /* tiny breathing room above glyphs */
+}
+
+.home-title.rtl .home-title__text{
+  line-height: 1.34;        /* Arabic needs a bit more line-height */
+}
+
+/* a slightly larger gap under the word before the underline */
+.home-title__underline{
+  margin-top: .8rem;
+}
+
+
 /* ======================================================
    HOME TITLE — "Crown Sparkle" overlay (auto replay)
    Works with: <h1 class="home-title sparkle"> … </h1>

@@ -1,4 +1,3 @@
-// src/pages/products/ProductCard.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -8,9 +7,8 @@ import { FiShoppingCart } from "react-icons/fi";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { getImgUrl } from "../../utils/getImgUrl";
 
-import "../../Styles/StylesProductCard.css";
-/* ✅ Reuse the exact same CSS classes used in SingleProduct (sp-qty, sp-add, badges…) */
-import "../../Styles/StylesSingleProduct.css";
+import "../../Styles/ProductCard.css";          // <-- use this name
+import "../../Styles/StylesSingleProduct.css";  // reuses qty/add-to-cart look
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -27,11 +25,10 @@ const ProductCard = ({ product }) => {
   // Local UI state
   const [quantity, setQuantity] = useState(1);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
-  const [isHovering, setIsHovering] = useState(false);
 
   if (!product) return null;
 
-  // i18n-aware fields
+  /* ---------- i18n-aware fields ---------- */
   const title =
     product?.translations?.[lang]?.title ||
     product?.translations?.[baseLang]?.title ||
@@ -44,15 +41,17 @@ const ProductCard = ({ product }) => {
     product?.description ||
     "";
 
+  const firstColor = Array.isArray(product?.colors) ? product.colors[0] : undefined;
+
   const displayedColor =
-    product?.colors?.[0]?.colorName?.[lang] ||
-    product?.colors?.[0]?.colorName?.[baseLang] ||
-    product?.colors?.[0]?.colorName?.en ||
+    firstColor?.colorName?.[lang] ||
+    firstColor?.colorName?.[baseLang] ||
+    firstColor?.colorName?.en ||
     t("default", "Default");
 
   // Stock from first color; fallback to product-level stock
   const displayedStock =
-    product?.colors?.[0]?.stock ?? product?.stockQuantity ?? 0;
+    firstColor?.stock ?? product?.stockQuantity ?? product?.stock ?? 0;
 
   // Robust “trending” flag
   const isTrending = Boolean(
@@ -63,11 +62,9 @@ const ProductCard = ({ product }) => {
   );
 
   const hasOld = Number(product?.oldPrice) > Number(product?.newPrice || 0);
+  const shopName = product?.storeName || product?.vendor || product?.brand || "";
 
-  const shopName =
-    product?.storeName || product?.vendor || product?.brand || "";
-
-  // Quantity handlers (match SingleProduct behavior)
+  /* ---------- quantity handlers ---------- */
   const clampMax = Math.max(1, displayedStock || 1);
   const handleQuantityChange = (e) => {
     const raw = Number(e.target.value);
@@ -75,16 +72,15 @@ const ProductCard = ({ product }) => {
     setQuantity(Math.max(1, Math.min(clampMax, safe)));
   };
   const decQty = () => setQuantity((q) => Math.max(1, q - 1));
-  const incQty = () =>
-    setQuantity((q) => Math.min(clampMax, q + 1));
+  const incQty = () => setQuantity((q) => Math.min(clampMax, q + 1));
 
-  // Add-to-Cart action
+  /* ---------- actions ---------- */
   const handleAddToCart = () => {
     const defaultColor =
-      product?.colors?.[0] || {
+      firstColor || {
         colorName: { en: "Original", fr: "Original", ar: "أصلي" },
         image: product?.coverImage,
-        stock: product?.stockQuantity,
+        stock: displayedStock,
       };
 
     if ((defaultColor?.stock ?? displayedStock ?? 0) > 0 && quantity > 0) {
@@ -92,26 +88,21 @@ const ProductCard = ({ product }) => {
     }
   };
 
-  // (Optional) hover zoom handlers
+  /* ---------- hover zoom (desktop only) ---------- */
   const handleMouseMove = (e) => {
+    if (window.matchMedia("(hover: none)").matches) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setZoomPosition({ x, y });
   };
-  const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-    setZoomPosition({ x: 50, y: 50 });
-  };
 
   return (
     <div
-      className="product-card pc-card group relative bg-white border border-gray-200 overflow-hidden transition-all duration-300 w-full mx-auto"
+      className="pc-card group relative bg-white border border-gray-200 overflow-hidden w-full mx-auto"
       dir={isRTL ? "rtl" : "ltr"}
     >
       {/* ===== Image + Badges ===== */}
-      {/* keep <a> for full reload (as you requested elsewhere) */}
       <a
         href={`/products/${product._id}`}
         className="pc-imgwrap relative block w-full bg-white"
@@ -121,14 +112,9 @@ const ProductCard = ({ product }) => {
           src={getImgUrl(product?.coverImage)}
           alt={title}
           loading="lazy"
-          onMouseEnter={handleMouseEnter}
           onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
           className="pc-img w-full h-full object-contain transition duration-300"
-          style={{
-            transform: "none",
-            transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-          }}
+          style={{ transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` }}
         />
 
         {/* Trending (top-start) */}
@@ -164,7 +150,6 @@ const ProductCard = ({ product }) => {
         </span>
       </a>
 
-      {/* Divider */}
       <div className="pc-divider" />
 
       {/* ===== Body ===== */}
@@ -177,9 +162,7 @@ const ProductCard = ({ product }) => {
 
         {shopName && (
           <div className="pc-shop">
-            <span className="pc-shop-label">
-              {t("boutique", "Boutique")}:
-            </span>{" "}
+            <span className="pc-shop-label">{t("boutique", "Boutique")}:</span>{" "}
             <a href="#" className="pc-shop-name">
               {shopName}
             </a>
@@ -187,62 +170,46 @@ const ProductCard = ({ product }) => {
         )}
 
         {/* Price row */}
-        <div className="pc-price text-sm font-bold text-gray-900 mt-1">
+        <div className="pc-price text-sm font-bold text-gray-900 mt-1" aria-label={t("price")}>
           {hasOld && (
-            <span className="pc-old">
-              {Number(product?.oldPrice).toFixed(2)} $
-            </span>
+            <span className="pc-old">{Number(product?.oldPrice).toFixed(2)} $</span>
           )}
-          <span className="pc-new">
-            {Number(product?.newPrice || 0).toFixed(2)} $
-          </span>
+          <span className="pc-new">{Number(product?.newPrice || 0).toFixed(2)} $</span>
         </div>
 
-        {/* Hover-reveal panel */}
+        {/* Reveal panel (always shown on mobile, hover on desktop) */}
         <div className="pc-extra">
-          {/* Short description */}
           <p className="product-description text-sm text-gray-500">
-            {description.length > 60
-              ? `${description.slice(0, 60)}...`
-              : description}
+            {description.length > 70 ? `${description.slice(0, 70)}…` : description}
           </p>
 
-          {/* Default color name */}
           {displayedColor && (
             <p className="text-sm italic text-gray-500">
-              {t("color")}:{" "}
-              <span className="text-gray-700 font-medium">
-                {displayedColor}
-              </span>
+              {t("color")}: <span className="text-gray-700 font-medium">{displayedColor}</span>
             </p>
           )}
 
-          {/* Available colors (if any) */}
-          {product.colors?.length > 0 && (
+          {Array.isArray(product?.colors) && product.colors.length > 0 && (
             <div className="text-sm text-gray-600">
               <p className="font-medium">{t("available_colors")}:</p>
               <ul className="color-list flex flex-wrap justify-center gap-2 mt-1">
-                {product.colors.map((colorObj, idx) => (
-                  <li
-                    key={
-                      colorObj.colorName?.[lang] ||
-                      colorObj.colorName?.[baseLang] ||
-                      colorObj.colorName?.en ||
-                      idx
-                    }
-                    className="px-2 py-1 border text-xs bg-gray-100"
-                  >
-                    {colorObj.colorName?.[lang] ||
-                      colorObj.colorName?.[baseLang] ||
-                      colorObj.colorName?.en ||
-                      "-"}
-                  </li>
-                ))}
+                {product.colors.map((c, idx) => {
+                  const name =
+                    c?.colorName?.[lang] ||
+                    c?.colorName?.[baseLang] ||
+                    c?.colorName?.en ||
+                    `#${idx + 1}`;
+                  return (
+                    <li key={`${name}-${idx}`} className="px-2 py-1 border text-xs bg-gray-100">
+                      {name}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}
 
-          {/* ✅ Quantity stepper — identical structure/classes as SingleProduct */}
+          {/* Quantity stepper (SingleProduct look) */}
           <div className="flex items-center justify-center mt-3 sp-cta-row">
             <div className="sp-qty">
               <button
@@ -262,6 +229,7 @@ const ProductCard = ({ product }) => {
                 onChange={handleQuantityChange}
                 disabled={displayedStock === 0}
                 aria-label={t("quantity")}
+                inputMode="numeric"
               />
 
               <button
@@ -275,21 +243,18 @@ const ProductCard = ({ product }) => {
             </div>
           </div>
 
-          {/* ✅ Primary CTA — same classes & behavior as SingleProduct */}
+          {/* Primary CTA (Android-friendly tap target) */}
           <div className="mt-3">
-           <button
-  onClick={handleAddToCart}
-  disabled={displayedStock === 0}
-  className={`w-full py-3 px-6 text-white font-medium text-lg transition-all sp-add ${
-    displayedStock > 0
-      ? "bg-black hover:bg-[#111]"
-      : "bg-gray-300 cursor-not-allowed is-disabled"
-  }`}
->
-  <FiShoppingCart className="inline mr-2" />
-  {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-</button>
-
+            <button
+              onClick={handleAddToCart}
+              disabled={displayedStock === 0}
+              className={`add-to-cart-btn sp-add ${
+                displayedStock > 0 ? "" : "is-disabled"
+              }`}
+            >
+              <FiShoppingCart className="icon" />
+              {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+            </button>
           </div>
         </div>
       </div>
