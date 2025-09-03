@@ -51,6 +51,26 @@ const OurSellers = () => {
         })
       : products.filter((p) => norm(p.category) === norm(selectedCategory));
 
+  /* ---------- Custom, RTL-aware arrows ---------- */
+  const Arrow = ({ onClick, type }) => {
+    // type: 'prev' | 'next'
+    // For RTL, icons swap directions visually
+    const icon = type === "prev"
+      ? (isRTL ? "›" : "‹")   // previous
+      : (isRTL ? "‹" : "›");  // next
+
+    return (
+      <button
+        type="button"
+        className={`wz-arrow ${type === "prev" ? "wz-prev" : "wz-next"}`}
+        onClick={onClick}
+        aria-label={type === "prev" ? (t("previous") || "Previous") : (t("next") || "Next")}
+      >
+        <span className="wz-arrow-icon">{icon}</span>
+      </button>
+    );
+  };
+
   return (
     <FadeInSection>
       <div className="our-sellers-wrapper" dir={isRTL ? "rtl" : "ltr"}>
@@ -80,7 +100,7 @@ const OurSellers = () => {
             {/* ===== Carousel ===== */}
             <div className="max-w-6xl mx-auto px-2 sm:px-4">
               {filteredProducts.length > 0 ? (
-                <div className="carousel-clip">
+                <div className="carousel-clip custom-carousel">
                   <Carousel
                     responsive={responsive}
                     autoPlay
@@ -96,6 +116,9 @@ const OurSellers = () => {
                     containerClass="rmc-list"
                     sliderClass="rmc-track"
                     itemClass="rmc-item"
+                    // 👇 Custom arrows (bigger, RTL-safe, mobile-friendly)
+                    customLeftArrow={<Arrow type="prev" />}
+                    customRightArrow={<Arrow type="next" />}
                   >
                     {filteredProducts.map((product, index) => (
                       <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>

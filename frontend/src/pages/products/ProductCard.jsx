@@ -7,8 +7,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { getImgUrl } from "../../utils/getImgUrl";
 
-import "../../Styles/ProductCard.css";          // <-- use this name
-import "../../Styles/StylesSingleProduct.css";  // reuses qty/add-to-cart look
+import "../../Styles/StylesProductCard.css";  // reuses qty/add-to-cart look
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -245,16 +244,17 @@ const ProductCard = ({ product }) => {
 
           {/* Primary CTA (Android-friendly tap target) */}
           <div className="mt-3">
-            <button
-              onClick={handleAddToCart}
-              disabled={displayedStock === 0}
-              className={`add-to-cart-btn sp-add ${
-                displayedStock > 0 ? "" : "is-disabled"
-              }`}
-            >
-              <FiShoppingCart className="icon" />
-              {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-            </button>
+           <button
+  onClick={handleAddToCart}
+  disabled={displayedStock === 0}
+  className={`sp-add w-full ${
+    displayedStock === 0 ? "cursor-not-allowed opacity-70" : ""
+  }`}
+>
+  <FiShoppingCart className="inline mr-2" />
+  {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+</button>
+
           </div>
         </div>
       </div>

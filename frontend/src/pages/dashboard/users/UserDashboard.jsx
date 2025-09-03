@@ -16,10 +16,18 @@ import {
   FaEnvelope,
 } from "react-icons/fa";
 
+/* ✅ Bring in small responsive helpers */
+import "../../../Styles/StylesUserDashboard.css";
+
 const UserDashboard = () => {
   const { currentUser } = useAuth();
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
+
+  const isRTL =
+    i18n.language === "ar" ||
+    i18n.language === "ar-SA" ||
+    (typeof i18n.language === "string" && i18n.language.startsWith("ar"));
 
   // Data
   const email = currentUser?.email || "";
@@ -47,21 +55,11 @@ const UserDashboard = () => {
     return { totalOrders: count, totalSpent: spent.toFixed(2) };
   }, [orders]);
 
-  
-  // Oldest -> newest for the list visual order
+  // Oldest -> newest for list visual order
   const sortedOrders = useMemo(
     () => [...orders].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
     [orders]
   );
-
-  // Helpers
-  const initials = (name) =>
-    name
-      ?.split(" ")
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((s) => s[0]?.toUpperCase())
-      .join("") || "WZ";
 
   const providerBadge = () => {
     if (provider === "google.com")
@@ -84,7 +82,10 @@ const UserDashboard = () => {
   if (isLoading || isFetching) return <LoadingSpinner />;
 
   return (
-    <div className="bg-[#F8F1E9] min-h-screen px-2 sm:px-4 UserDashboard-screen pt-28 md:pt-32 pb-12">
+    <div
+      className="bg-[#F8F1E9] min-h-screen px-2 sm:px-4 UserDashboard-screen pt-28 md:pt-32 pb-12"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
       <Helmet>
         <title>{t("userDashboard.title")}</title>
       </Helmet>
@@ -98,7 +99,7 @@ const UserDashboard = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
           <div className="bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 border border-[#A67C52]/20 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-6 md:p-8">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-              {/* RIGHT: Avatar with first letter of user's email (link to change-password) */}
+              {/* Avatar → Change password */}
               <div className="w-14 h-14 flex justify-end">
                 <Link
                   to="/change-password"
@@ -113,7 +114,6 @@ const UserDashboard = () => {
                     <span className="text-white font-bold text-xl leading-none">{initial}</span>
                   </div>
 
-                  {/* tooltip (optional) */}
                   <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -bottom-2 translate-y-full
                                    bg-amber-50 text-amber-800 text-[11px] font-semibold px-2.5 py-1 rounded-full shadow
                                    border border-amber-200 opacity-0 group-hover:opacity-100 transition">
@@ -124,14 +124,14 @@ const UserDashboard = () => {
 
               {/* Info */}
               <div className="flex-1 text-center md:text-left">
-                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#8B5C3E]">
+                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#8B5C3E] break-words">
                   {t("userDashboard.welcome", { name: displayName })}
                 </h1>
                 <p className="mt-1 text-gray-600">
                   {t("userDashboard.overview")}
                 </p>
 
-                {/* Quick actions (UPDATED BUTTON STYLES) */}
+                {/* Quick actions */}
                 <div className="mt-4 flex flex-col sm:flex-row gap-3 justify-center md:justify-start">
                   <Link
                     to="/change-password"
@@ -270,17 +270,19 @@ const UserDashboard = () => {
 
                       return (
                         <li
-                          className="flex items-start gap-4 rounded-xl border border-[#A67C52]/20 p-3 sm:p-4"
                           key={`${product.productId._id}-${idx}`}
+                          className="order-item flex flex-col sm:flex-row items-center sm:items-start gap-4 rounded-xl border border-[#A67C52]/20 p-3 sm:p-4"
                         >
                           <img
                             src={imageSrc}
                             alt={title}
-                            className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg object-cover border-2 border-[#A67C52]/30"
+                            className="order-item__img w-24 h-24 sm:w-28 sm:h-28 rounded-lg object-cover border-2 border-[#A67C52]/30 flex-shrink-0 mx-auto sm:mx-0"
                           />
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-gray-800">{title}</h4>
-                            <div className="mt-1 text-sm text-gray-600 flex flex-wrap gap-3">
+                          <div className="order-item__body flex-1 min-w-0 text-center sm:text-start">
+                            <h4 className="font-semibold text-gray-800 break-words leading-relaxed">
+                              {title}
+                            </h4>
+                            <div className="mt-1 text-sm text-gray-600 flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-1">
                               <span>
                                 {t("userDashboard.quantity")}:{" "}
                                 <span className="font-medium">{product.quantity}</span>

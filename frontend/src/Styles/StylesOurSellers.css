@@ -9,8 +9,6 @@
   background: transparent !important;
   margin: 0 auto;
   position: relative;
-
-  /* stop any accidental horizontal scrollbars */
   overflow-x: hidden;
 }
 @supports (overflow: clip) {
@@ -23,7 +21,6 @@
   padding: 2rem 1rem;
   background: transparent !important;
 }
-
 .our-sellers-container {
   max-width: 1280px;
   margin: 0 auto;
@@ -43,12 +40,12 @@
 .os-title {
   position: relative;
   display: block;
-  width: 100%;               /* was max-content → caused overflow */
+  width: 100%;
   max-width: 100%;
   margin-inline: auto;
   text-align: center;
   isolation: isolate;
-  padding-inline: 8px;       /* breathing room near screen edges */
+  padding-inline: 8px;
 }
 .os-title__text {
   display: inline-block;
@@ -67,15 +64,10 @@
   color: transparent;
   transition: background-position 0.55s ease, transform 0.25s ease;
   will-change: background-position, transform;
-
-  /* allow wrapping in Arabic/long titles instead of pushing layout */
   white-space: normal;
   overflow-wrap: anywhere;
 }
-.os-title:hover .os-title__text {
-  animation: osShimmer 1.4s linear infinite;
-  transform: translateY(-1px);
-}
+.os-title:hover .os-title__text { animation: osShimmer 1.4s linear infinite; transform: translateY(-1px); }
 .os-title::after {
   content: "";
   position: absolute;
@@ -104,7 +96,7 @@
 
 /* ===== Carousel containment (prevents horizontal overflow) ===== */
 .carousel-clip {
-  position: relative;
+  position: relative; /* so custom arrows can be absolutely positioned */
   width: 100%;
   overflow-x: hidden;
 }
@@ -113,28 +105,71 @@
 }
 
 /* Library classes hooks */
-.rmc-list { overflow: hidden !important; }         /* keep the scroller clipped horizontally */
+.rmc-list { overflow: hidden !important; }
 .rmc-track { will-change: transform; }
 .rmc-item  { padding: 0; }
 
 /* ===== Carousel Items (room for badges inside the card area) ===== */
 .react-multi-carousel-item {
-  padding-top: 4rem;     /* keep space for badges */
+  padding-top: 4rem;
   padding-bottom: 4rem;
   z-index: 1;
   position: relative;
 }
-
 .carousel-card-wrapper {
   padding: 0 12px;
   width: 100%;
   max-width: 100%;
 }
 
-/* Remove the old rule that caused oversizing on phones */
-/* .react-multi-carousel-track { overflow: visible !important; } */
+/* ===== Custom Arrows (desktop + Android) ===== */
+.wz-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  inline-size: 56px;            /* logical width */
+  block-size: 56px;             /* logical height */
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.45);
+  background: linear-gradient(135deg, #7a5a36, #a67c52);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 20;
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+  transition: transform .12s ease, filter .2s ease, opacity .2s ease;
+}
+.wz-arrow:hover { filter: brightness(1.02); }
+.wz-arrow:active { transform: translateY(-50%) scale(0.98); }
+.wz-arrow:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(122,90,54,.55);
+}
+.wz-arrow-icon {
+  font-weight: 900;
+  font-size: 28px;
+  line-height: 1;
+  pointer-events: none;
+}
 
-/* ===== Arrows ===== */
+/* placement (logical sides to support RTL) */
+.wz-prev { inset-inline-start: 8px; }
+.wz-next { inset-inline-end: 8px; }
+
+/* safe spacing on very small phones */
+@media (max-width: 768px) {
+  .wz-arrow {
+    inline-size: 46px;
+    block-size: 46px;
+  }
+  .wz-arrow-icon { font-size: 24px; }
+  .carousel-card-wrapper { padding: 0 8px; }
+  .our-sellers-wrapper { padding: 2rem 1rem; }
+  .react-multi-carousel-item { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+}
+
+/* ===== If library default arrows ever render (fallback) ===== */
 .custom-carousel .react-multiple-carousel__arrow {
   background: #8B5C3E;
   color: #fff;
@@ -154,7 +189,6 @@
 .custom-carousel .react-multiple-carousel__arrow:active { transform: scale(0.98); }
 .custom-carousel .react-multiple-carousel__arrow--left { left: 10px; }
 .custom-carousel .react-multiple-carousel__arrow--right { right: 10px; }
-/* RTL arrows */
 html[dir="rtl"] .react-multiple-carousel__arrow--left { right: 10px !important; left: auto !important; }
 html[dir="rtl"] .react-multiple-carousel__arrow--right { left: 10px !important; right: auto !important; }
 
@@ -165,14 +199,9 @@ html[dir="rtl"] .react-multiple-carousel__arrow--right { left: 10px !important; 
 @media (max-width: 1024px) {
   .our-sellers-container { padding: 0 .75rem; }
 }
-
 @media (max-width: 768px) {
   .our-sellers-title { font-size: 1.5rem; }
   .our-sellers-filters { gap: 1rem; }
-  .custom-carousel .react-multiple-carousel__arrow { width: 32px; height: 32px; font-size: 14px; }
-  .react-multi-carousel-item { padding-top: 4.5rem; padding-bottom: 4.5rem; }
-  .our-sellers-wrapper { padding: 2rem 1rem; }
-  .carousel-card-wrapper { padding: 0 8px; }  /* keep within viewport */
 }
 
 /* ===== No horizontal scroll globally ===== */
