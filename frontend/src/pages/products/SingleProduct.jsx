@@ -1,4 +1,4 @@
-// src/pages/singleProduct/SingleProduct.jsx
+// src/pages/products/SingleProduct.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -33,7 +33,7 @@ const SingleProduct = () => {
   const categoryKey = product?.category?.toLowerCase();
   const translatedCategory = t(`categories.${categoryKey}`, product?.category || t("unknown"));
 
-  // trend flag (robust)
+  // trend flag
   const isTrending = Boolean(
     product?.trending ||
       product?.isTrending ||
@@ -163,21 +163,31 @@ const SingleProduct = () => {
             })}
           </div>
 
-          {/* Main image */}
+          {/* Main image with premium badges */}
           <div className="relative sp-mainimg group w-full">
+            {/* Trending badge */}
             {isTrending && (
-              <span className="sp-badge sp-badge--trend" title={t("trending")}>
+              <span
+                className="product-badge badge-top-left trending-badge"
+                title={t("trending")}
+                aria-label={t("trending")}
+              >
                 {t("trending")}
               </span>
             )}
 
+            {/* Stock badge */}
             <span
-              className="sp-badge sp-badge--stock"
+              className={`product-badge badge-top-right stock-badge ${
+                stockCount > 0 ? "in-stock" : "out-of-stock"
+              }`}
               title={stockCount > 0 ? `${t("stock")}: ${stockCount}` : t("out_of_stock")}
+              aria-label={stockCount > 0 ? `${t("stock")}: ${stockCount}` : t("out_of_stock")}
             >
               {stockCount > 0 ? `${t("stock")}: ${stockCount}` : t("out_of_stock")}
             </span>
 
+            {/* Left Arrow */}
             {activeGallery.length > 1 && (
               <button
                 type="button"
@@ -192,6 +202,7 @@ const SingleProduct = () => {
               </button>
             )}
 
+            {/* Main Image */}
             <img
               src={getImgUrl(activeGallery[selectedImageIndex] || selectedColor?.image)}
               alt={translatedTitle}
@@ -202,11 +213,13 @@ const SingleProduct = () => {
               style={{
                 width: "100%",
                 height: "100%",
-                transform: isHovering && window.innerWidth > 768 ? "scale(2)" : "scale(1)",
+                transform:
+                  isHovering && window.innerWidth > 768 ? "scale(2)" : "scale(1)",
                 transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
               }}
             />
 
+            {/* Right Arrow */}
             {activeGallery.length > 1 && (
               <button
                 type="button"
@@ -316,19 +329,16 @@ const SingleProduct = () => {
             </p>
           </div>
 
-          {/* Qty + Add to cart — CENTERED column */}
-          <div className="sp-cta-row">
-            {/* Force LTR inside the stepper to avoid RTL swapping and ghost blocks */}
-            <div className="sp-qty" dir="ltr">
+          {/* Qty + Add to cart */}
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-2 sp-cta-row">
+            <div className="flex items-center sp-qty">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 disabled={(selectedColor?.stock ?? 0) === 0}
-                aria-label={t("decrease")}
               >
                 –
               </button>
-
               <input
                 type="number"
                 min="1"
@@ -336,19 +346,16 @@ const SingleProduct = () => {
                 value={quantity}
                 onChange={handleQuantityChange}
                 disabled={selectedColor?.stock === 0}
-                aria-label={t("quantity")}
-                inputMode="numeric"
               />
-
               <button
                 type="button"
                 onClick={() =>
-                  setQuantity((q) =>
-                    Math.min(selectedColor?.stock ?? 1, q + 1)
-                  )
+                  setQuantity((q) => Math.min((selectedColor?.stock ?? 1), q + 1))
                 }
-                disabled={(selectedColor?.stock ?? 0) === 0 || quantity >= (selectedColor?.stock ?? 1)}
-                aria-label={t("increase")}
+                disabled={
+                  (selectedColor?.stock ?? 0) === 0 ||
+                  quantity >= (selectedColor?.stock ?? 1)
+                }
               >
                 +
               </button>
@@ -357,7 +364,7 @@ const SingleProduct = () => {
             <button
               onClick={handleAddToCart}
               disabled={selectedColor?.stock === 0}
-              className={`sp-add w-full sm:w-full md:w-full ${
+              className={`w-full sm:w-auto py-3 px-6 text-white font-medium text-lg transition-all sp-add ${
                 selectedColor?.stock > 0
                   ? "bg-black hover:bg-[#111]"
                   : "bg-gray-300 cursor-not-allowed is-disabled"

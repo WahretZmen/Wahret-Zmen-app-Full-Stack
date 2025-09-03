@@ -35,6 +35,48 @@
   display: block;
 }
 
+/* ===============================
+   Premium Badges (same as ProductCard)
+   =============================== */
+
+.sp-mainimg { position: relative; } /* ensure absolute children anchor here */
+
+.sp-mainimg .product-badge {
+  position: absolute;
+  z-index: 30; /* above image/arrows */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;              /* pill */
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  backdrop-filter: saturate(120%) blur(2px);
+  border: 1px solid rgba(255,255,255,.35);
+  user-select: none;
+}
+
+.sp-mainimg .badge-top-left  { top: 10px; left: 10px; }
+.sp-mainimg .badge-top-right { top: 10px; right: 10px; }
+
+/* RTL flip */
+html[dir="rtl"] .sp-mainimg .badge-top-left  { left: auto; right: 10px; }
+html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
+
+/* Colors (same palette) */
+.sp-mainimg .trending-badge        { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+.sp-mainimg .stock-badge.in-stock  { background: linear-gradient(135deg, #16a34a, #15803d); }
+.sp-mainimg .stock-badge.out-of-stock { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+
+/* Slightly larger on big screens */
+@media (min-width: 768px) {
+  .sp-mainimg .product-badge { font-size: 13px; padding: 7px 12px; }
+}
+
+
 /* -------- Premium arrows -------- */
 .sp-arrow {
   position: absolute;
