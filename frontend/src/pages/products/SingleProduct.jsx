@@ -1,3 +1,4 @@
+// src/pages/singleProduct/SingleProduct.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -139,7 +140,7 @@ const SingleProduct = () => {
       <div className="flex flex-col md:flex-row gap-8 sp-card">
         {/* IMAGES AREA */}
         <div className="flex-1 md:flex md:gap-4 sp-media">
-          {/* Desktop: vertical thumbs (narrow rail, tight gaps) */}
+          {/* Desktop thumbs */}
           <div className="hidden md:flex md:flex-col gap-2 w-20 overflow-visible thumb-rail">
             {activeGallery.map((img, idx) => {
               const isActive = idx === selectedImageIndex;
@@ -162,26 +163,21 @@ const SingleProduct = () => {
             })}
           </div>
 
-          {/* Main image with arrows + badges on top of the image */}
+          {/* Main image */}
           <div className="relative sp-mainimg group w-full">
-            {/* Trending badge (top-left) */}
             {isTrending && (
               <span className="sp-badge sp-badge--trend" title={t("trending")}>
                 {t("trending")}
               </span>
             )}
 
-            {/* Stock badge (top-right, black/white) */}
             <span
               className="sp-badge sp-badge--stock"
-              title={
-                stockCount > 0 ? `${t("stock")}: ${stockCount}` : t("out_of_stock")
-              }
+              title={stockCount > 0 ? `${t("stock")}: ${stockCount}` : t("out_of_stock")}
             >
               {stockCount > 0 ? `${t("stock")}: ${stockCount}` : t("out_of_stock")}
             </span>
 
-            {/* Left Arrow */}
             {activeGallery.length > 1 && (
               <button
                 type="button"
@@ -196,7 +192,6 @@ const SingleProduct = () => {
               </button>
             )}
 
-            {/* Main Image */}
             <img
               src={getImgUrl(activeGallery[selectedImageIndex] || selectedColor?.image)}
               alt={translatedTitle}
@@ -207,13 +202,11 @@ const SingleProduct = () => {
               style={{
                 width: "100%",
                 height: "100%",
-                transform:
-                  isHovering && window.innerWidth > 768 ? "scale(2)" : "scale(1)",
+                transform: isHovering && window.innerWidth > 768 ? "scale(2)" : "scale(1)",
                 transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
               }}
             />
 
-            {/* Right Arrow */}
             {activeGallery.length > 1 && (
               <button
                 type="button"
@@ -227,7 +220,7 @@ const SingleProduct = () => {
             )}
           </div>
 
-          {/* Mobile: thumbs wrap */}
+          {/* Mobile thumbs */}
           <div className="mt-2 md:hidden flex flex-wrap gap-2 sp-thumbs">
             {activeGallery.map((img, idx) => {
               const isActive = idx === selectedImageIndex;
@@ -270,7 +263,7 @@ const SingleProduct = () => {
             </p>
           </div>
 
-          {/* Price row with save + % off */}
+          {/* Price row */}
           <div className="sp-price-row">
             {hasDiscount ? (
               <>
@@ -306,7 +299,6 @@ const SingleProduct = () => {
                         isActive ? "is-active" : ""
                       }`}
                     />
-                    {/* Black/white stock counter on thumbnail */}
                     <div className="sp-thumb-count" title={translatedName}>
                       {color.stock > 0 ? color.stock : t("out_of_stock")}
                     </div>
@@ -324,16 +316,19 @@ const SingleProduct = () => {
             </p>
           </div>
 
-          {/* Qty + Add to cart */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-2 sp-cta-row">
-            <div className="flex items-center sp-qty">
+          {/* Qty + Add to cart — CENTERED column */}
+          <div className="sp-cta-row">
+            {/* Force LTR inside the stepper to avoid RTL swapping and ghost blocks */}
+            <div className="sp-qty" dir="ltr">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 disabled={(selectedColor?.stock ?? 0) === 0}
+                aria-label={t("decrease")}
               >
                 –
               </button>
+
               <input
                 type="number"
                 min="1"
@@ -341,31 +336,36 @@ const SingleProduct = () => {
                 value={quantity}
                 onChange={handleQuantityChange}
                 disabled={selectedColor?.stock === 0}
+                aria-label={t("quantity")}
+                inputMode="numeric"
               />
+
               <button
                 type="button"
                 onClick={() =>
-                  setQuantity((q) => Math.min((selectedColor?.stock ?? 1), q + 1))
+                  setQuantity((q) =>
+                    Math.min(selectedColor?.stock ?? 1, q + 1)
+                  )
                 }
                 disabled={(selectedColor?.stock ?? 0) === 0 || quantity >= (selectedColor?.stock ?? 1)}
+                aria-label={t("increase")}
               >
                 +
               </button>
             </div>
 
-          <button
-  onClick={handleAddToCart}
-  disabled={selectedColor?.stock === 0}
-  className={`w-full sm:w-auto py-3 px-6 text-white font-medium text-lg transition-all sp-add ${
-    selectedColor?.stock > 0
-      ? "bg-black hover:bg-[#111]"
-      : "bg-gray-300 cursor-not-allowed is-disabled"
-  }`}
->
-  <FiShoppingCart className="inline mr-2" />
-  {selectedColor?.stock > 0 ? t("add_to_cart") : t("out_of_stock")}
-</button>
-
+            <button
+              onClick={handleAddToCart}
+              disabled={selectedColor?.stock === 0}
+              className={`sp-add w-full sm:w-full md:w-full ${
+                selectedColor?.stock > 0
+                  ? "bg-black hover:bg-[#111]"
+                  : "bg-gray-300 cursor-not-allowed is-disabled"
+              }`}
+            >
+              <FiShoppingCart className="inline mr-2" />
+              {selectedColor?.stock > 0 ? t("add_to_cart") : t("out_of_stock")}
+            </button>
           </div>
         </div>
       </div>

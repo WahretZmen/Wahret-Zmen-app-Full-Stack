@@ -232,6 +232,102 @@
   border-bottom-right-radius: 12px;
 }
 
+/* ===============================
+   CTA ROW — centered, stacked
+   =============================== */
+.sp-cta-row {
+  display: flex;
+  flex-direction: column;     /* stepper above button */
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* ===============================
+   Quantity Stepper (single source of truth)
+   =============================== */
+.sp-qty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  background: #fff;
+  border: 1px solid #111;     /* clean hairline */
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Buttons */
+.sp-qty > button {
+  min-width: 44px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: #111;
+  color: #fff;
+  border: 0;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity .15s ease, transform .05s ease;
+}
+.sp-qty > button:hover { opacity: .92; }
+.sp-qty > button:active { transform: translateY(1px); }
+.sp-qty > button:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Input */
+.sp-qty input {
+  width: 68px;
+  height: 44px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
+  color: #111;
+  background: #fff;
+  border: 0;                 /* remove any internal borders */
+  outline: none;
+  /* draw small dividers so it looks neat, not like a big white block */
+  border-left: 1px solid #111;
+  border-right: 1px solid #111;
+}
+
+/* Mobile sizing */
+@media (max-width: 768px) {
+  .sp-qty > button { min-width: 44px; width: 44px; height: 44px; }
+  .sp-qty input { width: 64px; height: 44px; font-size: 15px; }
+}
+
+/* Keep visual rounding consistent in LTR/RTL */
+.sp-qty > button:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+.sp-qty > button:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+[dir="rtl"] .sp-qty > button:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+[dir="rtl"] .sp-qty > button:last-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+/* High-contrast keyboard focus */
+.sp-qty button:focus-visible,
+.sp-qty input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(17,17,17,.6);
+}
+
+
 /* Mirror corner rounding in RTL */
 [dir="rtl"] .sp-qty button:first-child {
   border-top-left-radius: 0;
