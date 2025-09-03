@@ -1,8 +1,9 @@
-import React from 'react';
+// src/pages/home/Banner.jsx
+import React from "react";
 import { useTranslation } from "react-i18next";
-import ScrollFade from '../../Animations/ScrollFade.jsx';
+import ScrollFade from "../../Animations/ScrollFade.jsx";
 import AnimatedText from "../../Animations/AnimatedText.jsx";
-import '../../Styles/StylesBanner.css';
+import "../../Styles/StylesBanner.css";
 import bannerImg from "../../assets/Banner/Banner.avif";
 import "../../Styles/StylesAnimatedText.css";
 
@@ -16,40 +17,39 @@ const Banner = () => {
       onClick={() => window.scrollTo(0, 0)}
       className="banner-container-enhanced link-wrapper"
     >
-      {/* 🖼 Image - Fade from Right */}
+      {/* Image */}
       <div className="banner-image-wrapper">
-      <ScrollFade direction="fade-rotate-zoom" delay={0.5}>
-  <img
-    src={bannerImg}
-    alt={t("banner_img_alt")}
-    className="banner-img"
-  />
-</ScrollFade>
-
-
-
-
+        <ScrollFade direction="fade-rotate-zoom" delay={0.5}>
+          <img
+            src={bannerImg}
+            alt={t("banner_img_alt")}
+            className="banner-img"
+          />
+        </ScrollFade>
       </div>
 
-      {/* ✨ Text Section */}
+      {/* Text Section */}
       <div className="banner-text-wrapper">
-       <ScrollFade direction="left-to-right" delay={0.5}>
-  <h1 className="banner-title wz-royal-title">
-    {t("banner_title")}
-  </h1>
-</ScrollFade>
+        <ScrollFade direction="left-to-right" delay={0.5}>
+          {/* Title with premium auto-replay shimmer + reveal */}
+          <h1 className="banner-title wz-royal-title">
+            {t("banner_title")}
+          </h1>
+        </ScrollFade>
 
-<ScrollFade>
-        <div className="banner-description">
-          <AnimatedText text={t("banner_description")} />
-        </div>
-</ScrollFade>
+        <ScrollFade>
+          <div className="banner-description">
+            <AnimatedText text={t("banner_description")} />
+          </div>
+        </ScrollFade>
 
         <ScrollFade direction="bottom" delay={0.6}>
-          <button className="banner-cta-btn">
-            {t("discover_now")}
-          </button>
-        </ScrollFade>
+  <button type="button" className="btn-premium">
+  {t("discover_now")}
+</button>
+
+</ScrollFade>
+
       </div>
     </a>
   );

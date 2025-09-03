@@ -26,29 +26,43 @@ const LargeBanner = () => {
       aria-label={t("Welcome_Banner_title", "Welcome to Wahret Zmen")}
       dir={isRTL ? "rtl" : "ltr"}
     >
-      {/* Background */}
+      {/* ===============================
+          Background + animations layer
+          - Ken Burns zoom (img.hz-kenburns)
+          - Soft overlay gradient
+          - Floating bokeh particles (decorative)
+         =============================== */}
       <div className="hz-hero__bg">
         <img
           src={heroAvif}
           alt={t("banner_img_alt", "Wahret Zmen traditional banner")}
           loading="eager"
+          className="hz-kenburns"
         />
         <div className="hz-hero__overlay" />
+        {/* Decorative floating bokeh dots behind content */}
+        <div className="hz-hero__bokeh" aria-hidden="true" />
       </div>
 
-      {/* Content */}
+      {/* ===============================
+          Content
+         =============================== */}
       <div className="hz-hero__container">
         <div className="hz-hero__content">
           {/* Title */}
           <h2 className="hz-hero__title animate-fade-in-up">
-            <span className="hz-inline animate-slide-in-left">{firstWord}</span>{" "}
+            {/* Shimmer reveal on brand words */}
+            <span className="hz-inline hz-title-shimmer animate-slide-in-left">{firstWord}</span>{" "}
             {secondWord ? (
-              <span className="hz-inline animate-slide-in-right animation-delay-200">
+              <span className="hz-inline hz-title-shimmer animate-slide-in-right animation-delay-200">
                 {secondWord}
               </span>
             ) : null}
             <span className="hz-hero__by animate-fade-in-delay-400">{bySabri}</span>
           </h2>
+
+          {/* Elegant underline sweep under the title */}
+          <div className="hz-title-underline animate-underline" aria-hidden="true" />
 
           {/* Subtitle */}
           <p className="hz-hero__subtitle animate-fade-in-delay-300">

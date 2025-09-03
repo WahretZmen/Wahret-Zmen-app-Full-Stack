@@ -1,134 +1,105 @@
-/* === Banner Wrapper === */
-.banner-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background: transparent;
-    text-align: center;
-    padding: 50px 20px;
-    border-radius: 1.5rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    position: relative;
-    
-    
-  }
-  
-  .banner-container::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background: url('../../assets/banner-pattern.png');
-    opacity: 0.08;
-    z-index: -1;
-  }
-  
-  
-
-  .banner-text-wrapper {
-    flex: 1;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* change to flex-start if you want left-aligned */
-    justify-content: flex-start; /* ✅ Title appears at top */
-    text-align: center;
-    gap: 1rem;
-  }
-  
-  
-  
-  /* === Image === */
-  .banner-image {
-    flex: 1;
-    padding: 10px;
-  }
-  
-  .banner-image-img {
-    width: 100% !important;
-    border-radius: 10px;
-    
-    object-fit: cover;
-  }
-  
-  /* === Text Section === */
-  .banner-text {
-    flex: 1;
-    max-width: 500px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  
-  .banner-text h1 {
-    font-size: 2.5rem;
-    color: #A67C52;
-    font-weight: 800;
-    margin-bottom: 15px;
-  }
-
-  /* =========================================================
-   PREMIUM HERO TITLE — Royal Shimmer (auto replay)
-   Replaces the old glowText animation for .banner-title
-   ========================================================= */
-
-/* stop previous animation on the title (full replace) */
 /* ==========================================
-   Banner Title — Premium Hover Animation
+   Banner — Layout & Premium Animations
+   Plain CSS (no Tailwind, no shadcn)
    ========================================== */
 
-/* Base title (already animated with shimmer) */
+/* Wrapper (mobile-first) */
+.banner-container-enhanced {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  background: transparent;
+  text-align: center;
+  gap: 2rem;
+  box-shadow: none;
+  border-radius: 0;
+}
+
+.link-wrapper {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Side-by-side on desktop */
+@media (min-width: 768px) {
+  .banner-container-enhanced {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 6rem 3rem;
+    text-align: left;
+  }
+}
+
+/* Image area */
+.banner-image-wrapper {
+  flex: 1;
+  max-width: 500px;
+  text-align: center;
+}
+
+.banner-img {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 1rem;
+  object-fit: cover;
+  transition: transform 0.6s ease, box-shadow 0.6s ease, filter 0.6s ease;
+  will-change: transform, box-shadow, filter;
+  backface-visibility: hidden;
+}
+
+/* Premium image hover — luxury zoom + gold glow */
+.banner-img:hover {
+  transform: scale(1.05);
+  filter: brightness(1.05) contrast(1.02);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.25),
+    0 0 22px rgba(212, 175, 55, 0.45),
+    0 0 48px rgba(212, 175, 55, 0.25);
+  cursor: pointer;
+}
+
+/* Text area */
+.banner-text-wrapper {
+  flex: 1;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* centered on desktop too */
+  padding: 0 1rem;
+  color: #3b2404;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .banner-text-wrapper {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* ================================
+   Premium Title (auto-replay)
+   ================================ */
+
+/* Remove any previous animations on banner-title */
 .banner-title {
-  transition: transform 0.5s ease, letter-spacing 0.5s ease, text-shadow 0.5s ease;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #8B5C3E; /* fallback if gradients not supported */
+  margin-top: 50px;
+  margin-bottom: 50px;
+  line-height: 1.1;
+  text-align: center;
+  letter-spacing: 1px;
   position: relative;
-  overflow: hidden; /* required for the hover shine */
+  overflow: visible;
+  transition: transform 0.4s ease, letter-spacing 0.4s ease, text-shadow 0.4s ease;
 }
 
-/* Premium hover: elegant lift + golden sweep */
-.banner-title:hover {
-  transform: translateY(-2px) scale(1.02);
-  letter-spacing: 1.5px;
-  text-shadow:
-    0 0 6px rgba(224, 176, 94, 0.55),
-    0 0 14px rgba(224, 176, 94, 0.35),
-    0 0 22px rgba(224, 176, 94, 0.25);
-}
-
-/* Sweep shine effect */
-.banner-title::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-    120deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.7) 45%,
-    transparent 100%
-  );
-  transform: skewX(-20deg);
-  transition: none;
-}
-
-/* Trigger shine on hover */
-.banner-title:hover::before {
-  animation: sweepShine 1.2s ease forwards;
-}
-
-/* Keyframes for shine sweep */
-@keyframes sweepShine {
-  from { left: -75%; }
-  to   { left: 125%; }
-}
-
-
-/* Keyframes */
+/* Royal shimmer + reveal (replaces old glowText) */
 @keyframes wzRoyalReveal {
   0%   { opacity: 0; filter: blur(3px); transform: translateY(10px); letter-spacing: .02em; }
   35%  { opacity: 1; filter: blur(0);   transform: translateY(0);     letter-spacing: .014em; }
@@ -143,367 +114,339 @@
   25%,75% { width: 64%; box-shadow: 0 6px 18px rgba(212,175,55,.25); }
 }
 
-/* Apply the new animation */
-.wz-royal-title{
-  /* keep your base look from .banner-title */
+/* Apply premium title animation */
+.wz-royal-title {
+  display: inline-block;
+  margin-inline: auto;
   font-weight: 800;
-  margin-bottom: 1rem;
-  text-align: center;
 
-  /* animated golden text */
-  background: linear-gradient(90deg,#8a5d3b 0%,#d4af37 30%,#fff4c6 50%,#d4af37 70%,#8a5d3b 100%);
+  /* Animated golden text */
+  background: linear-gradient(90deg, #8a5d3b 0%, #d4af37 30%, #fff4c6 50%, #d4af37 70%, #8a5d3b 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
-  background-clip: text;
+          background-clip: text;
   color: transparent;
   text-shadow: 0 1px 0 rgba(0,0,0,.06);
 
-  /* replaying animations */
+  /* Auto-replay animations */
   animation:
     wzRoyalReveal 900ms cubic-bezier(.2,.8,.2,1) forwards,
     wzRoyalSheen 4.2s linear 1s infinite;
 
-  /* centering regardless of RTL/LTR */
-  display: inline-block;
-  margin-inline: auto;
-}
-
-/* breathing underline (auto replay) */
-.wz-royal-title::after{
-  content:"";
-  display:block;
-  height:6px;
-  width:0;
-  margin:.65rem auto 0 auto;
-  border-radius:999px;
-  background: linear-gradient(90deg,#c9853f,#e4c27f,#c9853f);
-  animation: wzRoyalLine 3.8s ease-in-out 200ms infinite;
-}
-
-/* Responsive sizing that matches your layout */
-.wz-royal-title{
+  /* Responsive font size */
   font-size: clamp(1.6rem, 4.5vw, 3rem);
 }
 
-/* Respect reduced motion */
-@media (prefers-reduced-motion: reduce){
-  .wz-royal-title{ animation: none !important; background-position: 100% 50%; }
-  .wz-royal-title::after{ animation: none !important; width: 64%; }
+/* Breathing underline (auto replay) */
+.wz-royal-title::after {
+  content: "";
+  display: block;
+  height: 6px;
+  width: 0;
+  margin: .65rem auto 0 auto;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #c9853f, #e4c27f, #c9853f);
+  animation: wzRoyalLine 3.8s ease-in-out 200ms infinite;
 }
 
-  
-  .banner-text p {
-    font-size: 1.125rem;
-    color: #5E493A;
-    margin-bottom: 20px;
-    line-height: 1.6;
-  }
-  
-  /* === CTA Button === */
-  .banner-btn {
-    background: #C69C6D;
-    color: white;
-    padding: 12px 24px;
-    font-size: 1rem;
-    border-radius: 8px;
-    font-family: 'Cairo', sans-serif;
-    text-transform: uppercase;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-    
-  }
-  
-  .banner-btn:hover {
-    background: #8B5E3B;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-    border-color: #fff5e0;
-    cursor: pointer;
-  }
-  
-  .banner-btn:active {
-    transform: translateY(2px);
-    box-shadow: none;
-  }
-  
-  .banner-btn::before {
-    content: "";
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    right: -5px;
-    bottom: -5px;
-    background: linear-gradient(45deg, rgba(255, 223, 186, 0.5), rgba(194, 134, 74, 0.5));
-    border-radius: 10px;
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
-  
-  .banner-btn:hover::before {
-    opacity: 1;
-  }
-  
-  /* === Animations === */
-  @keyframes zoomIn {
-    from {
-      transform: scale(0.92);
-      opacity: 0;
-    }
-    to {
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-  
-  @keyframes fadeIn {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-  
-
-  
-  
-  @media (min-width: 768px) {
-    .banner-container-enhanced {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 4rem 1rem;
-        background: transparent; /* ✅ Clean and empty */
-        text-align: center;
-        gap: 2rem;
-        box-shadow: none; /* Remove any shadows */
-        border-radius: 0;  /* Optional: remove rounded background */
-      }
-    }      
-  
-  .banner-image-wrapper {
-    flex: 1;
-    text-align: center;
-  }
-  
- .banner-img {
-  width: 100%;
-  max-width: 500px;
-  border-radius: 1rem;
-  object-fit: cover;
-  transition: transform 0.5s ease; /* ✅ hover effect only */
-  /* ❌ NO animation or opacity here */
-}
-
-
-  
-  /* Premium hover for Banner image */
-.banner-img {
-  transition: transform 0.6s ease, box-shadow 0.6s ease, filter 0.6s ease;
-  will-change: transform, box-shadow, filter;
-}
-
-.banner-img:hover {
-  transform: scale(1.05); /* smooth zoom */
-  filter: brightness(1.05) contrast(1.02);
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.25),
-    0 0 22px rgba(212, 175, 55, 0.45),   /* soft golden glow */
-    0 0 48px rgba(212, 175, 55, 0.25);  /* extended glow */
-  cursor: pointer;
-}
-
-
-@keyframes spinOnce {
-  from {
-    transform: rotate(0deg) scale(1);
-  }
-  to {
-    transform: rotate(360deg) scale(1.05);
-  }
-}
-
-
-
-.banner-img {
-  will-change: transform;
-  backface-visibility: hidden;
-}
-
-
-  
-  .banner-text-wrapper {
-    flex: 1;
-    color: #3b2404;
-    text-align: center;
-    padding: 0 1rem;
-  }
-  
-  @media (min-width: 768px) {
-    .banner-text-wrapper {
-      text-align: left;
-    }
-  }
-  
-  /* === Banner Text Styling === */
-.banner-title {
-  font-size: 3rem;
-  font-weight: 800;
-  color: #8B5C3E;
-  text-align: center;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-  font-family: 'Cairo', sans-serif;
-  letter-spacing: 1px;
-  transition: all 0.4s ease-in-out;
-  animation: glowText 3s ease-in-out infinite alternate;
-  cursor: pointer;
-}
-
-/* 🌟 Hover effect */
-.banner-title:hover {
-  transform: scale(1.05) rotate(-1deg);
-  letter-spacing: 2.5px;
-  color: #A77C4E;
+/* Premium hover for title: elegant lift + sweep */
+.wz-royal-title:hover {
+  transform: translateY(-2px) scale(1.02);
+  letter-spacing: 1.5px;
   text-shadow:
-    0 0 5px #e2bb83,
-    0 0 10px #d4a95a,
-    0 0 15px #c89546;
+    0 0 6px rgba(224, 176, 94, 0.55),
+    0 0 14px rgba(224, 176, 94, 0.35),
+    0 0 22px rgba(224, 176, 94, 0.25);
 }
 
-  
-  @keyframes glowText {
-    from {
-      text-shadow: 0 0 5px #e8c075, 0 0 10px #e8c075;
-    }
-    to {
-      text-shadow: 0 0 15px #d6a24e, 0 0 25px #e3b36f;
-    }
-  }
-  
-  .banner-description {
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: #3b2404; /* Fallback visible color */
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto 1.5rem;
-  line-height: 1.8;
-  font-family: 'Cairo', sans-serif;
-    color: #222;
-    /* Optional Gradient Text */
-  /* Fallback for non-supported browsers */
-  color: #3b2404;
+/* Hover sweep overlay */
+.wz-royal-title::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.7) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  opacity: 0;
+  pointer-events: none;
 }
 
-  
-  
-  
-  /* === CTA Button Enhancement === */
-  .banner-cta-btn {
-    background: linear-gradient(135deg, #a2643f, #d8a865);
-    color: white;
-    padding: 0.85rem 2rem;
-    font-size: 1rem;
-    font-weight: bold;
-    border: none;
-    border-radius: 10px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    font-family: 'Cairo', sans-serif;
-  }
-  
-  .banner-cta-btn:hover {
-    transform: scale(1.05) translateY(-3px);
-    box-shadow: 0 6px 18px rgba(191, 143, 84, 0.4);
-    background: linear-gradient(135deg, #875430, #cfa255);
-  }
-  
-  
+.wz-royal-title:hover::before {
+  opacity: 1;
+  animation: sweepShine 1.2s ease forwards;
+}
 
-  
-  
-  @media (min-width: 768px) {
-    .banner-container-enhanced {
-      flex-direction: row;
-      justify-content: space-between;
-      padding: 6rem 3rem;
-      text-align: left;
-    }
-  }
-  
-  .banner-image-wrapper {
-    flex: 1;
-    max-width: 500px;
-  }
-  
-  .banner-img {
-    width: 100%;
-    max-width: 500px;
-    border-radius: 1rem;
-    object-fit: cover;
-    transition: transform 0.5s ease; /* ✅ only hover effect */
-    /* ❌ REMOVE any animation: fadeIn or zoomIn here */
-  }
-  
-  
-  .banner-text-wrapper {
-    flex: 1;
-    max-width: 600px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  @media (min-width: 768px) {
-    .banner-text-wrapper {
-      align-items: center; /* ✅ Keep it centered on desktop too */
-      text-align: center;
-    }
-  }
-  
-  
-  .banner-title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #8B5C3E;
-    margin-bottom: 50px;
-    margin-top: 50px;
-  }
-  
-  .banner-description {
+@keyframes sweepShine {
+  from { left: -75%; }
+  to   { left: 125%; }
+}
+
+/* ================================
+   Description
+   ================================ */
+.banner-description {
   font-size: 1.2rem;
-  color: #222 !important; /* ✅ Strong dark color */
+  color: #222 !important;
   font-weight: 500;
   line-height: 1.8;
   max-width: 100%;
   text-align: center;
+  margin: 0 auto 1.5rem;
 }
 
-  
- 
+/* ================================
+   CTA Buttons (Plain CSS)
+   Two premium options:
+   - btn-gold-pulse  (auto replay)
+   - btn-royal-sweep (hover only)
+   ================================ */
 
+/* ==========================================
+   PREMIUM CTA — Imperial Gold Button (plain CSS)
+   ========================================== */
 
+:root{
+  /* Tweak these if you want a different gold tone */
+  --btn-gold-1: #f7d08a;
+  --btn-gold-2: #e2b356;
+  --btn-gold-3: #c18a3b;
+  --btn-gold-4: #f4d69e;
+  --btn-text:  #1a1409;        /* dark cacao text */
+  --btn-shadow: rgba(193,138,59,.28);
+  --btn-glow:   rgba(212,175,55,.45);
+}
 
+/* Base look */
+.btn-premium{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
 
+  padding: .95rem 2.1rem;
+  border: 0;
+  border-radius: 14px;
+  cursor: pointer;
+  user-select: none;
 
- 
+  font: 800 1rem/1.1 "Cairo", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  letter-spacing: .04em;
+  color: var(--btn-text);
 
+  background: linear-gradient(135deg,
+              var(--btn-gold-1) 0%,
+              var(--btn-gold-2) 38%,
+              var(--btn-gold-3) 62%,
+              var(--btn-gold-4) 100%);
+  background-size: 200% 100%;
 
-  
- 
+  box-shadow:
+    0 10px 24px var(--btn-shadow),
+    inset 0 1px 0 rgba(255,255,255,.55);
+  transition: transform .35s ease, box-shadow .35s ease, filter .35s ease;
+  will-change: transform, box-shadow, filter, background-position;
+  overflow: hidden;
 
+  /* Gentle life while idle */
+  animation: btnBgShift 7s linear infinite, btnPulse 3.8s ease-in-out infinite;
+}
 
- 
+/* Subtle moving gradient */
+@keyframes btnBgShift{
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
 
+/* Breathing shadow pulse */
+@keyframes btnPulse{
+  0%,100% {
+    box-shadow:
+      0 10px 24px var(--btn-shadow),
+      inset 0 1px 0 rgba(255,255,255,.55);
+    transform: translateY(0) scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    box-shadow:
+      0 16px 38px rgba(193,138,59,.38),
+      0 0 18px var(--btn-glow),
+      inset 0 1px 0 rgba(255,255,255,.65);
+    transform: translateY(-1px) scale(1.015);
+    filter: brightness(1.02);
+  }
+}
 
+/* Premium hover: elegant lift + gold sweep */
+.btn-premium:hover{
+  transform: translateY(-2px) scale(1.03);
+  box-shadow:
+    0 18px 44px rgba(193,138,59,.42),
+    0 0 26px var(--btn-glow),
+    inset 0 1px 0 rgba(255,255,255,.7);
+}
 
+/* The sweep highlight */
+.btn-premium::after{
+  content:"";
+  position:absolute;
+  top:0; left:-70%;
+  width:50%; height:100%;
+  background: linear-gradient(110deg,
+              rgba(255,255,255,0) 0%,
+              rgba(255,255,255,.34) 50%,
+              rgba(255,255,255,0) 100%);
+  transform: skewX(-18deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.btn-premium:hover::after{
+  opacity: 1;
+  animation: btnSweep 0.95s ease forwards;
+}
+
+@keyframes btnSweep{
+  to { left: 120%; }
+}
+
+/* Press/active */
+.btn-premium:active{
+  transform: translateY(0) scale(.985);
+  box-shadow:
+    0 8px 20px rgba(193,138,59,.32),
+    inset 0 1px 0 rgba(255,255,255,.55);
+}
+
+/* Keyboard focus — classy ring */
+.btn-premium:focus-visible{
+  outline: none;
+  box-shadow:
+    0 0 0 3px #fff,
+    0 0 0 6px rgba(212,175,55,.55),
+    0 18px 44px rgba(193,138,59,.42);
+}
+
+/* Reduced-motion safety */
+@media (prefers-reduced-motion: reduce){
+  .btn-premium{
+    animation: none !important;
+  }
+}
+
+/* ====== Conflict killer for legacy CTA styles ====== */
+/* If the element accidentally still has old classes, nuke their overlays */
+.btn-premium.banner-cta-btn::before,
+.btn-premium.banner-cta-btn::after,
+.btn-premium.banner-btn::before,
+.btn-premium.banner-btn::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Ensure our gradient wins over any inherited background */
+.btn-premium {
+  background: linear-gradient(135deg, var(--btn-gold-1), var(--btn-gold-2) 38%, var(--btn-gold-3) 62%, var(--btn-gold-4)) !important;
+  background-size: 200% 100% !important;
+}
+
+/* Make sure any inherited animation from old classes is removed */
+.btn-premium {
+  animation: btnBgShift 7s linear infinite, btnPulse 3.8s ease-in-out infinite !important;
+}
+
+.btn-premium,
+.btn-premium::before,
+.btn-premium::after {
+  box-shadow: none;            /* will be re-set by our premium styles */
+  filter: none;
+}
+
+/* =======================
+   PREMIUM BUTTON DESIGN
+   ======================= */
+
+/* Base premium button */
+.btn-premium {
+  --btn-gold-1: #c79a4a;
+  --btn-gold-2: #e6c27a;
+  --btn-gold-3: #f3d58c;
+  --btn-gold-4: #b8863b;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.9rem 2.2rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-family: 'Cairo', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  color: #fff;
+  background: linear-gradient(
+    135deg,
+    var(--btn-gold-1),
+    var(--btn-gold-2) 35%,
+    var(--btn-gold-3) 65%,
+    var(--btn-gold-4)
+  );
+  background-size: 200% 100%;
+
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+
+  /* subtle default state */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15),
+              0 0 0 rgba(212, 175, 55, 0.0);
+
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+
+  /* === Auto animation (premium idle) === */
+  animation: btnBgShift 6s linear infinite, btnPulse 4s ease-in-out infinite;
+}
+
+/* Hover animation — golden sweep + lift */
+.btn-premium:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25),
+              0 0 24px rgba(212, 175, 55, 0.45);
+  background-position: 100% 0;
+}
+
+/* Optional active (click) */
+.btn-premium:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) inset;
+}
+
+/* =======================
+   Keyframes
+   ======================= */
+
+/* Idle background gradient shift */
+@keyframes btnBgShift {
+  0%   { background-position: 0% 0; }
+  50%  { background-position: 100% 0; }
+  100% { background-position: 0% 0; }
+}
+
+/* Idle breathing glow */
+@keyframes btnPulse {
+  0%, 100% {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15),
+                0 0 0 rgba(212, 175, 55, 0.0);
+  }
+  50% {
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.18),
+                0 0 20px rgba(212, 175, 55, 0.25);
+  }
+}
