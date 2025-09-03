@@ -158,20 +158,7 @@ const ProductCard = ({ product }) => {
             : t("out_of_stock")}
         </span>
 
-        {/* Hover Add-to-Cart (desktop/hover) */}
-        <button
-          onClick={handleAddToCart}
-          disabled={displayedStock === 0}
-          className={`pc-cta-ontop ${
-            displayedStock > 0 ? "is-active" : "is-disabled"
-          }`}
-          aria-label={displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-        >
-          <FiShoppingCart className="inline icon" />
-          <span className="label">
-            {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-          </span>
-        </button>
+      
       </a>
 
       {/* Divider */}
