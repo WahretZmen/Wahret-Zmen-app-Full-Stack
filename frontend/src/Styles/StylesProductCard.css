@@ -171,9 +171,9 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   padding: 10px 12px;
   cursor: pointer;
 }
-.pc-card .sp-qty .sp-minus { border-inline-end: 1px solid #e6e1d8; }
-.pc-card .sp-qty .sp-plus  { border-inline-start: 1px solid #e6e1d8; }
-.pc-card .sp-qty .sp-btn:hover { background: #f2efe7 !important; }
+.pc-card .sp-qty .sp-minus { border-inline-end: 1px solid #000000; }
+.pc-card .sp-qty .sp-plus  { border-inline-start: 1px solid #000000; }
+.pc-card .sp-qty .sp-btn:hover { background: #000000 !important; }
 .pc-card .sp-qty .sp-btn:disabled { opacity: .5; cursor: not-allowed; }
 
 /* smaller phones */
