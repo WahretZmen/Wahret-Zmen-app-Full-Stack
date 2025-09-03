@@ -115,6 +115,10 @@
    Premium Collections Header
    =========================== */
 
+/* ===========================
+   Premium Collections Header
+   =========================== */
+
 .wz-collections-header {
   text-align: center;
   max-width: 980px;
@@ -122,23 +126,23 @@
   padding: 0 1rem;
 }
 
-.wz-collections-title {
+/* Title with premium gradient */
+.wz-collections-title.premium-gradient {
   font-family: ui-serif, Georgia, "Times New Roman", serif;
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: 0.2px;
   margin: 0 auto;
   text-align: center;
-  font-size: clamp(1.9rem, 3.6vw, 3.2rem);
+  font-size: clamp(2rem, 3.6vw, 3.4rem);
 
-  /* darker gradient gold/bronze */
   background: linear-gradient(
-    120deg,
-    #7a5a36 0%,
-    #a67c52 25%,
-    #caa74d 50%,
-    #a67c52 75%,
-    #7a5a36 100%
+    90deg,
+    #7a5a36 0%,   /* dark bronze */
+    #b6863b 20%,  /* golden bronze */
+    #d4af37 50%,  /* rich gold */
+    #b6863b 80%,  /* golden bronze */
+    #7a5a36 100%  /* dark bronze */
   );
   -webkit-background-clip: text;
   background-clip: text;
@@ -150,27 +154,27 @@
 }
 
 /* underline bar */
-.wz-collections-title::after {
+.wz-collections-title.premium-gradient::after {
   content: "";
   display: block;
-  width: 140px;
+  width: 160px;
   height: 4px;
   margin: 12px auto 0;
   border-radius: 999px;
-  background: linear-gradient(90deg, #7a5a36, #a67c52, #7a5a36);
-  box-shadow: 0 2px 12px rgba(166, 124, 82, 0.35);
+  background: linear-gradient(90deg, #7a5a36, #d4af37, #7a5a36);
+  box-shadow: 0 2px 14px rgba(212,175,55,.35);
 }
 
-/* description under title */
+/* Subtitle */
 .wz-collections-sub {
   margin: 14px auto 0;
-  color: #3a3a3a; /* darker than before */
-  font-size: clamp(0.98rem, 1.2vw, 1.1rem);
+  color: #3a3a3a;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
   line-height: 1.85;
   max-width: 820px;
-  padding: 0 0.25rem;
-  text-align: center; /* ⬅️ center align text */
+  text-align: center;
 }
+
 
 @media (min-width: 1024px) {
   .wz-collections-header { margin-top: 4rem; }

@@ -1,3 +1,4 @@
+// src/pages/products/ProductCard.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -8,6 +9,8 @@ import { addToCart } from "../../redux/features/cart/cartSlice";
 import { getImgUrl } from "../../utils/getImgUrl";
 
 import "../../Styles/StylesProductCard.css";
+/* ✅ Reuse the exact same CSS classes used in SingleProduct (sp-qty, sp-add, badges…) */
+import "../../Styles/StylesSingleProduct.css";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -59,20 +62,21 @@ const ProductCard = ({ product }) => {
       product?.labels?.includes?.("trending")
   );
 
-  const hasOld =
-    Number(product?.oldPrice) > Number(product?.newPrice || 0);
+  const hasOld = Number(product?.oldPrice) > Number(product?.newPrice || 0);
 
   const shopName =
     product?.storeName || product?.vendor || product?.brand || "";
 
-  // Quantity handler: clamp and handle NaN
+  // Quantity handlers (match SingleProduct behavior)
+  const clampMax = Math.max(1, displayedStock || 1);
   const handleQuantityChange = (e) => {
     const raw = Number(e.target.value);
     const safe = Number.isFinite(raw) ? raw : 1;
-    const max = Math.max(1, displayedStock || 1);
-    const capped = Math.max(1, Math.min(max, safe));
-    setQuantity(capped);
+    setQuantity(Math.max(1, Math.min(clampMax, safe)));
   };
+  const decQty = () => setQuantity((q) => Math.max(1, q - 1));
+  const incQty = () =>
+    setQuantity((q) => Math.min(clampMax, q + 1));
 
   // Add-to-Cart action
   const handleAddToCart = () => {
@@ -107,6 +111,7 @@ const ProductCard = ({ product }) => {
       dir={isRTL ? "rtl" : "ltr"}
     >
       {/* ===== Image + Badges ===== */}
+      {/* keep <a> for full reload (as you requested elsewhere) */}
       <a
         href={`/products/${product._id}`}
         className="pc-imgwrap relative block w-full bg-white"
@@ -157,8 +162,6 @@ const ProductCard = ({ product }) => {
             ? `${t("stock")}: ${displayedStock}`
             : t("out_of_stock")}
         </span>
-
-      
       </a>
 
       {/* Divider */}
@@ -239,35 +242,54 @@ const ProductCard = ({ product }) => {
             </div>
           )}
 
-          {/* Quantity selector */}
-          <div className="flex items-center justify-center text-sm">
-            <label className="mr-2">{t("quantity")}:</label>
-            <input
-              type="number"
-              min="1"
-              max={Math.max(1, displayedStock || 1)}
-              value={quantity}
-              onChange={handleQuantityChange}
-              className="quantity-input border px-2 w-14 text-center"
-              disabled={displayedStock === 0}
-            />
+          {/* ✅ Quantity stepper — identical structure/classes as SingleProduct */}
+          <div className="flex items-center justify-center mt-3 sp-cta-row">
+            <div className="sp-qty">
+              <button
+                type="button"
+                onClick={decQty}
+                disabled={displayedStock === 0}
+                aria-label={t("decrease")}
+              >
+                –
+              </button>
+
+              <input
+                type="number"
+                min="1"
+                max={clampMax}
+                value={quantity}
+                onChange={handleQuantityChange}
+                disabled={displayedStock === 0}
+                aria-label={t("quantity")}
+              />
+
+              <button
+                type="button"
+                onClick={incQty}
+                disabled={displayedStock === 0 || quantity >= clampMax}
+                aria-label={t("increase")}
+              >
+                +
+              </button>
+            </div>
           </div>
 
-          {/* Primary CTA */}
+          {/* ✅ Primary CTA — same classes & behavior as SingleProduct */}
           <div className="mt-3">
-            <button
-              onClick={handleAddToCart}
-              disabled={displayedStock === 0}
-              className={`add-to-cart-btn ${
-                displayedStock > 0 ? "" : "is-disabled"
-              }`}
-              aria-label={displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-            >
-              <FiShoppingCart className="inline icon" />
-              <span className="label">
-                {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-              </span>
-            </button>
+           <button
+  onClick={handleAddToCart}
+  disabled={displayedStock === 0}
+  className={`w-full py-3 px-6 text-white font-medium text-lg transition-all sp-add ${
+    displayedStock > 0
+      ? "bg-black hover:bg-[#111]"
+      : "bg-gray-300 cursor-not-allowed is-disabled"
+  }`}
+>
+  <FiShoppingCart className="inline mr-2" />
+  {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+</button>
+
           </div>
         </div>
       </div>

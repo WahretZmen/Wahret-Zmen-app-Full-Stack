@@ -353,18 +353,19 @@ const SingleProduct = () => {
               </button>
             </div>
 
-            <button
-              onClick={handleAddToCart}
-              disabled={selectedColor?.stock === 0}
-              className={`w-full sm:w-auto py-3 px-6 text-white font-medium text-lg transition-all sp-add ${
-                selectedColor?.stock > 0
-                  ? "bg-[#8B5E3B] hover:bg-[#6B4226]"
-                  : "bg-gray-300 cursor-not-allowed is-disabled"
-              }`}
-            >
-              <FiShoppingCart className="inline mr-2" />
-              {selectedColor?.stock > 0 ? t("add_to_cart") : t("out_of_stock")}
-            </button>
+          <button
+  onClick={handleAddToCart}
+  disabled={selectedColor?.stock === 0}
+  className={`w-full sm:w-auto py-3 px-6 text-white font-medium text-lg transition-all sp-add ${
+    selectedColor?.stock > 0
+      ? "bg-black hover:bg-[#111]"
+      : "bg-gray-300 cursor-not-allowed is-disabled"
+  }`}
+>
+  <FiShoppingCart className="inline mr-2" />
+  {selectedColor?.stock > 0 ? t("add_to_cart") : t("out_of_stock")}
+</button>
+
           </div>
         </div>
       </div>
