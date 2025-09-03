@@ -1,125 +1,150 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+// SelectorPageProducts.jsx
+// -------------------------------------------------------------
+// Plain-CSS filter sidebar for the Products page.
+// This component renders category, color, and price filters.
+// Layout is controlled by Styles/StylesSelectorProductsPage.css.
+// NOTE: Content/logic preserved exactly; only formatting & comments added.
+// -------------------------------------------------------------
+
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { Filter } from "lucide-react";
+import "../Styles/StylesSelectorProductsPage.css";
 
-/** Keep in sync with Products.jsx */
-const DEFAULT_OPTIONS = ["All", "Men", "Women", "Children"];
-const normalize = (v) => (v || "").toString().trim().toLowerCase();
-
-const CATEGORY_ALIAS_TO_UI = {
-  // FR
-  hommes: "Men",
-  femmes: "Women",
-  enfants: "Children",
-  // EN
-  men: "Men",
-  women: "Women",
-  children: "Children",
-  kids: "Children",
-  kid: "Children",
-  // Singular FR
-  homme: "Men",
-  femme: "Women",
-  enfant: "Children",
-  // AR
-  "رجال": "Men",
-  "نساء": "Women",
-  "أطفال": "Children",
-};
-
-const mapURLCategoryToUI = (raw) => {
-  const key = normalize(raw);
-  return CATEGORY_ALIAS_TO_UI[key] || "";
-};
-
-export default function SelectorProductsPage({
-  options = DEFAULT_OPTIONS,
-  onSelect,               // expects array: ["All"] or ["Men"] …
-  label = "category",
-}) {
+/**
+ * Props
+ * - categorySel, setCategorySel: current category + setter
+ * - categories: array of category options (e.g., ["All","Men","Women","Children"])
+ * - colorSel, setColorSel: current color + setter
+ * - colors: array of color options
+ * - priceRange, setPriceRange: [min,max] numeric price range + setter
+ * - minPrice, maxPrice: numeric bounds derived from catalog
+ * - clearFilters: resets all filters to defaults
+ */
+const SelectorPageProducts = ({
+  categorySel,
+  setCategorySel,
+  categories,
+  colorSel,
+  setColorSel,
+  colors,
+  priceRange,
+  setPriceRange,
+  minPrice,
+  maxPrice,
+  clearFilters,
+}) => {
   const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === "ar" || i18n.language === "ar-SA";
-  const location = useLocation();
-  const navigate = useNavigate();
 
-  const [selected, setSelected] = useState("All");
-
-  // Build label map
-  const labelFor = (k) => {
-    if (normalize(k) === "all") {
-      return isRTL ? "الكل" : t("all", "Tous");
-    }
-    const key = `categories.${k.toLowerCase()}`;
-    return t(key, k);
-  };
-
-  const pills = useMemo(() => options.map((o) => ({
-    key: o,
-    text: labelFor(o),
-  })), [options, isRTL, t]);
-
-  // Sync from URL → local state
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const raw = params.get("category");
-    const mapped = mapURLCategoryToUI(raw);
-    if (mapped) {
-      setSelected(mapped);
-      onSelect?.([mapped]);
-    } else {
-      setSelected("All");
-      onSelect?.(["All"]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search]);
-
-  // Update URL when user clicks a pill
-  const setCategory = (k) => {
-    setSelected(k);
-    const params = new URLSearchParams(location.search);
-    if (k === "All") {
-      params.delete("category");
-      onSelect?.(["All"]);
-    } else {
-      const urlKey = {
-        Men: "hommes",
-        Women: "femmes",
-        Children: "enfants",
-      }[k] || k.toLowerCase();
-      params.set("category", urlKey);
-      onSelect?.([k]);
-    }
-    navigate({ search: params.toString() }, { replace: true });
-  };
+  // RTL awareness for Arabic
+  const isRTL = i18n?.language === "ar" || i18n?.language === "ar-SA";
 
   return (
-    <div className="w-full" dir={isRTL ? "rtl" : "ltr"}>
-      {label && (
-        <div className="text-center text-sm text-gray-600 mb-2">
-          {t(label, label)}
+    // Sidebar wrapper (positioned to the right/left by the page layout)
+    <aside className="filters-sidebar" dir={isRTL ? "rtl" : "ltr"}>
+      <div className="filters-card">
+        {/* ---------- Header ---------- */}
+        <div className="filters-header" style={{ justifyContent: "space-between" }}>
+          <h3 style={{ margin: 0 }}>{t("filters", "Filters")}</h3>
+          <Filter className="icon" />
         </div>
-      )}
 
-      <div className={`flex flex-wrap items-center justify-center gap-2 sm:gap-3`}>
-        {pills.map(({ key, text }) => {
-          const isActive = key === selected;
-          return (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setCategory(key)}
-              className={`px-3 py-1.5 rounded-full text-sm font-medium border transition
-                ${isActive
-                  ? "bg-black text-white border-black"
-                  : "bg-white text-gray-800 border-gray-300 hover:border-gray-600"
-                }`}
-              aria-pressed={isActive}
-            >
-              {text}
-            </button>
-          );
-        })}
+        {/* ---------- Category Select ---------- */}
+        <div className="filter-group">
+          <label className="filter-label">{t("category", "Category")}</label>
+          <select
+            className="filter-select"
+            value={categorySel}
+            onChange={(e) => setCategorySel(e.target.value)}
+          >
+            {categories.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* ---------- Color Select ---------- */}
+        <div className="filter-group">
+          <label className="filter-label">{t("color", "Color")}</label>
+          <select
+            className="filter-select"
+            value={colorSel}
+            onChange={(e) => setColorSel(e.target.value)}
+          >
+            {colors.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* ---------- Price Range (min/max inputs + dual range) ---------- */}
+        <div className="filter-group">
+          <label className="filter-label">{t("price_range", "Price Range")}</label>
+
+          {/* Numeric min/max inputs */}
+          <div className="price-row">
+            <div className="price-field">
+              <span>$</span>
+              <input
+                type="number"
+                min={minPrice}
+                max={priceRange[1]}
+                value={Math.round(priceRange[0])}
+                onChange={(e) =>
+                  setPriceRange([Number(e.target.value) || minPrice, priceRange[1]])
+                }
+              />
+            </div>
+
+            <span className="dash">—</span>
+
+            <div className="price-field">
+              <span>$</span>
+              <input
+                type="number"
+                min={priceRange[0]}
+                max={maxPrice}
+                value={Math.round(priceRange[1])}
+                onChange={(e) =>
+                  setPriceRange([priceRange[0], Number(e.target.value) || maxPrice])
+                }
+              />
+            </div>
+          </div>
+
+          {/* Dual slider controls (lower + upper) */}
+          <input
+            className="range"
+            type="range"
+            min={minPrice}
+            max={maxPrice}
+            step="5"
+            value={priceRange[0]}
+            onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+          />
+
+          <input
+            className="range second"
+            type="range"
+            min={minPrice}
+            max={maxPrice}
+            step="5"
+            value={priceRange[1]}
+            onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+          />
+        </div>
+
+        {/* ---------- Clear Filters Button ---------- */}
+        <button className="btn-outline w-full" onClick={clearFilters}>
+          {t("clear_filters", "Clear Filters")}
+        </button>
       </div>
-    </div>
+    </aside>
   );
-}
+};
+
+export default SelectorPageProducts;

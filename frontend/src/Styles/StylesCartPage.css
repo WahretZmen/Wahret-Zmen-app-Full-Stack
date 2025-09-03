@@ -60,3 +60,35 @@
   background: #f9fafb;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
+
+
+/* ------- Cart item image: fill frame, no inner white space ------- */
+.cart-img-box {
+  /* a tidy, consistent frame */
+  flex: 0 0 clamp(220px, 26vw, 300px);
+  height: clamp(160px, 20vw, 200px);
+
+  border-radius: 12px;
+  overflow: hidden;
+
+  /* remove the “white space” source */
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.cart-img-box .cart-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;     /* fills frame (no bars), may crop a tiny bit */
+  display: block;
+}
+
+/* Mobile: full width, compact height */
+@media (max-width: 768px) {
+  .cart-img-box {
+    flex: 1 1 100%;
+    width: 100%;
+    height: 180px;
+  }
+}

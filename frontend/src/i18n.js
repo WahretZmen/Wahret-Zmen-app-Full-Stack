@@ -291,6 +291,9 @@ i18n
     wahret_zmen_collection: "Collection Wahret Zmen",
     no_products_found: "Aucun produit trouvé.",
 
+        Welcome_Banner_title: "Bienvenue à Wahret Zmen",
+          banner_img_alt: "Bannière de vêtements traditionnels Wahret Zmen",
+
     largebanner: {
       banner_aria: "Grande bannière de présentation",
       banner_img_alt: "Bannière de collection de Jebbas traditionnelles",
@@ -399,13 +402,9 @@ i18n
           },
 
 
-          search_input: {
-            placeholder: "Rechercher des produits..."  // French
-          },
-
+        
          
-          Welcome_Banner_title: "Bienvenue à Wahret Zmen",
-          banner_img_alt: "Bannière de vêtements traditionnels Wahret Zmen",
+      
           
 
 
@@ -654,6 +653,40 @@ changePassword: {
   "delivery_info_desc": "Livraison standard en 24–72 h selon votre ville."
 },
 
+  search_input: {
+            placeholder: "Rechercher des produits..."  // French
+          },
+
+          "products_page": {
+    "title": "مجموعة وهرة الزمان",
+    "overview": "في وهرة الزمان، نحافظ على جوهر الحرفية التونسية من خلال مزج التقنيات التقليدية مع اللمسات العصرية. سواء كنت تبحث عن قطعة فاخرة لمناسبة خاصة أو زيٍّ خالد، فإن مجموعتنا مصممة لتحتفل بجمال التراث.",
+    "list_view_note": "تصفح منتجاتنا المصنوعة يدوياً أدناه."
+  },
+
+  "search_placeholder": "ابحث عن المنتجات…",
+  "search_input": { "placeholder": "ابحث عن المنتجات..." },
+
+  "error_loading_products": "حدث خطأ أثناء تحميل المنتجات.",
+  "no_products_found": "لا توجد منتجات مطابقة لمرشحاتك.",
+  "load_more": "عرض المزيد",
+
+  "filters": "الفلاتر",
+  "category": "الفئة",
+  "color": "اللون",
+  "price_range": "نطاق السعر",
+  "clear_filters": "مسح الفلاتر",
+
+  "select_category": "الكل",
+  "select_color": "الكل",
+
+  "categories": {
+    "men": "رجال",
+    "women": "نساء",
+    "children": "أطفال",
+    "kids": "أطفال"
+    
+},
+
 about: {
   title: "À propos de nous",
   description: "Jebba tunisienne authentique, brodée à la main, mêlant héritage traditionnel et vision moderne en soie naturelle.",
@@ -750,8 +783,19 @@ about: {
         all: "الكل"
       },
 
-      search_input: { placeholder: "ابحث عن المنتجات..." },
+          
+            largebanner: {
+  banner_aria: "قسم البانر الرئيسي",
+  banner_img_alt: "لافتة مجموعة الجبب التقليدية",
+  brand: "وهرة الزّمان",
+  by_sabri: "بإدارة صبري",
+  description:
+    "اكتشفوا مجموعتنا الراقية من الجبب التقليدية، حيث تلتقي الأناقة الخالدة بالحرفية العصرية. كل قطعة تحكي قصة تراث وأسلوب.",
+  explore: "اكتشف المجموعة",
+  learn: "تعرّف على قصتنا"
+},
 
+    
       contentshowcase: {
         showcase_aria: "مجموعات مميزة",
         showcase_title: "أناقة خالدة، إرث حيّ",
@@ -779,21 +823,7 @@ about: {
         browse_all: "عرض كل المنتجات"
       },
 
-      footer: {
-        brand: "وهرة الزّمان",
-        description:
-          "ملابس تقليدية تونسية تجمع بين التراث والأناقة العصرية. موقعنا: سوق السوف، تونس.",
-        quickLinks: "روابط سريعة",
-        home: "الرئيسية",
-        products: "المنتجات",
-        about: "من نحن",
-        contact: "اتصل بنا",
-        contactUs: "اتصل بنا",
-        location: "سوق السوف، تونس",
-        followUs: "تابعونا",
-        rights: "جميع الحقوق محفوظة."
-      },
-
+    
 
           home_title: "وهرة الزّمان - الملابس التقليدية وبائعونا",
           home_meta_description: "مرحبًا بكم في وهرة الزّمان، استكشفوا مجموعتنا من الملابس التقليدية، والوافدات الجديدة، وآخر صيحات الموضة.",
@@ -812,10 +842,7 @@ about: {
           no_products_found: "لم يتم العثور على منتجات.",
           our_sellers_intro_html: "استكشفوا مجموعتنا من الملابس التقليدية المصنوعة بعناية وأصالة ثقافية. من <strong>القفاطين</strong> الأنيقة إلى <strong>الجباب</strong> التقليدية، اكتشفوا جمال التراث في كل قطعة.",
 
-          products_page: {
-            title: "مجموعة وهرة الزّمان",
-            overview: "في وهرة الزّمان، نحافظ على جوهر الحرفية التونسية من خلال مزج التقنيات التقليدية مع اللمسات العصرية. سواء كنت تبحث عن قطعة فاخرة لمناسبة خاصة أو زيٍّ خالد، فإن مجموعتنا مصممة لتحتفل بجمال التراث."
-          },
+      
             
  "shop_by_category": {
         "title": "تسوق حسب الفئة"
@@ -839,6 +866,27 @@ about: {
       },
 
       search_input: { placeholder: "ابحث عن المنتجات..." },
+
+      
+          stock: "المخزون",
+          out_of_stock: "غير متوفر",
+          trending: "رائج",
+          color: "اللون",
+          quantity: "الكمية",
+          add_to_cart: "أضف إلى السلة",
+
+          unknown_product: "منتج غير معروف",
+          category: "الفئة",
+          published: "تاريخ النشر",
+          unknown: "غير معروف",
+
+          no_description: "لا يوجد وصف متاح.",
+
+          
+          select_color: "اختر اللون",
+          selected: "المحدد",
+          default: "افتراضي",
+          available_colors: "الألوان المتوفرة",
 
      "craftsmanship": {
     "aria": "فنّ الحِرَف",
@@ -875,71 +923,15 @@ about: {
         }
       },
 
-      /* ⬇ everything stays INSIDE ar.translation ⬇ */
-      footer: {
-        brand: "وهرة الزّمان",
-        description: "ملابس تقليدية تونسية تجمع بين التراث والأناقة العصرية. موقعنا: سوق السوف، تونس.",
-        quickLinks: "روابط سريعة",
-        home: "الرئيسية",
-        products: "المنتجات",
-        about: "من نحن",
-        contact: "اتصل بنا",
-        contactUs: "اتصل بنا",
-        location: "سوق الّصوف، تونس",
-        followUs: "تابعونا",
-        rights: "جميع الحقوق محفوظة."
-      },
+     
 
 
-      products_page: {
-        title: "مجموعة وهرة الزّمان",
-        overview: "في وهرة الزّمان، نحافظ على جوهر الحرفية التونسية ..."
-      },
 
-      largebanner: {
-        banner_aria: "قسم البانر الرئيسي",
-        banner_img_alt: "لافتة مجموعة الجبب التقليدية",
-        brand: "وهرة الزّمان",
-        by_sabri: "بإدارة صبري",
-        description: "ااكتشف مجموعتنا الرائعة من الجبّايات التقليدية، حيث تلتقي الأناقة الخالدة بالحرفية المعاصرة. كل قطعة تروي قصة تراثية وأسلوبًا فريدًا.",
-        explore: "اكتشف المجموعة",
-        learn: "تعرّف على قصتنا"
-      },
 
-          
-            largebanner: {
-  banner_aria: "قسم البانر الرئيسي",
-  banner_img_alt: "لافتة مجموعة الجبب التقليدية",
-  brand: "وهرة الزّمان",
-  by_sabri: "بإدارة صبري",
-  description:
-    "اكتشفوا مجموعتنا الراقية من الجبب التقليدية، حيث تلتقي الأناقة الخالدة بالحرفية العصرية. كل قطعة تحكي قصة تراث وأسلوب.",
-  explore: "اكتشف المجموعة",
-  learn: "تعرّف على قصتنا"
-},
 
       
           
         
-          stock: "المخزون",
-          out_of_stock: "غير متوفر",
-          trending: "رائج",
-          color: "اللون",
-          quantity: "الكمية",
-          add_to_cart: "أضف إلى السلة",
-
-          unknown_product: "منتج غير معروف",
-          category: "الفئة",
-          published: "تاريخ النشر",
-          unknown: "غير معروف",
-
-          no_description: "لا يوجد وصف متاح.",
-
-          
-          select_color: "اختر اللون",
-          selected: "المحدد",
-          default: "افتراضي",
-          available_colors: "الألوان المتوفرة",
 
           "news": {
     "section_title": "أحدث الإلهامات",
@@ -965,7 +957,21 @@ about: {
             ]
           },
           
-
+ /* ⬇ everything stays INSIDE ar.translation ⬇ */
+       footer: {
+        brand: "وهرة الزّمان",
+        description:
+          "ملابس تقليدية تونسية تجمع بين التراث والأناقة العصرية. موقعنا: سوق السوف، تونس.",
+        quickLinks: "روابط سريعة",
+        home: "الرئيسية",
+        products: "المنتجات",
+        about: "من نحن",
+        contact: "اتصل بنا",
+        contactUs: "اتصل بنا",
+        location: "سوق السوف، تونس",
+        followUs: "تابعونا",
+        rights: "جميع الحقوق محفوظة."
+      },
        
           
          register: {
@@ -1184,48 +1190,77 @@ changePassword: {
 "continue_shopping": "مواصلة التسوق",
 "start_shopping": "ابدأ التسوق",
 
-"checkout": {
-  "title": "إتمام الطلب الآمن",
-  "subtitle": "أكمل طلبك بأمان",
-  "payment_method": "الدفع عند الاستلام",
-  "total_price": "السعر الإجمالي:",
-  "items": "المنتجات",
-  "personal_details": "المعلومات الشخصية",
-  "full_name": "الاسم الكامل",
-  "email": "البريد الإلكتروني",
-  "phone": "رقم الهاتف",
-  "shipping_address": "عنوان الشحن",
-  "address": "العنوان / الشارع",
-  "city": "المدينة",
-  "country": "الدولة",
-  "state": "المنطقة",
-  "zipcode": "الرمز البريدي",
-  "agree": "أوافق على",
-  "terms": "الشروط والأحكام",
-  "policy": "سياسة الشراء",
-  "and": "و",
-  "place_order": "إتمام الطلب",
-  "processing": "جارٍ معالجة طلبك...",
-  "order_confirmed": "تم تأكيد الطلب",
-  "success_message": "تم إرسال طلبك بنجاح!",
-  "go_to_orders": "عرض الطلبات",
-  "error_title": "خطأ!",
-  "error_message": "فشل في إرسال الطلب",
 
-  "cod_title": "الدفع عند الاستلام",
-  "cod_desc": "تدفع نقدًا عند تسليم الطلب. لا حاجة إلى دفع إلكتروني.",
-  "cod_point1": "يُفضّل تجهيز المبلغ الكامل إن أمكن.",
-  "cod_point2": "سيتواصل معك مندوب التوصيل قبل الوصول.",
-  "cod_point3": "الإرجاع والاستبدال يخضعان لسياسة المتجر المعتادة.",
+  "checkout": {
+    "title": "إتمام الطلب الآمن",
+    "subtitle": "أكمل طلبك بأمان",
+    "payment_method": "الدفع عند الاستلام",
+    "total_price": "السعر الإجمالي:",
+    "items": "المنتجات",
+    "personal_details": "المعلومات الشخصية",
+    "full_name": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "shipping_address": "عنوان الشحن",
+    "address": "العنوان / الشارع",
+    "city": "المدينة",
+    "country": "الدولة",
+    "state": "المنطقة",
+    "zipcode": "الرمز البريدي",
+    "agree": "أوافق على",
+    "terms": "الشروط والأحكام",
+    "policy": "سياسة الشراء",
+    "and": "و",
+    "place_order": "إتمام الطلب",
+    "processing": "جارٍ معالجة طلبك...",
+    "order_confirmed": "تم تأكيد الطلب",
+    "success_message": "تم إرسال طلبك بنجاح!",
+    "go_to_orders": "عرض الطلبات",
+    "error_title": "خطأ!",
+    "error_message": "فشل في إرسال الطلب",
 
-  "security_note": "آمن ومشفّر:",
-  "security_desc": "تُنقَل معلوماتك الشخصية بشكلٍ آمن.",
+    "cod_title": "الدفع عند الاستلام",
+    "cod_desc": "تدفع نقدًا عند تسليم الطلب. لا حاجة إلى دفع إلكتروني.",
+    "cod_point1": "يُفضّل تجهيز المبلغ الكامل إن أمكن.",
+    "cod_point2": "سيتواصل معك مندوب التوصيل قبل الوصول.",
+    "cod_point3": "الإرجاع والاستبدال يخضعان لسياسة المتجر المعتادة.",
 
-  "delivery_info_title": "معلومات التوصيل",
-  "delivery_info_desc": "توصيل قياسي خلال 24–72 ساعة حسب المدينة."
-}
-,
+    "security_note": "آمن ومشفّر:",
+    "security_desc": "تُنقَل معلوماتك الشخصية بشكلٍ آمن.",
 
+    "delivery_info_title": "معلومات التوصيل",
+    "delivery_info_desc": "توصيل قياسي خلال 24–72 ساعة حسب المدينة."
+  },
+
+  "products_page": {
+    "title": "مجموعة وهرة الزمان",
+    "overview": "في وهرة الزمان، نحافظ على جوهر الحرفية التونسية من خلال مزج التقنيات التقليدية مع اللمسات العصرية. سواء كنت تبحث عن قطعة فاخرة لمناسبة خاصة أو زيٍّ خالد، فإن مجموعتنا مصممة لتحتفل بجمال التراث.",
+    "list_view_note": "تصفح منتجاتنا المصنوعة يدوياً أدناه."
+  },
+
+  "search_placeholder": "ابحث عن المنتجات…",
+  "search_input": { "placeholder": "ابحث عن المنتجات..." },
+
+  "error_loading_products": "حدث خطأ أثناء تحميل المنتجات.",
+  "no_products_found": "لا توجد منتجات مطابقة لمرشحاتك.",
+  "load_more": "عرض المزيد",
+
+  "filters": "الفلاتر",
+  "category": "الفئة",
+  "color": "اللون",
+  "price_range": "نطاق السعر",
+  "clear_filters": "مسح الفلاتر",
+
+  "select_category": "الكل",
+  "select_color": "الكل",
+
+  "categories": {
+    "men": "رجال",
+    "women": "نساء",
+    "children": "أطفال",
+    "kids": "أطفال"
+    
+},
         about: {
   title: "حولنا",
   description: "جبّة تونسية أصيلة، مطرّزة يدويًا بلمسة تقليدية ورؤية عصرية من الحرير الطبيعي.",

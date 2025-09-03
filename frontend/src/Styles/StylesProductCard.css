@@ -1,168 +1,197 @@
+/* ==========================================================================
+   ProductCard.css  (Styles for ProductCard.jsx)
+   Organized with sections + comments
+   ========================================================================== */
+
+
 /* =============================
-   Flat Product Card (no radius)
-   Matches reference grid card.
+   Base Card (Flat, no radius)
    ============================= */
-
-/* Base tile — no rounded corners */
-.pc-card{
-  background:#fff;
-  border:1px solid #e6e6e6;
-  border-radius:0;                 /* NO RADIUS */
-  overflow:hidden;
-  width:100%;
-  max-width:280px;
-  margin:0 auto;
-  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  display:flex;
-  flex-direction:column;
-  box-shadow:0 2px 10px rgba(0,0,0,.04);
+.pc-card {
+  background: #fff;
+  border: 1px solid #e6e6e6;
+  border-radius: 0;                 /* NO RADIUS */
+  overflow: hidden;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 10px rgba(0,0,0,.04);
 }
-.pc-card:hover{
-  transform:translateY(-4px);
-  border-color:#dcdcdc;
-  box-shadow:0 10px 20px rgba(0,0,0,.08);
+.pc-card:hover {
+  transform: translateY(-4px);
+  border-color: #dcdcdc;
+  box-shadow: 0 10px 20px rgba(0,0,0,.08);
 }
 
-/* Image area — perfect square with margin */
-.pc-imgwrap{
-  display:block;
-  width:100%;
-  aspect-ratio:1/1;
-  background:#fff;
-  position:relative;
-  overflow:hidden;
-  border-radius:0;                /* NO RADIUS */
+
+/* =============================
+   Image Area
+   ============================= */
+.pc-imgwrap {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1/1;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0;                /* NO RADIUS */
 }
-.pc-img{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  display:block;
-  padding:16px;
+.pc-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  padding: 16px;
 }
 
-/* Thin divider like the ref under image */
-.pc-divider{
-  width:100%;
-  height:1px;
-  background:#ededed;
+
+/* =============================
+   Divider under image
+   ============================= */
+.pc-divider {
+  width: 100%;
+  height: 1px;
+  background: #ededed;
 }
 
-/* Body */
-.pc-body{
-  padding:14px 14px 16px;
-  text-align:center;
+
+/* =============================
+   Card Body
+   ============================= */
+.pc-body {
+  padding: 14px 14px 16px;
+  text-align: center;
 }
 
-/* Title (two lines max) */
-.pc-title{
-  display:block;
-  font-size:14px;
-  font-weight:700;
-  color:#1f1f1f;
-  line-height:1.35;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
+/* Title (two lines max, clamp) */
+.pc-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1f1f1f;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  overflow:hidden;
-  min-height:38px;
+  overflow: hidden;
+  min-height: 38px;
 }
 
 /* Boutique line */
-.pc-shop{ font-size:12px; color:#6b7280; margin-top:2px; }
-.pc-shop-label{ color:#9aa0a6; }
-.pc-shop-name{ color:#1e3a8a; text-decoration:none; }
-.pc-shop-name:hover{ text-decoration:underline; }
+.pc-shop { font-size: 12px; color: #6b7280; margin-top: 2px; }
+.pc-shop-label { color: #9aa0a6; }
+.pc-shop-name { color: #1e3a8a; text-decoration: none; }
+.pc-shop-name:hover { text-decoration: underline; }
 
 /* Price row */
-.pc-price{
-  margin-top:8px;
-  display:flex; justify-content:center; align-items:center; gap:10px;
-  font-size:14px;
+.pc-price {
+  margin-top: 8px;
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  gap: 10px;
+  font-size: 14px;
 }
-.pc-old{ color:#9aa0a6; text-decoration:line-through; font-weight:600; }
-.pc-new{ color:#111; font-weight:800; }
+.pc-old { color: #9aa0a6; text-decoration: line-through; font-weight: 600; }
+.pc-new { color: #111; font-weight: 800; }
 
-/* Always-visible bottom CTA in ref is not present;
-   we keep hover panel for button, but ensure NO radius anywhere. */
-.pc-cta{
-  margin-top:10px;
-  display:inline-flex; align-items:center; justify-content:center;
-  width:100%; height:40px;
-  background:#111; color:#fff;
-  font-size:12px; font-weight:800; letter-spacing:.4px;
-  text-transform:uppercase;
-  border:1px solid #111;
-  border-radius:0;                /* NO RADIUS */
+
+/* =============================
+   CTA (Call to Action buttons)
+   ============================= */
+.pc-cta {
+  margin-top: 10px;
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center;
+  width: 100%; 
+  height: 40px;
+  background: #111; 
+  color: #fff;
+  font-size: 12px; 
+  font-weight: 800; 
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  border: 1px solid #111;
+  border-radius: 0;                /* NO RADIUS */
   transition: filter .2s ease, transform .2s ease, box-shadow .2s ease;
 }
-.pc-cta:hover{ filter:brightness(0.95); transform:translateY(-1px); box-shadow:0 8px 14px rgba(0,0,0,.12); }
-.pc-cta--disabled{ background:#cfcfcf; border-color:#cfcfcf; cursor:not-allowed; }
+.pc-cta:hover { filter: brightness(0.95); transform: translateY(-1px); box-shadow: 0 8px 14px rgba(0,0,0,.12); }
+.pc-cta--disabled { background: #cfcfcf; border-color: #cfcfcf; cursor: not-allowed; }
 
-/* Hover CTA on image (kept) — NO radius */
-.pc-cta-ontop{
-  border:none;
-  border-radius:0 !important;     /* override rounded-full from JSX */
-  background:#111;
-  color:#fff;
-  font-weight:700;
+/* Hover CTA on image */
+.pc-cta-ontop {
+  border: none;
+  border-radius: 0 !important;
+  background: #111;
+  color: #fff;
+  font-weight: 700;
 }
 
-/* Badges — squared */
-.product-badge{
-  position:absolute;
-  z-index:10;
-  background-color:rgba(255,255,255,0.95);
-  padding:4px 10px;
-  border-radius:0;                /* NO RADIUS */
-  font-size:0.75rem;
-  font-weight:600;
-  color:#000;
-  box-shadow:0 2px 6px rgba(0,0,0,0.2);
-}
-.trending-badge{ top:10px; left:50%; transform:translateX(-50%); }
-.stock-badge{ bottom:10px; left:50%; transform:translateX(-50%); }
 
-/* Hover panel: show extra info + bottom button on hover (like left card) */
-.pc-extra{
-  max-height:0;
-  overflow:hidden;
-  opacity:0;
-  transition:max-height .3s ease, opacity .25s ease;
+/* =============================
+   Badges
+   ============================= */
+.product-badge {
+  position: absolute;
+  z-index: 10;
+  background-color: rgba(255,255,255,0.95);
+  padding: 4px 10px;
+  border-radius: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #000;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.trending-badge { top: 10px; left: 50%; transform: translateX(-50%); }
+.stock-badge { bottom: 10px; left: 50%; transform: translateX(-50%); }
+
+
+/* =============================
+   Extra info (hover panel)
+   ============================= */
+.pc-extra {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height .3s ease, opacity .25s ease;
 }
 .pc-card:hover .pc-extra,
-.pc-card:focus-within .pc-extra{
-  max-height:380px;
-  opacity:1;
-}
-
-/* Responsive */
-@media screen and (max-width: 768px){
-  .pc-card{ max-width: 45vw; }
-  .pc-title{ font-size:13px; min-height:34px; }
-  .pc-price{ font-size:13px; gap:8px; }
-}
-@media screen and (max-width: 480px){
-  .pc-card{ max-width: 90vw; }
-}
-
-/* Give space between available colors and quantity input */
-.product-card .color-list {
-  margin-bottom: 14px;   /* 🔥 adds spacing under the colors */
-}
-
-.product-card .flex.items-center.justify-center.text-sm {
-  margin-top: 10px;      /* 🔥 ensures gap above quantity row */
+.pc-card:focus-within .pc-extra {
+  max-height: 380px;
+  opacity: 1;
 }
 
 
-/* =======================
-   Your original styles (kept)
-   with RADIUS forced to 0
-   ======================= */
+/* =============================
+   Responsive adjustments
+   ============================= */
+@media screen and (max-width: 768px) {
+  .pc-card { max-width: 45vw; }
+  .pc-title { font-size: 13px; min-height: 34px; }
+  .pc-price { font-size: 13px; gap: 8px; }
+}
+@media screen and (max-width: 480px) {
+  .pc-card { max-width: 90vw; }
+}
+
+
+/* =============================
+   Spacing tweaks
+   ============================= */
+.product-card .color-list { margin-bottom: 14px; }
+.product-card .flex.items-center.justify-center.text-sm { margin-top: 10px; }
+
+
+/* =============================
+   Original overrides (kept)
+   ============================= */
 .product-card {
   background: white;
-  border-radius: 0;               /* forced */
+  border-radius: 0;
   box-shadow: 0 6px 24px rgba(0,0,0,0.08);
   overflow: hidden;
   transition: transform 0.35s ease, box-shadow 0.35s ease;
@@ -177,16 +206,17 @@
   animation: fadeInCard 0.8s ease-in-out;
 }
 .product-card img { background-color:#fff; padding:10px; }
-@keyframes fadeInCard { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fadeInCard { from { opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
 .product-card:hover { transform: scale(1.04); box-shadow: 0 10px 28px rgba(0,0,0,0.15); }
 
+/* Product image container */
 .product-image-container {
   position: relative;
   width: 100%;
   height: 220px;
   overflow: hidden;
   background: linear-gradient(135deg, #fef9f5, #fffdfb);
-  border-radius:0;                /* forced */
+  border-radius:0;
 }
 .product-image-container img {
   width: 100%;
@@ -198,27 +228,28 @@
 }
 .product-card:hover .product-image-container img { transform: scale(1.1) rotate(0.5deg); }
 
+/* Stock + trending badge colors */
 .stock-badge.in-stock { background-color:#16a34a; }
 .stock-badge.out-of-stock { background-color:#dc2626; }
 .trending-badge { background-color:#dc2626; top:36px; }
 
-/* description / price text (kept) */
+/* Description + price text */
 .product-description { font-size:0.9rem; color:#6b7280; min-height:40px; }
 .product-price { font-size:1.2rem; color:#8B5C3E; font-weight:600; margin-top:0.3rem; }
 .product-price .old { font-size:0.875rem; text-decoration:line-through; color:#9ca3af; margin-right:0.5rem; }
 
-/* color chips + inputs squared */
+/* Color chips + input */
 .color-list { display:flex; flex-wrap:wrap; gap:0.25rem; justify-content:center; font-size:0.75rem; margin-top:0.3rem; }
 .color-list li { background:#f3f4f6; padding:0.25rem 0.5rem; border:1px solid #d1d5db; transition:background 0.3s ease; border-radius:0; }
 .color-list li:hover { background:#e2e8f0; }
 .quantity-input { width:3.5rem; text-align:center; padding:0.25rem; border:1px solid #d1d5db; border-radius:0; }
 
-/* original bottom add-to-cart — squared now */
+/* Bottom add-to-cart (squared variant) */
 .sp-square .sp-add,
 .sp-square .add-to-cart-btn {
-  border-radius: 0 !important;      /* sharp edges */
+  border-radius: 0 !important;
   width: 100% !important;
-  background: #2c2c2c !important;   /* dark neutral (like capture) */
+  background: #2c2c2c !important;
   color: #fff !important;
   font-size: 1rem !important;
   font-weight: 700 !important;
@@ -231,14 +262,48 @@
   transition: background 0.25s ease;
   cursor: pointer;
 }
-
 .sp-square .sp-add:hover,
-.sp-square .add-to-cart-btn:hover {
-  background: #000 !important;      /* deeper on hover */
-}
-
+.sp-square .add-to-cart-btn:hover { background: #000 !important; }
 .sp-square .sp-add:disabled,
-.sp-square .add-to-cart-btn:disabled {
-  background: #ccc !important;      /* greyed out if no stock */
-  cursor: not-allowed;
+.sp-square .add-to-cart-btn:disabled { background: #ccc !important; cursor: not-allowed; }
+
+
+/* =============================
+   List View (pc-list variant)
+   ============================= */
+.pc-list.pc-card {
+  max-width: 100%;
+  width: 100%;
+  border-radius: 0;
+}
+.pc-list {
+  display: grid;
+  grid-template-columns: 1fr;  /* mobile: stacked */
+  align-items: stretch;
+}
+@media (min-width: 768px) {
+  .pc-list { grid-template-columns: 320px 1fr; } /* desktop: image + content */
+}
+/* image wrapper in list */
+.pc-list .pc-list-imgwrap {
+  aspect-ratio: auto;
+  min-height: 220px;
+  height: 100%;
+}
+.pc-list .pc-img {
+  padding: 12px;
+  object-fit: contain;
+}
+/* body in list */
+.pc-list .pc-list-body {
+  padding: 16px 18px;
+  text-align: start;
+}
+.pc-list .pc-title {
+  min-height: auto;
+  -webkit-line-clamp: unset;
+}
+.pc-list .pc-extra--always {
+  max-height: none;
+  opacity: 1;
 }

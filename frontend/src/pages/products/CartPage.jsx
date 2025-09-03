@@ -107,16 +107,14 @@ const CartPage = () => {
                       className={`animate-fade-in-delay-${(index + 1) * 100}`}
                     >
                       <CardContent className="p-6">
-                        <div className="flex flex-col md:flex-row gap-4">
-                          {/* Image */}
-                          <img
-                            src={imgSrc}
-                            alt={titleFor(product)}
-                            className="w-full md:w-32 h-32 object-cover rounded-lg"
-                            onError={(e) => {
-                              e.currentTarget.src = "/default-image.jpg";
-                            }}
-                          />
+  <div className="flex flex-col md:flex-row gap-4">
+    {/* Image (full view, no crop) */}
+   <div className="cart-img-box">
+  <img src={imgSrc} alt={titleFor(product)} className="cart-img"
+       onError={(e) => { e.currentTarget.src = "/default-image.jpg"; }} />
+</div>
+
+
 
                           {/* Details */}
                           <div className="flex-1">

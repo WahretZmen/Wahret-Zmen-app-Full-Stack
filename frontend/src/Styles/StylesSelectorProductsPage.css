@@ -1,76 +1,230 @@
-/* === Container === */
+/* ===========================================
+   Styles/StylesSelectorProductsPage.css
+   Filters UI (inline + sidebar)
+   -------------------------------------------
+   - Inline/top-row filters (grid)
+   - Shared form controls (labels/selects)
+   - Price fields & dual range sliders
+   - Buttons (outline)
+   - RTL tweaks
+   - Responsive breakpoints
+   - Sidebar container sizing
+   =========================================== */
+
+
+/* ===============================
+   Filters Inline (top row)
+   =============================== */
+
 .selector-products-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 2rem;
-    padding: 0 1rem;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 12px;
+  align-items: end;
+  margin-bottom: 1.25rem;
+  padding: 0 1rem;
+}
+
+/* 4 items on desktop: cat / color / price / clear */
+.filters-inline .filter-item {
+  grid-column: span 3;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Price gets a bit more room */
+.filters-inline .price {
+  grid-column: span 4;
+}
+
+/* Clear button cell */
+.clear-btn {
+  grid-column: span 2;
+  height: 40px;
+  align-self: center;
+}
+
+
+/* =========================================
+   Labels & selects (match Products.css)
+   ========================================= */
+
+.filter-item__label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #3d2c1e;
+}
+
+.filter-item__select {
+  width: 100%;
+  border: 1px solid #d9d3c9;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  background: #fff;
+  color: #2b2b2b;
+  outline: none;
+  transition: border-color .2s ease;
+}
+.filter-item__select:focus {
+  border-color: #A67C52;
+}
+
+
+/* ==========================
+   Price fields / inputs
+   ========================== */
+
+.price-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.price-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid #d9d3c9;
+  border-radius: 10px;
+  padding: 6px 10px;
+  background: #fff;
+}
+
+.price-field input {
+  width: 90px;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  color: #2b2b2b;
+}
+
+.price-field span {
+  color: #7a6a5a;
+}
+
+.dash {
+  color: #7a6a5a;
+}
+
+
+/* ==========================
+   Dual range sliders
+   ========================== */
+
+.range-wrap {
+  margin-top: 6px;
+}
+
+.range {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: #eee9df;
+  outline: none;
+  border-radius: 999px;
+  margin-top: 4px;
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  background: #A67C52;
+  cursor: pointer;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+}
+
+.range.second::-webkit-slider-thumb {
+  background: #D4AF37;
+}
+
+
+/* ==========================
+   Buttons – outline style
+   ========================== */
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #fff;
+  color: #2b2b2b;
+  border: 1px solid #d9d3c9;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease;
+}
+
+.btn-outline:hover {
+  background: #f5f1ea;
+  border-color: #A67C52;
+}
+
+
+/* ============
+   RTL support
+   ============ */
+
+.selector-products-container[dir="rtl"] .price-row {
+  direction: rtl;
+}
+
+
+/* ==========================
+   Responsive breakpoints
+   ========================== */
+
+@media (max-width: 1024px) {
+  .selector-products-container {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
   }
-  
-  /* === Label === */
-  .selector-products-label {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: #3d2c1e;
-    text-align: center;
-    text-transform: uppercase;
+  .filters-inline .filter-item {
+    grid-column: span 3;
   }
-  
-  /* === Options Wrapper === */
-  .selector-options {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.75rem;
+  .filters-inline .price {
+    grid-column: span 6;
   }
-  
-  /* === Option Button === */
-  .selector-option {
-    display: flex;
-    align-items: center;
-    padding: 0.45rem 1rem;
-    font-size: 0.95rem;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    background-color: #f7f7f7;
-    color: #3d2c1e;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
+  .clear-btn {
+    grid-column: span 6;
   }
-  
-  .selector-option:hover {
-    background-color: #e7e3dc;
-    border-color: #d4af37;
-    color: #d4af37;
+}
+
+@media (max-width: 640px) {
+  .selector-products-container {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
   }
-  
-  /* === Active Style === */
-  .selector-option.active {
-    background-color: #d4af37;
-    color: white;
-    border-color: #d4af37;
+  .filters-inline .filter-item,
+  .filters-inline .price,
+  .clear-btn {
+    grid-column: span 4;
   }
-  
-  /* === Hidden Checkbox === */
-  .selector-option input {
-    display: none;
+}
+
+
+/* ==========================
+   Sidebar container sizing
+   ========================== */
+
+.filters-sidebar {
+  width: 100%;
+}
+
+/* Typical desktop sidebar width */
+@media (min-width: 1024px) {
+  .filters-sidebar {
+    width: 20rem; /* ~320px */
   }
-  
-  /* === RTL Support === */
-  .selector-products-container[dir="rtl"] .selector-option {
-    direction: rtl;
-  }
-  
-  /* === Responsive === */
-  @media (max-width: 768px) {
-    .selector-products-label {
-      font-size: 1.1rem;
-    }
-  
-    .selector-option {
-      font-size: 0.85rem;
-      padding: 0.4rem 0.9rem;
-    }
-  }
-  
+}
+
+/* Visibility on small screens is controlled by parent state (Products.jsx) */
