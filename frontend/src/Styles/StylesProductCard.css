@@ -135,19 +135,28 @@
 /* =============================
    Badges
    ============================= */
+/* ===== Badges (visible, top corners) ===== */
 .product-badge {
   position: absolute;
-  z-index: 10;
-  background-color: rgba(255,255,255,0.95);
-  padding: 4px 10px;
+  z-index: 20;
+  padding: 6px 10px;
   border-radius: 0;
   font-size: 0.75rem;
-  font-weight: 600;
-  color: #000;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  font-weight: 700;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  letter-spacing: .2px;
 }
-.trending-badge { top: 10px; left: 50%; transform: translateX(-50%); }
-.stock-badge { bottom: 10px; left: 50%; transform: translateX(-50%); }
+
+.badge-top-left  { top: 8px;  left: 8px; }
+.badge-top-right { top: 8px;  right: 8px; }
+
+.trending-badge { background-color: #dc2626; }   /* red */
+.stock-badge.in-stock { background-color: #16a34a; }   /* green */
+.stock-badge.out-of-stock { background-color: #dc2626; } /* red */
+
+/* Ensure the image wrapper is the positioning root */
+.pc-imgwrap { position: relative; }
 
 
 /* =============================
