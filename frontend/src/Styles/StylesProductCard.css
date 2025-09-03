@@ -1,15 +1,15 @@
 /* ==========================================================================
-   ProductCard.css
+   ProductCard.css — responsive/RTL-safe add-to-cart
    ========================================================================== */
 
-/* ===== Base Card ===== */
+/* ----- Base Card ----- */
 .pc-card {
   background: #fff;
   border: 1px solid #e6e6e6;
   border-radius: 0;
   overflow: hidden;
   width: 100%;
-  max-width: 280px;
+  max-width: 320px;                 /* desktop default in grids */
   margin: 0 auto;
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
   display: flex;
@@ -22,7 +22,12 @@
   box-shadow: 0 10px 20px rgba(0,0,0,.08);
 }
 
-/* ===== Image Area ===== */
+/* Expand to full width inside narrow/mobile containers (e.g., carousel) */
+@media (max-width: 1024px) {
+  .pc-card { max-width: 100%; width: 100%; }
+}
+
+/* ----- Image Area ----- */
 .pc-imgwrap {
   display: block;
   width: 100%;
@@ -34,10 +39,10 @@
 }
 .pc-img { width: 100%; height: 100%; object-fit: contain; display: block; padding: 16px; }
 
-/* ===== Divider ===== */
+/* ----- Divider ----- */
 .pc-divider { width: 100%; height: 1px; background: #ededed; }
 
-/* ===== Body ===== */
+/* ----- Body ----- */
 .pc-body { padding: 14px 14px 16px; text-align: center; }
 .pc-title {
   display: -webkit-box;
@@ -66,10 +71,49 @@
 .pc-old { color: #9aa0a6; text-decoration: line-through; font-weight: 600; }
 .pc-new { color: #111; font-weight: 800; }
 
-/* ===== CTA ===== */
-.pc-cta-ontop { border: none; border-radius: 0 !important; background: #111; color: #fff; font-weight: 700; }
+/* ----- On-image hover CTA (desktop) ----- */
+.pc-cta-ontop {
+  position: absolute;
+  left: 50%;
+  bottom: 12px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
 
-/* ===== PREMIUM Badges ===== */
+  /* responsive width that never overflows the image */
+  width: clamp(180px, 70%, 340px);
+  min-height: 44px;
+
+  border: none;
+  border-radius: 10px;
+  padding: 0 16px;
+  background: #111;
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: .2px;
+  transition: opacity .25s ease, transform .25s ease, background .25s ease;
+  pointer-events: auto;
+}
+.pc-cta-ontop .icon { margin-inline-end: 4px; }
+.pc-cta-ontop.is-active {
+  opacity: 0;                      /* hidden until hover on desktop */
+  transform: translate(-50%, 8px);
+}
+.group:hover .pc-cta-ontop.is-active {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.pc-cta-ontop.is-disabled { background: #9ca3af; cursor: not-allowed; }
+
+/* On touch devices show only the bottom CTA (no hover) */
+@media (hover: none) {
+  .pc-cta-ontop { display: none; }
+}
+
+/* ----- PREMIUM Badges ----- */
 .product-badge {
   position: absolute;
   z-index: 20;
@@ -89,22 +133,19 @@
 .badge-top-left  { top: 10px; left: 10px; }
 .badge-top-right { top: 10px; right: 10px; }
 
-.trending-badge {
-  background: linear-gradient(135deg, #ef4444, #b91c1c);
-}
-.stock-badge.in-stock {
-  background: linear-gradient(135deg, #16a34a, #15803d);
-}
-.stock-badge.out-of-stock {
-  background: linear-gradient(135deg, #ef4444, #b91c1c);
-}
+html[dir="rtl"] .badge-top-left  { left: auto; right: 10px; }
+html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
 
-/* ===== Extra (hover panel) ===== */
+.trending-badge { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+.stock-badge.in-stock { background: linear-gradient(135deg, #16a34a, #15803d); }
+.stock-badge.out-of-stock { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+
+/* ----- Extra (hover panel) ----- */
 .pc-extra { max-height: 0; overflow: hidden; opacity: 0; transition: max-height .3s ease, opacity .25s ease; }
 .pc-card:hover .pc-extra,
 .pc-card:focus-within .pc-extra { max-height: 380px; opacity: 1; }
 
-/* ===== Misc / Original overrides kept ===== */
+/* ----- Legacy .product-card block (keep look, fix width) ----- */
 .product-card {
   background: white;
   border-radius: 0;
@@ -125,59 +166,57 @@
 @keyframes fadeInCard { from { opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
 .product-card:hover { transform: scale(1.04); box-shadow: 0 10px 28px rgba(0,0,0,0.15); }
 
-.product-image-container {
-  position: relative;
-  width: 100%;
-  height: 220px;
-  overflow: hidden;
-  background: linear-gradient(135deg, #fef9f5, #fffdfb);
-  border-radius:0;
+/* Full width in narrow layouts */
+@media (max-width: 1024px) {
+  .product-card { max-width: 100%; width: 100%; }
 }
-.product-image-container img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  transition: transform 0.5s ease;
-  padding: .5rem;
-  will-change: transform;
-}
-.product-card:hover .product-image-container img { transform: scale(1.1) rotate(.5deg); }
 
-/* Description + price text */
+/* ----- Description + price text ----- */
 .product-description { font-size:.9rem; color:#6b7280; min-height:40px; }
 .product-price { font-size:1.2rem; color:#8B5C3E; font-weight:600; margin-top:.3rem; }
 .product-price .old { font-size:.875rem; text-decoration:line-through; color:#9ca3af; margin-right:.5rem; }
 
-/* Color chips + input */
+/* ----- Color chips + input ----- */
 .color-list { display:flex; flex-wrap:wrap; gap:.25rem; justify-content:center; font-size:.75rem; margin-top:.3rem; }
 .color-list li { background:#f3f4f6; padding:.25rem .5rem; border:1px solid #d1d5db; transition:background .3s ease; border-radius:0; }
 .color-list li:hover { background:#e2e8f0; }
 .quantity-input { width:3.5rem; text-align:center; padding:.25rem; border:1px solid #d1d5db; border-radius:0; }
 
-/* Bottom add-to-cart (square) */
-.sp-square .sp-add,
-.sp-square .add-to-cart-btn {
-  border-radius: 0 !important;
-  width: 100% !important;
-  background: #2c2c2c !important;
-  color: #fff !important;
-  font-size: 1rem !important;
-  font-weight: 700 !important;
-  letter-spacing: .3px;
-  padding: 14px 18px !important;
-  text-transform: uppercase;
-  text-align: center;
-  border: none !important;
-  box-shadow: none !important;
-  transition: background .25s ease;
-  cursor: pointer;
-}
-.sp-square .sp-add:hover,
-.sp-square .add-to-cart-btn:hover { background: #000 !important; }
-.sp-square .sp-add:disabled,
-.sp-square .add-to-cart-btn:disabled { background: #ccc !important; cursor: not-allowed; }
+/* ----- Primary bottom Add-to-Cart (mobile-friendly) ----- */
+.add-to-cart-btn {
+  width: 100%;
+  min-height: 48px;                  /* Android tap target */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
 
-/* ===== List View ===== */
+  background: #2c2c2c;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: .2px;
+
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: background .2s ease, transform .08s ease, box-shadow .2s ease;
+}
+.add-to-cart-btn .icon { margin-inline-end: 4px; }
+.add-to-cart-btn:hover { background: #000; }
+.add-to-cart-btn:active { transform: translateY(1px); }
+.add-to-cart-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(17,17,17,.6);
+}
+.add-to-cart-btn.is-disabled { background: #ccc; cursor: not-allowed; }
+
+/* Avoid uppercase/extra spacing for Arabic */
+html[dir="rtl"] .add-to-cart-btn,
+html[dir="rtl"] .pc-cta-ontop { text-transform: none; letter-spacing: 0; }
+
+/* ----- List View ----- */
 .pc-list.pc-card { max-width: 100%; width: 100%; border-radius: 0; }
 .pc-list { display: grid; grid-template-columns: 1fr; align-items: stretch; }
 @media (min-width: 768px) { .pc-list { grid-template-columns: 320px 1fr; } }
@@ -187,14 +226,8 @@
 .pc-list .pc-title { min-height: auto; -webkit-line-clamp: unset; }
 .pc-list .pc-extra--always { max-height: none; opacity: 1; }
 
-/* ===== Responsive ===== */
+/* ----- Additional responsive font tweaks ----- */
 @media screen and (max-width: 768px) {
-  .pc-card { max-width: 45vw; }
   .pc-title { font-size: 13px; min-height: 34px; }
   .pc-price { font-size: 13px; gap: 8px; }
 }
-@media screen and (max-width: 480px) { .pc-card { max-width: 90vw; } }
-
-/* Spacing tweaks */
-.product-card .color-list { margin-bottom: 14px; }
-.product-card .flex.items-center.justify-center.text-sm { margin-top: 10px; }

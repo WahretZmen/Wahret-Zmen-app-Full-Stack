@@ -12,8 +12,13 @@ import "../../Styles/StylesProductCard.css";
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  const lang = i18n.language;
   if (!i18n.isInitialized) return null;
+
+  const lang = i18n.language || "en";
+  const isRTL =
+    lang === "ar" ||
+    lang === "ar-SA" ||
+    (typeof lang === "string" && lang.startsWith("ar"));
 
   const [quantity, setQuantity] = useState(1);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
@@ -21,8 +26,7 @@ const ProductCard = ({ product }) => {
 
   if (!product) return null;
 
-  const title =
-    product?.translations?.[lang]?.title || product?.title || "";
+  const title = product?.translations?.[lang]?.title || product?.title || "";
   const description =
     product?.translations?.[lang]?.description || product?.description || "";
 
@@ -31,18 +35,20 @@ const ProductCard = ({ product }) => {
     product?.colors?.[0]?.colorName?.en ||
     t("default", "Default");
 
-  const displayedStock = product?.colors?.[0]?.stock ?? product?.stockQuantity ?? 0;
+  const displayedStock =
+    product?.colors?.[0]?.stock ?? product?.stockQuantity ?? 0;
 
-  // Robust trending detection
   const isTrending = Boolean(
     product?.trending ||
-    product?.isTrending ||
-    product?.tags?.includes?.("trending") ||
-    product?.labels?.includes?.("trending")
+      product?.isTrending ||
+      product?.tags?.includes?.("trending") ||
+      product?.labels?.includes?.("trending")
   );
 
-  const hasOld = Number(product?.oldPrice) > Number(product?.newPrice || 0);
-  const shopName = product?.storeName || product?.vendor || product?.brand || "";
+  const hasOld =
+    Number(product?.oldPrice) > Number(product?.newPrice || 0);
+  const shopName =
+    product?.storeName || product?.vendor || product?.brand || "";
 
   const handleQuantityChange = (e) => {
     const value = Number(e.target.value);
@@ -50,11 +56,12 @@ const ProductCard = ({ product }) => {
   };
 
   const handleAddToCart = () => {
-    const defaultColor = product?.colors?.[0] || {
-      colorName: { en: "Original", fr: "Original", ar: "أصلي" },
-      image: product?.coverImage,
-      stock: product?.stockQuantity,
-    };
+    const defaultColor =
+      product?.colors?.[0] || {
+        colorName: { en: "Original", fr: "Original", ar: "أصلي" },
+        image: product?.coverImage,
+        stock: product?.stockQuantity,
+      };
 
     if ((defaultColor?.stock ?? 0) > 0 && quantity > 0) {
       dispatch(addToCart({ ...product, quantity, color: defaultColor }));
@@ -68,11 +75,17 @@ const ProductCard = ({ product }) => {
     setZoomPosition({ x, y });
   };
   const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => { setIsHovering(false); setZoomPosition({ x: 50, y: 50 }); };
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+    setZoomPosition({ x: 50, y: 50 });
+  };
 
   return (
-    <div className="product-card pc-card group relative bg-white border border-gray-200 overflow-hidden transition-all duration-300 w-full sm:max-w-[280px] mx-auto">
-      {/* ===== Image + Premium Badges ===== */}
+    <div
+      className="product-card pc-card group relative bg-white border border-gray-200 overflow-hidden transition-all duration-300 w-full mx-auto"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
+      {/* ===== Image + Badges ===== */}
       <a
         href={`/products/${product._id}`}
         className="pc-imgwrap relative block w-full bg-white"
@@ -88,7 +101,7 @@ const ProductCard = ({ product }) => {
           style={{ transform: "none" }}
         />
 
-        {/* Trending (top-left) */}
+        {/* Trending (top-start) */}
         {isTrending && (
           <span
             className="product-badge badge-top-left trending-badge"
@@ -99,30 +112,42 @@ const ProductCard = ({ product }) => {
           </span>
         )}
 
-        {/* Stock (top-right) */}
+        {/* Stock (top-end) */}
         <span
           className={`product-badge badge-top-right stock-badge ${
             displayedStock > 0 ? "in-stock" : "out-of-stock"
           }`}
-          title={displayedStock > 0 ? `${t("stock")}: ${displayedStock}` : t("out_of_stock")}
-          aria-label={displayedStock > 0 ? `${t("stock")}: ${displayedStock}` : t("out_of_stock")}
+          title={
+            displayedStock > 0
+              ? `${t("stock")}: ${displayedStock}`
+              : t("out_of_stock")
+          }
+          aria-label={
+            displayedStock > 0
+              ? `${t("stock")}: ${displayedStock}`
+              : t("out_of_stock")
+          }
         >
-          {displayedStock > 0 ? `${t("stock")}: ${displayedStock}` : t("out_of_stock")}
+          {displayedStock > 0
+            ? `${t("stock")}: ${displayedStock}`
+            : t("out_of_stock")}
         </span>
 
-        {/* Hover Add-to-Cart */}
+        {/* Hover Add-to-Cart (desktop/hover) */}
         <button
           onClick={handleAddToCart}
           disabled={displayedStock === 0}
-          className={`pc-cta-ontop absolute bottom-3 left-50 translate-x-center px-4 py-2 text-sm font-medium text-white transition-all duration-300 ${
-            displayedStock > 0
-              ? "bg-[#111111] opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0"
-              : "bg-gray-400 cursor-not-allowed"
+          className={`pc-cta-ontop ${
+            displayedStock > 0 ? "is-active" : "is-disabled"
           }`}
-          style={{ left: "50%", transform: "translateX(-50%)" }}
+          aria-label={
+            displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")
+          }
         >
-          <FiShoppingCart className="inline" style={{ marginInlineEnd: 4 }} />
-          {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+          <FiShoppingCart className="inline icon" />
+          <span className="label">
+            {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+          </span>
         </button>
       </a>
 
@@ -138,24 +163,39 @@ const ProductCard = ({ product }) => {
 
         {shopName && (
           <div className="pc-shop">
-            <span className="pc-shop-label">{t("boutique", "Boutique")}:</span>{" "}
-            <a href="#" className="pc-shop-name">{shopName}</a>
+            <span className="pc-shop-label">
+              {t("boutique", "Boutique")}:
+            </span>{" "}
+            <a href="#" className="pc-shop-name">
+              {shopName}
+            </a>
           </div>
         )}
 
         <div className="pc-price text-sm font-bold text-gray-900 mt-1">
-          {hasOld && <span className="pc-old">{Number(product?.oldPrice).toFixed(2)} $</span>}
-          <span className="pc-new">{Number(product?.newPrice || 0).toFixed(2)} $</span>
+          {hasOld && (
+            <span className="pc-old">
+              {Number(product?.oldPrice).toFixed(2)} $
+            </span>
+          )}
+          <span className="pc-new">
+            {Number(product?.newPrice || 0).toFixed(2)} $
+          </span>
         </div>
 
         <div className="pc-extra">
           <p className="product-description text-sm text-gray-500">
-            {description.length > 60 ? `${description.slice(0, 60)}...` : description}
+            {description.length > 60
+              ? `${description.slice(0, 60)}...`
+              : description}
           </p>
 
           {displayedColor && (
             <p className="text-sm italic text-gray-500">
-              {t("color")}: <span className="text-gray-700 font-medium">{displayedColor}</span>
+              {t("color")}:{" "}
+              <span className="text-gray-700 font-medium">
+                {displayedColor}
+              </span>
             </p>
           )}
 
@@ -165,10 +205,18 @@ const ProductCard = ({ product }) => {
               <ul className="color-list flex flex-wrap justify-center gap-2 mt-1">
                 {product.colors.map((colorObj, idx) => (
                   <li
-                    key={colorObj.colorName?.[lang] || colorObj.colorName?.en || idx}
+                    key={
+                      colorObj.colorName?.[lang] ||
+                      colorObj.colorName?.[lang?.split("-")[0]] ||
+                      colorObj.colorName?.en ||
+                      idx
+                    }
                     className="px-2 py-1 border text-xs bg-gray-100"
                   >
-                    {colorObj.colorName?.[lang] || colorObj.colorName?.en || "-"}
+                    {colorObj.colorName?.[lang] ||
+                      colorObj.colorName?.[lang?.split("-")[0]] ||
+                      colorObj.colorName?.en ||
+                      "-"}
                   </li>
                 ))}
               </ul>
@@ -188,14 +236,22 @@ const ProductCard = ({ product }) => {
             />
           </div>
 
+          {/* Primary CTA (always visible; mobile-friendly) */}
           <div className="mt-3">
             <button
               onClick={handleAddToCart}
               disabled={displayedStock === 0}
-              className={`add-to-cart-btn ${displayedStock > 0 ? "" : "bg-gray-300 cursor-not-allowed"}`}
+              className={`add-to-cart-btn ${
+                displayedStock > 0 ? "" : "is-disabled"
+              }`}
+              aria-label={
+                displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")
+              }
             >
-              <FiShoppingCart className="inline" style={{ marginInlineEnd: 4 }} />
-              {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+              <FiShoppingCart className="inline icon" />
+              <span className="label">
+                {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+              </span>
             </button>
           </div>
         </div>

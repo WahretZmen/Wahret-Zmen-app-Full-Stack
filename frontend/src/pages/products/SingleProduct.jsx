@@ -25,12 +25,21 @@ const SingleProduct = () => {
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
   const [isHovering, setIsHovering] = useState(false);
 
+  // ---- derived / i18n text
   const translatedTitle =
     product?.translations?.[lang]?.title || product?.title || t("unknown_product");
   const translatedDescription =
     product?.translations?.[lang]?.description || product?.description || t("no_description");
   const categoryKey = product?.category?.toLowerCase();
   const translatedCategory = t(`categories.${categoryKey}`, product?.category || t("unknown"));
+
+  // ---- trending detection (robust)
+  const isTrending = Boolean(
+    product?.trending ||
+    product?.isTrending ||
+    product?.tags?.includes?.("trending") ||
+    product?.labels?.includes?.("trending")
+  );
 
   const sameColor = (a, b) => {
     if (!a || !b) return false;
@@ -97,11 +106,12 @@ const SingleProduct = () => {
     setZoomPosition({ x, y });
   };
 
-  // ---- NEW: discount & price helpers (kept non-destructive) ----
+  // ---- discount helpers
   const oldP = Number(product?.oldPrice || 0);
   const newP = Number(product?.newPrice || 0);
   const hasDiscount = oldP > 0 && newP > 0 && oldP > newP;
-  const saveAmount = hasDiscount ? (oldP - newP) : 0;
+  const saveAmount = hasDiscount ? oldP - newP : 0;
+  const savePercent = hasDiscount ? Math.round(((oldP - newP) / oldP) * 100) : 0;
 
   if (isLoading) {
     return (
@@ -126,9 +136,9 @@ const SingleProduct = () => {
       </h1>
 
       <div className="flex flex-col md:flex-row gap-8 sp-card">
-        {/* IMAGES AREA */}
+        {/* ================= IMAGES ================= */}
         <div className="flex-1 md:flex md:gap-4 sp-media">
-          {/* Desktop: vertical thumbs — ring is NOT clipped */}
+          {/* thumbs (desktop) */}
           <div className="hidden md:flex md:flex-col gap-3 w-20 overflow-visible">
             {activeGallery.map((img, idx) => {
               const isActive = idx === selectedImageIndex;
@@ -153,70 +163,81 @@ const SingleProduct = () => {
             })}
           </div>
 
-          {/* Main image */}
-          {/* Main image with arrows */}
-<div className="relative border border-[#A67C52] overflow-hidden group w-full sp-mainimg">
-  {/* Left Arrow */}
-  {activeGallery.length > 1 && (
-    <button
-      type="button"
-      className="sp-arrow sp-arrow-left"
-      onClick={() =>
-        setSelectedImageIndex(
-          (prev) => (prev - 1 + activeGallery.length) % activeGallery.length
-        )
-      }
-    >
-      ‹
-    </button>
-  )}
+          {/* main image + ARROWS + BADGES */}
+          <div className="relative border border-[#A67C52] overflow-hidden group w-full sp-mainimg">
+            {/* arrows */}
+            {activeGallery.length > 1 && (
+              <button
+                type="button"
+                className="sp-arrow sp-arrow-left"
+                onClick={() =>
+                  setSelectedImageIndex(
+                    (prev) => (prev - 1 + activeGallery.length) % activeGallery.length
+                  )
+                }
+              >
+                ‹
+              </button>
+            )}
 
-  {/* Main Image */}
-  <img
-    src={getImgUrl(activeGallery[selectedImageIndex] || selectedColor?.image)}
-    alt={translatedTitle}
-    onMouseEnter={handleMouseEnter}
-    onMouseMove={handleMouseMove}
-    onMouseLeave={handleMouseLeave}
-    className="w-full transition-transform duration-300 cursor-zoom-in object-contain"
-    style={{
-      transform:
-        isHovering && window.innerWidth > 768 ? "scale(2)" : "scale(1)",
-      transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
-    }}
-  />
+            <img
+              src={getImgUrl(activeGallery[selectedImageIndex] || selectedColor?.image)}
+              alt={translatedTitle}
+              onMouseEnter={handleMouseEnter}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              className="w-full transition-transform duration-300 cursor-zoom-in object-contain"
+              style={{
+                transform: isHovering && window.innerWidth > 768 ? "scale(2)" : "scale(1)",
+                transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
+              }}
+            />
 
-  {/* Right Arrow */}
-  {activeGallery.length > 1 && (
-    <button
-      type="button"
-      className="sp-arrow sp-arrow-right"
-      onClick={() =>
-        setSelectedImageIndex(
-          (prev) => (prev + 1) % activeGallery.length
-        )
-      }
-    >
-      ›
-    </button>
-  )}
+            {activeGallery.length > 1 && (
+              <button
+                type="button"
+                className="sp-arrow sp-arrow-right"
+                onClick={() =>
+                  setSelectedImageIndex((prev) => (prev + 1) % activeGallery.length)
+                }
+              >
+                ›
+              </button>
+            )}
 
-  {/* Stock Badge */}
-  <div
-    className={`absolute top-2 left-2 px-2 py-1 text-xs font-bold rounded-full text-white ${
-      selectedColor?.stock > 0
-        ? "bg-green-600 sp-stock sp-stock--ok"
-        : "bg-red-500 sp-stock sp-stock--out"
-    }`}
-  >
-    {selectedColor?.stock > 0
-      ? `${t("stock")}: ${selectedColor?.stock}`
-      : t("out_of_stock")}
-  </div>
-</div>
+            {/* 🔥 Premium badges on the image */}
+            {isTrending && (
+              <span
+                className="sp-badge sp-badge--trending sp-badge-top-left"
+                title={t("trending")}
+                aria-label={t("trending")}
+              >
+                {t("trending")}
+              </span>
+            )}
 
+            <span
+              className={`sp-badge sp-badge-top-right ${
+                (selectedColor?.stock ?? 0) > 0 ? "sp-badge--stock-ok" : "sp-badge--stock-out"
+              }`}
+              title={
+                (selectedColor?.stock ?? 0) > 0
+                  ? `${t("stock")}: ${selectedColor?.stock}`
+                  : t("out_of_stock")
+              }
+              aria-label={
+                (selectedColor?.stock ?? 0) > 0
+                  ? `${t("stock")}: ${selectedColor?.stock}`
+                  : t("out_of_stock")
+              }
+            >
+              {(selectedColor?.stock ?? 0) > 0
+                ? `${t("stock")}: ${selectedColor?.stock}`
+                : t("out_of_stock")}
+            </span>
+          </div>
 
-          {/* Mobile: thumbs wrap */}
+          {/* thumbs (mobile) */}
           <div className="mt-3 md:hidden flex flex-wrap gap-3 sp-thumbs">
             {activeGallery.map((img, idx) => {
               const isActive = idx === selectedImageIndex;
@@ -242,7 +263,7 @@ const SingleProduct = () => {
           </div>
         </div>
 
-        {/* DETAILS AREA */}
+        {/* ================= DETAILS ================= */}
         <div className="flex-1 flex flex-col gap-4 sp-right">
           <p className="text-gray-700 text-base sp-desc">{translatedDescription}</p>
 
@@ -261,24 +282,24 @@ const SingleProduct = () => {
             </p>
           </div>
 
-          {/* ---- UPDATED PRICE ROW (Chill & Lit style) ---- */}
+          {/* Price row + SAVE badge (amount recalculates from old/new) */}
           <div className="sp-price-row">
             {hasDiscount ? (
               <>
                 <span className="sp-old">{oldP.toFixed(2)} $</span>
                 <span className="sp-new">{newP.toFixed(2)} $</span>
                 <span className="sp-save">
-                  {t("save") || "ÉCONOMISEZ"} {saveAmount.toFixed(2)} $
+                  {t("save", "save")} {saveAmount.toFixed(2)} $
                 </span>
+                {/* optional % chip; keep if you like */}
+                {savePercent > 0 && <span className="sp-off">-{savePercent}%</span>}
               </>
             ) : (
               <span className="sp-new">{(newP || oldP).toFixed(2)} $</span>
             )}
           </div>
 
-         
-
-          {/* Color selector (kept) */}
+          {/* Color selector */}
           <div className="sp-block">
             <p className="text-lg font-medium text-[#6B4226] mb-2 sp-block-label">
               {t("select_color")}:
@@ -312,7 +333,7 @@ const SingleProduct = () => {
                 );
               })}
             </div>
-            <p className="mt-3 text-[#6B4226] text-sm">
+            <p className="mt-3 text-[#6B5E3B] text-sm">
               {t("selected")}:{" "}
               <strong>
                 {selectedColor?.colorName?.[lang] ||
@@ -322,7 +343,7 @@ const SingleProduct = () => {
             </p>
           </div>
 
-          {/* Qty + Add to cart (kept) */}
+          {/* Qty + Add to cart */}
           <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-4 sp-cta-row">
             <div className="flex items-center gap-3 sp-qty">
               <button
@@ -344,11 +365,12 @@ const SingleProduct = () => {
               <button
                 type="button"
                 onClick={() =>
-                  setQuantity((q) =>
-                    Math.min((selectedColor?.stock ?? 1), q + 1)
-                  )
+                  setQuantity((q) => Math.min((selectedColor?.stock ?? 1), q + 1))
                 }
-                disabled={(selectedColor?.stock ?? 0) === 0 || quantity >= (selectedColor?.stock ?? 1)}
+                disabled={
+                  (selectedColor?.stock ?? 0) === 0 ||
+                  quantity >= (selectedColor?.stock ?? 1)
+                }
               >
                 +
               </button>
@@ -367,8 +389,6 @@ const SingleProduct = () => {
               {selectedColor?.stock > 0 ? t("add_to_cart") : t("out_of_stock")}
             </button>
           </div>
-
-         
         </div>
       </div>
     </div>
