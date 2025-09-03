@@ -63,14 +63,13 @@ const Home = () => {
         className="home-container px-4 sm:px-6 md:px-10 lg:px-20 max-w-[1440px] mx-auto"
         dir={isRTL ? "rtl" : "ltr"}
       >
-        {/* ===================== Home Title ===================== */}
+      
        {/* ===================== Home Title ===================== */}
 <section className="py-10 text-center">
-  <h1 className={`home-title ${isRTL ? "rtl" : "ltr"}`}>
-  <span className="home-title__text">{t("home", "الرئيسية")}</span>
-  <span className="home-title__underline" />
-</h1>
-
+  <h1 className={`home-title sparkle ${isRTL ? "rtl" : "ltr"}`}>
+    <span className="home-title__text">{t("home", "الرئيسية")}</span>
+    <span className="home-title__underline" />
+  </h1>
 
   <p className="home-title__sub">
     <Trans i18nKey="home_intro_html">

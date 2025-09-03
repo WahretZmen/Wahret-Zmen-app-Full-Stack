@@ -663,29 +663,7 @@ changePassword: {
     "list_view_note": "تصفح منتجاتنا المصنوعة يدوياً أدناه."
   },
 
-  "search_placeholder": "ابحث عن المنتجات…",
-  "search_input": { "placeholder": "ابحث عن المنتجات..." },
-
-  "error_loading_products": "حدث خطأ أثناء تحميل المنتجات.",
-  "no_products_found": "لا توجد منتجات مطابقة لمرشحاتك.",
-  "load_more": "عرض المزيد",
-
-  "filters": "الفلاتر",
-  "category": "الفئة",
-  "color": "اللون",
-  "price_range": "نطاق السعر",
-  "clear_filters": "مسح الفلاتر",
-
-  "select_category": "الكل",
-  "select_color": "الكل",
-
-  "categories": {
-    "men": "رجال",
-    "women": "نساء",
-    "children": "أطفال",
-    "kids": "أطفال"
-    
-},
+  
 
 about: {
   title: "À propos de nous",

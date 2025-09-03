@@ -33,9 +33,11 @@ const Banner = () => {
 
       {/* ✨ Text Section */}
       <div className="banner-text-wrapper">
-        <ScrollFade direction="left-to-right" delay={0.5}>
-          <h1 className="banner-title">{t("banner_title")}</h1>
-        </ScrollFade>
+       <ScrollFade direction="left-to-right" delay={0.5}>
+  <h1 className="banner-title wz-royal-title">
+    {t("banner_title")}
+  </h1>
+</ScrollFade>
 
 <ScrollFade>
         <div className="banner-description">

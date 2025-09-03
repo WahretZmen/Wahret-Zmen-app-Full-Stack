@@ -70,6 +70,127 @@
     font-weight: 800;
     margin-bottom: 15px;
   }
+
+  /* =========================================================
+   PREMIUM HERO TITLE — Royal Shimmer (auto replay)
+   Replaces the old glowText animation for .banner-title
+   ========================================================= */
+
+/* stop previous animation on the title (full replace) */
+/* ==========================================
+   Banner Title — Premium Hover Animation
+   ========================================== */
+
+/* Base title (already animated with shimmer) */
+.banner-title {
+  transition: transform 0.5s ease, letter-spacing 0.5s ease, text-shadow 0.5s ease;
+  position: relative;
+  overflow: hidden; /* required for the hover shine */
+}
+
+/* Premium hover: elegant lift + golden sweep */
+.banner-title:hover {
+  transform: translateY(-2px) scale(1.02);
+  letter-spacing: 1.5px;
+  text-shadow:
+    0 0 6px rgba(224, 176, 94, 0.55),
+    0 0 14px rgba(224, 176, 94, 0.35),
+    0 0 22px rgba(224, 176, 94, 0.25);
+}
+
+/* Sweep shine effect */
+.banner-title::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.7) 45%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  transition: none;
+}
+
+/* Trigger shine on hover */
+.banner-title:hover::before {
+  animation: sweepShine 1.2s ease forwards;
+}
+
+/* Keyframes for shine sweep */
+@keyframes sweepShine {
+  from { left: -75%; }
+  to   { left: 125%; }
+}
+
+
+/* Keyframes */
+@keyframes wzRoyalReveal {
+  0%   { opacity: 0; filter: blur(3px); transform: translateY(10px); letter-spacing: .02em; }
+  35%  { opacity: 1; filter: blur(0);   transform: translateY(0);     letter-spacing: .014em; }
+  100% { letter-spacing: .006em; }
+}
+@keyframes wzRoyalSheen {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes wzRoyalLine {
+  0%,100% { width: 0; box-shadow: 0 0 0 rgba(212,175,55,0); }
+  25%,75% { width: 64%; box-shadow: 0 6px 18px rgba(212,175,55,.25); }
+}
+
+/* Apply the new animation */
+.wz-royal-title{
+  /* keep your base look from .banner-title */
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-align: center;
+
+  /* animated golden text */
+  background: linear-gradient(90deg,#8a5d3b 0%,#d4af37 30%,#fff4c6 50%,#d4af37 70%,#8a5d3b 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 0 1px 0 rgba(0,0,0,.06);
+
+  /* replaying animations */
+  animation:
+    wzRoyalReveal 900ms cubic-bezier(.2,.8,.2,1) forwards,
+    wzRoyalSheen 4.2s linear 1s infinite;
+
+  /* centering regardless of RTL/LTR */
+  display: inline-block;
+  margin-inline: auto;
+}
+
+/* breathing underline (auto replay) */
+.wz-royal-title::after{
+  content:"";
+  display:block;
+  height:6px;
+  width:0;
+  margin:.65rem auto 0 auto;
+  border-radius:999px;
+  background: linear-gradient(90deg,#c9853f,#e4c27f,#c9853f);
+  animation: wzRoyalLine 3.8s ease-in-out 200ms infinite;
+}
+
+/* Responsive sizing that matches your layout */
+.wz-royal-title{
+  font-size: clamp(1.6rem, 4.5vw, 3rem);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .wz-royal-title{ animation: none !important; background-position: 100% 50%; }
+  .wz-royal-title::after{ animation: none !important; width: 64%; }
+}
+
   
   .banner-text p {
     font-size: 1.125rem;
@@ -183,11 +304,22 @@
 
 
   
-  .banner-img:hover {
-  animation: spinOnce 0.8s ease-in-out;
-  cursor: pointer;
-  box-shadow: 0 10px 30px rgba(168, 117, 71, 0.25), 0 20px 40px rgba(255, 225, 180, 0.2);
+  /* Premium hover for Banner image */
+.banner-img {
+  transition: transform 0.6s ease, box-shadow 0.6s ease, filter 0.6s ease;
+  will-change: transform, box-shadow, filter;
 }
+
+.banner-img:hover {
+  transform: scale(1.05); /* smooth zoom */
+  filter: brightness(1.05) contrast(1.02);
+  box-shadow:
+    0 12px 28px rgba(0, 0, 0, 0.25),
+    0 0 22px rgba(212, 175, 55, 0.45),   /* soft golden glow */
+    0 0 48px rgba(212, 175, 55, 0.25);  /* extended glow */
+  cursor: pointer;
+}
+
 
 @keyframes spinOnce {
   from {

@@ -262,9 +262,10 @@ const Products = () => {
           </Helmet>
 {/* Title */}
 <FadeInSection duration={0.6}>
-<h2 className="products-title wz-title-shine wz-title-bounce page-title-desktop text-3xl sm:text-4xl font-bold font-serif mb-6 drop-shadow-lg mx-auto block text-center">
+ <h2 className="products-title bounce page-title-desktop text-3xl sm:text-4xl font-bold font-serif text-center mb-6 drop-shadow-lg">
   {t("products_page.title")}
 </h2>
+
 </FadeInSection>
 
 {/* Overview + Search */}
