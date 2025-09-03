@@ -253,7 +253,7 @@ const Products = () => {
   return (
     <FadeInSection>
       <div className="main-content">
-        <div className="container mx-auto pt-2 sm:pt-4 pb-4 px-4 sm:px-6 md:px-10 lg:px-20 max-w-[1440px]">
+        <div className="container mx-auto pt-8 sm:pt-12 md:pt-16 pb-4 px-4 sm:px-6 md:px-10 lg:px-20 max-w-[1440px]">
           <Helmet>
             <title>{t("products_page.title")} - Wahret Zmen</title>
           </Helmet>

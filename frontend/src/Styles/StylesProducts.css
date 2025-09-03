@@ -3,20 +3,15 @@
    — Plain CSS, organized & commented
    =========================== */
 
-
 /* ===========================
    Base Layout Helpers
    =========================== */
 
 /* Full-width container */
-.container-Products {
-  width: 100%;
-}
+.container-Products { width: 100%; }
 
 /* Ensure content area has enough height (prevents footer jump) */
-.main-content {
-  min-height: 80vh;
-}
+.main-content { min-height: 80vh; }
 
 /* Brand button (already in use) */
 .wahret-zmen-btn {
@@ -28,9 +23,7 @@
   font-weight: 500;
   transition: background-color 0.3s ease;
 }
-.wahret-zmen-btn:hover {
-  background-color: #8a5d3b;
-}
+.wahret-zmen-btn:hover { background-color: #8a5d3b; }
 
 /* Loader block spacing under navbar */
 .loader-wrapper {
@@ -41,16 +34,13 @@
   margin-top: 100px;
 }
 
-
 /* ===========================
    Typography & Spacing (Responsive)
    =========================== */
 
 /* Desktop: extra top margin for page title */
 @media (min-width: 1024px) {
-  .page-title-desktop {
-    margin-top: 3.5rem; /* ~ mt-14 */
-  }
+  .page-title-desktop { margin-top: 3.5rem; /* ~ mt-14 */ }
 }
 
 /* =============================
@@ -62,28 +52,15 @@
   50%      { transform: translateY(0); opacity: 0.9; }
   75%      { transform: translateY(4px); opacity: 1; }
 }
-
-.products-title.bounce {
-  display: inline-block;
-  animation: bounceFade 4s ease-in-out infinite;
-}
+.products-title.bounce { display: inline-block; animation: bounceFade 4s ease-in-out infinite; }
 
 /* ===== Title animations (auto-replay) ===== */
-
-/* Golden shine sweep */
 @keyframes shineSweep {
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
 }
 .wz-title-shine {
-  background: linear-gradient(
-    120deg,
-    #A67C52 0%,
-    #D4AF37 25%,
-    #fff6cc 50%,
-    #D4AF37 75%,
-    #A67C52 100%
-  );
+  background: linear-gradient(120deg,#A67C52 0%,#D4AF37 25%,#fff6cc 50%,#D4AF37 75%,#A67C52 100%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -91,44 +68,26 @@
   animation: shineSweep 3.2s linear infinite;
   will-change: background-position;
 }
+@keyframes bounceFade { 0%,100%{transform:translateY(0);opacity:.9} 50%{transform:translateY(-6px);opacity:1} }
+.wz-title-bounce { animation: bounceFade 5.2s ease-in-out infinite; will-change: transform, opacity; }
 
-/* Soft luxury bounce */
-@keyframes bounceFade {
-  0%, 100% { transform: translateY(0); opacity: .9; }
-  50%      { transform: translateY(-6px); opacity: 1; }
-}
-.wz-title-bounce {
-  animation: bounceFade 5.2s ease-in-out infinite;
-  will-change: transform, opacity;
-}
-
-/* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .wz-title-shine,
-  .wz-title-bounce {
-    animation: none !important;
-  }
+  .wz-title-shine, .wz-title-bounce { animation: none !important; }
 }
 
-
 /* ===========================
    Premium Collections Header
    =========================== */
 
-/* ===========================
-   Premium Collections Header
-   =========================== */
-
+/* ↑↑ Increased top margin here to push the title further down from navbar */
 .wz-collections-header {
   text-align: center;
   max-width: 980px;
-  margin: 3.25rem auto 2rem;
+  margin: 5rem auto 2rem;   /* was ~3.25rem */
   padding: 0 1rem;
 }
 
-/* Title with premium gradient */
 .wz-collections-title.premium-gradient {
-  margin-top: 8%;
   font-family: ui-serif, Georgia, "Times New Roman", serif;
   font-weight: 800;
   line-height: 1.15;
@@ -136,25 +95,14 @@
   margin: 0 auto;
   text-align: center;
   font-size: clamp(2rem, 3.6vw, 3.4rem);
-
-  background: linear-gradient(
-    90deg,
-    #7a5a36 0%,   /* dark bronze */
-    #b6863b 20%,  /* golden bronze */
-    #d4af37 50%,  /* rich gold */
-    #b6863b 80%,  /* golden bronze */
-    #7a5a36 100%  /* dark bronze */
-  );
+  background: linear-gradient(90deg,#7a5a36 0%,#b6863b 20%,#d4af37 50%,#b6863b 80%,#7a5a36 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-
   text-shadow: 0 1px 2px rgba(0,0,0,0.25);
   display: inline-block;
   padding-bottom: 12px;
 }
-
-/* underline bar */
 .wz-collections-title.premium-gradient::after {
   content: "";
   display: block;
@@ -176,36 +124,23 @@
   text-align: center;
 }
 
-
+/* Even more breathing room on desktop */
 @media (min-width: 1024px) {
-  .wz-collections-header { margin-top: 4rem; }
+  .wz-collections-header { margin-top: 6rem; } /* was 4rem */
 }
-
 
 /* ===========================
    Mobile adjustments
    =========================== */
-
 @media (max-width: 768px) {
-  .category-title {
-    font-size: 1.1rem;
-  }
-  .wahret-zmen-btn {
-    padding: 0.6rem 1.5rem;
-    font-size: 0.95rem;
-  }
+  .category-title { font-size: 1.1rem; }
+  .wahret-zmen-btn { padding: 0.6rem 1.5rem; font-size: 0.95rem; }
 }
-
-label input[type="checkbox"]:checked + span {
-  font-weight: bold;
-}
-
-
+label input[type="checkbox"]:checked + span { font-weight: bold; }
 
 /* ===========================
    Loader Responsiveness
    =========================== */
-
 @media (max-width: 768px) {
   .main-content { min-height: 50vh; }
   .loader-wrapper { margin-top: 40px; }
@@ -218,11 +153,9 @@ label input[type="checkbox"]:checked + span {
   .loader-wrapper { margin-top: 60px; }
 }
 
-
 /* ===========================
    Grid: Center cards on narrow layouts
    =========================== */
-
 @media (max-width: 768px) {
   .grid {
     display: grid;
@@ -232,35 +165,19 @@ label input[type="checkbox"]:checked + span {
     padding: 0 1rem;
   }
 }
-
-.product-card {
-  margin: 0 auto;
-  margin-top: 50px !important;
-}
-
-@media (max-width: 480px) {
-  .products-title {
-    margin-top: 2.5rem !important;
-  }
-}
-
+.product-card { margin: 0 auto; margin-top: 50px !important; }
+@media (max-width: 480px) { .products-title { margin-top: 2.5rem !important; } }
 
 /* ===========================
    Sidebar spacing on mobile
    =========================== */
-
 @media (max-width: 1024px) {
-  aside .card,
-  aside .filters-card {
-    margin-bottom: 1rem;
-  }
+  aside .card, aside .filters-card { margin-bottom: 1rem; }
 }
-
 
 /* ===========================
    NEW: Plain-CSS Filters UI
    =========================== */
-
 .filters-card {
   background: #fff;
   border: 1px solid #e6e1d8;
@@ -268,32 +185,12 @@ label input[type="checkbox"]:checked + span {
   padding: 16px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.04);
 }
-
-.filters-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 18px;
-}
-.filters-header h3 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #2b2b2b;
-}
-
+.filters-header { display: flex; align-items: center; gap: 8px; margin-bottom: 18px; }
+.filters-header h3 { font-size: 1.05rem; font-weight: 700; color: #2b2b2b; }
 .icon { width: 20px; height: 20px; color: #A67C52; }
 .icon.sm { width: 16px; height: 16px; }
-
 .filter-group { margin-bottom: 16px; }
-
-.filter-label {
-  display: block;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #3d2c1e;
-  margin-bottom: 8px;
-}
-
+.filter-label { display: block; font-size: 0.9rem; font-weight: 600; color: #3d2c1e; margin-bottom: 8px; }
 .filter-select {
   width: 100%;
   border: 1px solid #d9d3c9;
@@ -308,173 +205,65 @@ label input[type="checkbox"]:checked + span {
 .filter-select:focus { border-color: #A67C52; }
 
 /* Price inputs + dual range sliders */
-.price-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 8px;
-}
+.price-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
 .price-field {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid #d9d3c9;
-  border-radius: 10px;
-  padding: 6px 10px;
-  background: #fff;
+  display: flex; align-items: center; gap: 6px;
+  border: 1px solid #d9d3c9; border-radius: 10px; padding: 6px 10px; background: #fff;
 }
-.price-field input {
-  width: 90px;
-  border: none;
-  outline: none;
-  font-size: 0.95rem;
-  color: #2b2b2b;
-}
+.price-field input { width: 90px; border: none; outline: none; font-size: 0.95rem; color: #2b2b2b; }
 .price-field span { color: #7a6a5a; }
 .dash { color: #7a6a5a; }
-
-.range {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 4px;
-  background: #eee9df;
-  outline: none;
-  border-radius: 999px;
-  margin-top: 4px;
-}
+.range { -webkit-appearance: none; width: 100%; height: 4px; background: #eee9df; outline: none; border-radius: 999px; margin-top: 4px; }
 .range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  background: #A67C52;
-  cursor: pointer;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.2);
+  -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 999px;
+  background: #A67C52; cursor: pointer; border: 2px solid #fff; box-shadow: 0 1px 6px rgba(0,0,0,0.2);
 }
 .range.second::-webkit-slider-thumb { background: #D4AF37; }
-
 
 /* ===========================
    NEW: Plain Buttons / Toolbar
    =========================== */
-
 .btn-outline {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  background: #fff;
-  color: #2b2b2b;
-  border: 1px solid #d9d3c9;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-weight: 600;
-  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: #fff; color: #2b2b2b; border: 1px solid #d9d3c9; border-radius: 10px;
+  padding: 10px 14px; font-weight: 600; cursor: pointer;
   transition: background .2s ease, border-color .2s ease;
 }
 .btn-outline:hover { background: #f5f1ea; border-color: #A67C52; }
-
-.w240 { width: 240px; }
-.w-full { width: 100%; }
-
+.w240 { width: 240px; } .w-full { width: 100%; }
 .lg-hidden { display: inline-flex; }
 @media (min-width: 1024px) { .lg-hidden { display: none; } }
 
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 24px;
-}
-.toolbar .left {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.toolbar .muted {
-  color: #6b6b6b;
-  font-size: 0.95rem;
-}
+.toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
+.toolbar .left { display: flex; align-items: center; gap: 12px; }
+.toolbar .muted { color: #6b6b6b; font-size: 0.95rem; }
 
-.view-toggle {
-  display: flex;
-  border: 1px solid #d9d3c9;
-  border-radius: 10px;
-  overflow: hidden;
-}
-.btn-toggle {
-  background: #fff;
-  padding: 8px 12px;
-  border: none;
-  outline: none;
-  cursor: pointer;
-}
+.view-toggle { display: flex; border: 1px solid #d9d3c9; border-radius: 10px; overflow: hidden; }
+.btn-toggle { background: #fff; padding: 8px 12px; border: none; outline: none; cursor: pointer; }
 .btn-toggle.active { background: #f5f1ea; }
-
 
 /* ===========================
    NEW: List-Mode Plain Card
    =========================== */
-
-.plain-card {
-  border: 1px solid #ece7dd;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
-}
-.plain-card__img img {
-  width: 100%;
-  height: 260px;
-  object-fit: cover;
-  display: block;
-}
+.plain-card { border: 1px solid #ece7dd; border-radius: 12px; overflow: hidden; background: #fff; }
+.plain-card__img img { width: 100%; height: 260px; object-fit: cover; display: block; }
 @media (min-width: 768px) {
-  .plain-card {
-    display: grid;
-    grid-template-columns: 320px 1fr;
-  }
+  .plain-card { display: grid; grid-template-columns: 320px 1fr; }
   .plain-card__img img { height: 100%; }
 }
-.plain-card__body {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.plain-card__top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-}
-.plain-card__title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #2b2b2b;
-  margin: 0 0 6px;
-}
+.plain-card__body { padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.plain-card__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.plain-card__title { font-size: 1.25rem; font-weight: 700; color: #2b2b2b; margin: 0 0 6px; }
 .plain-card__muted { color: #6b6b6b; font-size: 0.95rem; }
 .plain-card__price { font-size: 1.25rem; font-weight: 800; color: #A67C52; }
 
 .btn-gold {
-  background: #D4AF37;
-  color: #1a1a1a;
-  border: 1px solid #c39a2e;
-  border-radius: 10px;
-  padding: 10px 14px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: filter .2s ease;
+  background: #D4AF37; color: #1a1a1a; border: 1px solid #c39a2e; border-radius: 10px;
+  padding: 10px 14px; font-weight: 700; cursor: pointer; transition: filter .2s ease;
 }
 .btn-gold:hover { filter: brightness(0.95); }
-
 
 /* ===========================
    Spacing helper
    =========================== */
-
-.products-grid {
-  margin-top: 2rem;
-}
+.products-grid { margin-top: 2rem; }
