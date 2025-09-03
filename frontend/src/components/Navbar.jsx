@@ -12,7 +12,7 @@ import InputSearch from "./SearchInput";
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [navQuery, setNavQuery] = useState(""); // ✅ search input state (kept)
+  const [navQuery, setNavQuery] = useState(""); // kept
 
   const dropdownRef = useRef(null);
   const headerRef = useRef(null);
@@ -70,11 +70,20 @@ const Navbar = () => {
         <div className="navbar-left">
           <Link
             to="/"
-            className="logo"
+            className="logo premium-logo"
             onClick={() => setIsMobileMenuOpen(false)}
           >
-            <img src={logoImg} alt="Wahret Zmen Logo" className="logo-img" />
-            <span className="logo-text">{t("navbar.brand")}</span>
+            {/* Emblem with halo + shimmer overlay (decorative) */}
+            <span className="logo-emblem" aria-hidden="true">
+              <img src={logoImg} alt="Wahret Zmen Logo" className="logo-img" />
+              <span className="logo-halo" aria-hidden="true"></span>
+              <span className="logo-shimmer" aria-hidden="true"></span>
+            </span>
+
+            {/* Brand text with gentle shine */}
+            <span className="logo-text">
+              <span className="logo-text-shine">{t("navbar.brand")}</span>
+            </span>
           </Link>
         </div>
 
@@ -120,8 +129,6 @@ const Navbar = () => {
 
         {/* Right area: Search placed right before icons */}
         <div className="nav-icons">
-          
-
           <Link
             to="/cart"
             className="cart-icon"

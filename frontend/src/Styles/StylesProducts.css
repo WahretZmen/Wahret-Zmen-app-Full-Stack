@@ -92,6 +92,45 @@
   will-change: background-position;
 }
 
+.wz-collections-title {
+  font-family: ui-serif, Georgia, "Times New Roman", serif;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: 0.2px;
+  margin: 0 auto;               /* centers horizontally */
+  text-align: center;           /* ensure center alignment */
+  font-size: clamp(1.9rem, 3.6vw, 3.2rem);
+
+  /* darker gradient gold/bronze */
+  background: linear-gradient(
+    120deg,
+    #7a5a36 0%,     /* dark bronze */
+    #a67c52 25%,    /* medium bronze */
+    #caa74d 50%,    /* dark gold */
+    #a67c52 75%,
+    #7a5a36 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25); /* more contrast */
+  display: inline-block;
+  padding-bottom: 12px;
+}
+
+.wz-collections-title::after {
+  content: "";
+  display: block;
+  width: 140px;
+  height: 4px;
+  margin: 12px auto 0;   /* ensures center under title */
+  border-radius: 999px;
+  background: linear-gradient(90deg, #7a5a36, #a67c52, #7a5a36);
+  box-shadow: 0 2px 12px rgba(166, 124, 82, 0.35);
+}
+
+
 /* Soft luxury bounce */
 @keyframes bounceFade {
   0%, 100% { transform: translateY(0); opacity: .9; }

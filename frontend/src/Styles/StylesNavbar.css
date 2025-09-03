@@ -68,6 +68,181 @@
   transition: color 0.3s ease;
 }
 
+/* ===== Premium Logo Animations ======================================= */
+:root {
+  --wz-gold: #A67C52;                /* warm premium brown-gold */
+  --wz-gold-soft: rgba(166,124,82,0.45);
+  --wz-amber: hsl(35 80% 52% / 0.9); /* matching your brand theme */
+}
+
+.premium-logo {
+  position: relative;
+  gap: 12px;
+  outline: none;
+}
+
+.premium-logo:focus-visible {
+  box-shadow: 0 0 0 3px rgba(166,124,82,0.25);
+  border-radius: 12px;
+}
+
+/* Emblem wrapper so we can add effects around the image */
+.logo-emblem {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  /* soft radial vignette that gently breathes */
+  background: radial-gradient(120% 120% at 50% 50%, rgba(166,124,82,0.12), rgba(0,0,0,0) 60%);
+  animation: wz-float 6s ease-in-out infinite, wz-glow 4.8s ease-in-out infinite;
+  will-change: transform, filter;
+}
+
+.logo-img {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  z-index: 2;
+  transition: transform .5s cubic-bezier(.2,.8,.2,1);
+}
+
+/* Rotating conic halo — very subtle in idle, stronger on hover */
+.logo-halo {
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+  /* conic gradient ring with transparent gaps */
+  background:
+    conic-gradient(from 0deg,
+      transparent 0deg,
+      rgba(166,124,82,0.0) 40deg,
+      rgba(166,124,82,0.45) 60deg,
+      transparent 120deg,
+      transparent 360deg);
+  filter: blur(1.2px);
+  animation: wz-spin 8.5s linear infinite;
+  opacity: .55;
+}
+
+/* Diagonal shimmer bar sweeping across the emblem */
+.logo-shimmer {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg,
+      transparent 30%,
+      rgba(255,255,255,0.5) 45%,
+      rgba(255,255,255,0.85) 50%,
+      rgba(255,255,255,0.5) 55%,
+      transparent 70%);
+  transform: translateX(-160%) rotate(0.0001deg);
+  animation: wz-sweep 5.8s ease-in-out infinite;
+  mix-blend-mode: screen;
+  opacity: .25;
+}
+
+/* Brand text gentle shine (auto loops) */
+.logo-text {
+  position: relative;
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+
+.logo-text-shine {
+  background: linear-gradient(90deg,
+    currentColor 0%,
+    currentColor 38%,
+    var(--wz-gold) 50%,
+    currentColor 62%,
+    currentColor 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 300% 100%;
+  animation: wz-text-shimmer 6.2s ease-in-out infinite;
+}
+
+/* Hover/focus: elevate, micro-tilt, stronger halo & faster shimmer */
+.premium-logo:hover .logo-img,
+.premium-logo:focus-visible .logo-img {
+  transform: scale(1.035) rotate(-1.2deg);
+}
+
+.premium-logo:hover .logo-halo,
+.premium-logo:focus-visible .logo-halo {
+  opacity: .9;
+  animation-duration: 6.2s;
+  filter: blur(1px) drop-shadow(0 0 6px var(--wz-gold-soft));
+}
+
+.premium-logo:hover .logo-shimmer,
+.premium-logo:focus-visible .logo-shimmer {
+  animation-duration: 3.6s;
+  opacity: .38;
+}
+
+.premium-logo:hover .logo-emblem,
+.premium-logo:focus-visible .logo-emblem {
+  animation-duration: 4.8s, 3.6s;
+  box-shadow:
+    0 2px 10px rgba(0,0,0,0.06),
+    0 0 0 1px rgba(166,124,82,0.18),
+    0 0 22px rgba(166,124,82,0.18);
+}
+
+/* Keyframes */
+@keyframes wz-float {
+  0%, 100% { transform: translateY(0) }
+  50%      { transform: translateY(-1.5px) }
+}
+
+@keyframes wz-glow {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(166,124,82,0.0)); }
+  50%      { filter: drop-shadow(0 0 6px rgba(166,124,82,0.22)); }
+}
+
+@keyframes wz-spin {
+  to { transform: rotate(360deg) }
+}
+
+@keyframes wz-sweep {
+  0%   { transform: translateX(-160%) rotate(0.0001deg); }
+  48%  { transform: translateX(160%)  rotate(0.0001deg); }
+  100% { transform: translateX(160%)  rotate(0.0001deg); }
+}
+
+@keyframes wz-text-shimmer {
+  0%   { background-position: 0% 50% }
+  50%  { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .logo-emblem,
+  .logo-halo,
+  .logo-shimmer,
+  .logo-text-shine {
+    animation: none !important;
+  }
+  .logo-img { transform: none !important; }
+}
+
+/* Keep your existing hover color nudge on the parent link */
+.logo:hover {
+  color: #A67C52;
+  transform: translateY(-2px);
+}
+
 
 /* ========================== */
 /* 📁 Navigation Links */

@@ -1,7 +1,8 @@
 // SelectorPageProducts.jsx
 // -------------------------------------------------------------
 // Plain-CSS filter sidebar for the Products page with robust
-// category alias normalization + dedupe.
+// category alias normalization + dedupe + i18n (incl. "All").
+// (Color filter removed as requested.)
 // -------------------------------------------------------------
 
 import React, { useMemo } from "react";
@@ -55,9 +56,6 @@ const SelectorPageProducts = ({
   categorySel,
   setCategorySel,
   categories,
-  colorSel,
-  setColorSel,
-  colors,
   priceRange,
   setPriceRange,
   minPrice,
@@ -65,18 +63,20 @@ const SelectorPageProducts = ({
   clearFilters,
 }) => {
   const { t, i18n } = useTranslation();
-  const isRTL = i18n?.language === "ar" || i18n?.language === "ar-SA";
+  const isRTL =
+    i18n?.language === "ar" ||
+    i18n?.language === "ar-SA" ||
+    (typeof i18n?.language === "string" && i18n.language.startsWith("ar"));
 
   /* === Normalize & dedupe categories ===
      - Canonical keys: All, Men, Women, Children
-     - Keep original/custom categories if any (after canonicalization)
-     - Ensure "All" appears at most once and first when present
+     - Ensure "All" exists ONCE and is first
   */
   const normalizedCategories = useMemo(() => {
     const seen = new Set();
     const canonList = [];
 
-    // First pass: canonicalize, dedupe, keep order
+    // Start with provided categories
     for (const c of categories || []) {
       const canon = canonicalizeCategory(c);
       const k = String(canon);
@@ -86,13 +86,16 @@ const SelectorPageProducts = ({
       }
     }
 
-    // Reorder to put All first if present
-    const hasAll = canonList.includes("All");
-    const reordered = hasAll
-      ? ["All", ...canonList.filter((x) => x !== "All")]
-      : canonList;
+    // Ensure "All" is present
+    if (!seen.has("All")) {
+      canonList.unshift("All");
+    } else {
+      // move All to front if it exists elsewhere
+      const withoutAll = canonList.filter((x) => x !== "All");
+      canonList.splice(0, canonList.length, "All", ...withoutAll);
+    }
 
-    return reordered;
+    return canonList;
   }, [categories]);
 
   // Localized label for a canonical value
@@ -100,6 +103,15 @@ const SelectorPageProducts = ({
     t(`categories.${String(c).toLowerCase()}`, {
       defaultValue: localFallback(c, i18n.language),
     });
+
+  // Show "All" when external state is ""
+  const selectedCategoryForUI = categorySel ? canonicalizeCategory(categorySel) : "All";
+
+  const onCategoryChange = (e) => {
+    const picked = e.target.value;
+    // Externally, use "" to mean "All" (no filter)
+    setCategorySel(picked === "All" ? "" : picked);
+  };
 
   return (
     <aside className="filters-sidebar" dir={isRTL ? "rtl" : "ltr"}>
@@ -115,28 +127,12 @@ const SelectorPageProducts = ({
           <label className="filter-label">{t("category", "Category")}</label>
           <select
             className="filter-select"
-            value={categorySel}
-            onChange={(e) => setCategorySel(e.target.value)}
+            value={selectedCategoryForUI}
+            onChange={onCategoryChange}
           >
             {normalizedCategories.map((c) => (
               <option key={c} value={c}>
                 {catText(c)}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* ---------- Color Select ---------- */}
-        <div className="filter-group">
-          <label className="filter-label">{t("color", "Color")}</label>
-          <select
-            className="filter-select"
-            value={colorSel}
-            onChange={(e) => setColorSel(e.target.value)}
-          >
-            {(colors || []).map((c) => (
-              <option key={c} value={c}>
-                {c}
               </option>
             ))}
           </select>

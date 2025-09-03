@@ -1,60 +1,80 @@
 /* ================== Design tokens ================== */
-:root {
-  --foreground: #111827;
-  --muted-foreground: #6b7280;
+:root{
+  --foreground:#111827;
+  --muted-foreground:#6b7280;
 
   /* brand (warm amber/orange) */
-  --primary-hsl: 28 86% 48%;
-  --primary-glow-hsl: 28 92% 58%;
-  --primary-foreground: #ffffff;
+  --primary-hsl:28 86% 48%;
+  --primary-glow-hsl:28 92% 58%;
+  --primary-foreground:#ffffff;
+
+  /* layout */
+  --container-max:1280px;
+  --content-max:700px;
+  --safe-x: max(1rem, env(safe-area-inset-left));
+  --safe-y: max(1rem, env(safe-area-inset-top));
+  --safe-r: max(1rem, env(safe-area-inset-right));
+  --safe-b: max(1rem, env(safe-area-inset-bottom));
 }
 
 /* ================== Layout / Structure ================== */
-.hz-hero {
-  position: relative;
-  min-height: 80vh;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
-  isolation: isolate;
-  background: #000; /* hidden by overlay gradient */
+.hz-hero{
+  position:relative;
+  /* svh = small viewport height (Android browser UI safe) */
+  min-height: clamp(520px, 85svh, 900px);
+  display:flex; align-items:center;
+  overflow:hidden; isolation:isolate;
+  background:#000; /* hidden by overlay */
 }
 
-/* Make the hero content a vertical stack (title → subtitle → buttons) */
-.hz-hero__content{
-  margin-left: 900px !important;
-  max-width: 680px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+/* Background layers */
+.hz-hero__bg{ position:absolute; inset:0; z-index:0; }
+.hz-hero__bg img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  /* better crop for desktop (keep subject right-ish) */
+  object-position:center right;
+}
+@media (max-width: 768px){
+  .hz-hero__bg img{ object-position:center; }
 }
 
-/* Right-align the stack in Arabic */
-.hz-hero[dir="rtl"] .hz-hero__content{
-  align-items: flex-end;
-}
-
-/* Ensure the buttons sit *under* the subtitle with some space */
-.hz-hero__ctas{
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
-  margin-top: 0.75rem;
-}
-@media (min-width:640px){
-  .hz-hero__ctas{ flex-direction: row; }
-}
-
-.hz-hero__bg { position: absolute; inset: 0; z-index: 0; }
-.hz-hero__bg img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-.hz-hero__overlay {
-  position: absolute; inset: 0;
+/* Light overlay from left → right (RTL flips below) */
+.hz-hero__overlay{
+  position:absolute; inset:0;
   background: linear-gradient(to right,
-    rgba(255,255,255,.88),
-    rgba(255,255,255,.70),
-    rgba(255,255,255,.42)
+    rgba(255,255,255,.92) 0%,
+    rgba(255,255,255,.78) 35%,
+    rgba(255,255,255,.48) 70%,
+    rgba(255,255,255,.36) 100%
   );
+}
+.hz-hero[dir="rtl"] .hz-hero__overlay{
+  background: linear-gradient(to left,
+    rgba(255,255,255,.92) 0%,
+    rgba(255,255,255,.78) 35%,
+    rgba(255,255,255,.48) 70%,
+    rgba(255,255,255,.36) 100%
+  );
+}
+
+/* Slightly stronger overlay on very small phones so text stays readable */
+@media (max-width: 420px){
+  .hz-hero__overlay{
+    background: linear-gradient(to right,
+      rgba(255,255,255,.96) 0%,
+      rgba(255,255,255,.86) 45%,
+      rgba(255,255,255,.58) 85%,
+      rgba(255,255,255,.46) 100%
+    );
+  }
+  .hz-hero[dir="rtl"] .hz-hero__overlay{
+    background: linear-gradient(to left,
+      rgba(255,255,255,.96) 0%,
+      rgba(255,255,255,.86) 45%,
+      rgba(255,255,255,.58) 85%,
+      rgba(255,255,255,.46) 100%
+    );
+  }
 }
 
 /* Bokeh particles layer sits above overlay, below content */
@@ -69,90 +89,137 @@
   animation: hzBokehDrift 22s ease-in-out infinite alternate;
 }
 
-/* Raise content above particles */
-.hz-hero__container { position: relative; z-index: 2; width: 100%; padding-inline: 1rem; margin-inline: auto; max-width: 1280px; }
-.hz-hero__content { max-width: 680px; }
+/* Container */
+.hz-hero__container{
+  position:relative; z-index:2; width:100%;
+  padding-inline: var(--safe-x) var(--safe-r);
+  padding-top: calc(var(--safe-y) + 1rem);
+  padding-bottom: calc(var(--safe-b) + 1rem);
+  margin-inline:auto; max-width: var(--container-max);
+}
+
+/* Responsive grid: right-side content on desktop, stacked on mobile */
+.hz-hero__grid{
+  display:grid;
+  grid-template-columns: repeat(12, minmax(0,1fr));
+  gap: clamp(12px, 2vw, 24px);
+}
+
+/* Content area */
+.hz-hero__content{
+  grid-column: 1 / -1;
+  max-width: var(--content-max);
+  display:flex; flex-direction:column; align-items:flex-start;
+  margin-inline: 0;
+}
+
+/* ✅ Mobile-first: center content & text so it never overflows off-screen */
+@media (max-width: 640px){
+  .hz-hero__content{
+    align-items: center;
+    text-align: center;
+    margin-inline: auto;
+    padding-inline: 8px;
+  }
+  .hz-hero[dir="rtl"] .hz-hero__content{
+    align-items: center; /* keep centered in RTL too */
+    text-align: center;
+  }
+}
+
+/* Desktop: move to the right (LTR) / left (RTL) */
+@media (min-width: 1024px){
+  .hz-hero__content{
+    grid-column: 7 / 13;         /* right side */
+    margin-inline-end: clamp(8px, 3vw, 32px);
+  }
+}
+.hz-hero[dir="rtl"] .hz-hero__content{ align-items:flex-end; }
+@media (min-width: 1024px){
+  .hz-hero[dir="rtl"] .hz-hero__content{
+    grid-column: 1 / 7;          /* left side in RTL */
+    margin-inline-start: clamp(8px, 3vw, 32px);
+    margin-inline-end: 0;
+  }
+}
+
+/* CTAs row: stacked on mobile, row on >=sm; RTL reverses order */
+.hz-hero__ctas{
+  display:flex; gap:1rem; flex-direction:column; margin-top:.75rem;
+}
+@media (min-width:640px){ .hz-hero__ctas{ flex-direction:row; } }
+.hz-hero[dir="rtl"] .hz-hero__ctas{ flex-direction: column; }
+@media (min-width:640px){
+  .hz-hero[dir="rtl"] .hz-hero__ctas{ flex-direction: row-reverse; }
+}
 
 /* ================== Typography ================== */
-.hz-hero__title {
-  color: var(--foreground);
-  margin: 0 0 1.2rem 0;
-  line-height: 1.1;
-  font-weight: 800;
-  font-size: clamp(2.5rem, 6vw, 4.5rem);
+.hz-inline{ display:inline-block; }
+
+/* Slightly smaller floor on phones so title never feels cropped */
+.hz-hero__title{
+  color:var(--foreground);
+  margin:0 0 1.2rem 0;
+  line-height:1.1;
+  font-weight:800;
+  font-size: clamp(1.9rem, 6vw, 4.2rem);
 }
-.hz-hero__by {
-  display: block;
-  margin-top: .5rem;
-  color: hsl(var(--primary-hsl));
-  font-weight: 300;
-  font-size: clamp(1.25rem, 2.5vw, 2rem);
+@media (max-width: 360px){
+  .hz-hero__title{ font-size: clamp(1.75rem, 6.5vw, 2.2rem); }
 }
-.hz-hero__subtitle {
-  color: var(--muted-foreground);
-  font-size: 1.125rem;
-  line-height: 1.7;
-  margin: 0 0 2rem 0;
+
+.hz-hero__by{
+  display:block; margin-top:.5rem;
+  color:hsl(var(--primary-hsl)); font-weight:300;
+  font-size: clamp(1rem, 2.8vw, 1.6rem);
+}
+
+.hz-hero__subtitle{
+  color:var(--muted-foreground);
+  font-size: clamp(0.98rem, 1.8vw, 1.125rem);
+  line-height:1.7;
+  margin: 0 0 1.6rem 0;
   max-width: 44ch;
 }
-.hz-inline { display: inline-block; }
 
 /* ================== Title effects ================== */
-/* Subtle shimmering gradient that moves across the brand words */
 .hz-title-shimmer{
-  background: linear-gradient(90deg, #1f2937 0%, #111827 15%, #6b7280 30%, #111827 55%, #1f2937 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  background-size: 200% 100%;
+  background: linear-gradient(90deg,#1f2937 0%,#111827 15%,#6b7280 30%,#111827 55%,#1f2937 100%);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  background-size:200% 100%;
   animation: hzTitleShimmer 3.2s ease-in-out infinite;
 }
-
-/* Clean underline that sweeps in after the title */
 .hz-title-underline{
-  width: 100%;
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, rgba(201,133,63,0), rgba(201,133,63,.9), rgba(220,163,91,1), rgba(201,133,63,.9), rgba(201,133,63,0));
-  transform-origin: left center;
-  opacity: 0;
+  width:100%; height:4px; border-radius:2px;
+  background:linear-gradient(90deg, rgba(201,133,63,0), rgba(201,133,63,.9), rgba(220,163,91,1), rgba(201,133,63,.9), rgba(201,133,63,0));
+  transform-origin:left center; opacity:0;
 }
 
-/* ================== Buttons (pure CSS) ================== */
+/* ================== Buttons ================== */
 .hz-btn{
-  position:relative;
-  display:inline-flex; align-items:center; justify-content:center;
-  text-decoration:none;
-  -webkit-font-smoothing: antialiased;
+  position:relative; display:inline-flex; align-items:center; justify-content:center;
+  text-decoration:none; -webkit-font-smoothing:antialiased;
   border:0; cursor:pointer; border-radius:12px;
   font-weight:700; letter-spacing:.01em;
   transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
-  box-sizing:border-box;
+  box-sizing:border-box; min-height:48px; /* Android tap target */
 }
 .hz-btn--xl{ height:56px; padding:0 2.25rem; font-size:1.0625rem; }
-
-/* Ensure label is above glow layers */
 .hz-btn__label{ position:relative; z-index:2; color:inherit; white-space:nowrap; }
 
-/* 🔶 Primary (Explore) — gradient + sun glow */
+/* Primary */
 .hz-btn--primary{
   color:#fff;
-  background-image:linear-gradient(135deg, #c9853f 0%, #dca35b 100%);
+  background-image:linear-gradient(135deg,#c9853f 0%,#dca35b 100%);
   box-shadow:0 10px 24px rgba(17,24,39,.12);
 }
 .hz-btn--primary::before,
-.hz-btn--primary::after{
-  content:""; position:absolute; pointer-events:none;
-}
+.hz-btn--primary::after{ content:""; position:absolute; pointer-events:none; }
 .hz-btn--primary::before{
   inset:-34%; border-radius:999px; z-index:0;
-  background:
-    radial-gradient(circle at 50% 50%,
-      hsla(var(--primary-glow-hsl), .38),
-      hsla(var(--primary-glow-hsl), .24) 35%,
-      transparent 62%);
-  filter:blur(18px); opacity:.65;
-  animation: hzSunPulse 2.6s ease-in-out infinite;
+  background: radial-gradient(circle at 50% 50%, hsla(var(--primary-glow-hsl), .38),
+              hsla(var(--primary-glow-hsl), .24) 35%, transparent 62%);
+  filter:blur(18px); opacity:.65; animation: hzSunPulse 2.6s ease-in-out infinite;
 }
 .hz-btn--primary::after{
   inset:0; border-radius:inherit; z-index:1; mix-blend-mode:screen;
@@ -166,7 +233,7 @@
 }
 .hz-btn--primary:hover{
   transform: translateY(-1px) scale(1.03);
-  background-image:linear-gradient(135deg, #dca35b 0%, #e6b97a 100%);
+  background-image:linear-gradient(135deg,#dca35b 0%,#e6b97a 100%);
   box-shadow:0 18px 38px rgba(17,24,39,.18);
 }
 .hz-btn--primary:hover::before{ opacity:.82; }
@@ -174,10 +241,9 @@
   animation: hzSunSpin 3.2s linear infinite, hzSheenSweep 2.1s ease-in-out infinite;
 }
 
-/* 🟠 Secondary (Learn) — white outline, fill on hover */
+/* Secondary */
 .hz-btn--secondary{
-  background:#fff; color:#c9853f; border:2px solid #c9853f;
-  overflow:hidden; z-index:0;
+  background:#fff; color:#c9853f; border:2px solid #c9853f; overflow:hidden; z-index:0;
 }
 .hz-btn--secondary:hover{
   color:#fff; background:#c9853f; border-color:transparent;
@@ -185,18 +251,13 @@
   box-shadow:0 12px 28px rgba(17,24,39,.14);
 }
 
-/* Focus ring */
+/* Focus ring (keyboard) */
 .hz-btn:focus-visible{
   outline:none;
   box-shadow:0 0 0 3px #fff, 0 0 0 6px hsl(var(--primary-hsl) / .55);
 }
 
-/* CTA row */
-.hz-hero__ctas{ display:flex; gap:1rem; flex-direction:column; }
-@media (min-width:640px){ .hz-hero__ctas{ flex-direction:row; } }
-.hz-hero[dir="rtl"] .hz-hero__ctas{ flex-direction:row-reverse; }
-
-/* ================== Animations (existing) ================== */
+/* ================== Animations ================== */
 .animate-fade-in-up{ opacity:0; transform: translateY(16px); animation: hzFadeInUp .7s ease forwards; }
 .animate-slide-in-left{ opacity:0; transform: translateX(-18px); animation: hzSlideInLeft .6s ease forwards; }
 .animate-slide-in-right{ opacity:0; transform: translateX(18px); animation: hzSlideInRight .6s ease forwards; }
@@ -208,63 +269,46 @@
 @keyframes hzSlideInLeft{ to{ opacity:1; transform: translateX(0);} }
 @keyframes hzSlideInRight{ to{ opacity:1; transform: translateX(0);} }
 
-/* ================== NEW premium animations ================== */
-
-/* 1) Ken-Burns slow zoom on the hero image */
+/* Ken Burns */
 .hz-kenburns{
-  transform-origin: center center;
+  transform-origin:center center;
   animation: hzKenBurns 18s ease-in-out infinite alternate;
   will-change: transform;
 }
 @keyframes hzKenBurns{
   0%   { transform: scale(1.02) translate3d(0px, 0px, 0); }
-  50%  { transform: scale(1.06) translate3d(1.5%, -0.8%, 0); }
-  100% { transform: scale(1.1)  translate3d(3%, -1.2%, 0); }
+  50%  { transform: scale(1.06) translate3d(1.2%, -0.6%, 0); }
+  100% { transform: scale(1.095) translate3d(2.2%, -1.1%, 0); }
 }
 
-/* 2) Floating bokeh drift behind content */
+/* Bokeh drift */
 @keyframes hzBokehDrift{
-  0% {
-    transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(2px);
-  }
-  50% {
-    transform: translate3d(-1.2%, -0.6%, 0) scale(1.05);
-    filter: blur(2.5px);
-  }
-  100%{
-    transform: translate3d(1.2%, 0.8%, 0) scale(1.04);
-    filter: blur(2px);
-  }
+  0% { transform: translate3d(0,0,0) scale(1); filter: blur(2px); }
+  50%{ transform: translate3d(-1.2%, -0.6%, 0) scale(1.05); filter: blur(2.5px); }
+  100%{transform: translate3d(1.2%, 0.8%, 0) scale(1.04); filter: blur(2px); }
 }
 
-/* 3) Title shimmer sweep across brand and underline reveal */
+/* Title shimmer + underline */
 @keyframes hzTitleShimmer{
-  0%   { background-position: 200% 0; }
-  50%  { background-position: 100% 0; }
-  100% { background-position: -20% 0; }
+  0%{ background-position: 200% 0; }
+  50%{ background-position: 100% 0; }
+  100%{ background-position: -20% 0; }
 }
-.animate-underline{
-  animation: hzUnderline 900ms ease 420ms forwards;
-}
+.animate-underline{ animation: hzUnderline 900ms ease 420ms forwards; }
 @keyframes hzUnderline{
-  0%   { transform: scaleX(0.1); opacity: 0; }
-  60%  { transform: scaleX(1.02); opacity: 1; }
-  100% { transform: scaleX(1); opacity: 1; }
+  0%{ transform: scaleX(0.1); opacity:0; }
+  60%{ transform: scaleX(1.02); opacity:1; }
+  100%{transform: scaleX(1); opacity:1; }
 }
 
-/* Existing button aura animations */
+/* Button aura */
 @keyframes hzSunPulse{ 0%,100%{transform:scale(1);opacity:.55;} 50%{transform:scale(1.12);opacity:.88;} }
 @keyframes hzSunSpin{ to{ transform: rotate(360deg) scale(1.05);} }
-
-/* Sweeping sheen for primary button */
 @keyframes hzSheenSweep{
-  0%   { background-position: center, center, -220% 0; }
-  45%  { background-position: center, center,  125% 0; }
-  100% { background-position: center, center,  125% 0; }
+  0%{ background-position:center, center, -220% 0; }
+  45%{background-position:center, center,  125% 0; }
+  100%{background-position:center, center,  125% 0; }
 }
-
-/* Extra glow pulse if you add .animate-glow */
 .animate-glow{ animation: hzBtnGlow 1.6s ease-in-out infinite alternate; }
 @keyframes hzBtnGlow{
   from{ box-shadow: 0 8px 20px rgba(0,0,0,.16), 0 0 0 rgba(255,184,77,0); }
@@ -288,3 +332,5 @@
     animation:none !important; opacity:1 !important; transform:none !important;
   }
 }
+
+/* --- cleanup: ensure only ONE margin rule remains (no duplicate overrides) --- */

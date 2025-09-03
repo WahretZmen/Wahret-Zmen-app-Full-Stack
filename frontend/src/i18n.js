@@ -752,15 +752,14 @@ about: {
       loading: { brand_loading: "وهرة الزّمان..." },
 
       select_category: "اختر الفئة",
-      categories: { all: "الكل", men: "رجال", women: "نساء", children: "أطفال" },
-      product_filters: {
-        label: "اختر المنتجات",
-        men: "رجال",
-        women: "نساء",
-        children: "أطفال",
-        all: "الكل"
-      },
+      categories: {
+  all: "الكل",
+  men: "رجال",
+  women: "نساء",
+  children: "أطفال"
+},
 
+ategories: { all: "الكل", men: "رجال", women: "نساء", children: "أطفال" },
           
             largebanner: {
   banner_aria: "قسم البانر الرئيسي",
