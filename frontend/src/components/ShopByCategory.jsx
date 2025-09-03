@@ -117,9 +117,9 @@ const ShopByCategory = ({ items = DEFAULT_ITEMS, title }) => {
               <span className="shine" />
             </span>
 
-            <span className="mt-5 text-xl sm:text-2xl font-extrabold tracking-wide text-gray-900 uppercase label-gradient">
-              {it.label}
-            </span>
+            <span className={`cat-label cat-${it.key}`}>
+  {it.label}
+</span>
           </a>
         ))}
       </div>

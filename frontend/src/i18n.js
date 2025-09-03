@@ -342,7 +342,7 @@ i18n
     "items": [
       {
         "title": "Sélection de tissus premium",
-        "desc": "Nous sélectionnons uniquement les meilleurs tissus auprès d’artisans textiles marocains renommés, pour que chaque jebba soit aussi luxueuse qu’elle en a l’air."
+        "desc": "Nous sélectionnons uniquement les meilleurs tissus auprès d’artisans textiles tunisiens renommés, pour que chaque jebba soit aussi luxueuse qu’elle en a l’air."
       },
       {
         "title": "Maîtrise de la coupe",
@@ -873,7 +873,7 @@ about: {
     "items": [
       {
         "title": "اختيار أقمشة فاخرة",
-        "desc": "ننتقي أجود الأقمشة من أمهر حرفيي النسيج في المغرب، لتمنح كل جبّة إحساسًا بالفخامة يضاهي مظهرها."
+        "desc": "ننتقي أجود الأقمشة من أمهر حرفيي النسيج في تونس، لتمنح كل جبّة إحساسًا بالفخامة يضاهي مظهرها."
       },
       {
         "title": "تفصيل احترافي",

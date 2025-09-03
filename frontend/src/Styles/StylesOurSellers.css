@@ -22,13 +22,81 @@
   padding: 0 1rem;
 }
 
-/* ===== Title ===== */
+/* ===== Title (base) ===== */
 .our-sellers-title {
   font-size: 2rem;
   font-weight: bold;
   color: #4b2e2e;
   text-align: center;
   margin-bottom: 2rem;
+}
+
+/* ============================================================
+   PREMIUM HOVER ANIMATIONS for the Title
+   - 1) Gold shimmer over the text on hover
+   - 2) Elegant underline sweep that draws in on hover
+   ============================================================ */
+/* Center the title element itself */
+.os-title {
+  position: relative;
+  display: block;          /* was inline-block */
+  width: max-content;      /* shrink to text width */
+  margin-inline: auto;     /* center horizontally */
+  text-align: center;      /* keep text centered inside */
+  isolation: isolate;
+}
+
+
+/* Gradient text that can shimmer on hover */
+.os-title__text {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    #5a382d 0%,
+    #a67c52 20%,
+    #5a382d 40%,
+    #5a382d 60%,
+    #a67c52 80%,
+    #5a382d 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  transition: background-position 0.55s ease, transform 0.25s ease;
+  will-change: background-position, transform;
+}
+
+/* Hover effect 1: shimmering gradient sweep across the letters */
+.os-title:hover .os-title__text {
+  animation: osShimmer 1.4s linear infinite;
+  transform: translateY(-1px); /* micro lift for polish */
+}
+
+/* Hover effect 2: underline sweep (draws in from center) */
+.os-title::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  width: 86%;
+  height: 3px;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(166,124,82,0), rgba(212,175,55,.95), rgba(166,124,82,0));
+  transition: transform 520ms cubic-bezier(.22, .61, .36, 1);
+  z-index: 0;
+}
+
+.os-title:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+/* Shimmer keyframes */
+@keyframes osShimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -20% 0; }
 }
 
 /* ===== Filter Area ===== */
@@ -103,7 +171,6 @@ html[dir="rtl"] .react-multiple-carousel__arrow--right {
 }
 
 /* ===== Remove the green/pink badges only inside OurSellers ===== */
-/* If you prefer to keep text without background, replace `display:none` with background:transparent */
 .our-sellers-container .stock-badge,
 .our-sellers-container .badge--stock,
 .our-sellers-container .badge--trending,
@@ -125,3 +192,12 @@ html[dir="rtl"] .react-multiple-carousel__arrow--right {
 
 /* ===== No horizontal scroll ===== */
 body, html { overflow-x: hidden; }
+
+/* Reduced motion: disable animations for accessibility */
+@media (prefers-reduced-motion: reduce){
+  .os-title__text,
+  .os-title::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

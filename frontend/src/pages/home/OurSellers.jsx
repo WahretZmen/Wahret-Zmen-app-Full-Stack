@@ -9,8 +9,6 @@ import FadeInSection from "../../Animations/FadeInSection.jsx";
 import { useTranslation } from "react-i18next";
 import ScrollFade from "../../Animations/ScrollFade.jsx"; // ✅ Correct
 
-
-
 const categories = ["All", "Men", "Women", "Children"];
 
 const responsive = {
@@ -40,82 +38,79 @@ const OurSellers = () => {
 
   // ✅ Filter products by selected category
   const filteredProducts =
-  selectedCategory === "All"
-    ? [...products].sort((a, b) => {
-        const order = { men: 1, women: 2, children: 3 };
-        return (order[a.category.toLowerCase()] || 99) - (order[b.category.toLowerCase()] || 99);
-      })
-    : products.filter(
-        (product) =>
-          product.category.toLowerCase() === selectedCategory.toLowerCase()
-      );
-
+    selectedCategory === "All"
+      ? [...products].sort((a, b) => {
+          const order = { men: 1, women: 2, children: 3 };
+          return (order[a.category.toLowerCase()] || 99) - (order[b.category.toLowerCase()] || 99);
+        })
+      : products.filter(
+          (product) =>
+            product.category.toLowerCase() === selectedCategory.toLowerCase()
+        );
 
   return (
     <FadeInSection>
       <div className="our-sellers-wrapper">
-  <div className="our-sellers-section">
-    <div className="our-sellers-container">
+        <div className="our-sellers-section">
+          <div className="our-sellers-container">
 
-        {/* Title */}
-        <ScrollFade direction="right" delay={0}>
-  <h2 className="text-4xl text-[#5a382d] font-bold mb-6 text-center uppercase tracking-wide">
-    {t("wahret_zmen_collection")}
-  </h2>
-</ScrollFade> 
+            {/* ===== Title (with 2 premium hover animations) =====
+               - Gold shimmer across text (gradient clip + animation)
+               - Elegant underline sweep (draws in on hover)
+            */}
+            <ScrollFade direction="right" delay={0}>
+              <h2 className="text-4xl text-[#5a382d] font-bold mb-6 text-center uppercase tracking-wide our-sellers-title os-title">
+                <span className="os-title__text">
+                  {t("wahret_zmen_collection")}
+                </span>
+              </h2>
+            </ScrollFade>
 
+            {/* Category Filter */}
+            <div className="mb-6 flex flex-col items-center px-2 sm:px-0 w-full">
+              <h3 className="select-category-title text-lg sm:text-xl font-semibold text-[#5a382d] mb-2 text-center">
+                {t("select_category")}
+              </h3>
+              <div className="w-full px-2 sm:px-0 max-w-xs">
+                <Selector options={categories} onSelect={setSelectedCategory} />
+              </div>
+            </div>
 
+            {/* Carousel */}
+            <div className="max-w-6xl mx-auto px-2 sm:px-4">
+              {filteredProducts.length > 0 ? (
+                <Carousel
+                  responsive={responsive}
+                  autoPlay={true}
+                  autoPlaySpeed={3000}
+                  infinite={true}
+                  arrows={true}
+                  swipeable={true}
+                  draggable={true}
+                  showDots={false}
+                  keyBoardControl={true}
+                  className="custom-carousel"
+                  rtl={isRTL} // ✅ RTL support for Arabic
+                >
+                  {filteredProducts.map((product, index) => (
+                    <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>
+                      <div className="carousel-card-wrapper">
+                        <ProductCard product={product} />
+                      </div>
+                    </FadeInSection>
+                  ))}
+                </Carousel>
+              ) : (
+                <p className="text-center text-[#5a382d] text-lg">
+                  {t("no_products_found")} You're welcome !
+                </p>
+              )}
+            </div>
 
-        {/* Category Filter */}
-        <div className="mb-6 flex flex-col items-center px-2 sm:px-0 w-full">
-
-  <h3 className="select-category-title text-lg sm:text-xl font-semibold text-[#5a382d] mb-2 text-center">
-    {t("select_category")}
-  </h3>
-  <div className="w-full px-2 sm:px-0 max-w-xs">
-
-    <Selector options={categories} onSelect={setSelectedCategory} />
-  </div>
-</div>
-
-        {/* Carousel */}
-        <div className="max-w-6xl mx-auto px-2 sm:px-4">
-          {filteredProducts.length > 0 ? (
-            <Carousel
-              responsive={responsive}
-              autoPlay={true}
-              autoPlaySpeed={3000}
-              infinite={true}
-              arrows={true}
-              swipeable={true}
-              draggable={true}
-              showDots={false}
-              keyBoardControl={true}
-              className="custom-carousel"
-              rtl={isRTL} // ✅ RTL support for Arabic
-            >
-              {filteredProducts.map((product, index) => (
- <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>
-  <div className="carousel-card-wrapper">
-    <ProductCard product={product} />
-  </div>
-</FadeInSection>
-
-))}
-
-
-            </Carousel>
-          ) : (
-            <p className="text-center text-[#5a382d] text-lg">
-              {t("no_products_found")} You're welcome !
-            </p>
-          )}
-        </div>
           </div>
-  </div>
-</div>
-</FadeInSection>
-
+        </div>
+      </div>
+    </FadeInSection>
   );
 };
 

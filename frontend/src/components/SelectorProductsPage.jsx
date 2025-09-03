@@ -1,26 +1,56 @@
 // SelectorPageProducts.jsx
 // -------------------------------------------------------------
-// Plain-CSS filter sidebar for the Products page.
-// This component renders category, color, and price filters.
-// Layout is controlled by Styles/StylesSelectorProductsPage.css.
-// NOTE: Content/logic preserved exactly; only formatting & comments added.
+// Plain-CSS filter sidebar for the Products page with robust
+// category alias normalization + dedupe.
 // -------------------------------------------------------------
 
-import React from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Filter } from "lucide-react";
 import "../Styles/StylesSelectorProductsPage.css";
 
-/**
- * Props
- * - categorySel, setCategorySel: current category + setter
- * - categories: array of category options (e.g., ["All","Men","Women","Children"])
- * - colorSel, setColorSel: current color + setter
- * - colors: array of color options
- * - priceRange, setPriceRange: [min,max] numeric price range + setter
- * - minPrice, maxPrice: numeric bounds derived from catalog
- * - clearFilters: resets all filters to defaults
- */
+/* ===== Canonicalization: map any alias → canonical key ===== */
+const CANONICAL = {
+  all: "All",
+  tous: "All",
+  // EN
+  men: "Men",
+  women: "Women",
+  children: "Children",
+  kids: "Children",
+  kid: "Children",
+  // FR
+  hommes: "Men",
+  homme: "Men",
+  femmes: "Women",
+  femme: "Women",
+  enfants: "Children",
+  enfant: "Children",
+  // AR
+  "الكل": "All",
+  "رجال": "Men",
+  "نساء": "Women",
+  "أطفال": "Children",
+};
+
+/* i18n fallbacks for display text if keys are missing */
+const FALLBACKS = {
+  ar: { all: "الكل", men: "رجال", women: "نساء", children: "أطفال" },
+  fr: { all: "Tous", men: "Hommes", women: "Femmes", children: "Enfants" },
+  en: { all: "All", men: "Men", women: "Women", children: "Children" },
+};
+function localFallback(opt, lang) {
+  const key = String(opt).toLowerCase();
+  const short = (lang || "en").split("-")[0];
+  return FALLBACKS[short]?.[key] ?? FALLBACKS.en[key] ?? String(opt);
+}
+
+function canonicalizeCategory(raw) {
+  if (raw == null) return "";
+  const k = String(raw).trim().toLowerCase();
+  return CANONICAL[k] || raw; // if unknown, keep as-is
+}
+
 const SelectorPageProducts = ({
   categorySel,
   setCategorySel,
@@ -35,12 +65,43 @@ const SelectorPageProducts = ({
   clearFilters,
 }) => {
   const { t, i18n } = useTranslation();
-
-  // RTL awareness for Arabic
   const isRTL = i18n?.language === "ar" || i18n?.language === "ar-SA";
 
+  /* === Normalize & dedupe categories ===
+     - Canonical keys: All, Men, Women, Children
+     - Keep original/custom categories if any (after canonicalization)
+     - Ensure "All" appears at most once and first when present
+  */
+  const normalizedCategories = useMemo(() => {
+    const seen = new Set();
+    const canonList = [];
+
+    // First pass: canonicalize, dedupe, keep order
+    for (const c of categories || []) {
+      const canon = canonicalizeCategory(c);
+      const k = String(canon);
+      if (!seen.has(k)) {
+        seen.add(k);
+        canonList.push(canon);
+      }
+    }
+
+    // Reorder to put All first if present
+    const hasAll = canonList.includes("All");
+    const reordered = hasAll
+      ? ["All", ...canonList.filter((x) => x !== "All")]
+      : canonList;
+
+    return reordered;
+  }, [categories]);
+
+  // Localized label for a canonical value
+  const catText = (c) =>
+    t(`categories.${String(c).toLowerCase()}`, {
+      defaultValue: localFallback(c, i18n.language),
+    });
+
   return (
-    // Sidebar wrapper (positioned to the right/left by the page layout)
     <aside className="filters-sidebar" dir={isRTL ? "rtl" : "ltr"}>
       <div className="filters-card">
         {/* ---------- Header ---------- */}
@@ -57,9 +118,9 @@ const SelectorPageProducts = ({
             value={categorySel}
             onChange={(e) => setCategorySel(e.target.value)}
           >
-            {categories.map((c) => (
+            {normalizedCategories.map((c) => (
               <option key={c} value={c}>
-                {c}
+                {catText(c)}
               </option>
             ))}
           </select>
@@ -73,7 +134,7 @@ const SelectorPageProducts = ({
             value={colorSel}
             onChange={(e) => setColorSel(e.target.value)}
           >
-            {colors.map((c) => (
+            {(colors || []).map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>
@@ -85,7 +146,6 @@ const SelectorPageProducts = ({
         <div className="filter-group">
           <label className="filter-label">{t("price_range", "Price Range")}</label>
 
-          {/* Numeric min/max inputs */}
           <div className="price-row">
             <div className="price-field">
               <span>$</span>
@@ -116,7 +176,6 @@ const SelectorPageProducts = ({
             </div>
           </div>
 
-          {/* Dual slider controls (lower + upper) */}
           <input
             className="range"
             type="range"
