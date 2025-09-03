@@ -48,6 +48,25 @@
   animation: homeUnderline 720ms 180ms cubic-bezier(.2,.8,.2,1) forwards;
 }
 
+/* Space between LargeBanner and the Home title block */
+.home-title-block{
+  /* extra room above the title — scales by device height */
+  margin-top: clamp(32px, 8svh, 128px);
+  padding-top: clamp(6px, 1.5svh, 16px);
+}
+
+/* On very small phones, give a bit more space */
+@media (max-width: 420px){
+  .home-title-block{
+    margin-top: clamp(44px, 12svh, 160px);
+  }
+}
+
+/* Helpful when linking/scrolling to this title */
+.home-title{
+  scroll-margin-top: 90px; /* matches your fixed navbar offset */
+}
+
 /* ======================================================
    HOME TITLE — "Crown Sparkle" overlay (auto replay)
    Works with: <h1 class="home-title sparkle"> … </h1>

@@ -64,8 +64,8 @@ const Home = () => {
         dir={isRTL ? "rtl" : "ltr"}
       >
       
-       {/* ===================== Home Title ===================== */}
-<section className="py-10 text-center">
+      {/* ===================== Home Title ===================== */}
+<section className="home-title-block text-center">
   <h1 className={`home-title sparkle ${isRTL ? "rtl" : "ltr"}`}>
     <span className="home-title__text">{t("home", "الرئيسية")}</span>
     <span className="home-title__underline" />
@@ -78,6 +78,7 @@ const Home = () => {
     </Trans>
   </p>
 </section>
+
 
 
         {/* ===================== Banner CTA ===================== */}
