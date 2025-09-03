@@ -1,3 +1,4 @@
+// src/pages/products/ProductCard.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -7,7 +8,7 @@ import { FiShoppingCart } from "react-icons/fi";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { getImgUrl } from "../../utils/getImgUrl";
 
-import "../../Styles/StylesProductCard.css";  // reuses qty/add-to-cart look
+import "../../Styles/StylesProductCard.css"; // keeps SingleProduct look but with card overrides
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -208,11 +209,12 @@ const ProductCard = ({ product }) => {
             </div>
           )}
 
-          {/* Quantity stepper (SingleProduct look) */}
+          {/* Quantity stepper (Card-safe overrides so + is always visible) */}
           <div className="flex items-center justify-center mt-3 sp-cta-row">
             <div className="sp-qty">
               <button
                 type="button"
+                className="sp-btn sp-minus"
                 onClick={decQty}
                 disabled={displayedStock === 0}
                 aria-label={t("decrease")}
@@ -233,6 +235,7 @@ const ProductCard = ({ product }) => {
 
               <button
                 type="button"
+                className="sp-btn sp-plus"
                 onClick={incQty}
                 disabled={displayedStock === 0 || quantity >= clampMax}
                 aria-label={t("increase")}
@@ -244,17 +247,16 @@ const ProductCard = ({ product }) => {
 
           {/* Primary CTA (Android-friendly tap target) */}
           <div className="mt-3">
-           <button
-  onClick={handleAddToCart}
-  disabled={displayedStock === 0}
-  className={`sp-add w-full ${
-    displayedStock === 0 ? "cursor-not-allowed opacity-70" : ""
-  }`}
->
-  <FiShoppingCart className="inline mr-2" />
-  {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
-</button>
-
+            <button
+              onClick={handleAddToCart}
+              disabled={displayedStock === 0}
+              className={`sp-add w-full ${
+                displayedStock === 0 ? "cursor-not-allowed opacity-70" : ""
+              }`}
+            >
+              <FiShoppingCart className="inline mr-2" />
+              {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
+            </button>
           </div>
         </div>
       </div>
