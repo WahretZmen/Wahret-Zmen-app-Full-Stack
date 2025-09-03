@@ -142,6 +142,7 @@
 }
 
 
+
 /* Desktop: keep only left thumbs column visible in RTL as well */
 @media (min-width: 768px){
   .sp-thumbs { display:none !important; }
@@ -153,3 +154,115 @@
 /* Square theme (keep corners sharp) */
 .sp-square, .sp-square * { border-radius: 0 !important; }
 .sp-square .sp-add, .sp-square .add-to-cart-btn { box-shadow: none !important; }
+
+
+/* ===============================
+   FIX: Always-visible + / – icons
+   (desktop + Android, RTL-safe)
+   =============================== */
+
+.sp-qty {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid #e6e1d8;
+  border-radius: 12px;
+  background: #fff;
+}
+
+/* Buttons (same for – and +) */
+.sp-qty button {
+  position: relative;                 /* for pseudo icon */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;                    /* big tap targets */
+  width: 48px;
+  height: 48px;
+  background: #111;
+  border: 0;
+  cursor: pointer;
+  /* Hide the actual text; we will draw via ::before */
+  color: transparent !important;
+  font-size: 0;                       /* prevent stray glyph */
+  line-height: 1;
+  transition: background .15s, transform .05s, opacity .15s;
+}
+.sp-qty button:hover { background: #000; }
+.sp-qty button:active { transform: translateY(1px); }
+.sp-qty button[disabled] { background: #c7c7c7; cursor: not-allowed; opacity: .75; }
+
+/* Draw the glyphs */
+.sp-qty button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;                        /* visible on dark bg */
+  font: 800 22px/1 system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+}
+
+/* MINUS on the first button */
+.sp-qty button:first-child::before { content: "–"; }
+
+/* PLUS on the last button */
+.sp-qty button:last-child::before  { content: "+"; }
+
+/* Input */
+.sp-qty input {
+  width: 72px;
+  height: 48px;
+  text-align: center;
+  border: 0;
+  outline: none;
+  font-weight: 800;
+  font-size: 16px;
+  color: #2b2b2b;
+  background: #fff;
+}
+
+/* Keep rounded corners regardless of RTL/LTR */
+.sp-qty button:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+.sp-qty button:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+/* Mirror corner rounding in RTL */
+[dir="rtl"] .sp-qty button:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+[dir="rtl"] .sp-qty button:last-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+/* Mobile tweaks (Android/iOS) */
+@media (max-width: 768px) {
+  .sp-qty button {
+    min-width: 44px;
+    width: 44px;
+    height: 44px;
+  }
+  .sp-qty input {
+    width: 64px;
+    height: 44px;
+    font-size: 15px;
+  }
+}
+
+/* High-contrast keyboard focus */
+.sp-qty button:focus-visible,
+.sp-qty input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(17,17,17,.6);
+}
