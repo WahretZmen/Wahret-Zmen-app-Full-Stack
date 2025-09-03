@@ -207,7 +207,7 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   outline: none;
   box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(17,17,17,.6);
 }
-.add-to-cart-btn.is-disabled { background: #c7c7c7; cursor: not-allowed; }
+.add-to-cart-btn.is-disabled { background: #000000; cursor: not-allowed; }
 .add-to-cart-btn .icon { margin-inline-end: 6px; font-size: 1.1rem; }
 html[dir="rtl"] .add-to-cart-btn { text-transform: none; letter-spacing: 0; }
 
