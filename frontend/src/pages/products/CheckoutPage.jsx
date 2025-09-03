@@ -17,10 +17,7 @@ const CheckoutPage = () => {
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
 
-  // Scroll to top on mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  useEffect(() => { window.scrollTo(0, 0); }, []);
 
   const cartItems = useSelector((s) => s.cart.cartItems || []);
   const totalItems = cartItems.reduce((acc, item) => acc + Number(item.quantity || 0), 0);
@@ -37,9 +34,7 @@ const CheckoutPage = () => {
   const [createOrder, { isLoading }] = useCreateOrderMutation();
   const [isChecked, setIsChecked] = useState(false);
 
-  // Submit handler — normalized to what backend expects
   const onSubmit = async (data) => {
-    // Guards
     if (!currentUser?.email) {
       Swal.fire({
         icon: "error",
@@ -59,7 +54,6 @@ const CheckoutPage = () => {
       return;
     }
 
-    // Normalize address (server also defaults, but we help from client side)
     const street = (data.address || "").trim();
     const city = (data.city || "").trim();
     const country = (data.country || "Tunisia").trim();
@@ -76,7 +70,6 @@ const CheckoutPage = () => {
       return;
     }
 
-    // Build products with guaranteed multilingual color + image
     const products = cartItems.map((item) => {
       const rawCn = item?.color?.colorName;
       const hasObj = rawCn && typeof rawCn === "object";
@@ -162,7 +155,7 @@ const CheckoutPage = () => {
           </p>
         </div>
 
-        {/* Two-column layout (no order summary) */}
+        {/* Two-column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* LEFT: Shipping Information (form) */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -191,15 +184,20 @@ const CheckoutPage = () => {
                     />
                   </div>
 
+                  {/* EMAIL – forced LTR + readOnly for correct display on RTL/mobile */}
                   <div>
                     <label className="block text-sm font-medium mb-1">
                       {t("checkout.email")}
                     </label>
                     <input
-                      type="email"
-                      disabled
-                      defaultValue={currentUser?.email || ""}
-                      className="w-full px-4 py-2 rounded-lg border border-[#E6D3BF] bg-gray-100 cursor-not-allowed"
+                      value={currentUser?.email || ""}
+                      readOnly
+                      aria-readonly="true"
+                      inputMode="email"
+                      dir="ltr"
+                      onFocus={(e) => e.target.select()}
+                      className="w-full px-4 py-2 rounded-lg border border-[#E6D3BF] bg-gray-100 email-plain"
+                      title={currentUser?.email || ""}
                     />
                   </div>
                 </div>
@@ -321,7 +319,6 @@ const CheckoutPage = () => {
                 {isLoading ? t("checkout.processing") : t("checkout.place_order")}
               </button>
 
-              {/* Small recap line (no order summary) */}
               <p className="mt-3 text-center text-sm text-gray-600">
                 {t("checkout.items")}: <span className="font-medium">{totalItems}</span> ·{" "}
                 {t("checkout.total_price")}{" "}
@@ -369,7 +366,6 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            {/* Delivery info card */}
             <div className="rounded-2xl border border-[#E5D9C9] bg-white shadow-sm">
               <div className="p-6 flex items-start gap-3">
                 <Truck className="h-6 w-6 mt-0.5 text-[#A67C52]" />

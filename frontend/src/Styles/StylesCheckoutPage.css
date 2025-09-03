@@ -1,1 +1,8 @@
-.screen-CheckoutPage {margin-top: 8%;}
+.screen-CheckoutPage {margin-top: 8%;} 
+
+/* Force emails to render left-to-right even on RTL pages */
+.email-plain {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: plaintext;
+}
