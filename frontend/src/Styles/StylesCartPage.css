@@ -1,31 +1,16 @@
 
-.btn-brown-gradient {
-  width: 100%;
-  height: 60px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(to right, #6B3A1E, #4A2410); /* brown gradient */
-  transition: all 0.3s ease;
-}
+/* -------- General page safety -------- */
+.cart-page { overflow-x: hidden; }
+.cart-page * { box-sizing: border-box; }
 
-.btn-brown-gradient:hover {
-  background: linear-gradient(to right, #5A2F18, #2C1609); /* darker hover */
-  transform: scale(1.02);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-}
-
-
+/* Buttons block in summary */
 .cart-buttons {
   display: flex;
-  flex-direction: column;   /* stack vertically */
-  gap: 12px;                /* space between the two buttons */
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* existing styles */
+/* Primary gradient button */
 .btn-brown-gradient {
   width: 100%;
   height: 60px;
@@ -34,7 +19,7 @@
   color: #fff;
   cursor: pointer;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   background: linear-gradient(to right, #6B3A1E, #4A2410);
   transition: all 0.3s ease;
 }
@@ -44,6 +29,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
+/* Secondary outline button */
 .btn-outline {
   width: 100%;
   height: 60px;
@@ -52,7 +38,7 @@
   background: #fff;
   color: #111827;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   transition: all 0.25s ease;
 }
@@ -61,34 +47,51 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-
-/* ------- Cart item image: fill frame, no inner white space ------- */
-.cart-img-box {
-  /* a tidy, consistent frame */
-  flex: 0 0 clamp(220px, 26vw, 300px);
-  height: clamp(160px, 20vw, 200px);
-
-  border-radius: 12px;
-  overflow: hidden;
-
-  /* remove the “white space” source */
-  background: transparent;
-  border: 0;
-  padding: 0;
+/* Side-by-side in wider view */
+@media (min-width: 640px) {
+  .cart-buttons { flex-direction: row; }
+  .btn-brown-gradient, .btn-outline { width: 50%; }
 }
 
+/* ------- Cart item image: fill frame, centered ------- */
+.cart-img-box {
+  flex: 0 0 clamp(220px, 26vw, 300px);
+  height: clamp(160px, 22vw, 220px);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
 .cart-img-box .cart-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;     /* fills frame (no bars), may crop a tiny bit */
+  object-fit: cover;        /* fill without letterboxing */
+  object-position: center;  /* keep subject centered */
   display: block;
 }
 
-/* Mobile: full width, compact height */
+/* Mobile: full width, compact height, centered */
 @media (max-width: 768px) {
   .cart-img-box {
     flex: 1 1 100%;
     width: 100%;
-    height: 180px;
+    height: 200px;
   }
 }
+
+/* Card subtle rounding */
+.cart-card { border-radius: 14px; }
+
+/* Remove button tap-area friendly on mobile */
+.remove-btn { touch-action: manipulation; }
+
+/* Quantity controls: bigger tap targets on phones */
+.qty-group .qty-btn {
+  border-radius: 10px;
+}
+@media (max-width: 640px) {
+  .qty-group .qty-btn { width: 44px; height: 44px; }
+  .qty-group .qty-val { font-size: 1.05rem; min-width: 2rem; }
+}
+
+/* Ensure order summary isn’t sticky on small screens (uses lg:sticky in JSX) */
+.order-summary { position: static; }

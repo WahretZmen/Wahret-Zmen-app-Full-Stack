@@ -32,7 +32,7 @@ const SingleProduct = () => {
   const categoryKey = product?.category?.toLowerCase();
   const translatedCategory = t(`categories.${categoryKey}`, product?.category || t("unknown"));
 
-  // robust trending detection
+  // trend flag (robust)
   const isTrending = Boolean(
     product?.trending ||
       product?.isTrending ||
@@ -65,7 +65,7 @@ const SingleProduct = () => {
     if (!product) return;
     const initial =
       product.colors?.[0] || {
-        colorName: { en: "Default", fr: "Défaut", ar: "افتراضي" },
+        colorName: { en: "Default", ar: "افتراضي" },
         image: product.coverImage,
         stock: product.stockQuantity || 0,
       };
@@ -105,7 +105,7 @@ const SingleProduct = () => {
     setZoomPosition({ x, y });
   };
 
-  // discount helpers
+  // prices / discount
   const oldP = Number(product?.oldPrice || 0);
   const newP = Number(product?.newPrice || 0);
   const hasDiscount = oldP > 0 && newP > 0 && oldP > newP;
@@ -115,7 +115,7 @@ const SingleProduct = () => {
   if (isLoading) {
     return (
       <div className="max-w-6xl mx-auto p-8">
-        <div className="text-center text-black/70">loading?.brand_loading</div>
+        <div className="text-center text-[#8B5E3B]">loading?.brand_loading</div>
       </div>
     );
   }
@@ -128,17 +128,19 @@ const SingleProduct = () => {
     );
   }
 
+  const stockCount = selectedColor?.stock ?? 0;
+
   return (
     <div className="product-cart px-4 sm:px-6 md:px-8 py-6 bg-white border border-[#A67C52] rounded-lg shadow-lg max-w-6xl mx-auto sp-page sp-square">
-      <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-black font-serif mb-6 sp-title">
+      <h1 className="text-3xl sm:text-4xl font-bold text-center text-[#8B5E3B] font-serif mb-6 sp-title">
         {translatedTitle}
       </h1>
 
       <div className="flex flex-col md:flex-row gap-8 sp-card">
         {/* IMAGES AREA */}
         <div className="flex-1 md:flex md:gap-4 sp-media">
-          {/* Desktop: vertical thumbs */}
-          <div className="hidden md:flex md:flex-col gap-3 w-20 overflow-visible">
+          {/* Desktop: vertical thumbs (narrow rail, tight gaps) */}
+          <div className="hidden md:flex md:flex-col gap-2 w-20 overflow-visible thumb-rail">
             {activeGallery.map((img, idx) => {
               const isActive = idx === selectedImageIndex;
               return (
@@ -146,10 +148,8 @@ const SingleProduct = () => {
                   key={idx}
                   type="button"
                   onClick={() => setSelectedImageIndex(idx)}
-                  className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden transition-all bg-white border ${
-                    isActive
-                      ? "ring-2 ring-black ring-offset-2 ring-offset-white border-transparent sp-thumb is-active"
-                      : "border-[#E7D9CC] hover:border-neutral-400 sp-thumb"
+                  className={`flex-shrink-0 w-20 h-20 overflow-hidden transition-all bg-white border sp-thumb ${
+                    isActive ? "is-active" : ""
                   }`}
                 >
                   <img
@@ -162,35 +162,24 @@ const SingleProduct = () => {
             })}
           </div>
 
-          {/* Main image with arrows + badges */}
-          <div className="relative border border-[#A67C52] overflow-hidden group w-full sp-mainimg">
+          {/* Main image with arrows + badges on top of the image */}
+          <div className="relative sp-mainimg group w-full">
             {/* Trending badge (top-left) */}
             {isTrending && (
-              <div className="sp-flag sp-flag--trending" title={t("trending")} aria-label={t("trending")}>
+              <span className="sp-badge sp-badge--trend" title={t("trending")}>
                 {t("trending")}
-              </div>
+              </span>
             )}
 
-            {/* Stock badge (top-right) */}
-            <div
-              className={`sp-stock ${
-                (selectedColor?.stock ?? 0) > 0 ? "sp-stock--ok" : "sp-stock--out"
-              }`}
+            {/* Stock badge (top-right, black/white) */}
+            <span
+              className="sp-badge sp-badge--stock"
               title={
-                (selectedColor?.stock ?? 0) > 0
-                  ? `${t("stock")}: ${selectedColor?.stock}`
-                  : t("out_of_stock")
-              }
-              aria-label={
-                (selectedColor?.stock ?? 0) > 0
-                  ? `${t("stock")}: ${selectedColor?.stock}`
-                  : t("out_of_stock")
+                stockCount > 0 ? `${t("stock")}: ${stockCount}` : t("out_of_stock")
               }
             >
-              {(selectedColor?.stock ?? 0) > 0
-                ? `${t("stock")}: ${selectedColor?.stock}`
-                : t("out_of_stock")}
-            </div>
+              {stockCount > 0 ? `${t("stock")}: ${stockCount}` : t("out_of_stock")}
+            </span>
 
             {/* Left Arrow */}
             {activeGallery.length > 1 && (
@@ -214,9 +203,12 @@ const SingleProduct = () => {
               onMouseEnter={handleMouseEnter}
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
-              className="w-full transition-transform duration-300 cursor-zoom-in object-contain"
+              className="transition-transform duration-300 cursor-zoom-in object-contain"
               style={{
-                transform: isHovering && window.innerWidth > 768 ? "scale(2)" : "scale(1)",
+                width: "100%",
+                height: "100%",
+                transform:
+                  isHovering && window.innerWidth > 768 ? "scale(2)" : "scale(1)",
                 transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%`,
               }}
             />
@@ -236,7 +228,7 @@ const SingleProduct = () => {
           </div>
 
           {/* Mobile: thumbs wrap */}
-          <div className="mt-3 md:hidden flex flex-wrap gap-3 sp-thumbs">
+          <div className="mt-2 md:hidden flex flex-wrap gap-2 sp-thumbs">
             {activeGallery.map((img, idx) => {
               const isActive = idx === selectedImageIndex;
               return (
@@ -244,10 +236,8 @@ const SingleProduct = () => {
                   key={idx}
                   type="button"
                   onClick={() => setSelectedImageIndex(idx)}
-                  className={`w-16 h-16 rounded-lg overflow-hidden transition-all bg-white border sp-thumb ${
-                    isActive
-                      ? "ring-2 ring-black ring-offset-2 ring-offset-white border-transparent is-active"
-                      : "border-[#E7D9CC] hover:border-neutral-400"
+                  className={`w-16 h-16 overflow-hidden transition-all bg-white border sp-thumb ${
+                    isActive ? "is-active" : ""
                   }`}
                 >
                   <img
@@ -263,74 +253,70 @@ const SingleProduct = () => {
 
         {/* DETAILS AREA */}
         <div className="flex-1 flex flex-col gap-4 sp-right">
-          <p className="text-black/80 text-base sp-desc">{translatedDescription}</p>
+          <p className="text-gray-700 text-base sp-desc">{translatedDescription}</p>
 
-          <div className="text-black/80 space-y-2 text-base">
+          <div className="text-[#6B4226] space-y-2 text-base">
             <p>
-              <strong className="text-black">{t("published")}:</strong>{" "}
+              <strong>{t("published")}:</strong>{" "}
               {product?.createdAt
                 ? new Date(product.createdAt).toLocaleDateString()
                 : t("unknown")}
             </p>
             <p>
-              <strong className="text-black">ID:</strong> {product?._id?.slice(0, 8)}
+              <strong>ID:</strong> {product?._id?.slice(0, 8)}
             </p>
             <p>
-              <strong className="text-black">{t("category")}:</strong> {translatedCategory}
+              <strong>{t("category")}:</strong> {translatedCategory}
             </p>
           </div>
 
-          {/* PRICE ROW */}
+          {/* Price row with save + % off */}
           <div className="sp-price-row">
-            {hasDiscount && <span className="sp-percent">{savePercent}%-</span>}
             {hasDiscount ? (
               <>
                 <span className="sp-old">{oldP.toFixed(2)} $</span>
                 <span className="sp-new">{newP.toFixed(2)} $</span>
                 <span className="sp-save">
-                  {t("save", "save")} {saveAmount.toFixed(2)} $
+                  {t("save")} {saveAmount.toFixed(2)} $
                 </span>
+                <span className="sp-off">-{savePercent}%</span>
               </>
             ) : (
               <span className="sp-new">{(newP || oldP).toFixed(2)} $</span>
             )}
           </div>
 
-          {/* Color selector */}
+          {/* Colors */}
           <div className="sp-block">
-            <p className="text-lg font-extrabold text-black mb-2 sp-block-label">
+            <p className="text-lg font-medium text-[#6B4226] mb-2 sp-block-label">
               {t("select_color")}:
             </p>
-            <div className="flex flex-wrap gap-4 sp-colors">
+            <div className="flex flex-wrap gap-3 sp-colors">
               {product?.colors?.map((color, index) => {
                 const translatedName =
                   color?.colorName?.[lang] || color?.colorName?.en || "Default";
                 const isActive = sameColor(color, selectedColor);
-                const badgeClass = isActive
-                  ? "sp-thumb-badge is-active"
-                  : `sp-thumb-badge neutral${color.stock > 0 ? "" : " dim"}`;
                 return (
                   <div key={index} className="relative">
                     <img
                       src={getImgUrl(color.image)}
                       alt={translatedName}
                       onClick={() => handleSelectColor(color)}
-                      className={`w-16 h-16 object-cover rounded-lg cursor-pointer border-2 transition-all ${
-                        isActive
-                          ? "ring-2 ring-black ring-offset-2 ring-offset-white border-transparent"
-                          : "border-[#E7D9CC]"
+                      className={`w-16 h-16 object-cover cursor-pointer border-2 transition-all sp-thumb ${
+                        isActive ? "is-active" : ""
                       }`}
                     />
-                    <div className={badgeClass} title={translatedName}>
+                    {/* Black/white stock counter on thumbnail */}
+                    <div className="sp-thumb-count" title={translatedName}>
                       {color.stock > 0 ? color.stock : t("out_of_stock")}
                     </div>
                   </div>
                 );
               })}
             </div>
-            <p className="mt-3 text-black/80 text-sm">
+            <p className="mt-2 text-[#6B4226] text-sm">
               {t("selected")}:{" "}
-              <strong className="text-black">
+              <strong>
                 {selectedColor?.colorName?.[lang] ||
                   selectedColor?.colorName?.en ||
                   t("default")}
@@ -339,8 +325,8 @@ const SingleProduct = () => {
           </div>
 
           {/* Qty + Add to cart */}
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-4 sp-cta-row">
-            <div className="flex items-center gap-3 sp-qty">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 mt-2 sp-cta-row">
+            <div className="flex items-center sp-qty">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -354,7 +340,6 @@ const SingleProduct = () => {
                 max={selectedColor?.stock ?? 0}
                 value={quantity}
                 onChange={handleQuantityChange}
-                className="border rounded px-4 py-2 w-24 text-center border-neutral-300"
                 disabled={selectedColor?.stock === 0}
               />
               <button
@@ -371,9 +356,9 @@ const SingleProduct = () => {
             <button
               onClick={handleAddToCart}
               disabled={selectedColor?.stock === 0}
-              className={`w-full sm:w-auto py-3 px-6 rounded-lg text-white font-medium text-lg transition-all sp-add ${
+              className={`w-full sm:w-auto py-3 px-6 text-white font-medium text-lg transition-all sp-add ${
                 selectedColor?.stock > 0
-                  ? "bg-black hover:bg-neutral-900"
+                  ? "bg-[#8B5E3B] hover:bg-[#6B4226]"
                   : "bg-gray-300 cursor-not-allowed is-disabled"
               }`}
             >

@@ -23,7 +23,12 @@ const CartPage = () => {
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
 
-  const lang = i18n.language;
+  const lang = i18n.language || "en";
+  const isRTL =
+    lang === "ar" ||
+    lang === "ar-SA" ||
+    (typeof lang === "string" && lang.startsWith("ar"));
+
   const dispatch = useDispatch();
   const cartItems = useSelector((s) => s.cart.cartItems || []);
 
@@ -66,14 +71,14 @@ const CartPage = () => {
   const total = subtotal + shipping;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="cart-page min-h-screen bg-background" dir={isRTL ? "rtl" : "ltr"}>
       <Header />
 
-      <main className="py-16">
-        <div className="container mx-auto px-4">
+      <main className="py-10 md:py-16">
+        <div className="container mx-auto px-4 max-w-7xl">
           {/* Title */}
-          <div className="mb-8 animate-fade-in-up">
-            <h1 className="text-4xl font-bold text-foreground mb-2">
+          <div className="mb-8 text-center md:text-left animate-fade-in-up">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
               {t("cart.title", "Shopping Cart")}
             </h1>
             <p className="text-muted-foreground">
@@ -104,22 +109,26 @@ const CartPage = () => {
                   return (
                     <Card
                       key={`${product._id}-${product?.color?.image || index}`}
-                      className={`animate-fade-in-delay-${(index + 1) * 100}`}
+                      className={`cart-card animate-fade-in-delay-${(index + 1) * 100}`}
                     >
-                      <CardContent className="p-6">
-  <div className="flex flex-col md:flex-row gap-4">
-    {/* Image (full view, no crop) */}
-   <div className="cart-img-box">
-  <img src={imgSrc} alt={titleFor(product)} className="cart-img"
-       onError={(e) => { e.currentTarget.src = "/default-image.jpg"; }} />
-</div>
-
-
+                      <CardContent className="p-4 sm:p-6">
+                        <div className="cart-row flex flex-col md:flex-row items-center md:items-stretch gap-4 md:gap-6">
+                          {/* Image (keeps aspect, centered) */}
+                          <div className="cart-img-box">
+                            <img
+                              src={imgSrc}
+                              alt={titleFor(product)}
+                              className="cart-img"
+                              onError={(e) => {
+                                e.currentTarget.src = "/default-image.jpg";
+                              }}
+                            />
+                          </div>
 
                           {/* Details */}
-                          <div className="flex-1">
-                            <div className="flex justify-between items-start mb-2">
-                              <h3 className="text-xl font-semibold text-foreground">
+                          <div className="flex-1 w-full">
+                            <div className="flex flex-wrap justify-between items-start gap-3 mb-2">
+                              <h3 className="text-lg sm:text-xl font-semibold text-foreground text-center md:text-start w-full md:w-auto">
                                 <Link
                                   to={`/products/${product._id}`}
                                   className="hover:underline"
@@ -130,15 +139,16 @@ const CartPage = () => {
 
                               {/* Remove */}
                               <button
-                                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-neutral-300 bg-white text-red-600 shadow-sm hover:bg-neutral-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/30 transition"
+                                className="remove-btn inline-flex h-9 w-9 items-center justify-center rounded-md border border-neutral-300 bg-white text-red-600 shadow-sm hover:bg-neutral-50 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/30 transition"
                                 aria-label={t("cart.remove", "Remove")}
                                 onClick={() => handleRemove(product)}
+                                title={t("cart.remove", "Remove")}
                               >
                                 <Trash2 className="h-4 w-4" />
                               </button>
                             </div>
 
-                            <div className="text-sm text-muted-foreground mb-3 space-y-1">
+                            <div className="text-sm text-muted-foreground mb-4 space-y-1 text-center md:text-start">
                               <p>
                                 {t("cart.category", "Category")}:{" "}
                                 <span className="text-foreground">
@@ -158,7 +168,8 @@ const CartPage = () => {
                               )}
                             </div>
 
-                            <div className="flex items-center justify-between">
+                            {/* Price + Qty */}
+                            <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
                               {/* Price */}
                               <div className="flex items-center gap-2">
                                 <span className="text-2xl font-bold text-foreground">
@@ -171,10 +182,14 @@ const CartPage = () => {
                                 )}
                               </div>
 
-                              {/* Qty controls — rounded like cart.tsx */}
-                              <div className="flex items-center gap-3">
+                              {/* Qty controls */}
+                              <div
+                                className="qty-group flex items-center gap-3"
+                                role="group"
+                                aria-label={t("quantity", "Quantity")}
+                              >
                                 <button
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-neutral-300 bg-white text-neutral-700 shadow-sm hover:bg-neutral-50 active:scale-95 focus:outline-none transition disabled:opacity-40"
+                                  className="qty-btn inline-flex h-9 w-9 sm:h-8 sm:w-8 items-center justify-center rounded-md border border-neutral-300 bg-white text-neutral-700 shadow-sm hover:bg-neutral-50 active:scale-95 focus:outline-none transition disabled:opacity-40"
                                   aria-label={t(
                                     "cart.decrease_qty",
                                     "Decrease quantity"
@@ -187,12 +202,12 @@ const CartPage = () => {
                                   <Minus className="h-4 w-4" />
                                 </button>
 
-                                <span className="font-medium text-base min-w-6 text-center select-none">
+                                <span className="qty-val font-medium text-base min-w-6 text-center select-none">
                                   {product.quantity}
                                 </span>
 
                                 <button
-                                  className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-neutral-300 bg-white text-neutral-700 shadow-sm hover:bg-neutral-50 active:scale-95 focus:outline-none transition disabled:opacity-40"
+                                  className="qty-btn inline-flex h-9 w-9 sm:h-8 sm:w-8 items-center justify-center rounded-md border border-neutral-300 bg-white text-neutral-700 shadow-sm hover:bg-neutral-50 active:scale-95 focus:outline-none transition disabled:opacity-40"
                                   aria-label={t(
                                     "cart.increase_qty",
                                     "Increase quantity"
@@ -214,7 +229,7 @@ const CartPage = () => {
                             </div>
 
                             {/* Line total */}
-                            <div className="mt-2 text-right text-sm text-muted-foreground">
+                            <div className="mt-3 text-center md:text-right text-sm text-muted-foreground">
                               {t("cart.subtotal", "Subtotal")}:{" "}
                               <span className="text-foreground font-semibold">
                                 ${linePrice.toFixed(2)}
@@ -241,9 +256,9 @@ const CartPage = () => {
 
               {/* Order Summary */}
               <div className="animate-fade-in-delay-300">
-                <Card className="sticky top-24">
+                <Card className="order-summary lg:sticky lg:top-24">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-semibold text-foreground mb-6">
+                    <h3 className="text-2xl font-semibold text-foreground mb-6 text-center md:text-left">
                       {t("cart.summary", "Order Summary")}
                     </h3>
 
@@ -280,14 +295,10 @@ const CartPage = () => {
                       </div>
                     </div>
 
-                    {/* Checkout + Continue shopping (keeps your CSS classes) */}
                     <div className="cart-buttons">
                       <Link to="/checkout">
                         <button className="btn-brown-gradient">
-                          {t(
-                            "cart.proceed_to_checkout",
-                            "Proceed to Checkout"
-                          )}
+                          {t("cart.proceed_to_checkout", "Proceed to Checkout")}
                         </button>
                       </Link>
 

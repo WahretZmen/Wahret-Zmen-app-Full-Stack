@@ -1,4 +1,4 @@
-/* === Enhanced Single Product CSS (black/white theme) === */
+/* === Single Product (clean white) === */
 .product-cart {
   margin-top: 85px !important;
   margin: 8% auto 5%;
@@ -6,16 +6,36 @@
   animation: fadeInUp 0.8s ease-in-out;
   background: #ffffff;
   border: 1px solid #a67c52;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
   transition: background 0.5s ease;
 }
+@keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* -------- Main gallery container (no inner white padding now) -------- */
+.sp-mainimg {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e5e7eb;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 0;                    /* ⬅ remove inner whitespace */
+  width: 100%;
+  max-height: 420px;
+  min-height: 320px;
+}
+.sp-mainimg img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
 }
 
-/* Arrows */
+/* -------- Premium arrows -------- */
 .sp-arrow {
   position: absolute;
   top: 50%;
@@ -25,147 +45,101 @@
   height: 44px;
   border-radius: 50%;
   border: none;
-  background: rgba(255, 255, 255, 0.9);
-  color: #111;
+  background: rgba(255,255,255,0.9);
+  color: #333;
   font-size: 1.5rem;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  transition: all 0.3s ease;
+  transition: all .3s ease;
 }
 .sp-arrow:hover { background: #000; color: #fff; transform: translateY(-50%) scale(1.1); }
 .sp-arrow-left { left: 12px; }
 .sp-arrow-right { right: 12px; }
 
-/* Main image container (clean) */
-.sp-mainimg {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #e5e7eb;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  padding: 6px;
-  width: 100%;
-  max-height: 420px;
-  min-height: 320px;
-}
-.sp-mainimg img { max-width: 100%; max-height: 100%; height: auto; width: auto; object-fit: contain; display: block; }
-
-/* Premium flags/badges on the main image */
-.sp-flag {
+/* -------- Badges on main image -------- */
+.sp-badge {
   position: absolute;
+  z-index: 30;           /* above arrows */
   top: 10px;
-  left: 10px;
   padding: 6px 10px;
-  border-radius: 999px;
   font-size: 12px;
   font-weight: 800;
+  letter-spacing: .2px;
+  border-radius: 0;      /* square look */
   color: #fff;
   box-shadow: 0 6px 16px rgba(0,0,0,.18);
 }
-.sp-flag--trending { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+.sp-badge--trend { left: 10px; background: #ef4444; }  /* red, as requested earlier */
+.sp-badge--stock { right: 10px; background: #000; }    /* black/white stock counter */
 
-.sp-stock {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 6px 10px;
-  border-radius: 999px;
-  font-weight: 800;
-  font-size: 12px;
-  color: #fff;
-  box-shadow: 0 6px 16px rgba(0,0,0,.18);
-}
-.sp-stock--ok  { background: linear-gradient(135deg, #16a34a, #15803d); }
-.sp-stock--out { background: linear-gradient(135deg, #ef4444, #b91c1c); }
-
-/* Price row & discount badges */
-.sp-price-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:6px 0 4px; }
-.sp-old { text-decoration: line-through; color:#9ca3af !important; font-weight:600; }
-.sp-new { color:#111827 !important; font-weight:800 !important; }
+/* -------- Price row (incl. save & % off) -------- */
+.sp-price-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:6px 0 4px; }
+.sp-old { text-decoration: line-through; color:#9ca3af; font-weight:600; }
+.sp-new { color:#111827; font-weight:800; }
 .sp-save { background:#dc2626; color:#fff; font-weight:800; padding:6px 10px; border-radius:6px; font-size:13px; }
-.sp-percent { background:#111; color:#fff; font-weight:800; padding:6px 10px; border-radius:6px; font-size:13px; }
+.sp-off  { background:#111; color:#fff; font-weight:800; padding:6px 8px; font-size:12px; border-radius:4px; }
 
-/* Thumbs */
-.sp-thumbs { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
-.sp-thumb { width:72px; height:72px; border:1px solid #e5e7eb !important; border-radius:6px; background:#fff; overflow:hidden; padding:0; }
-.sp-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+/* -------- Thumbnails (tight gaps / square) -------- */
+.thumb-rail { gap: 8px !important; } /* forcibly keep them tight */
+.sp-thumbs { display:flex; gap:8px; margin-top:8px; flex-wrap:wrap; }
+.sp-thumb { border:1px solid #e5e7eb !important; border-radius:0 !important; background:#fff; }
 .sp-thumb.is-active { outline:2px solid #111827; outline-offset:2px; }
 
-/* Black/white counter on thumbnails; selected = green like top-right badge */
-.sp-thumb-badge {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  padding: 3px 7px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,.15);
-  user-select: none;
+/* Small stock counters on color thumbnails → BLACK / WHITE */
+.sp-thumb-count{
+  position:absolute;
+  top: 4px;
+  right: 4px;
+  background:#000;
+  color:#fff;
+  font-weight:800;
+  font-size:11px;
+  padding: 2px 6px;
+  border:1px solid #fff;      /* white hairline for contrast */
+  border-radius: 0;           /* square */
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
 }
-.sp-thumb-badge.neutral { background:#111; }
-.sp-thumb-badge.neutral.dim { background:#111; opacity:.65; }
-.sp-thumb-badge.is-active { background:#16a34a; }
 
-/* Blocks & copy */
-.sp-block { margin-bottom: 26px; }
-.sp-block-label { color:#111827 !important; font-size:15px; font-weight:800; letter-spacing:.1px; }
-.sp-colors { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-
-/* Quantity */
-.sp-cta-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:18px; }
-.sp-qty { display:inline-flex; align-items:center; height:40px; border:1px solid #d1d5db; overflow:hidden; background:#fff; box-shadow: none; }
-.sp-qty > button { width:40px; height:40px; display:grid; place-items:center; border:none; background:#f5f5f5; font-size:20px; line-height:1; cursor:pointer; transition: background 200ms ease; user-select:none; }
-.sp-qty > button:hover { background:#efefef; }
+/* -------- Quantity stepper → BLACK / WHITE -------- */
+.sp-qty{
+  display:inline-flex; align-items:center;
+  height: 40px;
+  border: 1px solid #111;
+  background:#fff;
+}
+.sp-qty > button{
+  width:40px; height:40px; display:grid; place-items:center;
+  border:none; background:#111; color:#fff; font-size:20px; line-height:1;
+  cursor:pointer; transition:opacity .2s ease;
+}
+.sp-qty > button:hover { opacity:.9; }
 .sp-qty > button:disabled { opacity:.5; cursor:not-allowed; }
-.sp-qty input { width:64px; height:40px; text-align:center; font-weight:700; outline:none; border:none !important; background:#fff; border-inline:1px solid #d1d5db !important; }
-.sp-qty > button:first-child { border-right:1px solid #d1d5db; }
-.sp-qty > button:last-child  { border-left:1px solid #d1d5db; }
-[dir="rtl"] .sp-qty { flex-direction: row-reverse; }
-[dir="rtl"] .sp-qty > button:first-child { border-right:none; border-left:1px solid #d1d5db; }
-[dir="rtl"] .sp-qty > button:last-child  { border-left:none;  border-right:1px solid #d1d5db; }
+.sp-qty input{
+  width:64px; height:40px; text-align:center; font-weight:700; outline:none;
+  border: none !important; background:#fff; color:#111;
+  border-inline: 1px solid #111 !important;
+}
 
-/* Add to cart (flat black) */
-.sp-add { box-shadow:none !important; }
-.sp-add.is-disabled, .sp-add:disabled { background:#bdbdbd !important; cursor:not-allowed; }
-
-/* Typography (black/neutral) */
-.sp-title { color:#1f2937 !important; font-weight:800 !important; letter-spacing:-0.015em; line-height:1.2; margin:6px 0 18px !important; }
+/* -------- Typography & layout polish (kept) -------- */
+.sp-title, .single-product-title { color:#1f2937 !important; font-weight:800 !important; letter-spacing:-.015em; line-height:1.2; margin:6px 0 18px !important; }
 .sp-desc { color:#374151 !important; font-size:16px; line-height:1.9; overflow-wrap:anywhere; word-break:break-word; hyphens:auto; }
-.sp-right .text-black { color:#111827 !important; }
-.sp-right .text-black\/80 { color:rgba(17,24,39,.8) !important; }
+.sp-right .text-base { color:#6b7280 !important; font-size:14px; line-height:1.6; }
+.sp-right strong { color:#111827; }
 
-/* Layout helpers */
-.sp-page { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
-.sp-card { display: grid; grid-template-columns: 1fr; gap: 28px; }
-@media (min-width: 992px) { .sp-card { grid-template-columns: 54% 46%; } }
-.sp-card > * { min-width: 0; }
-.sp-right { min-width: 0; padding-inline: clamp(8px, 2vw, 16px); }
+/* Grid children should shrink properly (avoid overflow) */
+.sp-card > * { min-width:0; }
+.sp-right { min-width:0; padding-inline: clamp(8px, 2vw, 16px); }
 
-/* Hide mobile number spinners */
-.sp-cta-row .sp-qty input[type="number"]::-webkit-outer-spin-button,
-.sp-cta-row .sp-qty input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.sp-cta-row .sp-qty input[type="number"] { -moz-appearance: textfield; }
+/* Desktop: keep only left thumbs column visible in RTL as well */
+@media (min-width: 768px){
+  .sp-thumbs { display:none !important; }
+}
 
-/* Keep vertical thumbs on the LEFT even in RTL */
-@media (min-width: 768px) { .sp-thumbs { display: none !important; } }
+/* RTL niceties */
 [dir="rtl"] .sp-media { flex-direction: row-reverse; }
-.sp-media > .md\:flex.md\:flex-col.w-20 { flex: 0 0 84px; }
-.sp-media > .group.w-full,
-.sp-media > .sp-mainimg { flex: 1 1 auto; }
 
-/* Square theme (no radius) */
-.sp-square,
-.sp-square * { border-radius: 0 !important; }
-.sp-square .sp-stock,
-.sp-square .sp-save { border-radius: 0 !important; }
-.sp-square .sp-mainimg { border-width: 2px !important; border-color: #e5e7eb !important; box-shadow:none; }
-.sp-square .sp-thumb { border:1px solid #e5e7eb !important; box-shadow:none !important; }
+/* Square theme (keep corners sharp) */
+.sp-square, .sp-square * { border-radius: 0 !important; }
+.sp-square .sp-add, .sp-square .add-to-cart-btn { box-shadow: none !important; }
