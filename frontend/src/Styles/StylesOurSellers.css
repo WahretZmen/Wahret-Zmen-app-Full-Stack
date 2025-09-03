@@ -1,19 +1,27 @@
+/* Make everything inside this section box-size correctly */
+.our-sellers-wrapper, .our-sellers-wrapper * { box-sizing: border-box; }
+
 /* ===== OurSellers Wrapper ===== */
 .our-sellers-wrapper {
   width: 100%;
   max-width: 100vw;
   padding: 2rem 1.5rem;
-  background: transparent !important;   /* remove pink/beige */
+  background: transparent !important;
   margin: 0 auto;
-  overflow-x: visible !important;
   position: relative;
+
+  /* stop any accidental horizontal scrollbars */
+  overflow-x: hidden;
+}
+@supports (overflow: clip) {
+  .our-sellers-wrapper { overflow-x: clip; }
 }
 
 /* ===== Section Container ===== */
 .our-sellers-section {
   width: 100%;
   padding: 2rem 1rem;
-  background: transparent !important;   /* remove pink/beige */
+  background: transparent !important;
 }
 
 .our-sellers-container {
@@ -22,7 +30,7 @@
   padding: 0 1rem;
 }
 
-/* ===== Title (base) ===== */
+/* ===== Title ===== */
 .our-sellers-title {
   font-size: 2rem;
   font-weight: bold;
@@ -31,23 +39,17 @@
   margin-bottom: 2rem;
 }
 
-/* ============================================================
-   PREMIUM HOVER ANIMATIONS for the Title
-   - 1) Gold shimmer over the text on hover
-   - 2) Elegant underline sweep that draws in on hover
-   ============================================================ */
-/* Center the title element itself */
+/* ===== Premium Title Animations (no overflow on mobile) ===== */
 .os-title {
   position: relative;
-  display: block;          /* was inline-block */
-  width: max-content;      /* shrink to text width */
-  margin-inline: auto;     /* center horizontally */
-  text-align: center;      /* keep text centered inside */
+  display: block;
+  width: 100%;               /* was max-content → caused overflow */
+  max-width: 100%;
+  margin-inline: auto;
+  text-align: center;
   isolation: isolate;
+  padding-inline: 8px;       /* breathing room near screen edges */
 }
-
-
-/* Gradient text that can shimmer on hover */
 .os-title__text {
   display: inline-block;
   background: linear-gradient(
@@ -65,15 +67,15 @@
   color: transparent;
   transition: background-position 0.55s ease, transform 0.25s ease;
   will-change: background-position, transform;
-}
 
-/* Hover effect 1: shimmering gradient sweep across the letters */
+  /* allow wrapping in Arabic/long titles instead of pushing layout */
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
 .os-title:hover .os-title__text {
   animation: osShimmer 1.4s linear infinite;
-  transform: translateY(-1px); /* micro lift for polish */
+  transform: translateY(-1px);
 }
-
-/* Hover effect 2: underline sweep (draws in from center) */
 .os-title::after {
   content: "";
   position: absolute;
@@ -88,16 +90,8 @@
   transition: transform 520ms cubic-bezier(.22, .61, .36, 1);
   z-index: 0;
 }
-
-.os-title:hover::after {
-  transform: translateX(-50%) scaleX(1);
-}
-
-/* Shimmer keyframes */
-@keyframes osShimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -20% 0; }
-}
+.os-title:hover::after { transform: translateX(-50%) scaleX(1); }
+@keyframes osShimmer { 0% { background-position: 200% 0; } 100% { background-position: -20% 0; } }
 
 /* ===== Filter Area ===== */
 .our-sellers-filters {
@@ -108,35 +102,41 @@
   margin-bottom: 3rem;
 }
 
-/* ===== Carousel Settings ===== */
+/* ===== Carousel containment (prevents horizontal overflow) ===== */
+.carousel-clip {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}
+@supports (overflow: clip) {
+  .carousel-clip { overflow-x: clip; }
+}
+
+/* Library classes hooks */
+.rmc-list { overflow: hidden !important; }         /* keep the scroller clipped horizontally */
+.rmc-track { will-change: transform; }
+.rmc-item  { padding: 0; }
+
+/* ===== Carousel Items (room for badges inside the card area) ===== */
 .react-multi-carousel-item {
-  padding-top: 4rem;     /* keep space for badges if your cards use them */
+  padding-top: 4rem;     /* keep space for badges */
   padding-bottom: 4rem;
   z-index: 1;
   position: relative;
 }
 
-.react-multi-carousel-track {
-  overflow: visible !important;
-}
-
 .carousel-card-wrapper {
   padding: 0 12px;
-  box-sizing: border-box;
   width: 100%;
   max-width: 100%;
 }
 
-@media (max-width: 768px) {
-  .carousel-card-wrapper {
-    padding: 0 8px;
-    width: 92vw;
-  }
-}
+/* Remove the old rule that caused oversizing on phones */
+/* .react-multi-carousel-track { overflow: visible !important; } */
 
-/* ===== Arrows (on-brand, subtle) ===== */
+/* ===== Arrows ===== */
 .custom-carousel .react-multiple-carousel__arrow {
-  background: #8B5C3E;  /* brand color */
+  background: #8B5C3E;
   color: #fff;
   z-index: 10;
   width: 40px;
@@ -150,50 +150,35 @@
   opacity: 0.9;
   transition: opacity 0.25s ease, transform 0.1s ease;
 }
-
-.custom-carousel .react-multiple-carousel__arrow:hover {
-  opacity: 1;
-}
-
-.custom-carousel .react-multiple-carousel__arrow:active {
-  transform: scale(0.98);
-}
-
+.custom-carousel .react-multiple-carousel__arrow:hover { opacity: 1; }
+.custom-carousel .react-multiple-carousel__arrow:active { transform: scale(0.98); }
 .custom-carousel .react-multiple-carousel__arrow--left { left: 10px; }
 .custom-carousel .react-multiple-carousel__arrow--right { right: 10px; }
-
 /* RTL arrows */
-html[dir="rtl"] .react-multiple-carousel__arrow--left {
-  right: 10px !important; left: auto !important;
-}
-html[dir="rtl"] .react-multiple-carousel__arrow--right {
-  left: 10px !important; right: auto !important;
-}
+html[dir="rtl"] .react-multiple-carousel__arrow--left { right: 10px !important; left: auto !important; }
+html[dir="rtl"] .react-multiple-carousel__arrow--right { left: 10px !important; right: auto !important; }
 
-/* ===== Remove the green/pink badges only inside OurSellers ===== */
-.our-sellers-container .stock-badge,
-.our-sellers-container .badge--stock,
-.our-sellers-container .badge--trending,
-.our-sellers-container .sale-badge,
-.our-sellers-container .badge,
-.our-sellers-container [class*="badge"] {
-  display: none !important;
-}
+/* ===== IMPORTANT: Keep badges visible but inside cards ===== */
+.our-sellers-container .product-badge { display: inline-flex !important; }
 
 /* ===== Responsive ===== */
+@media (max-width: 1024px) {
+  .our-sellers-container { padding: 0 .75rem; }
+}
+
 @media (max-width: 768px) {
   .our-sellers-title { font-size: 1.5rem; }
   .our-sellers-filters { gap: 1rem; }
   .custom-carousel .react-multiple-carousel__arrow { width: 32px; height: 32px; font-size: 14px; }
   .react-multi-carousel-item { padding-top: 4.5rem; padding-bottom: 4.5rem; }
   .our-sellers-wrapper { padding: 2rem 1rem; }
-  .our-sellers-container { padding: 0; }
+  .carousel-card-wrapper { padding: 0 8px; }  /* keep within viewport */
 }
 
-/* ===== No horizontal scroll ===== */
-body, html { overflow-x: hidden; }
+/* ===== No horizontal scroll globally ===== */
+html, body { max-width: 100%; overflow-x: hidden; }
 
-/* Reduced motion: disable animations for accessibility */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce){
   .os-title__text,
   .os-title::after {

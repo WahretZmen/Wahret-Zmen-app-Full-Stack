@@ -1,4 +1,3 @@
-// src/pages/products/ProductCard.jsx
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -22,10 +21,8 @@ const ProductCard = ({ product }) => {
 
   if (!product) return null;
 
-  // ---- i18n-aware fields
   const title =
     product?.translations?.[lang]?.title || product?.title || "";
-
   const description =
     product?.translations?.[lang]?.description || product?.description || "";
 
@@ -34,15 +31,14 @@ const ProductCard = ({ product }) => {
     product?.colors?.[0]?.colorName?.en ||
     t("default", "Default");
 
-  const displayedStock =
-    product?.colors?.[0]?.stock ?? product?.stockQuantity ?? 0;
+  const displayedStock = product?.colors?.[0]?.stock ?? product?.stockQuantity ?? 0;
 
-  // More robust trending detection
+  // Robust trending detection
   const isTrending = Boolean(
     product?.trending ||
-      product?.isTrending ||
-      product?.tags?.includes?.("trending") ||
-      product?.labels?.includes?.("trending")
+    product?.isTrending ||
+    product?.tags?.includes?.("trending") ||
+    product?.labels?.includes?.("trending")
   );
 
   const hasOld = Number(product?.oldPrice) > Number(product?.newPrice || 0);
@@ -72,14 +68,11 @@ const ProductCard = ({ product }) => {
     setZoomPosition({ x, y });
   };
   const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => {
-    setIsHovering(false);
-    setZoomPosition({ x: 50, y: 50 });
-  };
+  const handleMouseLeave = () => { setIsHovering(false); setZoomPosition({ x: 50, y: 50 }); };
 
   return (
     <div className="product-card pc-card group relative bg-white border border-gray-200 overflow-hidden transition-all duration-300 w-full sm:max-w-[280px] mx-auto">
-      {/* ================= Image + badges + hover CTA ================= */}
+      {/* ===== Image + Premium Badges ===== */}
       <a
         href={`/products/${product._id}`}
         className="pc-imgwrap relative block w-full bg-white"
@@ -95,56 +88,47 @@ const ProductCard = ({ product }) => {
           style={{ transform: "none" }}
         />
 
-        {/* Trending badge (top-left) */}
+        {/* Trending (top-left) */}
         {isTrending && (
           <span
             className="product-badge badge-top-left trending-badge"
-            aria-label={t("trending", "Trending")}
-            title={t("trending", "Trending")}
+            title={t("trending")}
+            aria-label={t("trending")}
           >
-            {t("trending", "Trending")}
+            {t("trending")}
           </span>
         )}
 
-        {/* Stock badge (top-right) */}
+        {/* Stock (top-right) */}
         <span
           className={`product-badge badge-top-right stock-badge ${
             displayedStock > 0 ? "in-stock" : "out-of-stock"
           }`}
-          aria-label={
-            displayedStock > 0
-              ? `${t("stock", "Stock")}: ${displayedStock}`
-              : t("out_of_stock", "Out of stock")
-          }
-          title={
-            displayedStock > 0
-              ? `${t("stock", "Stock")}: ${displayedStock}`
-              : t("out_of_stock", "Out of stock")
-          }
+          title={displayedStock > 0 ? `${t("stock")}: ${displayedStock}` : t("out_of_stock")}
+          aria-label={displayedStock > 0 ? `${t("stock")}: ${displayedStock}` : t("out_of_stock")}
         >
-          {displayedStock > 0
-            ? `${t("stock", "Stock")}: ${displayedStock}`
-            : t("out_of_stock", "Out of stock")}
+          {displayedStock > 0 ? `${t("stock")}: ${displayedStock}` : t("out_of_stock")}
         </span>
 
-        {/* Hover Add-to-Cart CTA */}
+        {/* Hover Add-to-Cart */}
         <button
           onClick={handleAddToCart}
           disabled={displayedStock === 0}
-          className={`pc-cta-ontop absolute bottom-3 left-1/2 -translate-x-1/2 px-4 py-2 text-sm font-medium text-white transition-all duration-300 ${
+          className={`pc-cta-ontop absolute bottom-3 left-50 translate-x-center px-4 py-2 text-sm font-medium text-white transition-all duration-300 ${
             displayedStock > 0
               ? "bg-[#111111] opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0"
               : "bg-gray-400 cursor-not-allowed"
           }`}
+          style={{ left: "50%", transform: "translateX(-50%)" }}
         >
-          <FiShoppingCart className="inline mr-1" />
+          <FiShoppingCart className="inline" style={{ marginInlineEnd: 4 }} />
           {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
         </button>
       </a>
 
       <div className="pc-divider" />
 
-      {/* ================= Body ================= */}
+      {/* ===== Body ===== */}
       <div className="pc-body p-4 text-center space-y-2">
         <Link to={`/products/${product._id}`}>
           <h3 className="pc-title text-lg font-bold text-gray-800 hover:text-[#111] transition-colors duration-300">
@@ -210,7 +194,7 @@ const ProductCard = ({ product }) => {
               disabled={displayedStock === 0}
               className={`add-to-cart-btn ${displayedStock > 0 ? "" : "bg-gray-300 cursor-not-allowed"}`}
             >
-              <FiShoppingCart className="inline mr-1" />
+              <FiShoppingCart className="inline" style={{ marginInlineEnd: 4 }} />
               {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
             </button>
           </div>

@@ -7,20 +7,23 @@ import Selector from "../../components/Selector.jsx";
 import "../../Styles/StylesOurSellers.css";
 import FadeInSection from "../../Animations/FadeInSection.jsx";
 import { useTranslation } from "react-i18next";
-import ScrollFade from "../../Animations/ScrollFade.jsx"; // ✅ Correct
+import ScrollFade from "../../Animations/ScrollFade.jsx";
 
-const categories = ["All", "Men", "Women", "Children"];
+// ✅ Canonical keys so Selector translates (AR shows "الكل")
+const categories = ["all", "men", "women", "children"];
 
 const responsive = {
   superLargeDesktop: { breakpoint: { max: 4000, min: 1400 }, items: 3, slidesToSlide: 1 },
-  desktop: { breakpoint: { max: 1400, min: 1024 }, items: 3, slidesToSlide: 1 },
-  tablet: { breakpoint: { max: 1024, min: 768 }, items: 2, slidesToSlide: 1 },
-  mobile: { breakpoint: { max: 768, min: 0 }, items: 1, slidesToSlide: 1 },
+  desktop:           { breakpoint: { max: 1400, min: 1024 }, items: 3, slidesToSlide: 1 },
+  tablet:            { breakpoint: { max: 1024, min: 768 },  items: 2, slidesToSlide: 1 },
+  mobile:            { breakpoint: { max: 768,  min: 0 },    items: 1, slidesToSlide: 1 },
 };
 
 const OurSellers = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const { data: products = [], isLoading } = useGetAllProductsQuery(undefined, {
+  // "" means “All”
+  const [selectedCategory, setSelectedCategory] = useState("");
+
+  const { data: products = [] } = useGetAllProductsQuery(undefined, {
     pollingInterval: 5000,
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
@@ -28,87 +31,87 @@ const OurSellers = () => {
 
   const { t, i18n } = useTranslation();
 
-  // ✅ RTL logic
-  const isRTL = i18n.language === "ar" || i18n.language === "ar-SA";
+  const isRTL =
+    i18n.language === "ar" ||
+    i18n.language === "ar-SA" ||
+    (typeof i18n.language === "string" && i18n.language.startsWith("ar"));
   if (!i18n.isInitialized) return null;
 
   useEffect(() => {
     document.documentElement.dir = isRTL ? "rtl" : "ltr";
   }, [isRTL]);
 
-  // ✅ Filter products by selected category
+  const norm = (s = "") => String(s).trim().toLowerCase();
+
   const filteredProducts =
-    selectedCategory === "All"
+    selectedCategory === ""
       ? [...products].sort((a, b) => {
           const order = { men: 1, women: 2, children: 3 };
-          return (order[a.category.toLowerCase()] || 99) - (order[b.category.toLowerCase()] || 99);
+          return (order[norm(a.category)] || 99) - (order[norm(b.category)] || 99);
         })
-      : products.filter(
-          (product) =>
-            product.category.toLowerCase() === selectedCategory.toLowerCase()
-        );
+      : products.filter((p) => norm(p.category) === norm(selectedCategory));
 
   return (
     <FadeInSection>
-      <div className="our-sellers-wrapper">
-        <div className="our-sellers-section">
+      <div className="our-sellers-wrapper" dir={isRTL ? "rtl" : "ltr"}>
+        <section className="our-sellers-section" aria-label={t("wahret_zmen_collection")}>
           <div className="our-sellers-container">
-
-            {/* ===== Title (with 2 premium hover animations) =====
-               - Gold shimmer across text (gradient clip + animation)
-               - Elegant underline sweep (draws in on hover)
-            */}
+            {/* ===== Title ===== */}
             <ScrollFade direction="right" delay={0}>
               <h2 className="text-4xl text-[#5a382d] font-bold mb-6 text-center uppercase tracking-wide our-sellers-title os-title">
-                <span className="os-title__text">
-                  {t("wahret_zmen_collection")}
-                </span>
+                <span className="os-title__text">{t("wahret_zmen_collection")}</span>
               </h2>
             </ScrollFade>
 
-            {/* Category Filter */}
+            {/* ===== Category Filter ===== */}
             <div className="mb-6 flex flex-col items-center px-2 sm:px-0 w-full">
               <h3 className="select-category-title text-lg sm:text-xl font-semibold text-[#5a382d] mb-2 text-center">
                 {t("select_category")}
               </h3>
               <div className="w-full px-2 sm:px-0 max-w-xs">
-                <Selector options={categories} onSelect={setSelectedCategory} />
+                <Selector
+                  options={categories}
+                  value={selectedCategory}        /* "" -> All */
+                  onSelect={setSelectedCategory}  /* Selector returns "" for 'all' */
+                />
               </div>
             </div>
 
-            {/* Carousel */}
+            {/* ===== Carousel ===== */}
             <div className="max-w-6xl mx-auto px-2 sm:px-4">
               {filteredProducts.length > 0 ? (
-                <Carousel
-                  responsive={responsive}
-                  autoPlay={true}
-                  autoPlaySpeed={3000}
-                  infinite={true}
-                  arrows={true}
-                  swipeable={true}
-                  draggable={true}
-                  showDots={false}
-                  keyBoardControl={true}
-                  className="custom-carousel"
-                  rtl={isRTL} // ✅ RTL support for Arabic
-                >
-                  {filteredProducts.map((product, index) => (
-                    <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>
-                      <div className="carousel-card-wrapper">
-                        <ProductCard product={product} />
-                      </div>
-                    </FadeInSection>
-                  ))}
-                </Carousel>
+                <div className="carousel-clip">
+                  <Carousel
+                    responsive={responsive}
+                    autoPlay
+                    autoPlaySpeed={3000}
+                    infinite
+                    arrows
+                    swipeable
+                    draggable
+                    showDots={false}
+                    keyBoardControl
+                    rtl={isRTL}
+                    customTransition="transform 350ms ease"
+                    containerClass="rmc-list"
+                    sliderClass="rmc-track"
+                    itemClass="rmc-item"
+                  >
+                    {filteredProducts.map((product, index) => (
+                      <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>
+                        <div className="carousel-card-wrapper">
+                          <ProductCard product={product} />
+                        </div>
+                      </FadeInSection>
+                    ))}
+                  </Carousel>
+                </div>
               ) : (
-                <p className="text-center text-[#5a382d] text-lg">
-                  {t("no_products_found")} You're welcome !
-                </p>
+                <p className="text-center text-[#5a382d] text-lg">{t("no_products_found")}</p>
               )}
             </div>
-
           </div>
-        </div>
+        </section>
       </div>
     </FadeInSection>
   );

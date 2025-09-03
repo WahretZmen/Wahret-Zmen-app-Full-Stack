@@ -95,7 +95,12 @@ const productColorNames = (p) => {
 
 /* ============================ Component ============================ */
 const Products = () => {
-  // filters
+  // 🔒 list-only (no view toggle)
+  // const [viewMode, setViewMode] = useState("grid");  // removed
+
+  const [showFilters, setShowFilters] = useState(false);
+
+  // filters (no size)
   const [categorySel, setCategorySel] = useState("All");
   const [colorSel, setColorSel] = useState("All");
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -223,6 +228,7 @@ const Products = () => {
       return catOk && colorOk && priceOk && searchOk;
     });
 
+    // NOTE: removed any grid/list sorting/toggling logic
     return list.slice(0, loadMore);
   }, [products, categorySel, colorSel, priceRange, searchTerm, loadMore]);
 
@@ -254,29 +260,35 @@ const Products = () => {
           <Helmet>
             <title>{t("products_page.title")} - Wahret Zmen</title>
           </Helmet>
+{/* Title */}
+<FadeInSection duration={0.6}>
+ <h2 className="products-title bounce page-title-desktop text-3xl sm:text-4xl font-bold font-serif text-center mb-6 drop-shadow-lg">
+  {t("products_page.title")}
+</h2>
 
-          {/* ========= Premium centered title + overview ========= */}
-          <FadeInSection duration={0.6}>
-            <header className="wz-collections-header" dir={isRTL ? "rtl" : "ltr"}>
-              <h1 className="wz-collections-title wz-title-shine wz-title-bounce">
-                {t("products_page.title")}
-              </h1>
-              <p className="wz-collections-sub">
-                {t("products_page.overview")}
-              </p>
-            </header>
-          </FadeInSection>
+</FadeInSection>
 
-          {/* ========= Overview search ========= */}
-          <FadeInSection delay={0.2} duration={0.6}>
-            <div className="products-grid grid gap-6 grid-cols-1">
-              <SearchInput
-                setSearchTerm={handleSearchChange}
-                placeholder={t("search_placeholder")}
-              />
-              {searchLoading && <InlineWahretZmenLoader />}
-            </div>
-          </FadeInSection>
+{/* Overview + Search */}
+<FadeInSection delay={0.2} duration={0.6}>
+  <div className="text-center text-gray-700 max-w-3xl mx-auto mb-6 leading-relaxed px-2">
+    <p className="text-base sm:text-lg">
+      {t("products_page.overview")}
+    </p>
+    {isError && (
+      <p className="text-sm text-red-500 mt-2">
+        {t("error_loading_products") || "An error occurred while loading products."}
+      </p>
+    )}
+  </div>
+  <div className="products-grid grid gap-6 grid-cols-1">
+    <SearchInput
+      setSearchTerm={handleSearchChange}
+      placeholder={t("search_placeholder")}
+    />
+    {searchLoading && <InlineWahretZmenLoader />}
+  </div>
+</FadeInSection>
+
 
           {/* ===== Two-column layout (sidebar must be on the right) ===== */}
           <div className="flex flex-col lg:flex-row gap-8 mt-4">
@@ -298,6 +310,7 @@ const Products = () => {
 
             {/* MAIN: products (list-only) */}
             <div className="flex-1">
+              {/* Products */}
               <div className="grid gap-6 grid-cols-1">
                 {filtered.length > 0 ? (
                   filtered.map((product, index) => (
@@ -340,7 +353,7 @@ const Products = () => {
                 setCategorySel={setCategorySel}
                 categories={categories}
                 colorSel={colorSel}
-                setColorSel={setColorSel}
+                setColorSel={setColorSel}c
                 colors={colors}
                 priceRange={priceRange}
                 setPriceRange={setPriceRange}
