@@ -1,8 +1,19 @@
+// src/components/LargeBanner.jsx
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+
+// Assets
 import heroAvif from "../assets/Jebbas/LargeBanner/Jebba-tunisienne-LargeBanner.avif";
 import "../Styles/StylesLargeBanner.css";
 
+/**
+ * 🎌 LargeBanner (Hero Section)
+ * ------------------------------------------------
+ * - Fullscreen hero banner with background, animated text, and CTAs.
+ * - Supports i18n translations + RTL layout.
+ * - Dynamically splits brand into first/second words.
+ * - Localizes "By Sabri" depending on language.
+ */
 const LargeBanner = () => {
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
@@ -10,15 +21,19 @@ const LargeBanner = () => {
   const lang = i18n.language || "en";
   const isRTL = lang.startsWith("ar");
 
-  // Brand split
+  // Brand split: first word + remaining words
   const brand = t("navbar.brand", "Wahret Zmen");
   const parts = brand.trim().split(/\s+/);
   const firstWord = parts[0] || brand;
   const secondWord = parts.slice(1).join(" ");
 
-  // Localized “By Sabri”
+  // Localized “By Sabri” text
   const bySabri =
-    lang.startsWith("fr") ? "Par Sabri" : lang.startsWith("ar") ? "بإدارة صبري" : "By Sabri";
+    lang.startsWith("fr")
+      ? "Par Sabri"
+      : lang.startsWith("ar")
+      ? "بإدارة صبري"
+      : "By Sabri";
 
   return (
     <section
@@ -26,7 +41,9 @@ const LargeBanner = () => {
       aria-label={t("Welcome_Banner_title", "Welcome to Wahret Zmen")}
       dir={isRTL ? "rtl" : "ltr"}
     >
-      {/* BG Layers */}
+      {/* ======================
+          Background Layers
+      ======================= */}
       <div className="hz-hero__bg">
         <img
           src={heroAvif}
@@ -38,23 +55,35 @@ const LargeBanner = () => {
         <div className="hz-hero__bokeh" aria-hidden="true" />
       </div>
 
-      {/* Content Container */}
+      {/* ======================
+          Content
+      ======================= */}
       <div className="hz-hero__container">
         <div className="hz-hero__grid">
           <div className="hz-hero__content">
             {/* Title */}
             <h2 className="hz-hero__title animate-fade-in-up">
-              <span className="hz-inline hz-title-shimmer animate-slide-in-left">{firstWord}</span>{" "}
+              {/* First word shimmer */}
+              <span className="hz-inline hz-title-shimmer animate-slide-in-left">
+                {firstWord}
+              </span>{" "}
+              {/* Second word shimmer (if exists) */}
               {secondWord ? (
                 <span className="hz-inline hz-title-shimmer animate-slide-in-right animation-delay-200">
                   {secondWord}
                 </span>
               ) : null}
-              <span className="hz-hero__by animate-fade-in-delay-400">{bySabri}</span>
+              {/* “By Sabri” localized */}
+              <span className="hz-hero__by animate-fade-in-delay-400">
+                {bySabri}
+              </span>
             </h2>
 
-            {/* Underline */}
-            <div className="hz-title-underline animate-underline" aria-hidden="true" />
+            {/* Decorative underline */}
+            <div
+              className="hz-title-underline animate-underline"
+              aria-hidden="true"
+            />
 
             {/* Subtitle */}
             <p className="hz-hero__subtitle animate-fade-in-delay-300">
@@ -76,8 +105,14 @@ const LargeBanner = () => {
                 </span>
               </Link>
 
-              <Link to="/about" reloadDocument className="hz-btn hz-btn--xl hz-btn--secondary">
-                <span className="hz-btn__label">{t("about.title", "Learn Our Story")}</span>
+              <Link
+                to="/about"
+                reloadDocument
+                className="hz-btn hz-btn--xl hz-btn--secondary"
+              >
+                <span className="hz-btn__label">
+                  {t("about.title", "Learn Our Story")}
+                </span>
               </Link>
             </div>
           </div>
