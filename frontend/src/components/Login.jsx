@@ -1,3 +1,4 @@
+// Login.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { FaGoogle } from "react-icons/fa";
@@ -9,27 +10,19 @@ import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const [message, setMessage] = useState("");
-  const { loginUser, signInWithGoogle } = useAuth();
+  const { loginUser, signInWithGoogle, isGoogleSigningIn } = useAuth(); // ✅ use flag
   const navigate = useNavigate();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   const { t, i18n } = useTranslation();
-
   if (!i18n.isInitialized) return null;
 
-  // 🔼 Scroll to top on component mount
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const showSuccessAlert = (title, text) => {
     Swal.fire({
-      title,
-      text,
-      icon: "success",
+      title, text, icon: "success",
       confirmButtonColor: "#8B5C3E",
       confirmButtonText: t("login.continue_shopping"),
       timer: 2000,
@@ -40,9 +33,7 @@ const Login = () => {
 
   const showErrorAlert = (title, text) => {
     Swal.fire({
-      title,
-      text,
-      icon: "error",
+      title, text, icon: "error",
       confirmButtonColor: "#d33",
       confirmButtonText: t("login.try_again"),
       showClass: { popup: "animate__animated animate__shakeX" },
@@ -61,7 +52,8 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignIn = async (e) => {
+    e?.preventDefault(); // ✅ avoid form submit + click double-trigger
     try {
       await signInWithGoogle();
       showSuccessAlert(t("login.google_success_title"), t("login.success_text"));
@@ -82,47 +74,37 @@ const Login = () => {
         {message && <p className="text-red-500 text-center mb-3">{message}</p>}
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* email */}
           <div>
-            <label
-              className="block text-gray-700 font-medium mb-1"
-              htmlFor="email"
-            >
+            <label className="block text-gray-700 font-medium mb-1" htmlFor="email">
               {t("login.email_label")}
             </label>
             <input
               {...register("email", { required: true })}
               type="email"
-              name="email"
               id="email"
               placeholder={t("login.email_placeholder")}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#8B5C3E] focus:outline-none"
             />
             {errors.email && (
-              <p className="text-red-500 text-sm">
-                {t("login.email_required")}
-              </p>
+              <p className="text-red-500 text-sm">{t("login.email_required")}</p>
             )}
           </div>
 
+          {/* password */}
           <div>
-            <label
-              className="block text-gray-700 font-medium mb-1"
-              htmlFor="password"
-            >
+            <label className="block text-gray-700 font-medium mb-1" htmlFor="password">
               {t("login.password_label")}
             </label>
             <input
               {...register("password", { required: true })}
               type="password"
-              name="password"
               id="password"
               placeholder={t("login.password_placeholder")}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#8B5C3E] focus:outline-none"
             />
             {errors.password && (
-              <p className="text-red-500 text-sm">
-                {t("login.password_required")}
-              </p>
+              <p className="text-red-500 text-sm">{t("login.password_required")}</p>
             )}
           </div>
 
@@ -134,14 +116,12 @@ const Login = () => {
           </button>
         </form>
 
-        {/* 🔗 Forgot password link */}
         <p className="text-center text-sm text-gray-700 mt-3">
           <Link to="/forgot-password" className="text-[#8B5C3E] hover:underline">
             {t("login.forgot_password_link")}
           </Link>
         </p>
 
-        {/* 🔗 Register link */}
         <p className="text-center text-sm text-gray-700 mt-3">
           {t("login.no_account")}{" "}
           <Link to="/register" className="text-[#8B5C3E] hover:underline">
@@ -151,11 +131,15 @@ const Login = () => {
 
         <div className="text-center mt-4">
           <button
+            type="button"                                     // ✅ not submit
             onClick={handleGoogleSignIn}
-            className="w-full flex justify-center items-center gap-2 bg-white text-gray-700 border border-gray-300 py-2 rounded-md shadow-sm hover:bg-gray-100 transition"
+            disabled={isGoogleSigningIn}                      // ✅ disable during popup
+            className={`w-full flex justify-center items-center gap-2 bg-white text-gray-700 border border-gray-300 py-2 rounded-md shadow-sm transition 
+              ${isGoogleSigningIn ? "opacity-60 cursor-not-allowed" : "hover:bg-gray-100"}`}
+            aria-busy={isGoogleSigningIn ? "true" : "false"}
           >
             <FaGoogle className="text-red-500" />
-            {t("login.google_btn")}
+            {isGoogleSigningIn ? t("login.google_btn") + "..." : t("login.google_btn")}
           </button>
         </div>
 

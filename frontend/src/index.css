@@ -1,14 +1,18 @@
 
-/* HSL design tokens */
+/* =========================================================
+   🧪 HSL Design Tokens + Tailwind Layers
+   (Note: Tailwind layer directives must stay at the top)
+========================================================= */
 
 /* Tailwind layers */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-/* Design tokens */
+/* HSL design tokens (1st set)
+   ⚠️ Heads-up: there’s a second :root further below that OVERRIDES some of these.
+   Keeping order unchanged to preserve current visual behavior.
+*/
 :root {
   --background: 0 0% 100%;
   --foreground: 222.2 47.4% 11.2%;
@@ -21,9 +25,13 @@
   --input: 214.3 31.8% 91.4%;
   --border: 214.3 31.8% 91.4%;
 
-  /* ✅ your secondary font family (example: Cairo for Arabic UI) */
+  /* Secondary font (Arabic-friendly) */
   --font-secondary: "Cairo", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
 }
+
+/* =========================================================
+   🎞️ Motion (Keyframes + Helpers)
+========================================================= */
 
 /* Faster, continuous icon bounce */
 @keyframes iconBounceFast {
@@ -38,19 +46,21 @@
   will-change: transform;
 }
 
-/* Let each icon start at a slight stagger using the inline --d you pass */
+/* Stagger each icon via inline --d */
 .icon-delay {
   animation-delay: var(--d, 0ms);
 }
 
-
-/* Google fonts */
+/* =========================================================
+   🔤 Google Fonts
+========================================================= */
 @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Playfair+Display:wght@400;700;900&display=swap");
 
-
-/* =========================
-   Design tokens (CSS vars)
-   ========================= */
+/* =========================================================
+   🎨 Design Tokens (2nd set overrides some above)
+   NOTE: This later :root intentionally overrides the earlier one.
+   Values are RGB triplets used with rgb(var(--token)).
+========================================================= */
 :root {
   --background: 248 246 242;             /* parchment */
   --foreground: 33 24 18;                /* deep brown */
@@ -61,7 +71,7 @@
   --muted-foreground: 110 86 66;         /* softer brown */
 }
 
-/* Optional dark theme */
+/* Optional dark theme overrides */
 .dark {
   --background: 18 14 10;
   --foreground: 247 243 236;
@@ -72,23 +82,19 @@
   --muted-foreground: 201 177 150;
 }
 
-/* =========================
-   Base element styling
-   ========================= */
+/* =========================================================
+   📐 Base Element Styling (Tailwind base layer)
+========================================================= */
 @layer base {
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  
+  /* Keep explicit dir hints for LTR (first occurrence) */
   body[dir="ltr"] {
     direction: ltr;
   }
-  
-
-  
-
 
   body {
     font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, Segoe UI,
@@ -98,16 +104,17 @@
     min-height: 100vh;
   }
 
+  /* Headlines + optional secondary font utility */
   h1, h2, h3, .font-secondary {
     font-family: "Playfair Display", serif;
   }
 }
 
-/* =========================
-   Components (safe @apply)
-   ========================= */
+/* =========================================================
+   🧩 Components (safe @apply)
+========================================================= */
 @layer components {
-  /* Shared large button shape */
+  /* Shared large button */
   .btn-lg {
     @apply inline-flex items-center justify-center h-12 px-6 rounded-xl
            font-semibold tracking-wide transition-colors duration-200
@@ -115,17 +122,16 @@
   }
 
   /* Orange gradient button (Explore Collection) */
-.btn-primary-gradient {
-  background-image: linear-gradient(135deg, #c9853f 0%, #dca35b 100%);
-  @apply text-white shadow-md focus:ring-[#e9d4b8]/50 ring-offset-transparent
-         transition-all duration-300 transform;
-}
+  .btn-primary-gradient {
+    background-image: linear-gradient(135deg, #c9853f 0%, #dca35b 100%);
+    @apply text-white shadow-md focus:ring-[#e9d4b8]/50 ring-offset-transparent
+           transition-all duration-300 transform;
+  }
 
-.btn-primary-gradient:hover {
-  background-image: linear-gradient(135deg, #dca35b 0%, #e6b97a 100%);
-  @apply scale-105 shadow-lg;
-}
-
+  .btn-primary-gradient:hover {
+    background-image: linear-gradient(135deg, #dca35b 0%, #e6b97a 100%);
+    @apply scale-105 shadow-lg;
+  }
 
   /* White outline button (Learn Our Story) */
   .btn-outline-light {
@@ -136,9 +142,10 @@
   }
 }
 
-/* =========================
-   RTL / LTR support
-   ========================= */
+/* =========================================================
+   ↔️ RTL / LTR Support (global)
+   (Note: body[dir] repeats below—kept to preserve cascade)
+========================================================= */
 body[dir="rtl"] {
   direction: rtl;
 }
@@ -147,7 +154,6 @@ body[dir="ltr"] {
   direction: ltr;
 }
 
-/* Optional: align text automatically */
+/* Optional: auto align helpers under dir context */
 [dir="rtl"] .text-start { text-align: right; }
 [dir="rtl"] .text-end   { text-align: left;  }
-

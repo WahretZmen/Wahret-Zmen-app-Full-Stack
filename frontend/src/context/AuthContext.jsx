@@ -1,3 +1,4 @@
+// AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase/firebase.config";
 import {
@@ -7,11 +8,9 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  // Forgot/Reset password
   sendPasswordResetEmail,
   verifyPasswordResetCode,
   confirmPasswordReset,
-  // Change password
   EmailAuthProvider,
   reauthenticateWithCredential,
   updatePassword,
@@ -22,8 +21,6 @@ import { useTranslation } from "react-i18next";
 const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
-// You can override via Vite env if needed:
-// VITE_RESET_URL=https://your-domain.com/reset-password
 const RESET_URL =
   import.meta.env.VITE_RESET_URL || "http://localhost:5173/reset-password";
 
@@ -32,19 +29,40 @@ const googleProvider = new GoogleAuthProvider();
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  // 🔐 prevent concurrent popups
+  const [isGoogleSigningIn, setIsGoogleSigningIn] = useState(false);
+
   const { t, i18n } = useTranslation();
 
   // ---------- Basic auth ----------
-  const registerUser = async (email, password) => {
-    return await createUserWithEmailAndPassword(auth, email, password);
-  };
+  const registerUser = async (email, password) =>
+    await createUserWithEmailAndPassword(auth, email, password);
 
-  const loginUser = async (email, password) => {
-    return await signInWithEmailAndPassword(auth, email, password);
-  };
+  const loginUser = async (email, password) =>
+    await signInWithEmailAndPassword(auth, email, password);
 
   const signInWithGoogle = async () => {
-    return await signInWithPopup(auth, googleProvider);
+    if (isGoogleSigningIn) return; // ✅ guard against double open
+    setIsGoogleSigningIn(true);
+    try {
+      // Optional UX tweaks:
+      // googleProvider.setCustomParameters({ prompt: "select_account" });
+      const res = await signInWithPopup(auth, googleProvider);
+      return res;
+    } catch (err) {
+      // swallow the "expected" cases, log anything else
+      if (err?.code === "auth/popup-closed-by-user") {
+        console.warn("Google popup closed by the user.");
+      } else if (err?.code === "auth/cancelled-popup-request") {
+        console.warn("Another sign-in was already in progress.");
+      } else {
+        console.error("Google sign-in failed:", err);
+        throw err;
+      }
+    } finally {
+      setIsGoogleSigningIn(false);
+    }
   };
 
   const logout = async () => {
@@ -96,36 +114,23 @@ export const AuthProvider = ({ children }) => {
   };
 
   // ---------- Forgot / Reset password ----------
-  /**
-   * Sends a reset email that opens YOUR React route:
-   * http://localhost:5173/reset-password?mode=resetPassword&oobCode=...
-   */
   const sendResetEmail = async (email) => {
     const actionCodeSettings = {
-      url: RESET_URL, // must be an authorized domain in Firebase Auth settings
+      url: RESET_URL,
       handleCodeInApp: true,
     };
     return await sendPasswordResetEmail(auth, email, actionCodeSettings);
   };
 
-  /** Verifies the reset oobCode and returns the email address */
-  const verifyResetCodeWrapper = async (oobCode) => {
-    return await verifyPasswordResetCode(auth, oobCode);
-  };
+  const verifyResetCodeWrapper = async (oobCode) =>
+    await verifyPasswordResetCode(auth, oobCode);
 
-  /** Confirms the password reset with oobCode + new password */
-  const confirmPasswordResetWrapper = async (oobCode, newPassword) => {
-    return await confirmPasswordReset(auth, oobCode, newPassword);
-  };
+  const confirmPasswordResetWrapper = async (oobCode, newPassword) =>
+    await confirmPasswordReset(auth, oobCode, newPassword);
 
-  // ---------- Change password (re-authenticate then update) ----------
-  /**
-   * changePassword({ currentPassword, newPassword })
-   * Guards against: missing fields, non-password accounts, etc.
-   */
+  // ---------- Change password ----------
   const changePassword = async ({ currentPassword, newPassword }) => {
     const user = auth.currentUser;
-
     if (!user) {
       const e = new Error("No current user");
       e.code = "auth/no-current-user";
@@ -136,8 +141,6 @@ export const AuthProvider = ({ children }) => {
       e.code = "auth/missing-password";
       throw e;
     }
-
-    // Only for email/password accounts
     const isPasswordAccount = user.providerData?.some(
       (p) => p.providerId === "password"
     );
@@ -146,12 +149,8 @@ export const AuthProvider = ({ children }) => {
       e.code = "auth/provider-not-password";
       throw e;
     }
-
-    // Re-authenticate before sensitive action
     const cred = EmailAuthProvider.credential(user.email, currentPassword);
     await reauthenticateWithCredential(user, cred);
-
-    // Update to the new password
     await updatePassword(user, newPassword);
   };
 
@@ -178,6 +177,8 @@ export const AuthProvider = ({ children }) => {
     confirmPasswordResetWrapper,
     // change password
     changePassword,
+    // expose guard (so UI can disable button)
+    isGoogleSigningIn,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
