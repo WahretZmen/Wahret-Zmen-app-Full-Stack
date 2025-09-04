@@ -61,13 +61,14 @@ const CartPage = () => {
   const handleRemove = (product) => dispatch(removeFromCart(product));
   const handleClearCart = () => cartItems.length && dispatch(clearCart());
 
-  // ---- Pricing (NO TAX) ----
+  /* ---------- Pricing (NO TAX) ---------- */
   const subtotal = cartItems.reduce(
     (acc, item) =>
       acc + Number(item?.newPrice || 0) * Number(item?.quantity || 0),
     0
   );
-  const shipping = subtotal > 500 ? 0 : cartItems.length ? 25 : 0;
+  // Always free shipping as requested
+  const shipping = 0;
   const total = subtotal + shipping;
 
   return (
@@ -113,7 +114,7 @@ const CartPage = () => {
                     >
                       <CardContent className="p-4 sm:p-6">
                         <div className="cart-row flex flex-col md:flex-row items-center md:items-stretch gap-4 md:gap-6">
-                          {/* Image (keeps aspect, centered) */}
+                          {/* Thumbnail */}
                           <div className="cart-img-box">
                             <img
                               src={imgSrc}
@@ -182,14 +183,14 @@ const CartPage = () => {
                                 )}
                               </div>
 
-                              {/* Qty controls */}
+                              {/* Qty controls (cart.tsx style) */}
                               <div
                                 className="qty-group flex items-center gap-3"
                                 role="group"
                                 aria-label={t("quantity", "Quantity")}
                               >
                                 <button
-                                  className="qty-btn inline-flex h-9 w-9 sm:h-8 sm:w-8 items-center justify-center rounded-md border border-neutral-300 bg-white text-neutral-700 shadow-sm hover:bg-neutral-50 active:scale-95 focus:outline-none transition disabled:opacity-40"
+                                  className="qty-btn"
                                   aria-label={t(
                                     "cart.decrease_qty",
                                     "Decrease quantity"
@@ -202,12 +203,12 @@ const CartPage = () => {
                                   <Minus className="h-4 w-4" />
                                 </button>
 
-                                <span className="qty-val font-medium text-base min-w-6 text-center select-none">
+                                <span className="qty-val">
                                   {product.quantity}
                                 </span>
 
                                 <button
-                                  className="qty-btn inline-flex h-9 w-9 sm:h-8 sm:w-8 items-center justify-center rounded-md border border-neutral-300 bg-white text-neutral-700 shadow-sm hover:bg-neutral-50 active:scale-95 focus:outline-none transition disabled:opacity-40"
+                                  className="qty-btn"
                                   aria-label={t(
                                     "cart.increase_qty",
                                     "Increase quantity"
@@ -277,9 +278,7 @@ const CartPage = () => {
                           {t("cart.shipping", "Shipping")}
                         </span>
                         <span className="font-medium">
-                          {shipping === 0
-                            ? t("free", "Free")
-                            : `$${shipping.toFixed(2)}`}
+                          {t("free", "Free")}
                         </span>
                       </div>
 

@@ -8,38 +8,41 @@ import { FiShoppingCart } from "react-icons/fi";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { getImgUrl } from "../../utils/getImgUrl";
 
-import "../../Styles/StylesProductCard.css"; // keeps SingleProduct look but with card overrides
+import "../../Styles/StylesProductCard.css";
 
-const ProductCard = ({ product }) => {
+/**
+ * Product card with RTL support, mobile-friendly quantity stepper,
+ * badges, and list/card layout modes.
+ *
+ * Props:
+ * - product: Product object
+ * - viewMode: "card" | "list"   (optional; default "card")
+ */
+const ProductCard = ({ product, viewMode = "card" }) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
-  if (!i18n.isInitialized) return null;
+  if (!i18n?.isInitialized || !product) return null;
 
-  const lang = i18n.language || "en";
+  const lang = i18n.language || "ar";
   const baseLang = String(lang).split("-")[0];
-  const isRTL =
-    lang === "ar" ||
-    lang === "ar-SA" ||
-    (typeof lang === "string" && lang.startsWith("ar"));
+  const isRTL = /^ar/i.test(lang);
 
-  // Local UI state
+  // Local state
   const [quantity, setQuantity] = useState(1);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
-
-  if (!product) return null;
 
   /* ---------- i18n-aware fields ---------- */
   const title =
     product?.translations?.[lang]?.title ||
     product?.translations?.[baseLang]?.title ||
     product?.title ||
-    "";
+    t("unknown_product", "Unknown product");
 
   const description =
     product?.translations?.[lang]?.description ||
     product?.translations?.[baseLang]?.description ||
     product?.description ||
-    "";
+    t("no_description", "No description available.");
 
   const firstColor = Array.isArray(product?.colors) ? product.colors[0] : undefined;
 
@@ -53,7 +56,6 @@ const ProductCard = ({ product }) => {
   const displayedStock =
     firstColor?.stock ?? product?.stockQuantity ?? product?.stock ?? 0;
 
-  // Robust “trending” flag
   const isTrending = Boolean(
     product?.trending ||
       product?.isTrending ||
@@ -97,15 +99,21 @@ const ProductCard = ({ product }) => {
     setZoomPosition({ x, y });
   };
 
+  const isList = viewMode === "list";
+  const rootClasses = [
+    "pc-card",
+    isList ? "pc-list" : "",
+    "group relative bg-white border border-gray-200 overflow-visible w-full mx-auto",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div
-      className="pc-card group relative bg-white border border-gray-200 overflow-hidden w-full mx-auto"
-      dir={isRTL ? "rtl" : "ltr"}
-    >
+    <div className={rootClasses} dir={isRTL ? "rtl" : "ltr"}>
       {/* ===== Image + Badges ===== */}
       <a
         href={`/products/${product._id}`}
-        className="pc-imgwrap relative block w-full bg-white"
+        className={isList ? "pc-list-imgwrap pc-imgwrap" : "pc-imgwrap"}
         aria-label={title}
       >
         <img
@@ -113,7 +121,7 @@ const ProductCard = ({ product }) => {
           alt={title}
           loading="lazy"
           onMouseMove={handleMouseMove}
-          className="pc-img w-full h-full object-contain transition duration-300"
+          className="pc-img"
           style={{ transformOrigin: `${zoomPosition.x}% ${zoomPosition.y}%` }}
         />
 
@@ -153,15 +161,13 @@ const ProductCard = ({ product }) => {
       <div className="pc-divider" />
 
       {/* ===== Body ===== */}
-      <div className="pc-body p-4 text-center space-y-2">
+      <div className={isList ? "pc-list-body pc-body" : "pc-body"}>
         <Link to={`/products/${product._id}`}>
-          <h3 className="pc-title text-lg font-bold text-gray-800 hover:text-[#111] transition-colors duration-300">
-            {title}
-          </h3>
+          <h3 className="pc-title">{title}</h3>
         </Link>
 
         {shopName && (
-          <div className="pc-shop">
+          <div className="pc-shop" aria-label={t("boutique", "Boutique")}>
             <span className="pc-shop-label">{t("boutique", "Boutique")}:</span>{" "}
             <a href="#" className="pc-shop-name">
               {shopName}
@@ -170,54 +176,54 @@ const ProductCard = ({ product }) => {
         )}
 
         {/* Price row */}
-        <div className="pc-price text-sm font-bold text-gray-900 mt-1" aria-label={t("price")}>
+        <div className="pc-price" aria-label={t("price", "Price")}>
           {hasOld && (
-            <span className="pc-old">{Number(product?.oldPrice).toFixed(2)} $</span>
+            <span className="pc-old">
+              {Number(product?.oldPrice).toFixed(2)} $
+            </span>
           )}
-          <span className="pc-new">{Number(product?.newPrice || 0).toFixed(2)} $</span>
+          <span className="pc-new">
+            {Number(product?.newPrice || 0).toFixed(2)} $
+          </span>
         </div>
 
-        {/* Reveal panel (always shown on mobile, hover on desktop) */}
-        <div className="pc-extra">
-          <p className="product-description text-sm text-gray-500">
-            {description.length > 70 ? `${description.slice(0, 70)}…` : description}
+        {/* Extra content (always shown on touch) */}
+        <div className={`pc-extra ${isList ? "pc-extra--always" : ""}`}>
+          <p className="product-description">
+            {description.length > 90 ? `${description.slice(0, 90)}…` : description}
           </p>
 
           {displayedColor && (
-            <p className="text-sm italic text-gray-500">
-              {t("color")}: <span className="text-gray-700 font-medium">{displayedColor}</span>
+            <p className="pc-colorline">
+              {t("color")}: <span className="pc-colorval">{displayedColor}</span>
             </p>
           )}
 
           {Array.isArray(product?.colors) && product.colors.length > 0 && (
-            <div className="text-sm text-gray-600">
-              <p className="font-medium">{t("available_colors")}:</p>
-              <ul className="color-list flex flex-wrap justify-center gap-2 mt-1">
+            <div className="pc-colors">
+              <p className="pc-colors-label">{t("available_colors")}:</p>
+              <ul className="color-list">
                 {product.colors.map((c, idx) => {
                   const name =
                     c?.colorName?.[lang] ||
                     c?.colorName?.[baseLang] ||
                     c?.colorName?.en ||
                     `#${idx + 1}`;
-                  return (
-                    <li key={`${name}-${idx}`} className="px-2 py-1 border text-xs bg-gray-100">
-                      {name}
-                    </li>
-                  );
+                  return <li key={`${name}-${idx}`}>{name}</li>;
                 })}
               </ul>
             </div>
           )}
 
-          {/* Quantity stepper (Card-safe overrides so + is always visible) */}
-          <div className="flex items-center justify-center mt-3 sp-cta-row">
+          {/* Quantity stepper */}
+          <div className="sp-cta-row">
             <div className="sp-qty">
               <button
                 type="button"
                 className="sp-btn sp-minus"
                 onClick={decQty}
                 disabled={displayedStock === 0}
-                aria-label={t("decrease")}
+                aria-label={t("decrease", "Decrease")}
               >
                 –
               </button>
@@ -233,28 +239,20 @@ const ProductCard = ({ product }) => {
                 inputMode="numeric"
               />
 
-              <button
-                type="button"
-                className="sp-btn sp-plus"
-                onClick={incQty}
-                disabled={displayedStock === 0 || quantity >= clampMax}
-                aria-label={t("increase")}
-              >
-                +
-              </button>
+             
             </div>
           </div>
 
-          {/* Primary CTA (Android-friendly tap target) */}
-          <div className="mt-3">
+          {/* Primary CTA */}
+          <div className="pc-cta">
             <button
               onClick={handleAddToCart}
               disabled={displayedStock === 0}
-              className={`sp-add w-full ${
-                displayedStock === 0 ? "cursor-not-allowed opacity-70" : ""
+              className={`add-to-cart-btn ${
+                displayedStock === 0 ? "is-disabled" : ""
               }`}
             >
-              <FiShoppingCart className="inline mr-2" />
+              <FiShoppingCart className="icon" />
               {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
             </button>
           </div>
