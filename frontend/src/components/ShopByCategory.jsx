@@ -8,13 +8,21 @@ import hommeJebba from "../assets/Jebbas/Hommes/Jebba-Homme.jpg";
 import femmeJebba from "../assets/Jebbas/Femmes/Jebba-Femme.jpg";
 import enfantJebba from "../assets/Jebbas/Enfants/Jebba-Enfant.jpg";
 
+/* =============================================================================
+   🗂️ ShopByCategory
+   - Grid of circular category cards (Hommes / Femmes / Enfants)
+   - Title prefers i18n key → prop → fallback
+   - RTL-safe animated heading
+   - Keeps full-page reload for anchors (as in your original)
+============================================================================= */
+
 const DEFAULT_ITEMS = [
   { key: "hommes",  label: "HOMMES",  image: hommeJebba,  to: "/products?category=hommes" },
   { key: "femmes",  label: "FEMMES",  image: femmeJebba,  to: "/products?category=femmes" },
   { key: "enfants", label: "ENFANTS", image: enfantJebba, to: "/products?category=enfants" },
 ];
 
-/** Extract first string from any value (defensive). */
+/** Extract the first string from any nested structure (defensive fallback). */
 function extractFirstString(x) {
   if (x == null) return "";
   if (typeof x === "string") return x;
@@ -32,10 +40,16 @@ function extractFirstString(x) {
     }
     return "";
   }
-  try { return String(x); } catch { return ""; }
+  try {
+    return String(x);
+  } catch {
+    return "";
+  }
 }
 
-/* ---------- Animated title ---------- */
+/* ============================
+   Animated title (RTL-aware)
+============================ */
 const AnimatedTitle = ({ text }) => {
   const safe = (extractFirstString(text) || "كل الفئات").trim();
   const isArabic = /[\u0600-\u06FF]/.test(safe);
@@ -65,35 +79,50 @@ const AnimatedTitle = ({ text }) => {
   );
 };
 
+/**
+ * Props:
+ * - items?: Array<{ key: string; label: string; image: string; to: string }>
+ * - title?: string | i18n value (used if i18n key missing)
+ */
 const ShopByCategory = ({ items = DEFAULT_ITEMS, title }) => {
   const { t } = useTranslation();
 
-  // Prefer a dedicated section title, then prop, then select_category as fallback.
-  const categoryStr = t("shop_by_category.title", { defaultValue: "تسوّق حسب الفئة", returnObjects: false });
-  const selectStr   = t("select_category",        { defaultValue: "كل الفئات",       returnObjects: false });
+  // Priority for section heading:
+  // 1) i18n "shop_by_category.title"
+  // 2) prop `title`
+  // 3) i18n "select_category"
+  // 4) literal Arabic fallback
+  const categoryStr = t("shop_by_category.title", {
+    defaultValue: "تسوّق حسب الفئة",
+    returnObjects: false,
+  });
+  const selectStr = t("select_category", {
+    defaultValue: "كل الفئات",
+    returnObjects: false,
+  });
 
-  // Priority: shop_by_category.title → prop title → select_category → literal
   let rawTitle =
     (typeof categoryStr === "string" && categoryStr.trim()) ? categoryStr.trim()
-    : (typeof title       === "string" && title.trim())      ? title.trim()
-    : (typeof selectStr   === "string" && selectStr.trim())  ? selectStr.trim()
-    : "كل الفئات";
+      : (typeof title === "string" && title.trim()) ? title.trim()
+      : (typeof selectStr === "string" && selectStr.trim()) ? selectStr.trim()
+      : "كل الفئات";
 
-  // 🚫 Never show "الرئيسية"; normalize "الكل" → "كل الفئات"
+  // Normalize title: never show "الرئيسية" and turn "الكل" into "كل الفئات"
   const blocked = new Set(["الرئيسية", "Home", "Accueil"]);
   if (blocked.has(rawTitle)) rawTitle = "كل الفئات";
   if (rawTitle === "الكل") rawTitle = "كل الفئات";
 
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 my-16">
+      {/* Heading */}
       <AnimatedTitle text={rawTitle} />
 
-      {/* Bigger avatars + more gap + staggered reveal */}
+      {/* Category grid */}
       <div className="flex justify-center gap-16 md:gap-20 xl:gap-24 flex-wrap">
         {items.map((it, idx) => (
           <a
             key={it.key}
-            href={it.to}  /* full page reload */
+            href={it.to} /* full page reload (kept exactly) */
             aria-label={`${rawTitle} – ${it.label}`}
             className="group category-item w-48 sm:w-60 lg:w-72 flex flex-col items-center anim-fade-up"
             style={{ animationDelay: `${idx * 120}ms` }}
@@ -114,13 +143,12 @@ const ShopByCategory = ({ items = DEFAULT_ITEMS, title }) => {
               <span className="shine" />
             </span>
 
-            <span className={`cat-label cat-${it.key}`}>
-              {it.label}
-            </span>
+            <span className={`cat-label cat-${it.key}`}>{it.label}</span>
           </a>
         ))}
       </div>
-      {/* ⛔ "Voir plus" removed as requested */}
+
+      {/* ⛔ "Voir plus" intentionally removed */}
     </section>
   );
 };

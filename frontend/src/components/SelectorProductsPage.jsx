@@ -1,18 +1,20 @@
 // src/pages/SelectorPageProducts.jsx
-// -------------------------------------------------------------
-// Plain-CSS filter sidebar (category + double price range) with:
+// -----------------------------------------------------------------------------
+// Filter sidebar (category + double price range) with:
 // - Canonicalized category aliases (EN/FR/AR)
 // - i18n fallbacks
 // - RTL support
-// - Double price range UI: two separate bars (MIN on top, MAX below)
-// -------------------------------------------------------------
+// - Dual range UI: MIN (top) + MAX (bottom)
+// -----------------------------------------------------------------------------
 
 import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Filter } from "lucide-react";
 import "../Styles/StylesSelectorProductsPage.css";
 
-/* ===== Canonicalization: map any alias → canonical key ===== */
+/* =============================================================================
+   🔤 Canonicalization: map any alias → canonical key
+============================================================================= */
 const CANONICAL = {
   all: "All",
   tous: "All",
@@ -36,23 +38,30 @@ const CANONICAL = {
   "أطفال": "Children",
 };
 
-/* i18n fallbacks when translation keys are missing */
+/* =============================================================================
+   🌐 i18n fallbacks when translations are missing
+============================================================================= */
 const FALLBACKS = {
   ar: { all: "الكل", men: "رجال", women: "نساء", children: "أطفال" },
   fr: { all: "Tous", men: "Hommes", women: "Femmes", children: "Enfants" },
   en: { all: "All", men: "Men", women: "Women", children: "Children" },
 };
+
 function localFallback(opt, lang) {
   const key = String(opt).toLowerCase();
   const short = (lang || "en").split("-")[0];
   return FALLBACKS[short]?.[key] ?? FALLBACKS.en[key] ?? String(opt);
 }
+
 function canonicalizeCategory(raw) {
   if (raw == null) return "";
   const k = String(raw).trim().toLowerCase();
   return CANONICAL[k] || raw;
 }
 
+/* =============================================================================
+   🧰 Component
+============================================================================= */
 const SelectorPageProducts = ({
   categorySel,
   setCategorySel,
@@ -67,7 +76,9 @@ const SelectorPageProducts = ({
   const lang = i18n?.language || "en";
   const isRTL = lang === "ar" || lang === "ar-SA" || lang.startsWith("ar");
 
-  /* === Normalize & dedupe categories === */
+  /* -----------------------------------------------------------------------------
+     Normalize & dedupe categories, ensure "All" exists and is first
+  ----------------------------------------------------------------------------- */
   const normalizedCategories = useMemo(() => {
     const seen = new Set();
     const canonList = [];
@@ -81,7 +92,6 @@ const SelectorPageProducts = ({
       }
     }
 
-    // Ensure "All" exists and is first
     if (!seen.has("All")) {
       canonList.unshift("All");
     } else {
@@ -92,13 +102,13 @@ const SelectorPageProducts = ({
     return canonList;
   }, [categories]);
 
-  // Localized category label
+  // Localized category label with fallback
   const catText = (c) =>
     t(`categories.${String(c).toLowerCase()}`, {
       defaultValue: localFallback(c, lang),
     });
 
-  // Show "All" in the select when external state is ""
+  // UI should display "All" when external filter state is empty
   const selectedCategoryForUI = categorySel ? canonicalizeCategory(categorySel) : "All";
 
   const onCategoryChange = (e) => {
@@ -106,10 +116,15 @@ const SelectorPageProducts = ({
     setCategorySel(picked === "All" ? "" : picked); // "" means no filter
   };
 
-  // Clamp (avoid min>max on quick drags)
+  /* -----------------------------------------------------------------------------
+     Clamp ranges to avoid min > max during quick drags
+  ----------------------------------------------------------------------------- */
   const clampMin = Math.min(Math.max(minPrice, priceRange[0]), priceRange[1]);
   const clampMax = Math.max(Math.min(maxPrice, priceRange[1]), priceRange[0]);
 
+  /* -----------------------------------------------------------------------------
+     Render
+  ----------------------------------------------------------------------------- */
   return (
     <aside className="filters-sidebar" dir={isRTL ? "rtl" : "ltr"}>
       <div className="filters-card">
@@ -142,8 +157,9 @@ const SelectorPageProducts = ({
         <div className="filter-group">
           <label className="filter-label">{t("price_range", "نطاق السعر")}</label>
 
-          {/* Editable inputs for precise values */}
+          {/* Numeric inputs for precise control */}
           <div className="price-row" role="group" aria-label={t("price_range", "نطاق السعر")}>
+            {/* Min input */}
             <div className="price-field">
               <span className="currency">$</span>
               <input
@@ -161,6 +177,7 @@ const SelectorPageProducts = ({
 
             <span className="dash" aria-hidden="true">—</span>
 
+            {/* Max input */}
             <div className="price-field">
               <span className="currency">$</span>
               <input
@@ -177,9 +194,9 @@ const SelectorPageProducts = ({
             </div>
           </div>
 
-          {/* Double sliders: one bar for MIN (top), one bar for MAX (bottom) */}
+          {/* Dual sliders: top controls MIN, bottom controls MAX */}
           <div className="range-wrap double" aria-hidden="false">
-            {/* Top line controls the MIN */}
+            {/* MIN slider */}
             <input
               className="range line first"
               type="range"
@@ -192,7 +209,7 @@ const SelectorPageProducts = ({
                 setPriceRange([nextMin, clampMax]);
               }}
             />
-            {/* Bottom line controls the MAX */}
+            {/* MAX slider */}
             <input
               className="range line second"
               type="range"
@@ -207,14 +224,14 @@ const SelectorPageProducts = ({
             />
           </div>
 
-          {/* Optional min/max captions under the bars */}
+          {/* Endpoints caption */}
           <div className="range-ends">
             <span>${Math.round(minPrice)}</span>
             <span>${Math.round(maxPrice)}</span>
           </div>
         </div>
 
-        {/* ---------- Clear Filters Button ---------- */}
+        {/* ---------- Clear Filters ---------- */}
         <button
           type="button"
           className="btn-outline w-full"

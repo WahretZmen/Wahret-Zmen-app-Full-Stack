@@ -1,13 +1,46 @@
-import React from 'react';
+// src/components/SelectField.jsx
+import React from "react";
 
-const SelectField = ({ label, name, options, register }) => {
+/**
+ * SelectField Component
+ * - Reusable select dropdown with label + react-hook-form register
+ *
+ * @param {Object} props
+ * @param {string} props.label - Label text
+ * @param {string} props.name - Field name for react-hook-form
+ * @param {Array<{ value: string, label: string }>} props.options - Dropdown options
+ * @param {Function} props.register - react-hook-form register function
+ * @param {boolean} [props.required=true] - Whether the field is required
+ */
+const SelectField = ({ label, name, options = [], register, required = true }) => {
+  const selectId = `select-${name}`;
+
   return (
     <div className="mb-4">
-      <label className="block text-sm font-semibold text-gray-700">{label}</label>
+      {/* Label */}
+      {label && (
+        <label
+          htmlFor={selectId}
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          {label}
+        </label>
+      )}
+
+      {/* Select dropdown */}
       <select
-        {...register(name,  { required: true })}
-        className="w-full p-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+        id={selectId}
+        {...register(name, { required })}
+        className="w-full px-3 py-2 border border-gray-300 rounded-md 
+                   text-gray-800 placeholder-gray-400
+                   focus:outline-none focus:ring-2 focus:ring-[#8B5C3E] focus:border-[#8B5C3E]
+                   transition duration-200"
       >
+        {/* Default placeholder option */}
+        <option value="" disabled selected>
+          -- Select {label} --
+        </option>
+
         {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}

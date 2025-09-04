@@ -8,34 +8,47 @@ import imageCompression from "browser-image-compression";
 import getBaseUrl from "../../../utils/baseURL";
 import "../../../Styles/StylesAddProduct.css";
 
+/* =============================================================================
+   🧾 AddProduct (Dashboard)
+   - Admin form to create a product
+   - Handles:
+     • Cover image (preview + upload)
+     • Multiple colors with stock and per-color image gallery
+     • Client-side image compression before upload
+   - Sends the payload unchanged from your original file (no flow changes)
+============================================================================= */
 const AddProduct = () => {
   const { register, handleSubmit, reset } = useForm();
   const [addProduct, { isLoading }] = useAddProductMutation();
 
-  // ---- Cover image state ----
+  /* ================================
+     Cover image state
+  ================================= */
   const [coverImageFile, setCoverImageFile] = useState(null);
   const [coverPreviewURL, setCoverPreviewURL] = useState("");
 
-  // ---- Colors state ----
-  /**
-   * Each color element:
-   * {
-   *   colorName: string,         // EN source; backend will translate
-   *   stock: number,
-   *   images: string[],          // uploaded URLs for this color
-   *   pendingFile: File|null,    // selected but not uploaded yet
-   *   pendingPreview: string,    // objectURL for preview
-   *   uploading: boolean
-   * }
-   */
+  /* ================================
+     Colors state
+     Each color element:
+     {
+       colorName: string,        // EN label; backend translates
+       stock: number,
+       images: string[],         // uploaded URLs
+       pendingFile: File|null,   // selected but not uploaded yet
+       pendingPreview: string,   // objectURL for preview
+       uploading: boolean
+     }
+  ================================= */
   const [colorInputs, setColorInputs] = useState([
     { colorName: "", stock: 0, images: [], pendingFile: null, pendingPreview: "", uploading: false },
   ]);
 
-  // ================= Utils =================
+  /* =============================================================================
+     Utils: compression + upload
+  ============================================================================= */
   const compressImage = async (file) => {
     const options = { maxSizeMB: 1, maxWidthOrHeight: 1024, useWebWorker: true };
-    return await imageCompression(file, options);
+    return imageCompression(file, options);
   };
 
   const uploadImage = async (file) => {
@@ -43,11 +56,13 @@ const AddProduct = () => {
     try {
       const compressed = await compressImage(file);
       const formData = new FormData();
+      // server expects "image"
       formData.append("image", compressed);
+
       const res = await axios.post(`${getBaseUrl()}/api/upload`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      // server returns a relative path or full URL in res.data.image
+      // server returns res.data.image (full URL or relative)
       return res.data.image;
     } catch (err) {
       console.error("❌ Image upload failed:", err);
@@ -56,7 +71,9 @@ const AddProduct = () => {
     }
   };
 
-  // ================= Cover handlers =================
+  /* =============================================================================
+     Cover handlers
+  ============================================================================= */
   const handleCoverImageChange = (e) => {
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
@@ -68,7 +85,9 @@ const AddProduct = () => {
     }
   };
 
-  // ================= Color handlers =================
+  /* =============================================================================
+     Color handlers
+  ============================================================================= */
   const setColorAt = (index, patch) => {
     setColorInputs((prev) => prev.map((c, i) => (i === index ? { ...c, ...patch } : c)));
   };
@@ -124,7 +143,11 @@ const AddProduct = () => {
     );
   };
 
-  // ================= Submit =================
+  /* =============================================================================
+     Submit
+     - Uploads pending assets
+     - Builds payload (unchanged contract)
+  ============================================================================= */
   const onSubmit = async (data) => {
     try {
       // 1) Upload cover if selected
@@ -133,12 +156,12 @@ const AddProduct = () => {
         coverImage = await uploadImage(coverImageFile);
       }
 
-      // 2) Build filtered copy of colors (keep only valid rows)
+      // 2) Filter colors (only non-empty names + at least one image or pending file)
       const preparedColors = colorInputs
         .filter((c) => c.colorName && (c.images.length > 0 || c.pendingFile))
-        .map((c) => ({ ...c, images: [...c.images] })); // clone arrays
+        .map((c) => ({ ...c, images: [...c.images] })); // shallow clone arrays
 
-      // 3) ✅ Upload any leftover pending files **on preparedColors itself** (fixed index bug)
+      // 3) Upload any leftover pending files on preparedColors (fixed index handling)
       for (let i = 0; i < preparedColors.length; i++) {
         const color = preparedColors[i];
         if (color.pendingFile) {
@@ -156,13 +179,12 @@ const AddProduct = () => {
         Swal.fire("Données manquantes", "Ajoutez au moins une couleur avec une image.", "warning");
         return;
       }
-
       if (preparedColors.some((c) => !Array.isArray(c.images) || c.images.length === 0)) {
         Swal.fire("Image manquante", "Chaque couleur doit avoir au moins une image.", "warning");
         return;
       }
 
-      // If cover is still empty, use first color's first image
+      // 5) Cover fallback to first color first image
       if (!coverImage) {
         coverImage = preparedColors[0]?.images?.[0] || "";
       }
@@ -171,11 +193,11 @@ const AddProduct = () => {
         return;
       }
 
-      // 5) Map payload for server
+      // 6) Shape payload for server (keeps your current structure)
       const colorsForServer = preparedColors.map((c) => ({
-        colorName: c.colorName,         // EN; backend translates to FR/AR
-        image: c.images[0] || "",       // main image for that color
-        images: c.images,               // full gallery for the color
+        colorName: c.colorName,       // EN; server translates to FR/AR
+        image: c.images[0] || "",     // main image for that color
+        images: c.images,             // gallery for the color
         stock: Number(c.stock) || 0,
       }));
 
@@ -194,10 +216,10 @@ const AddProduct = () => {
         trending: !!data.trending,
       };
 
-      // 6) Send
+      // 7) Send
       await addProduct(payload).unwrap();
 
-      // 7) Done
+      // 8) Cleanup
       Swal.fire("Succès", "Produit ajouté avec succès !", "success");
       reset();
       setCoverImageFile(null);
@@ -211,14 +233,22 @@ const AddProduct = () => {
     }
   };
 
+  /* =============================================================================
+     Effects
+  ============================================================================= */
   useEffect(() => {
-    // Force LTR in dashboard
+    // Force LTR in dashboard (kept exactly as in your original file)
     document.documentElement.dir = "ltr";
   }, []);
 
-  // Helper to show uploaded images whether URL is relative or absolute
+  /* =============================================================================
+     Helpers
+  ============================================================================= */
   const fullUrl = (url) => (url?.startsWith("http") ? url : `${getBaseUrl()}${url}`);
 
+  /* =============================================================================
+     Render
+  ============================================================================= */
   return (
     <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-md w-full">
       <h2 className="text-2xl font-bold text-center text-[#A67C52] mb-4">
@@ -226,27 +256,38 @@ const AddProduct = () => {
       </h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Title */}
         <input
           {...register("title")}
           className="w-full p-2 border rounded"
           placeholder="Nom du Produit"
           required
+          autoComplete="off"
         />
 
+        {/* Description */}
         <textarea
           {...register("description")}
           className="w-full p-2 border rounded"
           placeholder="Description"
           required
+          rows={3}
         />
 
-        <select {...register("category")} className="w-full p-2 border rounded" required>
+        {/* Category */}
+        <select
+          {...register("category")}
+          className="w-full p-2 border rounded"
+          required
+          aria-label="Catégorie"
+        >
           <option value="">Sélectionner une Catégorie</option>
           <option value="Men">Homme</option>
           <option value="Women">Femme</option>
           <option value="Children">Enfants</option>
         </select>
 
+        {/* Prices */}
         <div className="grid grid-cols-2 gap-4">
           <input
             {...register("oldPrice")}
@@ -254,6 +295,8 @@ const AddProduct = () => {
             className="w-full p-2 border rounded"
             placeholder="Ancien Prix"
             required
+            step="0.01"
+            min="0"
           />
           <input
             {...register("newPrice")}
@@ -261,15 +304,18 @@ const AddProduct = () => {
             className="w-full p-2 border rounded"
             placeholder="Nouveau Prix"
             required
+            step="0.01"
+            min="0"
           />
         </div>
 
+        {/* Trending */}
         <label className="flex items-center">
           <input type="checkbox" {...register("trending")} className="mr-2" />
           Produit Tendance
         </label>
 
-        {/* ===== Cover image ===== */}
+        {/* ================= Cover image ================= */}
         <div>
           <label className="block font-medium mb-1">Image Principale</label>
           <div className="flex items-center gap-2">
@@ -309,12 +355,13 @@ const AddProduct = () => {
           )}
         </div>
 
-        {/* ===== Colors ===== */}
+        {/* ================= Colors ================= */}
         <div>
           <label className="block font-medium mb-2">Couleurs du Produit</label>
 
           {colorInputs.map((color, index) => (
             <div key={index} className="space-y-3 border border-gray-200 p-3 rounded-md">
+              {/* Color name (EN) */}
               <input
                 type="text"
                 placeholder="Nom de la Couleur (EN)"
@@ -324,6 +371,7 @@ const AddProduct = () => {
                 required
               />
 
+              {/* Stock */}
               <input
                 type="number"
                 placeholder="Quantité en stock"
@@ -333,6 +381,7 @@ const AddProduct = () => {
                   handleColorFieldChange(index, "stock", Number(e.target.value) || 0)
                 }
                 required
+                min="0"
               />
 
               {/* File picker row */}
@@ -432,6 +481,7 @@ const AddProduct = () => {
           </button>
         </div>
 
+        {/* Submit */}
         <button
           type="submit"
           className="block w-full mt-4 bg-[#A67C52] text-white py-3 rounded hover:bg-[#8a5d3b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#A67C52] active:scale-95 transition duration-200"
