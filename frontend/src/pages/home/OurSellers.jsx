@@ -20,7 +20,6 @@ const responsive = {
 };
 
 const OurSellers = () => {
-  // "" means “All”
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const { data: products = [] } = useGetAllProductsQuery(undefined, {
@@ -30,7 +29,6 @@ const OurSellers = () => {
   });
 
   const { t, i18n } = useTranslation();
-
   const isRTL =
     i18n.language === "ar" ||
     i18n.language === "ar-SA" ||
@@ -51,9 +49,7 @@ const OurSellers = () => {
         })
       : products.filter((p) => norm(p.category) === norm(selectedCategory));
 
-  /* ---------- Custom, RTL-aware arrows ---------- */
   const Arrow = ({ onClick, type }) => {
-    // type: 'prev' | 'next'
     const icon = type === "prev" ? (isRTL ? "›" : "‹") : (isRTL ? "‹" : "›");
     return (
       <button
@@ -72,14 +68,12 @@ const OurSellers = () => {
       <div className="our-sellers-wrapper" dir={isRTL ? "rtl" : "ltr"}>
         <section className="our-sellers-section" aria-label={t("wahret_zmen_collection")}>
           <div className="our-sellers-container">
-            {/* ===== Title ===== */}
             <ScrollFade direction="right" delay={0}>
               <h2 className="text-4xl text-[#5a382d] font-bold mb-6 text-center uppercase tracking-wide our-sellers-title os-title">
                 <span className="os-title__text">{t("wahret_zmen_collection")}</span>
               </h2>
             </ScrollFade>
 
-            {/* ===== Category Filter ===== */}
             <div className="mb-6 flex flex-col items-center px-2 sm:px-0 w-full">
               <h3 className="select-category-title text-lg sm:text-xl font-semibold text-[#5a382d] mb-2 text-center">
                 {t("select_category")}
@@ -87,13 +81,12 @@ const OurSellers = () => {
               <div className="w-full px-2 sm:px-0 max-w-xs">
                 <Selector
                   options={categories}
-                  value={selectedCategory}        /* "" -> All */
-                  onSelect={setSelectedCategory}  /* Selector returns "" for 'all' */
+                  value={selectedCategory}
+                  onSelect={setSelectedCategory}
                 />
               </div>
             </div>
 
-            {/* ===== Carousel ===== */}
             <div className="max-w-6xl mx-auto px-2 sm:px-4">
               {filteredProducts.length > 0 ? (
                 <div className="carousel-clip custom-carousel">
@@ -116,24 +109,17 @@ const OurSellers = () => {
                     customRightArrow={<Arrow type="next" />}
                   >
                     {filteredProducts.map((product, index) => (
-                      <FadeInSection
-                        key={index}
-                        delay={index * 0.1}
-                        duration={0.6}
-                        yOffset={30}
-                      >
+                      <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>
                         <div className="carousel-card-wrapper">
-                          {/* Use the COMPACT counter only in the carousel */}
-                          <ProductCard product={product} counterVariant="compact" />
+                          {/* Counter hidden here */}
+                          <ProductCard product={product} showCounter={false} />
                         </div>
                       </FadeInSection>
                     ))}
                   </Carousel>
                 </div>
               ) : (
-                <p className="text-center text-[#5a382d] text-lg">
-                  {t("no_products_found")}
-                </p>
+                <p className="text-center text-[#5a382d] text-lg">{t("no_products_found")}</p>
               )}
             </div>
           </div>

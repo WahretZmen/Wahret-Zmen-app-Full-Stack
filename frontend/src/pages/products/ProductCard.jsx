@@ -8,19 +8,20 @@ import { FiShoppingCart } from "react-icons/fi";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { getImgUrl } from "../../utils/getImgUrl";
 
-import "../../Styles/StylesProductCard.css"; // card + counters
+import "../../Styles/StylesProductCard.css"; // card + steppers
 
 /**
  * Props:
  *  - product (required)
  *  - showStockBadge: boolean (default true)
- *  - counterVariant: "default" | "compact"  (default "default")
- *      "compact" is used by OurSellers.jsx to render a smaller stepper.
+ *  - counterVariant: "default" | "compact" (default "default")
+ *  - showCounter: boolean (default true)  ← NEW (hide in OurSellers)
  */
 const ProductCard = ({
   product,
   showStockBadge = true,
   counterVariant = "default",
+  showCounter = true,
 }) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
@@ -52,9 +53,7 @@ const ProductCard = ({
     product?.description ||
     "";
 
-  const firstColor = Array.isArray(product?.colors)
-    ? product.colors[0]
-    : undefined;
+  const firstColor = Array.isArray(product?.colors) ? product.colors[0] : undefined;
 
   const displayedColor =
     firstColor?.colorName?.[lang] ||
@@ -75,8 +74,7 @@ const ProductCard = ({
   );
 
   const hasOld = Number(product?.oldPrice) > Number(product?.newPrice || 0);
-  const shopName =
-    product?.storeName || product?.vendor || product?.brand || "";
+  const shopName = product?.storeName || product?.vendor || product?.brand || "";
 
   /* ---------- quantity handlers ---------- */
   const clampMax = Math.max(1, displayedStock || 1);
@@ -104,11 +102,7 @@ const ProductCard = ({
 
   /* ---------- hover zoom (desktop only) ---------- */
   const handleMouseMove = (e) => {
-    if (
-      typeof window !== "undefined" &&
-      window.matchMedia("(hover: none)").matches
-    )
-      return;
+    if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -182,9 +176,7 @@ const ProductCard = ({
 
         {shopName && (
           <div className="pc-shop">
-            <span className="pc-shop-label">
-              {t("boutique", "Boutique")}:
-            </span>{" "}
+            <span className="pc-shop-label">{t("boutique", "Boutique")}:</span>{" "}
             <a href="#" className="pc-shop-name">
               {shopName}
             </a>
@@ -192,34 +184,22 @@ const ProductCard = ({
         )}
 
         {/* Price row */}
-        <div
-          className="pc-price text-sm font-bold text-gray-900 mt-1"
-          aria-label={t("price")}
-        >
+        <div className="pc-price text-sm font-bold text-gray-900 mt-1" aria-label={t("price")}>
           {hasOld && (
-            <span className="pc-old">
-              {Number(product?.oldPrice).toFixed(2)} $
-            </span>
+            <span className="pc-old">{Number(product?.oldPrice).toFixed(2)} $</span>
           )}
-          <span className="pc-new">
-            {Number(product?.newPrice || 0).toFixed(2)} $
-          </span>
+          <span className="pc-new">{Number(product?.newPrice || 0).toFixed(2)} $</span>
         </div>
 
         {/* Reveal panel (always shown on mobile, hover on desktop) */}
         <div className="pc-extra">
           <p className="product-description text-sm text-gray-500">
-            {description.length > 70
-              ? `${description.slice(0, 70)}…`
-              : description}
+            {description.length > 70 ? `${description.slice(0, 70)}…` : description}
           </p>
 
           {displayedColor && (
             <p className="text-sm italic text-gray-500">
-              {t("color")}:{" "}
-              <span className="text-gray-700 font-medium">
-                {displayedColor}
-              </span>
+              {t("color")}: <span className="text-gray-700 font-medium">{displayedColor}</span>
             </p>
           )}
 
@@ -234,10 +214,7 @@ const ProductCard = ({
                     c?.colorName?.en ||
                     `#${idx + 1}`;
                   return (
-                    <li
-                      key={`${name}-${idx}`}
-                      className="px-2 py-1 border text-xs bg-gray-100"
-                    >
+                    <li key={`${name}-${idx}`} className="px-2 py-1 border text-xs bg-gray-100">
                       {name}
                     </li>
                   );
@@ -246,78 +223,78 @@ const ProductCard = ({
             </div>
           )}
 
-          {/* ===== Quantity stepper (variant) ===== */}
-          <div className="flex items-center justify-center mt-3 sp-cta-row">
-            {counterVariant === "compact" ? (
-              // Smaller, carousel-friendly stepper (OurSellers only)
-              <div className="qty-mini" role="group" aria-label={t("quantity")}>
-                <button
-                  type="button"
-                  className="qm-btn qm-minus"
-                  onClick={decQty}
-                  disabled={displayedStock === 0}
-                  aria-label={t("decrease")}
-                >
-                  –
-                </button>
+          {/* ===== Quantity stepper (ONLY if showCounter) ===== */}
+          {showCounter && (
+            <div className="flex items-center justify-center mt-3 sp-cta-row">
+              {counterVariant === "compact" ? (
+                <div className="qty-mini" role="group" aria-label={t("quantity")}>
+                  <button
+                    type="button"
+                    className="qm-btn qm-minus"
+                    onClick={decQty}
+                    disabled={displayedStock === 0}
+                    aria-label={t("decrease")}
+                  >
+                    –
+                  </button>
 
-                <input
-                  type="number"
-                  min="1"
-                  max={clampMax}
-                  value={quantity}
-                  onChange={handleQuantityChange}
-                  disabled={displayedStock === 0}
-                  aria-label={t("quantity")}
-                  inputMode="numeric"
-                />
+                  <input
+                    type="number"
+                    min="1"
+                    max={clampMax}
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                    disabled={displayedStock === 0}
+                    aria-label={t("quantity")}
+                    inputMode="numeric"
+                  />
 
-                <button
-                  type="button"
-                  className="qm-btn qm-plus"
-                  onClick={incQty}
-                  disabled={displayedStock === 0 || quantity >= clampMax}
-                  aria-label={t("increase")}
-                >
-                  +
-                </button>
-              </div>
-            ) : (
-              // Default (bigger) stepper for product grid/detail
-              <div className="sp-qty" role="group" aria-label={t("quantity")}>
-                <button
-                  type="button"
-                  className="sp-btn sp-minus"
-                  onClick={decQty}
-                  disabled={displayedStock === 0}
-                  aria-label={t("decrease")}
-                >
-                  –
-                </button>
+                  <button
+                    type="button"
+                    className="qm-btn qm-plus"
+                    onClick={incQty}
+                    disabled={displayedStock === 0 || quantity >= clampMax}
+                    aria-label={t("increase")}
+                  >
+                    +
+                  </button>
+                </div>
+              ) : (
+                <div className="sp-qty" role="group" aria-label={t("quantity")}>
+                  <button
+                    type="button"
+                    className="sp-btn sp-minus"
+                    onClick={decQty}
+                    disabled={displayedStock === 0}
+                    aria-label={t("decrease")}
+                  >
+                    –
+                  </button>
 
-                <input
-                  type="number"
-                  min="1"
-                  max={clampMax}
-                  value={quantity}
-                  onChange={handleQuantityChange}
-                  disabled={displayedStock === 0}
-                  aria-label={t("quantity")}
-                  inputMode="numeric"
-                />
+                  <input
+                    type="number"
+                    min="1"
+                    max={clampMax}
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                    disabled={displayedStock === 0}
+                    aria-label={t("quantity")}
+                    inputMode="numeric"
+                  />
 
-                <button
-                  type="button"
-                  className="sp-btn sp-plus"
-                  onClick={incQty}
-                  disabled={displayedStock === 0 || quantity >= clampMax}
-                  aria-label={t("increase")}
-                >
-                  +
-                </button>
-              </div>
-            )}
-          </div>
+                  <button
+                    type="button"
+                    className="sp-btn sp-plus"
+                    onClick={incQty}
+                    disabled={displayedStock === 0 || quantity >= clampMax}
+                    aria-label={t("increase")}
+                  >
+                    +
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Primary CTA */}
           <div className="mt-3">
