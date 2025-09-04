@@ -1,11 +1,28 @@
+// UserDashboard.jsx
+// -----------------------------------------------------------------------------
+// Purpose: Authenticated user's dashboard showing profile details, quick actions,
+//          and a list of their orders. Pulls orders by email via RTK Query.
+// Notes  : Only structure and comments were added. No functional/UI changes.
+// -----------------------------------------------------------------------------
+
 import React, { useMemo } from "react";
+
+// Router / Meta
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
+
+// i18n / Auth
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../../../context/AuthContext";
+
+// Data (RTK Query)
 import { useGetOrderByEmailQuery } from "../../../redux/features/orders/ordersApi";
+
+// Utils / Components
 import { getImgUrl } from "../../../utils/getImgUrl";
 import LoadingSpinner from "../../../components/Loading";
+
+// Icons
 import {
   FaKey,
   FaShoppingBag,
@@ -16,10 +33,16 @@ import {
   FaEnvelope,
 } from "react-icons/fa";
 
-/* ✅ Bring in small responsive helpers */
+// Styles
 import "../../../Styles/StylesUserDashboard.css";
 
+// -----------------------------------------------------------------------------
+// Component
+// -----------------------------------------------------------------------------
 const UserDashboard = () => {
+  // ---------------------------------------------------------------------------
+  // 1) Context & i18n
+  // ---------------------------------------------------------------------------
   const { currentUser } = useAuth();
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
@@ -29,7 +52,9 @@ const UserDashboard = () => {
     i18n.language === "ar-SA" ||
     (typeof i18n.language === "string" && i18n.language.startsWith("ar"));
 
-  // Data
+  // ---------------------------------------------------------------------------
+  // 2) User info derivations
+  // ---------------------------------------------------------------------------
   const email = currentUser?.email || "";
   const mailName = email ? email.split("@")[0] : "";
   const initial = mailName ? mailName.charAt(0).toUpperCase() : "U";
@@ -38,8 +63,12 @@ const UserDashboard = () => {
     currentUser?.displayName ||
     currentUser?.username ||
     t("userDashboard.defaultUser");
+
   const provider = currentUser?.providerData?.[0]?.providerId || "password";
 
+  // ---------------------------------------------------------------------------
+  // 3) Data fetching: orders by email
+  // ---------------------------------------------------------------------------
   const {
     data: orders = [],
     isLoading,
@@ -48,19 +77,24 @@ const UserDashboard = () => {
 
   const lang = i18n.language;
 
-  // Stats
+  // ---------------------------------------------------------------------------
+  // 4) Stats & derived lists
+  // ---------------------------------------------------------------------------
   const { totalOrders, totalSpent } = useMemo(() => {
     const count = orders.length;
     const spent = orders.reduce((sum, o) => sum + (o?.totalPrice || 0), 0);
     return { totalOrders: count, totalSpent: spent.toFixed(2) };
   }, [orders]);
 
-  // Oldest -> newest for list visual order
+  // Keep oldest → newest for visual order consistency
   const sortedOrders = useMemo(
     () => [...orders].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
     [orders]
   );
 
+  // ---------------------------------------------------------------------------
+  // 5) Small UI helper for auth provider badge
+  // ---------------------------------------------------------------------------
   const providerBadge = () => {
     if (provider === "google.com")
       return (
@@ -69,6 +103,7 @@ const UserDashboard = () => {
           Google
         </span>
       );
+
     return (
       <span className="inline-flex items-center gap-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200 px-2.5 py-1 text-xs">
         <FaEnvelope />
@@ -79,27 +114,38 @@ const UserDashboard = () => {
     );
   };
 
+  // ---------------------------------------------------------------------------
+  // 6) Loading state
+  // ---------------------------------------------------------------------------
   if (isLoading || isFetching) return <LoadingSpinner />;
 
+  // ---------------------------------------------------------------------------
+  // 7) Render
+  // ---------------------------------------------------------------------------
   return (
     <div
       className="bg-[#F8F1E9] min-h-screen px-2 sm:px-4 UserDashboard-screen pt-28 md:pt-32 pb-12"
       dir={isRTL ? "rtl" : "ltr"}
     >
+      {/* SEO */}
       <Helmet>
         <title>{t("userDashboard.title")}</title>
       </Helmet>
 
-      {/* Header / Profile */}
+      {/* --------------------------------------------------------------------- */}
+      {/* Header / Profile                                                      */}
+      {/* --------------------------------------------------------------------- */}
       <section className="relative isolate overflow-hidden">
+        {/* Soft background accent */}
         <div className="absolute inset-0 -z-10 opacity-[0.06] pointer-events-none">
           <div className="h-64 w-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#8B5C3E] to-transparent" />
         </div>
 
+        {/* Profile card */}
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
           <div className="bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60 border border-[#A67C52]/20 rounded-2xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] p-6 md:p-8">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-              {/* Avatar → Change password */}
+              {/* Avatar → Change password shortcut */}
               <div className="w-14 h-14 flex justify-end">
                 <Link
                   to="/change-password"
@@ -114,15 +160,18 @@ const UserDashboard = () => {
                     <span className="text-white font-bold text-xl leading-none">{initial}</span>
                   </div>
 
-                  <span className="pointer-events-none absolute left-1/2 -translate-x-1/2 -bottom-2 translate-y-full
+                  {/* Hover tooltip */}
+                  <span
+                    className="pointer-events-none absolute left-1/2 -translate-x-1/2 -bottom-2 translate-y-full
                                    bg-amber-50 text-amber-800 text-[11px] font-semibold px-2.5 py-1 rounded-full shadow
-                                   border border-amber-200 opacity-0 group-hover:opacity-100 transition">
+                                   border border-amber-200 opacity-0 group-hover:opacity-100 transition"
+                  >
                     {t("changePassword.tooltip", { defaultValue: "Email & Password" })}
                   </span>
                 </Link>
               </div>
 
-              {/* Info */}
+              {/* Intro / actions */}
               <div className="flex-1 text-center md:text-left">
                 <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#8B5C3E] break-words">
                   {t("userDashboard.welcome", { name: displayName })}
@@ -160,7 +209,7 @@ const UserDashboard = () => {
                 </div>
               </div>
 
-              {/* Stats */}
+              {/* Small stats */}
               <div className="w-full md:w-auto grid grid-cols-2 sm:flex sm:flex-col gap-3">
                 <div className="rounded-xl border border-[#A67C52]/30 bg-white px-4 py-3 text-center">
                   <div className="text-xs uppercase tracking-wide text-gray-500">
@@ -184,12 +233,15 @@ const UserDashboard = () => {
         </div>
       </section>
 
-      {/* Orders List */}
+      {/* --------------------------------------------------------------------- */}
+      {/* Orders List                                                           */}
+      {/* --------------------------------------------------------------------- */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <h2 className="text-xl sm:text-2xl font-bold text-[#A67C52] mb-5 text-center">
           {t("userDashboard.yourOrders")}
         </h2>
 
+        {/* Empty state */}
         {orders.length === 0 ? (
           <div className="mx-auto max-w-2xl text-center bg-white border border-dashed border-[#A67C52]/40 rounded-2xl p-10 shadow-sm">
             <div className="text-5xl text-[#8B5C3E] mx-auto w-fit mb-3">
@@ -214,6 +266,7 @@ const UserDashboard = () => {
             </Link>
           </div>
         ) : (
+          // Orders list
           <div className="grid gap-6">
             {sortedOrders.map((order) => (
               <article
@@ -235,35 +288,41 @@ const UserDashboard = () => {
                       </div>
                     </div>
                   </div>
+
                   <div className="flex items-center gap-2 text-sm text-gray-600">
                     <FaCalendarAlt className="opacity-70" />
                     {new Date(order?.createdAt).toLocaleDateString()}
                   </div>
+
                   <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 text-sm">
                     <FaDollarSign />
                     {t("userDashboard.total")}: ${order.totalPrice}
                   </div>
                 </div>
 
-                {/* Items */}
+                {/* Order items */}
                 <div className="p-5">
                   <h3 className="font-semibold text-[#8B5C3E] mb-3">
                     {t("userDashboard.orderedProducts")}
                   </h3>
+
                   <ul className="grid gap-4">
                     {order.products.map((product, idx) => {
                       if (!product.productId) return null;
 
+                      // Multilingual color name fallback
                       const translatedColorName =
                         product.color?.colorName?.[lang] ||
                         product.color?.colorName?.en ||
                         t("userDashboard.original");
 
+                      // Multilingual title fallback
                       const title =
                         product.productId.translations?.[lang]?.title ||
                         product.productId.title ||
                         t("userDashboard.noTitle");
 
+                      // Preferred color image → otherwise product cover image
                       const imageSrc = product.color?.image
                         ? getImgUrl(product.color.image)
                         : getImgUrl(product.productId.coverImage);
@@ -273,20 +332,25 @@ const UserDashboard = () => {
                           key={`${product.productId._id}-${idx}`}
                           className="order-item flex flex-col sm:flex-row items-center sm:items-start gap-4 rounded-xl border border-[#A67C52]/20 p-3 sm:p-4"
                         >
+                          {/* Thumbnail */}
                           <img
                             src={imageSrc}
                             alt={title}
                             className="order-item__img w-24 h-24 sm:w-28 sm:h-28 rounded-lg object-cover border-2 border-[#A67C52]/30 flex-shrink-0 mx-auto sm:mx-0"
                           />
+
+                          {/* Details */}
                           <div className="order-item__body flex-1 min-w-0 text-center sm:text-start">
                             <h4 className="font-semibold text-gray-800 break-words leading-relaxed">
                               {title}
                             </h4>
+
                             <div className="mt-1 text-sm text-gray-600 flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-1">
                               <span>
                                 {t("userDashboard.quantity")}:{" "}
                                 <span className="font-medium">{product.quantity}</span>
                               </span>
+
                               <span className="capitalize">
                                 {t("userDashboard.color")}:{" "}
                                 <span className="font-medium">{translatedColorName}</span>

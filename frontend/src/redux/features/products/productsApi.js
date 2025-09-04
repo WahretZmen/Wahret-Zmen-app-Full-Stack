@@ -1,9 +1,18 @@
 // src/redux/features/products/productsApi.js
+// -----------------------------------------------------------------------------
+// Purpose : RTK Query API slice for products CRUD operations.
+// Notes   : Normalizes product colors to always include `images[]` and
+//           backward-compatible `image`. Handles auth headers via token.
+// -----------------------------------------------------------------------------
+
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import getBaseUrl from "../../../utils/baseURL";
 
-// Normalize colors to always have `images[]`
-// and keep a backward-compatible `image` equal to images[0]
+// -----------------------------------------------------------------------------
+// Helpers
+// -----------------------------------------------------------------------------
+
+// Normalize colors to always have `images[]` and keep a fallback `.image`
 const normalizeColors = (colors, coverImage) =>
   (colors || []).map((c) => {
     const images = Array.isArray(c.images) && c.images.length
@@ -12,10 +21,11 @@ const normalizeColors = (colors, coverImage) =>
     return {
       ...c,
       images,
-      image: images[0] || c.image || coverImage || "", // compat for UIs that expect `.image`
+      image: images[0] || c.image || coverImage || "", // compat for UIs expecting `.image`
     };
   });
 
+// Configure baseQuery with auth header
 const baseQuery = fetchBaseQuery({
   baseUrl: `${getBaseUrl().replace(/\/$/, "")}/api/products`,
   prepareHeaders: (headers) => {
@@ -27,12 +37,16 @@ const baseQuery = fetchBaseQuery({
   },
 });
 
+// -----------------------------------------------------------------------------
+// API Slice
+// -----------------------------------------------------------------------------
 const productsApi = createApi({
   reducerPath: "productsApi",
   baseQuery,
   tagTypes: ["Products"],
 
   endpoints: (builder) => ({
+
     // ✅ Get all products
     getAllProducts: builder.query({
       query: () => "/",
@@ -50,7 +64,7 @@ const productsApi = createApi({
           : [{ type: "Products", id: "LIST" }],
     }),
 
-    // ✅ Get a single product by ID
+    // ✅ Get single product by ID
     getProductById: builder.query({
       query: (id) => `/${id}`,
       transformResponse: (product) => ({
@@ -60,13 +74,13 @@ const productsApi = createApi({
       providesTags: (result, error, id) => [{ type: "Products", id }],
     }),
 
-    // ✅ Search products
+    // ✅ Search products by term
     searchProducts: builder.query({
       query: (searchTerm) => `/search?query=${encodeURIComponent(searchTerm)}`,
       providesTags: [{ type: "Products", id: "LIST" }],
     }),
 
-    // ✅ Add a new product (supports multiple images per color)
+    // ✅ Add a new product (multi-images per color supported)
     addProduct: builder.mutation({
       query: (newProduct) => ({
         url: "/create-product",
@@ -75,7 +89,7 @@ const productsApi = createApi({
           ...newProduct,
           coverImage: newProduct.coverImage,
           colors: (newProduct.colors || []).map((c) => ({
-            colorName: c.colorName, // EN; backend translates to FR/AR
+            colorName: c.colorName, // EN (backend translates FR/AR)
             images: Array.isArray(c.images) ? c.images : (c.image ? [c.image] : []),
             stock: Number(c.stock) || 0,
           })),
@@ -85,7 +99,7 @@ const productsApi = createApi({
       invalidatesTags: [{ type: "Products", id: "LIST" }],
     }),
 
-    // ✅ Update a product (supports multiple images per color)
+    // ✅ Update a product (multi-images per color supported)
     updateProduct: builder.mutation({
       query: ({ id, ...rest }) => ({
         url: `/edit/${id}`,
@@ -94,7 +108,7 @@ const productsApi = createApi({
           ...rest,
           coverImage: rest.coverImage,
           colors: (rest.colors || []).map((c) => ({
-            colorName: c.colorName, // EN; backend translates to FR/AR
+            colorName: c.colorName,
             images: Array.isArray(c.images) ? c.images : (c.image ? [c.image] : []),
             stock: Number(c.stock) || 0,
           })),
@@ -135,6 +149,9 @@ const productsApi = createApi({
   }),
 });
 
+// -----------------------------------------------------------------------------
+// Exports
+// -----------------------------------------------------------------------------
 export const {
   useGetAllProductsQuery,
   useGetProductByIdQuery,

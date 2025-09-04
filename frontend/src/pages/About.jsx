@@ -1,4 +1,11 @@
 // src/pages/About.jsx
+// -----------------------------------------------------------------------------
+// Purpose: Brand About page with hero, values, gallery, mission/crafted/behind,
+//          and join sections. Fully localized (i18n) with RTL support.
+// Notes:
+//   - No functional or visual changes. Only annotations & organization added.
+// -----------------------------------------------------------------------------
+
 import React from "react";
 import "../Styles/StylesAbout.css";
 import { Helmet } from "react-helmet-async";
@@ -17,6 +24,9 @@ import AboutImgn5 from "../assets/About/AboutImgn5.avif";
 import AboutImgn6 from "../assets/About/AboutImgn6.avif";
 import AboutImgn7 from "../assets/About/AboutImgn7.avif";
 
+// -----------------------------------------------------------------------------
+// Inline Icon component (kept as-is, annotated for clarity)
+// -----------------------------------------------------------------------------
 const Icon = ({ name }) => {
   if (name === "heart") {
     return (
@@ -63,17 +73,23 @@ const Icon = ({ name }) => {
   return null;
 };
 
+// -----------------------------------------------------------------------------
+// Component
+// -----------------------------------------------------------------------------
 const About = () => {
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
 
+  // RTL detection
   const isRTL =
     i18n.language === "ar" ||
     i18n.language === "ar-SA" ||
     (typeof i18n.language === "string" && i18n.language.startsWith("ar"));
 
+  // Title text (localized)
   const titleText = t("about.title", "About Us");
 
+  // Value cards (icon + title + text)
   const values = [
     { title: t("about.v1_title"), text: t("about.v1_text"), icon: "heart" },
     { title: t("about.v2_title"), text: t("about.v2_text"), icon: "medal" },
@@ -83,8 +99,12 @@ const About = () => {
     { title: t("about.v6_title"), text: t("about.v6_text"), icon: "clock" },
   ];
 
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
   return (
     <div className="about-page min-h-screen bg-[#fff] text-[#2b2b2b]" dir={isRTL ? "rtl" : "ltr"}>
+      {/* Head metadata */}
       <Helmet>
         <title>
           {t("about.title", "About")} | {t("navbar.brand", "Wahret Zmen")}
@@ -98,7 +118,9 @@ const About = () => {
       {/* Header */}
       <Header />
 
+      {/* --------------------------------------------------------------------- */}
       {/* HERO */}
+      {/* --------------------------------------------------------------------- */}
       <section className="about-hero about-hero--gradient animate-fade-in">
         <div className="about-hero__overlay" />
         <div className="about-hero__content animate-fade-up">
@@ -113,8 +135,10 @@ const About = () => {
             )}
           </h1>
 
+          {/* Subtitle */}
           <p className="about-hero__subtitle">{t("about.description")}</p>
 
+          {/* CTAs */}
           <div className="about-hero__actions animate-fade-in delay-200">
             <a href="/products" className="btn-luxury animate-pop-in delay-100">
               {t("discover_now", "Discover Now")}
@@ -126,7 +150,9 @@ const About = () => {
         </div>
       </section>
 
+      {/* --------------------------------------------------------------------- */}
       {/* VALUES */}
+      {/* --------------------------------------------------------------------- */}
       <section className="section section--values animate-fade-in">
         <div className="section__inner section__inner--center">
           <h2 className="h2 animate-fade-in delay-100">
@@ -154,7 +180,9 @@ const About = () => {
         </div>
       </section>
 
+      {/* --------------------------------------------------------------------- */}
       {/* GALLERY */}
+      {/* --------------------------------------------------------------------- */}
       <section className="section section--gallery animate-fade-in">
         <div className="section__inner section__inner--center animate-fade-in">
           <h2 className="h2 animate-fade-in delay-100">
@@ -180,7 +208,9 @@ const About = () => {
         </div>
       </section>
 
+      {/* --------------------------------------------------------------------- */}
       {/* MAIN CONTENT (Mission / Crafted / Behind / Join) */}
+      {/* --------------------------------------------------------------------- */}
       <main className="about-container">
         {/* Mission */}
         <section className="about-section animate-fade-in">
@@ -221,15 +251,14 @@ const About = () => {
               <h2 className="about-h2">{t("about.join_title")}</h2>
               <p className="about-p">{t("about.join_text1")}</p>
               <p className="about-p">{t("about.join_text2")}</p>
-<div className="about-cta">
-  <a href="/products" className="btn-luxury animate-pop-in">
-    {t("discover_now", "Découvrir maintenant")}
-  </a>
-  <a href="/contact" className="btn-outline small-btn animate-pop-in delay-100">
-    {t("footer.contactUs", "Contact Us")}
-  </a>
-</div>
-
+              <div className="about-cta">
+                <a href="/products" className="btn-luxury animate-pop-in">
+                  {t("discover_now", "Découvrir maintenant")}
+                </a>
+                <a href="/contact" className="btn-outline small-btn animate-pop-in delay-100">
+                  {t("footer.contactUs", "Contact Us")}
+                </a>
+              </div>
             </div>
           </div>
         </section>
@@ -241,4 +270,7 @@ const About = () => {
   );
 };
 
+// -----------------------------------------------------------------------------
+// Export
+// -----------------------------------------------------------------------------
 export default About;

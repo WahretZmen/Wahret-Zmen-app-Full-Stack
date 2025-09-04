@@ -1,15 +1,37 @@
+// AdminManageOrders.jsx
+// -------------------------------------------------------------
+// Purpose: Admin table to view, edit (isPaid/isDelivered), and
+//          delete orders. Uses RTK Query for data fetching and
+//          mutations, SweetAlert2 for confirmations, and i18n
+//          for language handling.
+// NOTE: Only reorganization and comments have been added.
+//       No logic, text, or UI content was modified.
+// -------------------------------------------------------------
+
 import React, { useState, useEffect, useMemo } from "react";
+
+// 🔌 RTK Query hooks (Orders API)
 import {
   useGetAllOrdersQuery,
   useUpdateOrderMutation,
   useDeleteOrderMutation,
 } from "../../../redux/features/orders/ordersApi.js";
+
+// 🧰 Utilities & libs
 import Swal from "sweetalert2";
 import { getImgUrl } from "../../../utils/getImgUrl";
-import "../../../Styles/StylesAdminManageOrders.css";
 import { useTranslation } from "react-i18next";
 
+// 🖌️ Styles
+import "../../../Styles/StylesAdminManageOrders.css";
+
+// -------------------------------------------------------------
+// Component
+// -------------------------------------------------------------
 const AdminManageOrders = () => {
+  // -----------------------------------------------------------------
+  // 1) Data fetching: get all orders (with auto-refetch options)
+  // -----------------------------------------------------------------
   const {
     data: orders = [],
     isLoading,
@@ -21,20 +43,38 @@ const AdminManageOrders = () => {
     refetchOnReconnect: true,
   });
 
+  // -----------------------------------------------------------------
+  // 2) Mutations: update & delete orders
+  // -----------------------------------------------------------------
   const [updateOrder] = useUpdateOrderMutation();
   const [deleteOrder] = useDeleteOrderMutation();
+
+  // -----------------------------------------------------------------
+  // 3) Local UI state: editing row & form values
+  // -----------------------------------------------------------------
   const [editingOrder, setEditingOrder] = useState(null);
   const [updatedValues, setUpdatedValues] = useState({});
 
+  // -----------------------------------------------------------------
+  // 4) i18n helpers
+  // -----------------------------------------------------------------
   const { i18n } = useTranslation();
   const lang = i18n.language || "fr";
 
-  // 🧭 Always show oldest -> newest so #1 is the earliest order
+  // -----------------------------------------------------------------
+  // 5) Derived data: sort orders (oldest -> newest)
+  //     - Ensures first row corresponds to the earliest order
+  // -----------------------------------------------------------------
   const sortedOrders = useMemo(
     () => [...orders].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
     [orders]
   );
 
+  // -----------------------------------------------------------------
+  // 6) Handlers
+  // -----------------------------------------------------------------
+
+  // Save current edited order (only isPaid/isDelivered)
   const handleEdit = async (orderId, order) => {
     try {
       await updateOrder({
@@ -60,6 +100,7 @@ const AdminManageOrders = () => {
     }
   };
 
+  // Update local form values while editing
   const handleChange = (field, value) => {
     setUpdatedValues((prev) => ({
       ...prev,
@@ -67,6 +108,7 @@ const AdminManageOrders = () => {
     }));
   };
 
+  // Enter edit mode for a specific order
   const startEditingOrder = (order) => {
     setEditingOrder(order._id);
     setUpdatedValues({
@@ -75,6 +117,7 @@ const AdminManageOrders = () => {
     });
   };
 
+  // Delete an order (with confirmation)
   const handleDelete = async (orderId) => {
     Swal.fire({
       title: "Êtes-vous sûr ?",
@@ -87,6 +130,7 @@ const AdminManageOrders = () => {
       cancelButtonText: "Annuler",
     }).then(async (result) => {
       if (!result.isConfirmed) return;
+
       try {
         // ✅ RTK endpoint expects the raw id string
         await deleteOrder(orderId).unwrap();
@@ -102,10 +146,17 @@ const AdminManageOrders = () => {
     });
   };
 
+  // -----------------------------------------------------------------
+  // 7) Effects
+  // -----------------------------------------------------------------
   useEffect(() => {
+    // Force LTR layout for this admin table view
     document.documentElement.dir = "ltr";
   }, []);
 
+  // -----------------------------------------------------------------
+  // 8) Early returns: loading / error
+  // -----------------------------------------------------------------
   if (isLoading) {
     return (
       <div className="flex justify-center items-center min-h-screen">
@@ -124,10 +175,15 @@ const AdminManageOrders = () => {
     );
   }
 
+  // -----------------------------------------------------------------
+  // 9) Render
+  // -----------------------------------------------------------------
   return (
     <section className="py-1 bg-blueGray-50">
       <div className="w-full max-w-7xl mx-auto px-6 mt-24">
+        {/* Card wrapper */}
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
+          {/* Header */}
           <div className="rounded-t mb-0 px-4 py-3 border-0">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full px-4 max-w-full flex-grow flex-1">
@@ -138,8 +194,10 @@ const AdminManageOrders = () => {
             </div>
           </div>
 
+          {/* Table */}
           <div className="block w-full overflow-x-auto">
             <table className="items-center bg-transparent w-full border-collapse">
+              {/* Table head */}
               <thead>
                 <tr className="border-b border-gray-300 text-left text-md font-semibold text-gray-800">
                   <th className="px-6 py-3 border">#</th>
@@ -156,29 +214,40 @@ const AdminManageOrders = () => {
                 </tr>
               </thead>
 
+              {/* Table body */}
               <tbody className="text-sm font-medium text-gray-600">
                 {sortedOrders.map((order, index) => (
                   <tr
                     key={`${order._id}-${index}`}
                     className="border-b hover:bg-gray-100 transition"
                   >
+                    {/* Index */}
                     <td className="px-6 py-3 border">{index + 1}</td>
 
+                    {/* Order ID (shortened) */}
                     <td className="px-6 py-3 border" title={order._id}>
                       {order._id.slice(0, 8)}...
                     </td>
 
+                    {/* Products list */}
                     <td className="px-6 py-3 border">
                       {order.products.map((prod, idx) => {
+                        // Normalize product id whether object or string
                         const productId = prod.productId?._id || prod.productId;
+
+                        // Title fallbacks
                         const productTitle =
                           prod.productId?.title || prod.title || "Produit inconnu";
+
+                        // Color name (supports multilingual object or string)
                         const colorName =
                           typeof prod?.color?.colorName === "object"
                             ? prod.color.colorName[lang] ||
                               prod.color.colorName.en ||
                               "Original"
                             : prod?.color?.colorName || "Original";
+
+                        // Optional color image
                         const colorImage = prod?.color?.image;
 
                         return (
@@ -215,17 +284,21 @@ const AdminManageOrders = () => {
                       })}
                     </td>
 
+                    {/* Customer info */}
                     <td className="px-6 py-3 border">{order.name}</td>
                     <td className="px-6 py-3 border">{order.email}</td>
                     <td className="px-6 py-3 border">{order.phone}</td>
 
+                    {/* Address */}
                     <td className="px-6 py-3 border">
                       {order?.address?.city || "—"},{" "}
                       {order?.address?.street || "—"}
                     </td>
 
+                    {/* Price */}
                     <td className="px-6 py-3 border">{order.totalPrice} USD</td>
 
+                    {/* Select: Paid */}
                     <td className="px-4 py-3 border">
                       <div className="min-w-[90px]">
                         <select
@@ -246,6 +319,7 @@ const AdminManageOrders = () => {
                       </div>
                     </td>
 
+                    {/* Select: Delivered */}
                     <td className="px-4 py-3 border">
                       <div className="min-w-[90px]">
                         <select
@@ -266,6 +340,7 @@ const AdminManageOrders = () => {
                       </div>
                     </td>
 
+                    {/* Actions */}
                     <td className="px-6 py-3 border">
                       <div className="flex justify-center items-center gap-4">
                         {editingOrder !== order._id ? (
@@ -295,9 +370,12 @@ const AdminManageOrders = () => {
                   </tr>
                 ))}
               </tbody>
+              {/* /Table body */}
             </table>
           </div>
+          {/* /Table */}
         </div>
+        {/* /Card wrapper */}
       </div>
     </section>
   );

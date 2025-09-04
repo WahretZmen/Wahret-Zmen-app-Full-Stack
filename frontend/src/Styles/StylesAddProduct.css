@@ -1,13 +1,36 @@
-.form {margin-left: 5% !important;}
+/* -----------------------------------------------------------------------------
+   StylesAddProduct.css
+   Purpose:
+     - Basic form styling for AddProduct page
+     - Ensures responsive layout for inputs on all screen sizes
+   Notes:
+     - Minimal rules, scoped to form elements
+----------------------------------------------------------------------------- */
 
-/* Ensure full-width input fields on smaller screens */
-input, textarea, select, button {
+/* Form container */
+.form {
+  margin-left: 5% !important; /* keep consistent margin from left edge */
+}
+
+/* ---------------------------------------------------------------------------
+   Inputs / Textareas / Selects / Buttons
+   ---------------------------------------------------------------------------
+   - Force inputs to span full width of their container
+--------------------------------------------------------------------------- */
+input,
+textarea,
+select,
+button {
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------------------
+   Responsive (Mobile)
+   ---------------------------------------------------------------------------
+   - For screens <= 768px, force .max-w-md to take full width
+--------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .max-w-md {
     width: 100%;
   }
-  
-  /* Additional styles for mobile */
-  @media (max-width: 768px) {
-    .max-w-md {
-      width: 100%;
-    }
-  }
+}

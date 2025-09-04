@@ -1,17 +1,41 @@
+// Dashboard.jsx
+// -----------------------------------------------------------------------------
+// Purpose: Admin dashboard showing quick stats, revenue chart, and order tools.
+// Features:
+//   - Authenticated admin summary (users, products, sales, orders).
+//   - Revenue chart visualization.
+//   - Manage Orders (table + per-product progress).
+// Notes:
+//   - No functional changes. Only comments/organization added.
+// -----------------------------------------------------------------------------
+
 import { FaBoxOpen, FaClipboardList, FaChartLine, FaUser } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
+// UI / Utils / Modules
 import Loading from '../../components/Loading';
 import getBaseUrl from '../../utils/baseURL';
 import RevenueChart from './RevenueChart';
 import ManageOrders from './manageOrders/manageOrder';
 
+// -----------------------------------------------------------------------------
+// Component
+// -----------------------------------------------------------------------------
 const Dashboard = () => {
+  // ---------------------------------------------------------------------------
+  // Local state
+  // ---------------------------------------------------------------------------
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
   const navigate = useNavigate();
 
+  // ---------------------------------------------------------------------------
+  // Effects
+  // ---------------------------------------------------------------------------
+
+  // Fetch admin summary data on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -31,11 +55,19 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
+  // ---------------------------------------------------------------------------
+  // Handlers
+  // ---------------------------------------------------------------------------
+
+  // Logout handler: clear token + navigate home
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/');
   };
 
+  // ---------------------------------------------------------------------------
+  // Loading state
+  // ---------------------------------------------------------------------------
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -44,6 +76,9 @@ const Dashboard = () => {
     );
   }
 
+  // ---------------------------------------------------------------------------
+  // Derived UI data (stats cards)
+  // ---------------------------------------------------------------------------
   const stats = [
     {
       icon: <FaUser className="h-6 w-6" />,
@@ -79,9 +114,14 @@ const Dashboard = () => {
     },
   ];
 
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
   return (
     <div dir="ltr" className="p-4 lg:p-8 w-full max-w-[100vw] mx-auto">
+      {/* --------------------------------------------------------------------- */}
       {/* Stats — compact and all in one row on desktop */}
+      {/* --------------------------------------------------------------------- */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {stats.map((stat, i) => (
           <div
@@ -101,7 +141,9 @@ const Dashboard = () => {
         ))}
       </section>
 
+      {/* --------------------------------------------------------------------- */}
       {/* Revenue Chart */}
+      {/* --------------------------------------------------------------------- */}
       <section className="flex flex-col lg:flex-row gap-6 overflow-x-auto">
         <div className="flex-1 bg-white shadow-md rounded-lg border border-gray-200 p-6 min-w-[600px]">
           <div className="font-semibold mb-4 text-lg">Le nombre de commandes par mois</div>
@@ -111,7 +153,9 @@ const Dashboard = () => {
         </div>
       </section>
 
-      {/* Manage Orders */}
+      {/* --------------------------------------------------------------------- */}
+      {/* Manage Orders (tables + progress) */}
+      {/* --------------------------------------------------------------------- */}
       <section className="bg-white shadow-md rounded-lg p-6 mt-6 overflow-x-auto min-w-[600px] border border-gray-200">
         <ManageOrders />
       </section>
@@ -119,4 +163,7 @@ const Dashboard = () => {
   );
 };
 
+// -----------------------------------------------------------------------------
+// Export
+// -----------------------------------------------------------------------------
 export default Dashboard;

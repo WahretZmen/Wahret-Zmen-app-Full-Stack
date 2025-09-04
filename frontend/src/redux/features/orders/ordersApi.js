@@ -1,9 +1,26 @@
 // src/redux/features/orders/ordersApi.js
+// -----------------------------------------------------------------------------
+// Purpose: RTK Query API slice for Orders (CRUD + notifications).
+// Features:
+//   - Auth header via localStorage token
+//   - Base URL derived from getBaseUrl() and normalized (no trailing slash)
+//   - Tag-based invalidation for granular cache updates
+// Notes:
+//   - No functional changes; only comments and organization added.
+// -----------------------------------------------------------------------------
+
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import getBaseUrl from "../../../utils/baseURL";
 
+// -----------------------------------------------------------------------------
+// API Slice
+// -----------------------------------------------------------------------------
 const ordersApi = createApi({
   reducerPath: "ordersApi",
+
+  // ---------------------------------------------------------------------------
+  // Base Query
+  // ---------------------------------------------------------------------------
   baseQuery: fetchBaseQuery({
     baseUrl: `${getBaseUrl().replace(/\/$/, "")}/api/orders`,
     credentials: "include",
@@ -13,10 +30,19 @@ const ordersApi = createApi({
       return headers;
     },
   }),
+
+  // Cache Tags
   tagTypes: ["Orders"],
 
+  // ---------------------------------------------------------------------------
+  // Endpoints
+  // ---------------------------------------------------------------------------
   endpoints: (builder) => ({
-    // ✅ Create a new order (send body as-is; Checkout already builds correct shape)
+    // -------------------------------------------------------------------------
+    // ✅ Create a new order
+    // - Checkout builds the correct shape; body sent as-is
+    // - Invalidates LIST to refetch collection
+    // -------------------------------------------------------------------------
     createOrder: builder.mutation({
       query: (newOrder) => ({
         url: "/",
@@ -26,7 +52,11 @@ const ordersApi = createApi({
       invalidatesTags: [{ type: "Orders", id: "LIST" }],
     }),
 
+    // -------------------------------------------------------------------------
     // ✅ Get orders by customer email
+    // - Normalizes each order’s product lines for UI robustness
+    // - Provides tags per order + LIST
+    // -------------------------------------------------------------------------
     getOrderByEmail: builder.query({
       query: (email) => `/email/${encodeURIComponent(email)}`,
       transformResponse: (orders) =>
@@ -56,19 +86,29 @@ const ordersApi = createApi({
           : [{ type: "Orders", id: "LIST" }],
     }),
 
+    // -------------------------------------------------------------------------
     // ✅ Get all orders (admin)
+    // - Provides LIST tag for collection-level caching
+    // -------------------------------------------------------------------------
     getAllOrders: builder.query({
       query: () => "/",
       providesTags: [{ type: "Orders", id: "LIST" }],
     }),
 
+    // -------------------------------------------------------------------------
     // ✅ Get a single order by ID
+    // - Provides tag by order ID for precise invalidation
+    // -------------------------------------------------------------------------
     getOrderById: builder.query({
       query: (id) => `/${id}`,
       providesTags: (result, error, id) => [{ type: "Orders", id }],
     }),
 
-    // ✅ Update an order (payment, delivery status, or progress)
+    // -------------------------------------------------------------------------
+    // ✅ Update an order
+    // - Supports payment/delivery status and productProgress updates
+    // - Invalidates that order + LIST to refresh detail and collection
+    // -------------------------------------------------------------------------
     updateOrder: builder.mutation({
       query: ({ orderId, productProgress, isPaid, isDelivered }) => ({
         url: `/${orderId}`,
@@ -81,7 +121,10 @@ const ordersApi = createApi({
       ],
     }),
 
+    // -------------------------------------------------------------------------
     // ✅ Delete an order (expects raw id string)
+    // - Invalidates that order + LIST
+    // -------------------------------------------------------------------------
     deleteOrder: builder.mutation({
       query: (id) => ({
         url: `/${id}`,
@@ -93,7 +136,11 @@ const ordersApi = createApi({
       ],
     }),
 
+    // -------------------------------------------------------------------------
     // ✅ Remove a single product line from an order
+    // - POST to /remove-line with orderId/productKey/quantityToRemove
+    // - Invalidates that order + LIST
+    // -------------------------------------------------------------------------
     removeProductFromOrder: builder.mutation({
       query: ({ orderId, productKey, quantityToRemove }) => ({
         url: `/remove-line`,
@@ -106,7 +153,10 @@ const ordersApi = createApi({
       ],
     }),
 
-    // (Optional) send order notification to customer
+    // -------------------------------------------------------------------------
+    // (Optional) Send order notification to customer
+    // - Triggers backend email on progress changes (e.g., 60% / 100%)
+    // -------------------------------------------------------------------------
     sendOrderNotification: builder.mutation({
       query: ({ orderId, email, productKey, progress, articleIndex }) => ({
         url: `/notify`,
@@ -117,6 +167,9 @@ const ordersApi = createApi({
   }),
 });
 
+// -----------------------------------------------------------------------------
+// Hooks
+// -----------------------------------------------------------------------------
 export const {
   useCreateOrderMutation,
   useGetAllOrdersQuery,
@@ -128,4 +181,7 @@ export const {
   useSendOrderNotificationMutation,
 } = ordersApi;
 
+// -----------------------------------------------------------------------------
+// Export
+// -----------------------------------------------------------------------------
 export default ordersApi;

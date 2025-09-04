@@ -1,3 +1,15 @@
+// ManageProducts.jsx
+// -----------------------------------------------------------------------------
+// Purpose: Admin screen to list, search, and manage products (edit/delete).
+// Features:
+//   - Dual search (by title in any language, and by product ID).
+//   - Shows category, colors (localized), price, and total stock.
+//   - Edit (Link) and Delete (Swal-confirmed) actions.
+// Notes:
+//   - "Content unchanged": logic, strings, and behavior remain the same.
+//   - Only formatting, grouping, and comments were added for readability.
+// -----------------------------------------------------------------------------
+
 import { Link } from "react-router-dom";
 import {
   useDeleteProductMutation,
@@ -11,26 +23,45 @@ import { useEffect, useState } from "react";
 import { productEventsActions } from "../../../redux/features/products/productEventsSlice";
 import "../../../Styles/StylesManageProducts.css";
 
-
+// -----------------------------------------------------------------------------
+// Component
+// -----------------------------------------------------------------------------
 const ManageProducts = () => {
-  const { data: products = [], isLoading, isError, refetch } = useGetAllProductsQuery();
+  // ---------------------------------------------------------------------------
+  // RTK Query: load products + mutation for delete
+  // ---------------------------------------------------------------------------
+  const { data: products = [], isLoading, isError, refetch } =
+    useGetAllProductsQuery();
   const [deleteProduct, { isLoading: deleting }] = useDeleteProductMutation();
+
+  // ---------------------------------------------------------------------------
+  // i18n / Redux
+  // ---------------------------------------------------------------------------
   const { i18n } = useTranslation();
   const lang = i18n.language;
   const dispatch = useDispatch();
-  const shouldRefetch = useSelector((state) => state.productEvents.shouldRefetch);
+  const shouldRefetch = useSelector(
+    (state) => state.productEvents.shouldRefetch
+  );
 
+  // ---------------------------------------------------------------------------
+  // Constants / Local state
+  // ---------------------------------------------------------------------------
   const categoryMapping = {
     Men: "Hommes",
     Women: "Femmes",
     Children: "Enfants",
   };
 
+  // Dual search inputs
   const [searchTerm, setSearchTerm] = useState("");
   const [searchId, setSearchId] = useState("");
 
+  // ---------------------------------------------------------------------------
+  // Effects
+  // ---------------------------------------------------------------------------
 
-
+  // React to global "shouldRefetch" events (e.g., after create/update elsewhere)
   useEffect(() => {
     if (shouldRefetch) {
       refetch();
@@ -38,6 +69,16 @@ const ManageProducts = () => {
     }
   }, [shouldRefetch, refetch, dispatch]);
 
+  // Force LTR for this admin view (per original code)
+  useEffect(() => {
+    document.documentElement.dir = "ltr";
+  }, []);
+
+  // ---------------------------------------------------------------------------
+  // Handlers
+  // ---------------------------------------------------------------------------
+
+  // Delete confirmation flow for a product
   const handleDeleteProduct = async (id) => {
     const confirmResult = await Swal.fire({
       title: "Êtes-vous sûr ?",
@@ -57,20 +98,22 @@ const ManageProducts = () => {
       } catch (error) {
         Swal.fire(
           "Erreur !",
-          error?.data?.message || "Échec de la suppression du produit. Veuillez réessayer.",
+          error?.data?.message ||
+            "Échec de la suppression du produit. Veuillez réessayer.",
           "error"
         );
       }
     }
   };
 
-  useEffect(() => {
-    document.documentElement.dir = "ltr";
-  }, []);
-  
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
   return (
     <section className="p-4 bg-gray-100 min-h-screen font-sans">
+      {/* --------------------------------------------------------------------- */}
       {/* 🔍 Dual Search Inputs */}
+      {/* --------------------------------------------------------------------- */}
       <div className="flex flex-col md:flex-row gap-4 mb-4">
         <input
           type="text"
@@ -87,8 +130,10 @@ const ManageProducts = () => {
           className="p-2 border border-gray-300 rounded-md w-full md:max-w-sm"
         />
       </div>
-  
+
+      {/* --------------------------------------------------------------------- */}
       {/* 📦 Products Table */}
+      {/* --------------------------------------------------------------------- */}
       <div className="w-full overflow-x-auto">
         <table className="min-w-[900px] w-full text-left border-collapse border border-gray-300">
           <thead>
@@ -103,49 +148,61 @@ const ManageProducts = () => {
               <th className="p-4 border border-gray-300">Actions</th>
             </tr>
           </thead>
-  
+
           <tbody>
+            {/* Loading row */}
             {isLoading && (
               <tr>
-                <td colSpan="8" className="text-center p-6 border border-gray-300">
+                <td
+                  colSpan="8"
+                  className="text-center p-6 border border-gray-300"
+                >
                   Chargement des produits...
                 </td>
               </tr>
             )}
-  
+
+            {/* Data rows */}
             {!isLoading && products?.length > 0 ? (
               products
-              .filter((product) => {
-                const lowerSearch = searchTerm.toLowerCase();
-                const matchesTitle = [
-                  product.title,
-                  product.translations?.fr?.title,
-                  product.translations?.ar?.title
-                ]
-                  .filter(Boolean) // remove null/undefined
-                  .map((t) => t.toLowerCase())
-                  .some((title) => title.includes(lowerSearch));
-                
-              
-                const matchesId = product._id?.toLowerCase().includes(searchId.toLowerCase());
-              
-                return matchesTitle && matchesId;
-              })
-              
+                .filter((product) => {
+                  // Title (multi-lingual) match
+                  const lowerSearch = searchTerm.toLowerCase();
+                  const matchesTitle = [product.title, product.translations?.fr?.title, product.translations?.ar?.title]
+                    .filter(Boolean) // drop null/undefined
+                    .map((t) => t.toLowerCase())
+                    .some((title) => title.includes(lowerSearch));
+
+                  // ID match
+                  const matchesId = product._id
+                    ?.toLowerCase()
+                    .includes(searchId.toLowerCase());
+
+                  return matchesTitle && matchesId;
+                })
                 .map((product, index) => {
+                  // Sum total stock across colors
                   const totalStock = product.colors?.reduce(
                     (sum, color) => sum + (color?.stock || 0),
                     0
                   );
-  
+
                   return (
-                    <tr key={product._id} className="hover:bg-gray-100 transition">
-                      <td className="p-4 border border-gray-300 align-middle">{index + 1}</td>
-  
+                    <tr
+                      key={product._id}
+                      className="hover:bg-gray-100 transition"
+                    >
+                      {/* Index */}
+                      <td className="p-4 border border-gray-300 align-middle">
+                        {index + 1}
+                      </td>
+
+                      {/* Short ID */}
                       <td className="p-4 border border-gray-300 align-middle text-sm text-gray-600">
                         {product._id.slice(0, 8)}...
                       </td>
-  
+
+                      {/* Title + image */}
                       <td className="p-4 border border-gray-300">
                         <div className="flex flex-col items-center justify-center text-center">
                           <span className="font-medium text-gray-800 mt-2 text-sm md:text-base break-words">
@@ -158,18 +215,26 @@ const ManageProducts = () => {
                           />
                         </div>
                       </td>
-  
+
+                      {/* Category (mapped to FR labels) */}
                       <td className="p-4 border border-gray-300 align-middle capitalize text-gray-700">
                         {categoryMapping[product.category] || "Non classifié"}
                       </td>
-  
+
+                      {/* Colors (localized + chip) */}
                       <td className="p-4 border border-gray-300 align-middle">
                         <div className="flex flex-wrap items-center gap-4">
                           {product.colors?.length > 0 ? (
                             [...product.colors]
                               .sort((a, b) => {
-                                const aName = a.colorName?.[lang] || a.colorName?.en || "";
-                                const bName = b.colorName?.[lang] || b.colorName?.en || "";
+                                const aName =
+                                  a.colorName?.[lang] ||
+                                  a.colorName?.en ||
+                                  "";
+                                const bName =
+                                  b.colorName?.[lang] ||
+                                  b.colorName?.en ||
+                                  "";
                                 return aName.localeCompare(bName);
                               })
                               .map((color, idx) => (
@@ -179,7 +244,9 @@ const ManageProducts = () => {
                                     style={{ backgroundColor: color.hex || "#fff" }}
                                   />
                                   <span className="text-sm text-gray-700">
-                                    {color.colorName?.[lang] || color.colorName?.en || "Défaut"}
+                                    {color.colorName?.[lang] ||
+                                      color.colorName?.en ||
+                                      "Défaut"}
                                   </span>
                                 </div>
                               ))
@@ -188,11 +255,13 @@ const ManageProducts = () => {
                           )}
                         </div>
                       </td>
-  
+
+                      {/* Price */}
                       <td className="p-4 border border-gray-300 align-middle text-green-600 font-semibold">
                         ${product.newPrice}
                       </td>
-  
+
+                      {/* Total stock */}
                       <td className="p-4 border border-gray-300 align-middle">
                         <span
                           className={
@@ -201,39 +270,42 @@ const ManageProducts = () => {
                               : "text-yellow-600 font-medium"
                           }
                         >
-                          {totalStock > 0 ? `${totalStock} en stock` : "Rupture de stock"}
+                          {totalStock > 0
+                            ? `${totalStock} en stock`
+                            : "Rupture de stock"}
                         </span>
                       </td>
-  
+
+                      {/* Actions */}
                       <td className="p-4 border border-gray-300 align-middle">
-                      <div className="flex gap-2 sm:gap-4">
-  <Link
-    to={`/dashboard/edit-product/${product._id}`}
-    className="action-button btn-edit"
-  >
-    Modifier
-  </Link>
+                        <div className="flex gap-2 sm:gap-4">
+                          <Link
+                            to={`/dashboard/edit-product/${product._id}`}
+                            className="action-button btn-edit"
+                          >
+                            Modifier
+                          </Link>
 
-  <button
-    onClick={() => handleDeleteProduct(product._id)}
-    disabled={deleting}
-    className="action-button btn-delete"
-  >
-    {deleting ? "Suppression..." : "Supprimer"}
-  </button>
-</div>
-
-
-
-
+                          <button
+                            onClick={() => handleDeleteProduct(product._id)}
+                            disabled={deleting}
+                            className="action-button btn-delete"
+                          >
+                            {deleting ? "Suppression..." : "Supprimer"}
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
                 })
             ) : (
+              // Empty state (no products)
               !isLoading && (
                 <tr>
-                  <td colSpan="8" className="text-center p-6 border border-gray-300">
+                  <td
+                    colSpan="8"
+                    className="text-center p-6 border border-gray-300"
+                  >
                     Aucun produit trouvé.
                   </td>
                 </tr>
@@ -243,10 +315,10 @@ const ManageProducts = () => {
         </table>
       </div>
     </section>
-    
   );
 };
 
+// -----------------------------------------------------------------------------
+// Export
+// -----------------------------------------------------------------------------
 export default ManageProducts;
-
-

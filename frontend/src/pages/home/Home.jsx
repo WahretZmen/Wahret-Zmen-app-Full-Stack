@@ -1,4 +1,13 @@
 // src/pages/home/Home.jsx
+// -----------------------------------------------------------------------------
+// Purpose : Home page composition (hero, CTA banner, shop-by-category,
+//           collections, news, craftsmanship, about).
+// Notes   : Only organization and comments added. No logic/JSX/text changes.
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// Imports
+// -----------------------------------------------------------------------------
 import React from "react";
 import { Trans, useTranslation } from "react-i18next";
 import { Helmet } from "react-helmet";
@@ -20,11 +29,20 @@ import enfantJebba from "../../assets/Jebbas/Enfants/Jebba-Enfant.jpg";
 
 import FullWidth from "../../components/ui/FullWidth";
 
+// -----------------------------------------------------------------------------
+// Component
+// -----------------------------------------------------------------------------
 const Home = () => {
+  // ---------------------------------------------------------------------------
+  // 1) i18n / RTL
+  // ---------------------------------------------------------------------------
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === "ar" || i18n.language === "ar-SA";
   if (!i18n.isInitialized) return null;
 
+  // ---------------------------------------------------------------------------
+  // 2) Labels & data (shop-by-category)
+  // ---------------------------------------------------------------------------
   const label = (k) =>
     isRTL
       ? { hommes: "رجال", femmes: "نساء", enfants: "أطفال" }[k]
@@ -36,6 +54,9 @@ const Home = () => {
     { key: "enfants", label: label("enfants"), image: enfantJebba, to: "/products?category=enfants" },
   ];
 
+  // ---------------------------------------------------------------------------
+  // 3) Render
+  // ---------------------------------------------------------------------------
   return (
     <>
       {/* ===================== Head meta ===================== */}
@@ -53,33 +74,32 @@ const Home = () => {
       {/* ===================== Hero Banner ===================== */}
       <FadeInSection delay={0} yOffset={0}>
         <div className="anim-scale-in">
-         <FullWidth dir={isRTL ? "rtl" : "ltr"}>
-  <LargeBanner />
-</FullWidth>
+          <FullWidth dir={isRTL ? "rtl" : "ltr"}>
+            <LargeBanner />
+          </FullWidth>
         </div>
       </FadeInSection>
 
+      {/* ===================== Page container ===================== */}
       <div
         className="home-container px-4 sm:px-6 md:px-10 lg:px-20 max-w-[1440px] mx-auto"
         dir={isRTL ? "rtl" : "ltr"}
       >
-      
-      {/* ===================== Home Title ===================== */}
-<section className="home-title-block text-center">
-  <h1 className={`home-title sparkle ${isRTL ? "rtl" : "ltr"}`}>
-    <span className="home-title__text">{t("home", "الرئيسية")}</span>
-    <span className="home-title__underline" />
-  </h1>
 
-  <p className="home-title__sub">
-    <Trans i18nKey="home_intro_html">
-      Step into the world of <strong>Wahret Zmen</strong>, where every stitch tells a
-      story of heritage.
-    </Trans>
-  </p>
-</section>
+        {/* ===================== Home Title ===================== */}
+        <section className="home-title-block text-center">
+          <h1 className={`home-title sparkle ${isRTL ? "rtl" : "ltr"}`}>
+            <span className="home-title__text">{t("home", "الرئيسية")}</span>
+            <span className="home-title__underline" />
+          </h1>
 
-
+          <p className="home-title__sub">
+            <Trans i18nKey="home_intro_html">
+              Step into the world of <strong>Wahret Zmen</strong>, where every stitch tells a
+              story of heritage.
+            </Trans>
+          </p>
+        </section>
 
         {/* ===================== Banner CTA ===================== */}
         <FadeInSection delay={0.2}>

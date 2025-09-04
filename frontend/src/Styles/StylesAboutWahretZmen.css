@@ -1,4 +1,16 @@
-/* Scoped root to avoid conflicts */
+/* -----------------------------------------------------------------------------
+   StylesAboutWahretZmen.css
+   Purpose:
+     - Scoped styles for the Wahret Zmen About section
+     - Includes layout, typography, buttons, cards, and subtle animations
+   Notes:
+     - Uses CSS variables for easy theming
+     - Scoped with `.wz-about-basic` to avoid global conflicts
+----------------------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------
+   Root Scope + Variables
+----------------------------------------------------------------------------- */
 .wz-about-basic {
   --bg: #ffffff;
   --muted: #f7f3ef;
@@ -12,23 +24,24 @@
   background: linear-gradient(135deg, var(--bg), var(--muted));
   padding: 80px 0;
   color: var(--text);
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
-    "Segoe UI Emoji";
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial,
+    "Apple Color Emoji", "Segoe UI Emoji";
 }
 
+/* Container */
 .wz-about-basic .wz-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
+/* Responsive grid (default = single col, desktop = 2 cols) */
 .wz-about-basic .wz-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 40px;
   align-items: center;
 }
-
 @media (min-width: 992px) {
   .wz-about-basic .wz-grid {
     grid-template-columns: 1fr 1fr;
@@ -36,7 +49,9 @@
   }
 }
 
-/* Left column */
+/* -----------------------------------------------------------------------------
+   Left Column (Text + Button)
+----------------------------------------------------------------------------- */
 .wz-about-basic .wz-title {
   font-size: 40px;
   line-height: 1.15;
@@ -52,7 +67,7 @@
   max-width: 60ch;
 }
 
-/* Button */
+/* Buttons */
 .wz-about-basic .wz-btn {
   display: inline-flex;
   align-items: center;
@@ -64,30 +79,31 @@
   text-decoration: none;
   font-weight: 700;
   letter-spacing: 0.2px;
-  transition: transform 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  transition: transform 150ms ease, box-shadow 150ms ease,
+    background-color 150ms ease;
 }
-
 .wz-about-basic .wz-btn-luxury {
   color: #fff;
   background: linear-gradient(135deg, var(--primary-dark), var(--primary));
   box-shadow: 0 10px 24px rgba(196, 106, 43, 0.25);
 }
-
 .wz-about-basic .wz-btn-luxury:hover {
   transform: translateY(-2px);
 }
-
 .wz-about-basic .wz-btn-luxury:active {
   transform: translateY(0);
 }
 
-/* Right column -> cards */
+/* -----------------------------------------------------------------------------
+   Right Column (Cards)
+----------------------------------------------------------------------------- */
 .wz-about-basic .wz-right {
   display: grid;
   grid-template-columns: 1fr;
   gap: 18px;
 }
 
+/* Card container */
 .wz-about-basic .wz-card {
   display: flex;
   align-items: flex-start;
@@ -99,12 +115,12 @@
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
   transition: transform 220ms ease, box-shadow 220ms ease;
 }
-
 .wz-about-basic .wz-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.09);
 }
 
+/* Icon inside card */
 .wz-about-basic .wz-icon {
   width: 40px;
   height: 40px;
@@ -115,49 +131,87 @@
   color: var(--primary);
   background: rgba(196, 106, 43, 0.12);
 }
+.wz-about-basic .wz-icon svg {
+  width: 28px;
+  height: 28px;
+  color: var(--primary);
+  animation: wzBounce 0.6s ease-in-out infinite; /* subtle bounce loop */
+}
 
+/* Card text */
 .wz-about-basic .wz-card-title {
   font-size: 20px;
   font-weight: 700;
   margin: 2px 0 8px 0;
 }
-
 .wz-about-basic .wz-card-text {
   color: var(--muted-text);
   line-height: 1.7;
 }
 
-/* Simple animations (no libs) */
+/* -----------------------------------------------------------------------------
+   Animations
+----------------------------------------------------------------------------- */
+/* Fade up */
 @keyframes wzFadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
+/* Slide left */
 @keyframes wzSlideLeft {
-  from { opacity: 0; transform: translateX(-12px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
+/* Slide right */
 @keyframes wzSlideRight {
-  from { opacity: 0; transform: translateX(12px); }
-  to { opacity: 1; transform: translateX(0); }
+  from {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-.wz-about-basic .wz-anim-fade-up { animation: wzFadeUp 600ms ease both; }
-.wz-about-basic .wz-anim-slide-left { animation: wzSlideLeft 700ms ease both; }
-.wz-about-basic .wz-anim-slide-right { animation: wzSlideRight 700ms ease both; }
-.wz-about-basic .wz-anim-delay-200 { animation-delay: .2s; }
-.wz-about-basic .wz-anim-delay-300 { animation-delay: .3s; }
-.wz-about-basic .wz-anim-delay-400 { animation-delay: .4s; }
+/* Utility classes for animation triggers */
+.wz-about-basic .wz-anim-fade-up {
+  animation: wzFadeUp 600ms ease both;
+}
+.wz-about-basic .wz-anim-slide-left {
+  animation: wzSlideLeft 700ms ease both;
+}
+.wz-about-basic .wz-anim-slide-right {
+  animation: wzSlideRight 700ms ease both;
+}
+.wz-about-basic .wz-anim-delay-200 {
+  animation-delay: 0.2s;
+}
+.wz-about-basic .wz-anim-delay-300 {
+  animation-delay: 0.3s;
+}
+.wz-about-basic .wz-anim-delay-400 {
+  animation-delay: 0.4s;
+}
 
-
-/* Bounce animation for icons */
+/* Bounce (used for icons) */
 @keyframes wzBounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-}
-
-.wz-about-basic .wz-icon svg {
-  width: 28px;
-  height: 28px;
-  color: var(--primary);
-  animation: wzBounce 0.6s ease-in-out infinite; /* fast, auto replay */
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }

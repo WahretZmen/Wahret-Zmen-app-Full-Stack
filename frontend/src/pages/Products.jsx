@@ -1,4 +1,14 @@
 // src/pages/Products.jsx
+// -----------------------------------------------------------------------------
+// Purpose : Products catalog page with search, filters (category, color, price),
+//           and "load more" pagination. Uses RTK Query for data fetching,
+//           Redux for refetch triggers, and i18n for RTL support.
+// Notes   : Only organization and comments added. No logic/JSX/text changes.
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+// Imports
+// -----------------------------------------------------------------------------
 import React, { useEffect, useMemo, useState } from "react";
 import ProductCard from "./products/ProductCard.jsx";
 import { useGetAllProductsQuery } from "../redux/features/products/productsApi.js";
@@ -13,7 +23,9 @@ import { productEventsActions } from "../redux/features/products/productEventsSl
 import { useLocation, useNavigate } from "react-router-dom";
 import SelectorPageProducts from "./../components/SelectorProductsPage";
 
-/* ------------------------ Loaders ------------------------ */
+// -----------------------------------------------------------------------------
+// Loaders (brand-styled)
+// -----------------------------------------------------------------------------
 const WahretZmenLoader = () => (
   <div className="loader-wrapper w-full">
     <div className="relative w-16 h-16">
@@ -38,9 +50,12 @@ const InlineWahretZmenLoader = () => (
   </div>
 );
 
-/* ------------------------ Helpers ------------------------ */
+// -----------------------------------------------------------------------------
+// Helpers
+// -----------------------------------------------------------------------------
 const normalize = (v) => (v || "").toString().trim().toLowerCase();
 
+// map many aliases → unified UI labels
 const CATEGORY_ALIAS_TO_UI = {
   // FR
   hommes: "Men",
@@ -63,7 +78,7 @@ const CATEGORY_ALIAS_TO_UI = {
 };
 const mapURLCategoryToUI = (raw) => CATEGORY_ALIAS_TO_UI[normalize(raw)] || "";
 
-// price extractor
+// extract numeric price across possible shapes
 const numericPrice = (p) => {
   const raw =
     p?.newPrice ??
@@ -74,7 +89,7 @@ const numericPrice = (p) => {
   return Number.isFinite(n) ? n : 0;
 };
 
-// collect color names from multiple possible shapes
+// collect color names across possible schemas
 const productColorNames = (p) => {
   if (Array.isArray(p?.colors)) {
     return p.colors
@@ -93,19 +108,25 @@ const productColorNames = (p) => {
   return [];
 };
 
-/* ============================ Component ============================ */
+// -----------------------------------------------------------------------------
+// Component
+// -----------------------------------------------------------------------------
 const Products = () => {
-  // filters (no size)
+  // ---------------------------------------------------------------------------
+  // 1) Local UI state: filters, search, pagination
+  // ---------------------------------------------------------------------------
   const [categorySel, setCategorySel] = useState("All");
   const [colorSel, setColorSel] = useState("All");
   const [priceRange, setPriceRange] = useState([0, 1000]);
 
-  // search + load more
   const [searchTerm, setSearchTerm] = useState("");
   const [loadMore, setLoadMore] = useState(12);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
 
+  // ---------------------------------------------------------------------------
+  // 2) i18n, router, redux
+  // ---------------------------------------------------------------------------
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const isRTL = i18n?.language === "ar" || i18n?.language === "ar-SA";
@@ -114,6 +135,9 @@ const Products = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  // ---------------------------------------------------------------------------
+  // 3) Data: products (RTK Query) + auto refetch on events
+  // ---------------------------------------------------------------------------
   const {
     data: products = [],
     isLoading,
@@ -133,7 +157,9 @@ const Products = () => {
     }
   }, [shouldRefetch, refetch, dispatch]);
 
-  /* --- Initialize category from ?category= URL param --- */
+  // ---------------------------------------------------------------------------
+  // 4) Initialize category filter from URL (?category=)
+  // ---------------------------------------------------------------------------
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const raw = params.get("category");
@@ -141,7 +167,9 @@ const Products = () => {
     setCategorySel(mapped || "All");
   }, [location.search]);
 
-  /* --- Build options & price bounds from live products --- */
+  // ---------------------------------------------------------------------------
+  // 5) Build filter options & price bounds from live data
+  // ---------------------------------------------------------------------------
   const { categories, colors, minPrice, maxPrice } = useMemo(() => {
     const catSet = new Set(["All", "Men", "Women", "Children"]);
     const colorSet = new Set(["All"]);
@@ -171,7 +199,7 @@ const Products = () => {
     };
   }, [products]);
 
-  // sync price range to current bounds
+  // Keep priceRange in sync with computed bounds
   useEffect(() => {
     setPriceRange(([lo, hi]) => {
       const next = [
@@ -183,7 +211,9 @@ const Products = () => {
     });
   }, [minPrice, maxPrice]);
 
-  /* --- Search with small delay & loader --- */
+  // ---------------------------------------------------------------------------
+  // 6) Search with debounce-like delay + inline loader
+  // ---------------------------------------------------------------------------
   const handleSearchChange = (term) => {
     setSearchLoading(true);
     const id = setTimeout(() => {
@@ -193,7 +223,9 @@ const Products = () => {
     return () => clearTimeout(id);
   };
 
-  /* --- Filtering --- */
+  // ---------------------------------------------------------------------------
+  // 7) Filtering pipeline
+  // ---------------------------------------------------------------------------
   const matched = useMemo(() => {
     const q = normalize(searchTerm);
     return products.filter((p) => {
@@ -210,7 +242,7 @@ const Products = () => {
       const pr = numericPrice(p);
       const priceOk = pr >= priceRange[0] && pr <= priceRange[1];
 
-      // Search across title variants
+      // Text search across title variants
       const titleVariants = [
         p?.title,
         p?.translations?.fr?.title,
@@ -222,9 +254,10 @@ const Products = () => {
     });
   }, [products, categorySel, colorSel, priceRange, searchTerm]);
 
-  /* --- Slice for "Load more" --- */
+  // Paginated slice
   const filtered = useMemo(() => matched.slice(0, loadMore), [matched, loadMore]);
 
+  // Load more button behavior (with small delay for UX)
   const handleLoadMore = () => {
     setIsLoadingMore(true);
     setTimeout(() => {
@@ -233,6 +266,7 @@ const Products = () => {
     }, 600);
   };
 
+  // Reset filters & clean URL
   const clearFilters = () => {
     setCategorySel("All");
     setColorSel("All");
@@ -242,14 +276,21 @@ const Products = () => {
     navigate({ search: params.toString() }, { replace: true });
   };
 
+  // ---------------------------------------------------------------------------
+  // 8) Early loader (i18n or data)
+  // ---------------------------------------------------------------------------
   if (!i18nReady || isLoading || isFetching) {
     return <WahretZmenLoader />;
   }
 
+  // ---------------------------------------------------------------------------
+  // 9) Render
+  // ---------------------------------------------------------------------------
   return (
     <FadeInSection>
       <div className="main-content">
         <div className="container mx-auto pt-8 sm:pt-12 md:pt-16 pb-4 px-4 sm:px-6 md:px-10 lg:px-20 max-w-[1440px]">
+          {/* SEO */}
           <Helmet>
             <title>{t("products_page.title")} - Wahret Zmen</title>
           </Helmet>
@@ -279,6 +320,7 @@ const Products = () => {
 
           {/* ===== Two-column layout (sidebar must be on the right) ===== */}
           <div className="flex flex-col lg:flex-row gap-8 mt-4">
+            {/* RTL: render sidebar first so it ends up visually on the RIGHT */}
             {isRTL && (
               <SelectorPageProducts
                 categorySel={categorySel}
@@ -297,7 +339,7 @@ const Products = () => {
 
             {/* MAIN: products */}
             <div className="flex-1">
-              {/* ⬇️ Center cards on mobile, normal flow on md+ */}
+              {/* Center cards on mobile, normal flow on md+ */}
               <div className="products-list grid gap-6 grid-cols-1 place-items-center md:place-items-stretch">
                 {filtered.length > 0 ? (
                   filtered.map((product, index) => (
@@ -317,7 +359,7 @@ const Products = () => {
                 )}
               </div>
 
-              {/* Load More (only when there are matches AND more pages) */}
+              {/* Load More (only if there are more matches) */}
               {matched.length > 0 &&
                 filtered.length < matched.length &&
                 !searchLoading && (
@@ -363,7 +405,9 @@ const Products = () => {
 
 export default Products;
 
-/* small util */
+// -----------------------------------------------------------------------------
+// Small util
+// -----------------------------------------------------------------------------
 function capitalize(s) {
   const n = String(s || "");
   if (!n) return n;

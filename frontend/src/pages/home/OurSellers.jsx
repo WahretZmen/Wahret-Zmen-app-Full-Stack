@@ -1,3 +1,15 @@
+// src/pages/home/OurSellers.jsx
+// -----------------------------------------------------------------------------
+// Purpose: “Our Sellers / Collection” carousel with category filtering.
+// Features:
+//   - Fetch all products via RTK Query.
+//   - Category selector (All/Men/Women/Children) with i18n/RTL support.
+//   - Responsive react-multi-carousel with custom arrows.
+//   - Subtle entrance animations via FadeInSection/ScrollFade.
+// Notes:
+//   - No content/logic changes; only organization and comments added.
+// -----------------------------------------------------------------------------
+
 import React, { useState, useEffect } from "react";
 import ProductCard from "../products/ProductCard";
 import Carousel from "react-multi-carousel";
@@ -9,9 +21,14 @@ import FadeInSection from "../../Animations/FadeInSection.jsx";
 import { useTranslation } from "react-i18next";
 import ScrollFade from "../../Animations/ScrollFade.jsx";
 
+// -----------------------------------------------------------------------------
+// Constants
+// -----------------------------------------------------------------------------
+
 // Canonical keys so Selector translates (AR shows "الكل")
 const categories = ["all", "men", "women", "children"];
 
+// react-multi-carousel responsive config
 const responsive = {
   superLargeDesktop: { breakpoint: { max: 4000, min: 1400 }, items: 3, slidesToSlide: 1 },
   desktop:           { breakpoint: { max: 1400, min: 1024 }, items: 3, slidesToSlide: 1 },
@@ -19,15 +36,27 @@ const responsive = {
   mobile:            { breakpoint: { max: 768,  min: 0 },    items: 1, slidesToSlide: 1 },
 };
 
+// -----------------------------------------------------------------------------
+// Component
+// -----------------------------------------------------------------------------
 const OurSellers = () => {
+  // ---------------------------------------------------------------------------
+  // Local state
+  // ---------------------------------------------------------------------------
   const [selectedCategory, setSelectedCategory] = useState("");
 
+  // ---------------------------------------------------------------------------
+  // Data fetching
+  // ---------------------------------------------------------------------------
   const { data: products = [] } = useGetAllProductsQuery(undefined, {
     pollingInterval: 5000,
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
   });
 
+  // ---------------------------------------------------------------------------
+  // i18n / RTL helpers
+  // ---------------------------------------------------------------------------
   const { t, i18n } = useTranslation();
   const isRTL =
     i18n.language === "ar" ||
@@ -35,12 +64,17 @@ const OurSellers = () => {
     (typeof i18n.language === "string" && i18n.language.startsWith("ar"));
   if (!i18n.isInitialized) return null;
 
+  // Force page direction according to language
   useEffect(() => {
     document.documentElement.dir = isRTL ? "rtl" : "ltr";
   }, [isRTL]);
 
+  // ---------------------------------------------------------------------------
+  // Helpers
+  // ---------------------------------------------------------------------------
   const norm = (s = "") => String(s).trim().toLowerCase();
 
+  // Filter & order products by category
   const filteredProducts =
     selectedCategory === ""
       ? [...products].sort((a, b) => {
@@ -49,6 +83,7 @@ const OurSellers = () => {
         })
       : products.filter((p) => norm(p.category) === norm(selectedCategory));
 
+  // Custom arrow for the carousel (handles RTL/LTR icons)
   const Arrow = ({ onClick, type }) => {
     const icon = type === "prev" ? (isRTL ? "›" : "‹") : (isRTL ? "‹" : "›");
     return (
@@ -63,17 +98,22 @@ const OurSellers = () => {
     );
   };
 
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
   return (
     <FadeInSection>
       <div className="our-sellers-wrapper" dir={isRTL ? "rtl" : "ltr"}>
         <section className="our-sellers-section" aria-label={t("wahret_zmen_collection")}>
           <div className="our-sellers-container">
+            {/* Title */}
             <ScrollFade direction="right" delay={0}>
               <h2 className="text-4xl text-[#5a382d] font-bold mb-6 text-center uppercase tracking-wide our-sellers-title os-title">
                 <span className="os-title__text">{t("wahret_zmen_collection")}</span>
               </h2>
             </ScrollFade>
 
+            {/* Category selector */}
             <div className="mb-6 flex flex-col items-center px-2 sm:px-0 w-full">
               <h3 className="select-category-title text-lg sm:text-xl font-semibold text-[#5a382d] mb-2 text-center">
                 {t("select_category")}
@@ -87,6 +127,7 @@ const OurSellers = () => {
               </div>
             </div>
 
+            {/* Carousel */}
             <div className="max-w-6xl mx-auto px-2 sm:px-4">
               {filteredProducts.length > 0 ? (
                 <div className="carousel-clip custom-carousel">
@@ -129,4 +170,7 @@ const OurSellers = () => {
   );
 };
 
+// -----------------------------------------------------------------------------
+// Export
+// -----------------------------------------------------------------------------
 export default OurSellers;
