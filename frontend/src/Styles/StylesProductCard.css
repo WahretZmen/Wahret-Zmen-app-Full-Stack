@@ -6,7 +6,6 @@
 .pc-card {
   background: #fff;
   border: 1px solid #e6e6e6;
-  border-radius: 12px;
   overflow: hidden;
   width: 100%;
   max-width: 360px;
@@ -105,7 +104,6 @@
   align-items: center;
   gap: 6px;
   padding: 6px 10px;
-  border-radius: 999px;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: .2px;
@@ -130,7 +128,6 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   background:#f3f4f6;
   padding:.25rem .5rem;
   border:1px solid #d1d5db;
-  border-radius: 8px;
   transition: background .2s ease;
 }
 .color-list li:hover { background:#e7ebf0; }
@@ -144,7 +141,6 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   align-items: center;
   background: #fff;
   border: 1px solid #e6e1d8;
-  border-radius: 12px;
   overflow: visible;                 /* don't clip buttons on small screens */
 }
 .pc-card .sp-qty input {
@@ -196,7 +192,6 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   font-size: 1rem;
   letter-spacing: .2px;
   border: none;
-  border-radius: 12px;
   padding: 12px 18px;
   cursor: pointer;
   transition: background .2s ease, transform .08s ease, box-shadow .2s ease;
@@ -212,7 +207,7 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
 html[dir="rtl"] .add-to-cart-btn { text-transform: none; letter-spacing: 0; }
 
 /* ----- List View (if you render ProductCard in list mode) ----- */
-.pc-list.pc-card { max-width: 100%; width: 100%; border-radius: 12px; }
+.pc-list.pc-card { max-width: 100%; width: 100%;  }
 .pc-list { display: grid; grid-template-columns: 1fr; align-items: stretch; }
 @media (min-width: 768px) { .pc-list { grid-template-columns: 320px 1fr; } }
 .pc-list .pc-list-imgwrap { aspect-ratio: auto; min-height: 220px; height: 100%; }
