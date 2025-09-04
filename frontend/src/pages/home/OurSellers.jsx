@@ -9,7 +9,7 @@ import FadeInSection from "../../Animations/FadeInSection.jsx";
 import { useTranslation } from "react-i18next";
 import ScrollFade from "../../Animations/ScrollFade.jsx";
 
-// ✅ Canonical keys so Selector translates (AR shows "الكل")
+// Canonical keys so Selector translates (AR shows "الكل")
 const categories = ["all", "men", "women", "children"];
 
 const responsive = {
@@ -54,11 +54,7 @@ const OurSellers = () => {
   /* ---------- Custom, RTL-aware arrows ---------- */
   const Arrow = ({ onClick, type }) => {
     // type: 'prev' | 'next'
-    // For RTL, icons swap directions visually
-    const icon = type === "prev"
-      ? (isRTL ? "›" : "‹")   // previous
-      : (isRTL ? "‹" : "›");  // next
-
+    const icon = type === "prev" ? (isRTL ? "›" : "‹") : (isRTL ? "‹" : "›");
     return (
       <button
         type="button"
@@ -116,22 +112,28 @@ const OurSellers = () => {
                     containerClass="rmc-list"
                     sliderClass="rmc-track"
                     itemClass="rmc-item"
-                    // 👇 Custom arrows (bigger, RTL-safe, mobile-friendly)
                     customLeftArrow={<Arrow type="prev" />}
                     customRightArrow={<Arrow type="next" />}
                   >
-                   {filteredProducts.map((product, index) => (
-  <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>
-    <div className="carousel-card-wrapper">
-      {/* 👇 NEW: use the compact stepper just for carousel */}
-      <ProductCard product={product} counterVariant="compact" />
-    </div>
-  </FadeInSection>
-))}
+                    {filteredProducts.map((product, index) => (
+                      <FadeInSection
+                        key={index}
+                        delay={index * 0.1}
+                        duration={0.6}
+                        yOffset={30}
+                      >
+                        <div className="carousel-card-wrapper">
+                          {/* Use the COMPACT counter only in the carousel */}
+                          <ProductCard product={product} counterVariant="compact" />
+                        </div>
+                      </FadeInSection>
+                    ))}
                   </Carousel>
                 </div>
               ) : (
-                <p className="text-center text-[#5a382d] text-lg">{t("no_products_found")}</p>
+                <p className="text-center text-[#5a382d] text-lg">
+                  {t("no_products_found")}
+                </p>
               )}
             </div>
           </div>

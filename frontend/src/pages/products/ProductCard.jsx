@@ -8,16 +8,20 @@ import { FiShoppingCart } from "react-icons/fi";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { getImgUrl } from "../../utils/getImgUrl";
 
-import "../../Styles/StylesProductCard.css"; // card + both steppers
+import "../../Styles/StylesProductCard.css"; // card + counters
 
 /**
  * Props:
  *  - product (required)
  *  - showStockBadge: boolean (default true)
- *  - counterVariant: "default" | "compact" (default "default")
+ *  - counterVariant: "default" | "compact"  (default "default")
  *      "compact" is used by OurSellers.jsx to render a smaller stepper.
  */
-const ProductCard = ({ product, showStockBadge = true, counterVariant = "default" }) => {
+const ProductCard = ({
+  product,
+  showStockBadge = true,
+  counterVariant = "default",
+}) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   if (!i18n?.isInitialized) return null;
@@ -48,7 +52,9 @@ const ProductCard = ({ product, showStockBadge = true, counterVariant = "default
     product?.description ||
     "";
 
-  const firstColor = Array.isArray(product?.colors) ? product.colors[0] : undefined;
+  const firstColor = Array.isArray(product?.colors)
+    ? product.colors[0]
+    : undefined;
 
   const displayedColor =
     firstColor?.colorName?.[lang] ||
@@ -69,7 +75,8 @@ const ProductCard = ({ product, showStockBadge = true, counterVariant = "default
   );
 
   const hasOld = Number(product?.oldPrice) > Number(product?.newPrice || 0);
-  const shopName = product?.storeName || product?.vendor || product?.brand || "";
+  const shopName =
+    product?.storeName || product?.vendor || product?.brand || "";
 
   /* ---------- quantity handlers ---------- */
   const clampMax = Math.max(1, displayedStock || 1);
@@ -97,7 +104,11 @@ const ProductCard = ({ product, showStockBadge = true, counterVariant = "default
 
   /* ---------- hover zoom (desktop only) ---------- */
   const handleMouseMove = (e) => {
-    if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) return;
+    if (
+      typeof window !== "undefined" &&
+      window.matchMedia("(hover: none)").matches
+    )
+      return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -171,7 +182,9 @@ const ProductCard = ({ product, showStockBadge = true, counterVariant = "default
 
         {shopName && (
           <div className="pc-shop">
-            <span className="pc-shop-label">{t("boutique", "Boutique")}:</span>{" "}
+            <span className="pc-shop-label">
+              {t("boutique", "Boutique")}:
+            </span>{" "}
             <a href="#" className="pc-shop-name">
               {shopName}
             </a>
@@ -179,22 +192,34 @@ const ProductCard = ({ product, showStockBadge = true, counterVariant = "default
         )}
 
         {/* Price row */}
-        <div className="pc-price text-sm font-bold text-gray-900 mt-1" aria-label={t("price")}>
+        <div
+          className="pc-price text-sm font-bold text-gray-900 mt-1"
+          aria-label={t("price")}
+        >
           {hasOld && (
-            <span className="pc-old">{Number(product?.oldPrice).toFixed(2)} $</span>
+            <span className="pc-old">
+              {Number(product?.oldPrice).toFixed(2)} $
+            </span>
           )}
-          <span className="pc-new">{Number(product?.newPrice || 0).toFixed(2)} $</span>
+          <span className="pc-new">
+            {Number(product?.newPrice || 0).toFixed(2)} $
+          </span>
         </div>
 
         {/* Reveal panel (always shown on mobile, hover on desktop) */}
         <div className="pc-extra">
           <p className="product-description text-sm text-gray-500">
-            {description.length > 70 ? `${description.slice(0, 70)}…` : description}
+            {description.length > 70
+              ? `${description.slice(0, 70)}…`
+              : description}
           </p>
 
           {displayedColor && (
             <p className="text-sm italic text-gray-500">
-              {t("color")}: <span className="text-gray-700 font-medium">{displayedColor}</span>
+              {t("color")}:{" "}
+              <span className="text-gray-700 font-medium">
+                {displayedColor}
+              </span>
             </p>
           )}
 
@@ -209,7 +234,10 @@ const ProductCard = ({ product, showStockBadge = true, counterVariant = "default
                     c?.colorName?.en ||
                     `#${idx + 1}`;
                   return (
-                    <li key={`${name}-${idx}`} className="px-2 py-1 border text-xs bg-gray-100">
+                    <li
+                      key={`${name}-${idx}`}
+                      className="px-2 py-1 border text-xs bg-gray-100"
+                    >
                       {name}
                     </li>
                   );
@@ -221,7 +249,7 @@ const ProductCard = ({ product, showStockBadge = true, counterVariant = "default
           {/* ===== Quantity stepper (variant) ===== */}
           <div className="flex items-center justify-center mt-3 sp-cta-row">
             {counterVariant === "compact" ? (
-              // Smaller, carousel-friendly stepper
+              // Smaller, carousel-friendly stepper (OurSellers only)
               <div className="qty-mini" role="group" aria-label={t("quantity")}>
                 <button
                   type="button"
