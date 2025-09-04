@@ -1,17 +1,29 @@
+/* -----------------------------------------------------------------------------
+   StylesAnimatedText.css
+   Purpose:
+     - Defines the animation for text reveal word-by-word
+     - Used by AnimatedText component
+   Notes:
+     - Words fade in and move upward with a staggered effect (controlled in JS)
+----------------------------------------------------------------------------- */
+
+/* Container for animated text */
 .animated-text {
-  display: inline-block;
-  flex-wrap: wrap;
-  overflow: hidden;
+  display: inline-block; /* keeps inline flow while allowing transforms */
+  flex-wrap: wrap;       /* allows wrapping across lines */
+  overflow: hidden;      /* hides overflow during animation */
 }
 
+/* Each word inside the animated text */
 .animated-word {
   display: inline-block;
-  opacity: 0;
-  transform: translateY(10px);
+  opacity: 0;                  /* start invisible */
+  transform: translateY(10px); /* start slightly shifted down */
   animation: fadeInUpWord 0.6s forwards;
-  margin-right: 8px;
+  margin-right: 8px;           /* spacing between words */
 }
 
+/* Keyframes for fade + upward motion */
 @keyframes fadeInUpWord {
   to {
     opacity: 1;

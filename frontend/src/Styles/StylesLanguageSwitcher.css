@@ -1,26 +1,45 @@
+/* ============================================================================
+   StylesLanguageSwitcher.css
+   Purpose: Style for the language dropdown switcher
+   ========================================================================== */
+
+
+/* ============================================================================
+   1) Base Select Element
+   ========================================================================== */
 .language-switcher {
   padding: 4px 8px;
   font-size: 0.9rem;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  min-width: 120px;
+
   background-color: #fff;
   color: #333;
+
+  border: 1px solid #ccc;
+  border-radius: 5px;
+
   cursor: pointer;
   outline: none;
-  min-width: 120px;
-  
-  
 }
 
+/* Hover state */
 .language-switcher:hover {
   border-color: #999;
 }
 
+
+/* ============================================================================
+   2) Focus State (wrapper container)
+   ========================================================================== */
 .language-switcher-container:focus {
   border-color: #a67c52;
   box-shadow: 0 0 6px rgba(166, 124, 82, 0.5);
 }
 
+
+/* ============================================================================
+   3) Options (dropdown items)
+   ========================================================================== */
 option {
   background-color: #fffaf3;
   color: #5a4632;

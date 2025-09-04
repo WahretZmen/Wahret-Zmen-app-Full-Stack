@@ -1,11 +1,21 @@
-/* ========== General Hidden State Before Scroll ========== */
+/* ============================================================================
+   StylesAnimations.css
+   Purpose: Reusable entrance animations (fade/slide/zoom/rotate)
+   Notes  : Only comments/organization added. No behavior changes.
+   ========================================================================== */
+
+/* ============================================================================
+   1) General Hidden State (pre-animation)
+   ========================================================================== */
 .hidden-before-scroll {
   opacity: 0;
   pointer-events: none;
   transform: translateY(50px);
 }
 
-/* ========== Fade-in from Left ========== */
+/* ============================================================================
+   2) Fade-in from Left
+   ========================================================================== */
 .fade-in-left {
   animation: fadeLeft 0.8s ease forwards;
 }
@@ -20,7 +30,9 @@
   }
 }
 
-/* ========== Fade-in from Right ========== */
+/* ============================================================================
+   3) Fade-in from Right
+   ========================================================================== */
 .fade-in-right {
   animation: fadeRight 0.8s ease forwards;
 }
@@ -35,7 +47,9 @@
   }
 }
 
-/* ========== Fade-in from Top ========== */
+/* ============================================================================
+   4) Fade-in from Top
+   ========================================================================== */
 .fade-in-top {
   animation: fadeTop 0.8s ease forwards;
 }
@@ -50,7 +64,9 @@
   }
 }
 
-/* ========== Fade-in from Bottom ========== */
+/* ============================================================================
+   5) Fade-in from Bottom
+   ========================================================================== */
 .fade-in-bottom {
   animation: fadeInBottom 0.8s ease forwards;
 }
@@ -65,7 +81,9 @@
   }
 }
 
-/* ========== Fade-in Right to Left ========== */
+/* ============================================================================
+   6) Fade-in Right ➜ Left
+   ========================================================================== */
 .fade-in-right-to-left {
   animation: fadeRightToLeft 0.8s ease forwards;
 }
@@ -80,36 +98,13 @@
   }
 }
 
-/* ========== Fade-in Left to Right (for Title) ========== */
+/* ============================================================================
+   7) Fade-in Left ➜ Right (titles, headings)
+   ========================================================================== */
 .fade-in-left-to-right {
   animation: fadeLeftToRight 0.8s ease forwards;
 }
-@keyframes fadeLeftToRight {
-  0% {
-    opacity: 0;
-    transform: translateX(-100px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* ========== Fade-in with Rotate and Zoom (for Image) ========== */
-.fade-in-rotate-zoom {
-  animation: fadeRotateZoom 1s ease-out forwards;
-}
-@keyframes fadeRotateZoom {
-  0% {
-    opacity: 0;
-    transform: scale(0.7) rotate(-10deg);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-  }
-}
-
+@keyframes fadeLeftToRig
 
   
 

@@ -1,80 +1,100 @@
-/* Dashboard Layout */
+/* ===========================================================
+   StylesDashboardLayout.css — Admin Dashboard Layout
+   =========================================================== */
+
+/* ---------- App container ---------- */
 .dashboard-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #f7f7f7;
-  }
-  
-  /* Sidebar */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f7f7f7;
+}
+
+/* ===========================================================
+   SIDEBAR
+   - Collapsed by default (64px) on desktop
+   - Expands text on hover
+   - Slides in on mobile when `.open` is applied
+   =========================================================== */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* top: logo/nav, bottom: actions */
+  align-items: center;
+  width: 64px;
+  height: 100vh;
+  padding: 10px;
+  background-color: #2d3748; /* dark slate */
+}
+
+/* Logo */
+.sidebar-logo img {
+  width: 40px;
+  height: 40px;
+}
+
+/* Vertical nav links */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Link appearance */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  color: #ccc;
+  transition: background 0.3s;
+}
+
+/* Label is hidden by default (collapsed state) */
+.sidebar-text {
+  display: none;
+}
+
+/* On hover, reveal labels */
+.sidebar:hover .sidebar-text {
+  display: inline;
+}
+
+/* Hover highlight */
+.sidebar-link:hover {
+  background-color: #8B5C3E; /* brand brown */
+  color: #fff;
+}
+
+/* ===========================================================
+   MOBILE SIDEBAR
+   - Hidden off-canvas by default
+   - `.open` brings it into view
+   =========================================================== */
+@media (max-width: 767px) {
   .sidebar {
-    display: flex;
-    flex-direction: column;
-    width: 64px;
-    height: 100vh;
-    background-color: #2d3748;
-    padding: 10px;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .sidebar-logo img {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .sidebar-link {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    color: #ccc;
-    transition: background 0.3s;
-  }
-  
-  .sidebar-text {
-    display: none;
-  }
-  
-  .sidebar:hover .sidebar-text {
-    display: inline;
-  }
-  
-  .sidebar-link:hover {
-    background-color: #8B5C3E;
-    color: white;
-  }
-  
-  /* Sidebar for Mobile */
-  @media (max-width: 767px) {
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: -100%;
-      width: 180px;
-      transition: left 0.3s ease-in-out;
-    }
-  
-    .sidebar.open {
-      left: 0;
-    }
-  }
-  
-  /* Mobile Menu Button */
-  .mobile-menu-button {
     position: fixed;
-    top: 10px;
-    left: 10px;
-    background: #8B5C3E;
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    z-index: 100;
+    top: 0;
+    left: -100%;
+    width: 180px;                 /* wider on mobile for readable labels */
+    transition: left 0.3s ease-in-out;
   }
-  
+  .sidebar.open {
+    left: 0;
+  }
+}
+
+/* ===========================================================
+   MOBILE MENU BUTTON
+   - Fixed trigger to open/close the off-canvas sidebar
+   =========================================================== */
+.mobile-menu-button {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 100;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #8B5C3E;
+  color: #fff;
+}

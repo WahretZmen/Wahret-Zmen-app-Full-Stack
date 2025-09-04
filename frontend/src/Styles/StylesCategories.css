@@ -8,7 +8,6 @@
   margin-bottom: 2.25rem;
   position: relative;
 }
-
 .shop-title-row {
   display: inline-flex;
   align-items: center;
@@ -32,7 +31,6 @@
   overflow: hidden;
   animation: icon-float 2400ms ease-in-out infinite;
 }
-
 .title-emblem::after {
   content: "";
   position: absolute;
@@ -45,7 +43,6 @@
   animation: emblem-sheen 2200ms ease 500ms infinite;
   pointer-events: none;
 }
-
 .title-emblem-icon {
   width: 60%;
   height: 60%;
@@ -53,10 +50,8 @@
   opacity: .9;
   filter: drop-shadow(0 1px 0 rgba(255,255,255,0.4));
 }
-
 @keyframes icon-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
 @keyframes emblem-sheen { 0%,60%{transform:translateX(-140%)} 100%{transform:translateX(140%)} }
-
 
 /* ===========================
    Shop By Category Hover Animations
@@ -77,7 +72,6 @@
   border-radius: 50%;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
-
 /* Hover effect on image */
 .category-item:hover img {
   transform: scale(1.08) rotate(-2deg);
@@ -94,7 +88,6 @@
   display: inline-block;
   transition: color 0.35s ease;
 }
-
 /* Underline animation on hover */
 .category-item .category-label::after {
   content: "";
@@ -107,32 +100,20 @@
   border-radius: 999px;
   transition: width 0.4s ease;
 }
-
 /* On hover: text color + underline sweep */
-.category-item:hover .category-label {
-  color: #a67c52;
-}
-
-.category-item:hover .category-label::after {
-  width: 100%;
-}
+.category-item:hover .category-label { color: #a67c52; }
+.category-item:hover .category-label::after { width: 100%; }
 
 /* Subtle floating effect on whole block */
-.category-item:hover {
-  transform: translateY(-6px);
-}
+.category-item:hover { transform: translateY(-6px); }
 
 /* =======================================================
    SHOP BY CATEGORY — Premium Title Hover (Plain CSS)
    Works with: <span class="cat-label cat-hommes|cat-femmes|cat-enfants">Title</span>
-   ======================================================= */
-
-/* Base label style */
-/* =======================================================
-   SHOP BY CATEGORY — Premium Title Hover (Plain CSS)
    Enlarged titles
    ======================================================= */
 
+/* Base label style */
 .cat-label {
   position: relative;
   display: inline-block;
@@ -154,7 +135,6 @@
     filter .35s ease;
   will-change: transform, filter, letter-spacing;
 }
-
 /* Underline */
 .cat-label::after {
   content:"";
@@ -169,15 +149,12 @@
   background: linear-gradient(90deg, rgba(212,175,55,.95), rgba(237,212,145,.95), rgba(212,175,55,.95));
   transition: width .45s ease;
 }
-
 .category-item:hover .cat-label {
   transform: translateY(-4px);   /* a little more lift for emphasis */
   letter-spacing: .07em;
   filter: drop-shadow(0 4px 16px rgba(166,124,82,.3));
 }
-.category-item:hover .cat-label::after {
-  width: 100%;
-}
+.category-item:hover .cat-label::after { width: 100%; }
 
 /* Shimmer sweep */
 .cat-label::before {
@@ -201,9 +178,7 @@
   opacity: 1;
   animation: catLabelSweep .95s ease forwards;
 }
-@keyframes catLabelSweep {
-  to { left: 120%; }
-}
+@keyframes catLabelSweep { to { left: 120%; } }
 
 /* ============================
    Per-category palettes
@@ -239,9 +214,6 @@
   }
 }
 
-
-
-
 /* ---------- Section title (animated gradient text) ---------- */
 .shop-title-pro {
   display: inline-block;
@@ -255,7 +227,6 @@
   line-height: 1.25;
   isolation: isolate;
 }
-
 /* Base word style (fallback visible color) */
 .title-word {
   display: inline-block;
@@ -267,7 +238,6 @@
   color: #2b2620;  /* readable charcoal fallback */
   text-shadow: 0 1px 0 rgba(255,255,255,0.18);
 }
-
 @keyframes title-rise { to { opacity: 1; transform: translateY(0); } }
 
 /* 🟡 Animated gradient ON the text (when background-clip is supported) */
@@ -294,14 +264,12 @@
       title-rise 720ms cubic-bezier(.22,.8,.24,1) forwards var(--delay, 0ms),
       title-gradient-move 6s ease-in-out infinite 600ms; /* slight delay so rise finishes first */
   }
-
   @keyframes title-gradient-move {
     0%   { background-position:   0% 50%; }
     50%  { background-position: 100% 50%; }
     100% { background-position:   0% 50%; }
   }
 }
-
 /* Gentle shimmer layer over the whole title (kept subtle) */
 .title-shimmer {
   position: absolute;
@@ -317,7 +285,6 @@
   mix-blend-mode: screen;
 }
 @keyframes title-sheen { to { transform: translateX(140%); } }
-
 /* Elegant gold underline */
 .title-underline {
   display: block;
@@ -337,10 +304,8 @@
     0 10px 20px rgba(0,0,0,0.08),
     0 2px 8px rgba(0,0,0,0.04);
 }
-
 .cat-img { transition: transform 500ms cubic-bezier(.2,.8,.2,1); transform-origin: center; }
 .group:hover .cat-img { transform: scale(1.06); }
-
 .shine {
   position: absolute;
   inset: 0;

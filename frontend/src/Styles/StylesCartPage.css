@@ -1,43 +1,54 @@
 
-/* ===========================================================
-   StylesCartPage.css — Cart page (plain CSS, RTL-safe)
-   Premium hover animations; no Tailwind/shadcn bg conflicts.
-   =========================================================== */
+/* =============================================================================
+   StylesCartPage.css — Cart Page (Plain CSS, RTL-safe)
+   Features:
+     - Premium hover animations (shimmer + ripple)
+     - No Tailwind/shadcn conflicts
+     - Responsive item cards, quantity controls, and stacked buttons
+============================================================================= */
 
-/* Safety + theme vars */
+/* ---------------------------------------------------------------------------
+   Root / Theme Variables
+--------------------------------------------------------------------------- */
 .cart-page {
   overflow-x: hidden;
+
   --wz-grad: linear-gradient(135deg, #6b3a1e, #4a2410);
   --wz-ring: rgba(107, 58, 30, .55);
-  --wz-shadow: 0 10px 22px rgba(0,0,0,.18);
-  --wz-shadow-hover: 0 14px 28px rgba(0,0,0,.22);
+  --wz-shadow: 0 10px 22px rgba(0, 0, 0, .18);
+  --wz-shadow-hover: 0 14px 28px rgba(0, 0, 0, .22);
   --wz-outline: #e5e7eb;
   --wz-text: #111827;
 }
-.cart-page * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+.cart-page * {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
 
-/* -----------------------------
-   Cards / elevation
------------------------------ */
+/* ---------------------------------------------------------------------------
+   Card Styling
+--------------------------------------------------------------------------- */
 .cart-card {
   border-radius: 14px;
   border: 1px solid #eee;
   background: #fff;
-  box-shadow: 0 6px 22px rgba(0,0,0,.06);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, .06);
 }
 
-/* -----------------------------
-   Item thumbnail (cart.tsx-like)
------------------------------ */
+/* ---------------------------------------------------------------------------
+   Product Thumbnail
+--------------------------------------------------------------------------- */
 .cart-img-box {
   width: 100%;
-  height: 8rem;                  /* ~ h-32 */
+  height: 8rem; /* ~ h-32 */
   max-width: 100%;
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
 }
-@media (min-width: 768px) { .cart-img-box { width: 8rem; } } /* md:w-32 */
+@media (min-width: 768px) {
+  .cart-img-box { width: 8rem; } /* md:w-32 */
+}
 .cart-img {
   width: 100%;
   height: 100%;
@@ -46,12 +57,12 @@
   display: block;
 }
 
-/* Remove button tap-area friendly */
+/* Remove button (touch-friendly) */
 .remove-btn { touch-action: manipulation; }
 
-/* -----------------------------
-   Qty group — outline look
------------------------------ */
+/* ---------------------------------------------------------------------------
+   Quantity Controls
+--------------------------------------------------------------------------- */
 .qty-group { gap: 12px; }
 
 .qty-btn {
@@ -84,29 +95,27 @@
   .qty-val { font-size: 1.05rem; min-width: 2.25rem; }
 }
 
-/* ===========================================================
-   PREMIUM BUTTONS (stacked, same width, large, shimmer)
-   — Both buttons share identical hover bg (like cart.tsx)
-   — No Tailwind/shadcn bg hover conflicts
-   =========================================================== */
+/* ---------------------------------------------------------------------------
+   Cart Buttons (stacked, premium animations)
+--------------------------------------------------------------------------- */
 .cart-buttons {
   display: flex;
-  flex-direction: column;   /* one on one (stacked) */
+  flex-direction: column; /* stacked vertically */
   gap: 16px;
 }
 .cart-buttons a { display: block; }
 .cart-buttons a > * { display: block; width: 100%; }
 
-/* Common base */
+/* Base styles for both buttons */
 .cart-page .btn-brown-gradient,
 .cart-page .btn-outline {
   position: relative;
-  isolation: isolate;           /* confine pseudo-elements */
+  isolation: isolate; /* confine pseudo-elements */
   -webkit-appearance: none;
   appearance: none;
   outline: none;
   border-radius: 12px;
-  height: 64px;                 /* larger */
+  height: 64px;
   width: 100%;
   font-size: 1.1rem;
   font-weight: 800;
@@ -114,16 +123,16 @@
   line-height: 1;
   cursor: pointer;
   transform: translateZ(0);
-  transition:
-    transform .18s cubic-bezier(.22,.61,.36,1),
-    box-shadow .22s ease;
+  transition: transform .18s cubic-bezier(.22,.61,.36,1), box-shadow .22s ease;
   box-shadow: var(--wz-shadow);
 }
 
-/* SHIMMER sweep */
+/* ---------------------------------------------------------------------------
+   Button Effects (Shimmer + Ripple)
+--------------------------------------------------------------------------- */
 @keyframes wz-sheen {
   0%   { transform: translateX(-140%) skewX(-12deg); }
-  100% { transform: translateX(140%)  skewX(-12deg); }
+  100% { transform: translateX(140%) skewX(-12deg); }
 }
 .cart-page .btn-brown-gradient::after,
 .cart-page .btn-outline::after {
@@ -132,20 +141,21 @@
   inset: -1px;
   border-radius: inherit;
   pointer-events: none;
-  background:
-    linear-gradient(120deg,
-      transparent 0%,
-      rgba(255,255,255,.25) 14%,
-      rgba(255,255,255,.55) 22%,
-      rgba(255,255,255,.25) 30%,
-      transparent 40%);
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,.25) 14%,
+    rgba(255,255,255,.55) 22%,
+    rgba(255,255,255,.25) 30%,
+    transparent 40%
+  );
   transform: translateX(-140%) skewX(-12deg);
   opacity: 0;
   transition: opacity .25s ease;
   mix-blend-mode: soft-light;
 }
 
-/* Press ripple */
+/* Ripple effect */
 .cart-page .btn-brown-gradient::before,
 .cart-page .btn-outline::before {
   content: "";
@@ -154,19 +164,25 @@
   width: 40%; height: 40%;
   border-radius: 50%;
   transform: translate(-50%,-50%) scale(0);
-  background: radial-gradient(closest-side, rgba(255,255,255,.32), transparent 72%);
+  background: radial-gradient(
+    closest-side,
+    rgba(255,255,255,.32),
+    transparent 72%
+  );
   opacity: 0;
   transition: transform .28s ease, opacity .28s ease;
   pointer-events: none;
 }
 
-/* Hover / focus = lift + glow + shimmer */
+/* Hover / Focus */
 .cart-page .btn-brown-gradient:hover,
 .cart-page .btn-brown-gradient:focus,
 .cart-page .btn-outline:hover,
 .cart-page .btn-outline:focus {
   transform: translateY(-2px);
-  box-shadow: var(--wz-shadow-hover), 0 0 0 4px rgba(255,255,255,.4), 0 0 0 6px var(--wz-ring);
+  box-shadow: var(--wz-shadow-hover), 
+              0 0 0 4px rgba(255,255,255,.4), 
+              0 0 0 6px var(--wz-ring);
 }
 .cart-page .btn-brown-gradient:hover::after,
 .cart-page .btn-brown-gradient:focus::after,
@@ -176,7 +192,7 @@
   animation: wz-sheen .9s cubic-bezier(.22,.61,.36,1);
 }
 
-/* Active: subtle sink + ripple */
+/* Active (pressed) */
 .cart-page .btn-brown-gradient:active,
 .cart-page .btn-outline:active {
   transform: translateY(0);
@@ -188,7 +204,10 @@
   transform: translate(-50%,-50%) scale(1.5);
 }
 
-/* Primary (solid gradient) — LOCK bg to avoid utility clashes */
+/* ---------------------------------------------------------------------------
+   Button Variants
+--------------------------------------------------------------------------- */
+/* Solid gradient */
 .cart-page .btn-brown-gradient {
   color: #fff !important;
   border: none;
@@ -203,7 +222,7 @@
   color: #fff !important;
 }
 
-/* Outline — WHITE idle, SWITCHES to SAME gradient on hover */
+/* Outline — switches to gradient on hover */
 .cart-page .btn-outline {
   color: var(--wz-text) !important;
   background: #fff !important;
@@ -212,28 +231,40 @@
 .cart-page .btn-outline:hover,
 .cart-page .btn-outline:focus,
 .cart-page .btn-outline:active {
-  background-image: var(--wz-grad) !important;   /* identical hover bg */
+  background-image: var(--wz-grad) !important;
   background-color: transparent !important;
   color: #fff !important;
   border-color: transparent !important;
 }
 
-/* Motion-safe */
+/* ---------------------------------------------------------------------------
+   Accessibility
+--------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .cart-page .btn-brown-gradient,
-  .cart-page .btn-outline { transition: none; box-shadow: var(--wz-shadow); }
+  .cart-page .btn-outline {
+    transition: none;
+    box-shadow: var(--wz-shadow);
+  }
   .cart-page .btn-brown-gradient::after,
   .cart-page .btn-outline::after,
   .cart-page .btn-brown-gradient::before,
-  .cart-page .btn-outline::before { display: none; }
+  .cart-page .btn-outline::before {
+    display: none;
+  }
 }
 
-/* Summary not sticky on small screens (lg:sticky in JSX) */
-@media (max-width: 1023.98px) { .order-summary { position: static; } }
+/* ---------------------------------------------------------------------------
+   Layout Adjustments
+--------------------------------------------------------------------------- */
+/* Summary not sticky on mobile (lg:sticky in JSX) */
+@media (max-width: 1023.98px) {
+  .order-summary { position: static; }
+}
 
-/* -----------------------------
-   Empty state button
------------------------------ */
+/* ---------------------------------------------------------------------------
+   Empty State Button
+--------------------------------------------------------------------------- */
 .cart-btn {
   color: #fff;
   padding: 12px 16px;

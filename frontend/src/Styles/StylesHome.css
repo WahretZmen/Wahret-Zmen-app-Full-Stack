@@ -3,7 +3,11 @@
    File: src/Styles/StylesCategories.css
    ========================================= */
 
-   /* ==== FIXED: Home Page Title “الرئيسية” / “Home” ==== */
+
+/* ======================================================
+   HOME TITLE — Core Styles + Fixes (RTL/LTR, spacing)
+   ====================================================== */
+
 /* Stronger specificity so it wins over Tailwind text colors */
 .home-container .home-title {
   position: relative;
@@ -136,6 +140,10 @@
 }
 
 
+/* ======================================================
+   HOME TITLE — Subtitle + Glow impact
+   ====================================================== */
+
 .home-container .home-title__sub {
   font-size: clamp(1rem, 2.2vw, 1.25rem);
   color: #5f5f5f;
@@ -160,10 +168,10 @@
 }
 
 
+/* ======================================================
+   CTA — Brown Button (animated)
+   ====================================================== */
 
-/* =========================
-   Brown CTA Button
-   ========================= */
 .brown-btn {
   -webkit-font-smoothing: antialiased;
   font-weight: 700;
@@ -246,7 +254,10 @@
 }
 
 
-/* Keyframes (unchanged) */
+/* ======================================================
+   HOME TITLE — Keyframes (for the core block)
+   ====================================================== */
+
 @keyframes homeTitleIn { to { opacity: 1; transform: translateY(0) scale(1); } }
 @keyframes homeUnderline { to { width: 56%; } }
 @keyframes subFadeUp { to { opacity: 1; transform: translateY(0); } }
@@ -265,7 +276,10 @@
 }
 
 
-/* -------- Grid Layout -------- */
+/* ======================================================
+   CATEGORIES — Grid Layout
+   ====================================================== */
+
 .categories-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -295,7 +309,11 @@
   }
 }
 
-/* -------- Category Item (wrapper for img + label) -------- */
+
+/* ======================================================
+   CATEGORIES — Item, Circle, Label (hover/animate)
+   ====================================================== */
+
 .category-item {
   display: flex;
   flex-direction: column;
@@ -311,7 +329,7 @@
   animation-delay: var(--stagger, 0ms);
 }
 
-/* If you don’t set --stagger inline, we’ll auto-stagger via nth-child */
+/* If you don’t set --stagger inline, auto-stagger via nth-child */
 .categories-grid .category-item:nth-child(1) { --stagger: 60ms; }
 .categories-grid .category-item:nth-child(2) { --stagger: 140ms; }
 .categories-grid .category-item:nth-child(3) { --stagger: 220ms; }
@@ -319,7 +337,7 @@
 .categories-grid .category-item:nth-child(5) { --stagger: 380ms; }
 .categories-grid .category-item:nth-child(6) { --stagger: 460ms; }
 
-/* -------- Circular Image -------- */
+/* Circular image */
 .category-circle {
   width: clamp(170px, 22vw, 240px);
   height: clamp(170px, 22vw, 240px);
@@ -331,7 +349,6 @@
   will-change: transform, box-shadow;
   background: #fff;
 }
-
 .category-circle img {
   width: 100%;
   height: 100%;
@@ -340,8 +357,6 @@
   transform: scale(1.02);
   transition: transform 0.45s ease;
 }
-
-/* Hover on the whole item affects circle and label */
 .category-item:hover .category-circle {
   transform: translateY(-6px);
   box-shadow: 0 16px 42px rgba(0, 0, 0, 0.16);
@@ -349,8 +364,7 @@
 .category-item:hover .category-circle img {
   transform: scale(1.08) rotate(-2deg);
 }
-
-/* Optional: subtle highlight ring on hover */
+/* Optional highlight ring */
 .category-circle::after {
   content: "";
   position: absolute;
@@ -363,7 +377,7 @@
   box-shadow: inset 0 0 0 6px rgba(166,124,82,0.18);
 }
 
-/* -------- Category Label (under circle) -------- */
+/* Label under circle */
 .category-label {
   margin-top: 0.85rem;
   font-size: clamp(1.02rem, 2.2vw, 1.18rem);
@@ -375,7 +389,6 @@
   cursor: pointer;
   line-height: 1.15;
 }
-
 /* Gold underline sweep */
 .category-label::after {
   content: "";
@@ -388,8 +401,7 @@
   transition: width 0.45s ease;
   opacity: 0.95;
 }
-
-/* Hover effects on label (triggered by item hover) */
+/* Hover effects (triggered by item hover) */
 .category-item:hover .category-label {
   color: #a67c52;
   transform: translateY(-3px);
@@ -399,7 +411,7 @@
   width: 100%;
 }
 
-/* -------- Reduced Motion -------- */
+/* Reduced Motion for categories */
 @media (prefers-reduced-motion: reduce) {
   .category-item,
   .category-circle,
@@ -412,7 +424,7 @@
   .category-item { opacity: 1 !important; }
 }
 
-/* -------- Keyframes -------- */
+/* Keyframes for category reveal */
 @keyframes catFadeUp {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -420,15 +432,10 @@
 
 
 
-
-/* ===========================
-   HOME TITLE — PREMIUM MOTION
-   Works with:
-   <h1 class="home-title">
-     <span class="home-title__text">...</span>
-     <span class="home-title__underline"></span>
-   </h1>
-   =========================== */
+/* =======================================================================
+   HOME TITLE — PREMIUM MOTION (Second block retained as-is)
+   NOTE: This block overlaps with earlier title styles; kept intentionally.
+   ======================================================================= */
 
 /* Wrapper */
 .home-title{
@@ -508,16 +515,14 @@
 }
 
 /* ===========================
-   Keyframes
+   Keyframes (second block)
    =========================== */
 
-/* Gentle breathing of the whole title block */
 @keyframes hzTitleBreath{
   0%, 100% { transform: translateY(0) scale(1);   filter: none; }
   50%      { transform: translateY(-2px) scale(1.008); filter: drop-shadow(0 1px 0 rgba(0,0,0,.04)); }
 }
 
-/* Entrance that also “replays”: blur/offset → crisp, then relax */
 @keyframes hzTitleIntro{
   0%   { opacity: 0; filter: blur(2px); transform: translateY(8px); letter-spacing: .01em; }
   12%  { opacity: 1; filter: blur(0);   transform: translateY(0);    letter-spacing: .03em; }
@@ -526,7 +531,6 @@
   100% { opacity: 1; } /* stays visible; loop restarts smoothly */
 }
 
-/* Sheen sweep over the text */
 @keyframes hzTitleSheen{
   0%   { opacity: 0; transform: skewX(-18deg) translateX(-130%); }
   35%  { opacity: .95; transform: skewX(-18deg) translateX(10%); }
@@ -534,7 +538,6 @@
   100% { opacity: 0;   transform: skewX(-18deg) translateX(120%); }
 }
 
-/* Underline grows from center and glows */
 @keyframes hzUnderlineDraw{
   0%   { width: 0; box-shadow: 0 0 0 rgba(255,184,77,0); }
   22%  { width: 62%; box-shadow: 0 6px 18px rgba(201,133,63,.25); }
@@ -543,7 +546,6 @@
   100% { width: 0;  box-shadow: 0 0 0 rgba(255,184,77,0); }
 }
 
-/* Spark dot runs along underline while it draws */
 @keyframes hzUnderlineSpark{
   0%   { opacity: 0; left: 50%; transform: translate(-50%, -50%) scale(.4); }
   15%  { opacity: 1; left: 50%; transform: translate(-50%, -50%) scale(.9); }
@@ -552,7 +554,7 @@
   100% { opacity: 0; left: 50%; transform: translate(-50%, -50%) scale(.4); }
 }
 
-/* Reduced-motion safety */
+/* Reduced-motion safety (second block) */
 @media (prefers-reduced-motion: reduce){
   .home-title,
   .home-title__text,

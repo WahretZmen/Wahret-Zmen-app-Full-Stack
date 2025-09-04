@@ -1,7 +1,26 @@
-/* ==========================================
-   Banner — Layout & Premium Animations
-   Plain CSS (no Tailwind, no shadcn)
-   ========================================== */
+/* ============================================================================
+   StylesBanner.css
+   Banner — Layout & Premium Animations (Plain CSS)
+   ---------------------------------------------------------------------------
+   Table of Contents
+   1) Wrapper & Layout (mobile-first, desktop split)
+   2) Image Area (luxury hover glow)
+   3) Text Area
+   4) Premium Title (auto-replay shimmer + underline + hover sweep)
+   5) Description
+   6) CTA Buttons — Premium (auto pulse/sheen, focus ring, hover sweep)
+      6.1) Root variables
+      6.2) Base premium button (first definition)
+      6.3) Background shift & pulse keyframes
+      6.4) Conflict killers / enforcement (legacy classes)
+      6.5) Premium button (second/base design block)
+      6.6) Keyframes (idle background shift & glow)
+   ========================================================================== */
+
+
+/* ============================================================================
+   1) Wrapper & Layout
+   ========================================================================== */
 
 /* Wrapper (mobile-first) */
 .banner-container-enhanced {
@@ -14,7 +33,6 @@
   text-align: center;
   gap: 2rem;
   box-shadow: none;
-  
 }
 
 .link-wrapper {
@@ -32,7 +50,11 @@
   }
 }
 
-/* Image area */
+
+/* ============================================================================
+   2) Image Area (luxury hover glow)
+   ========================================================================== */
+
 .banner-image-wrapper {
   flex: 1;
   max-width: 500px;
@@ -59,7 +81,11 @@
   cursor: pointer;
 }
 
-/* Text area */
+
+/* ============================================================================
+   3) Text Area
+   ========================================================================== */
+
 .banner-text-wrapper {
   flex: 1;
   max-width: 600px;
@@ -79,9 +105,10 @@
   }
 }
 
-/* ================================
-   Premium Title (auto-replay)
-   ================================ */
+
+/* ============================================================================
+   4) Premium Title (auto-replay)
+   ========================================================================== */
 
 /* Remove any previous animations on banner-title */
 .banner-title {
@@ -187,9 +214,10 @@
   to   { left: 125%; }
 }
 
-/* ================================
-   Description
-   ================================ */
+
+/* ============================================================================
+   5) Description
+   ========================================================================== */
 .banner-description {
   font-size: 1.2rem;
   color: #222 !important;
@@ -200,17 +228,12 @@
   margin: 0 auto 1.5rem;
 }
 
-/* ================================
-   CTA Buttons (Plain CSS)
-   Two premium options:
-   - btn-gold-pulse  (auto replay)
-   - btn-royal-sweep (hover only)
-   ================================ */
 
-/* ==========================================
-   PREMIUM CTA — Imperial Gold Button (plain CSS)
-   ========================================== */
+/* ============================================================================
+   6) CTA Buttons — Premium (auto-replay + hover sweep)
+   ========================================================================== */
 
+/* 6.1) Root variables */
 :root{
   /* Tweak these if you want a different gold tone */
   --btn-gold-1: #f7d08a;
@@ -222,7 +245,7 @@
   --btn-glow:   rgba(212,175,55,.45);
 }
 
-/* Base look */
+/* 6.2) Base look (first premium block) */
 .btn-premium{
   position: relative;
   display: inline-flex;
@@ -258,13 +281,12 @@
   animation: btnBgShift 7s linear infinite, btnPulse 3.8s ease-in-out infinite;
 }
 
-/* Subtle moving gradient */
+/* 6.3) Keyframes: Background shift + Breathing pulse */
 @keyframes btnBgShift{
   0%   { background-position: 0% 50%; }
   100% { background-position: 200% 50%; }
 }
 
-/* Breathing shadow pulse */
 @keyframes btnPulse{
   0%,100% {
     box-shadow:
@@ -283,7 +305,7 @@
   }
 }
 
-/* Premium hover: elegant lift + gold sweep */
+/* 6.4) Hover, sweep, active, focus ring */
 .btn-premium:hover{
   transform: translateY(-2px) scale(1.03);
   box-shadow:
@@ -316,7 +338,6 @@
   to { left: 120%; }
 }
 
-/* Press/active */
 .btn-premium:active{
   transform: translateY(0) scale(.985);
   box-shadow:
@@ -324,7 +345,6 @@
     inset 0 1px 0 rgba(255,255,255,.55);
 }
 
-/* Keyboard focus — classy ring */
 .btn-premium:focus-visible{
   outline: none;
   box-shadow:
@@ -340,8 +360,7 @@
   }
 }
 
-/* ====== Conflict killer for legacy CTA styles ====== */
-/* If the element accidentally still has old classes, nuke their overlays */
+/* 6.5) Conflict killer for legacy CTA styles */
 .btn-premium.banner-cta-btn::before,
 .btn-premium.banner-cta-btn::after,
 .btn-premium.banner-btn::before,
@@ -369,7 +388,7 @@
 }
 
 /* =======================
-   PREMIUM BUTTON DESIGN
+   PREMIUM BUTTON DESIGN (second/base design block)
    ======================= */
 
 /* Base premium button */
@@ -428,7 +447,7 @@
 }
 
 /* =======================
-   Keyframes
+   6.6) Keyframes (idle bg shift & pulse)
    ======================= */
 
 /* Idle background gradient shift */
