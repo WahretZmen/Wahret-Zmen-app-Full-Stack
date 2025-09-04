@@ -1,17 +1,36 @@
 /* =========================================================
    About Page — Pure CSS animations & polished layout
    File: src/Styles/StylesAbout.css
+
+   Table of Contents
+   1) Root Wrapper
+   2) HERO (gradient / banner)
+      2.1) Title Wave / RTL Float
+      2.2) Subtitle / Actions / Fade-in utilities
+   3) Section Spacing (global wrappers)
+   4) VALUES Section (layout, title shine, grid, cards, RTL)
+      4.1) Animations / Micro-interactions
+   5) GALLERY Section (grid/cards + responsive)
+   6) About Containers / Headings / Paragraphs / Actions
+   7) Buttons (luxury/outline, focus & press)
+   8) Global Animations (utility classes + reduced motion)
+   9) Extra Title/Paragraph Animations (headRise/titleReveal/paraFade)
+   10) CTA Buttons (bottom)
    ========================================================= */
 
-/* Root wrapper */
+
+/* =========================================================
+   1) Root wrapper
+   ========================================================= */
 .about-page {
   background: #ffffff;
   color: #2b2b2b;
 }
 
-/* ================================
-   HERO (image-free, gradient bg)
-   ================================ */
+
+/* =========================================================
+   2) HERO (image-free, gradient bg / banner)
+   ========================================================= */
 .about-hero {
   position: relative;
   overflow: hidden;
@@ -48,9 +67,11 @@
   text-align: center;
 }
 
+
 /* =========================================================
-   HERO TITLE – Wave Letter Animation
+   2.1) HERO TITLE – Wave Letter Animation (LTR) / RTL Float
    ========================================================= */
+
 /* HERO title base — gradient text */
 .about-hero__title{
   font-size: clamp(2.2rem, 5vw, 3.5rem);
@@ -111,7 +132,6 @@
 }
 
 
-
 .about-hero__subtitle {
   font-size: clamp(1.05rem, 2.1vw, 1.25rem);
   color: #5f5f5f;
@@ -126,7 +146,10 @@
   justify-content: center;
 }
 
-/* Fade-in reusable */
+
+/* =========================================================
+   2.2) Fade-in utilities (reused)
+   ========================================================= */
 .animate-fade-in {
   opacity: 0;
   transform: translateY(20px);
@@ -145,18 +168,9 @@
 }
 
 
-/* ================================
-   MAIN CONTENT
-   ================================ */
-/* ================================
-   OUR VALUES — exact look from screenshots
-   ================================ */
-
-   /* =========================================================
-   Section Spacing
+/* =========================================================
+   3) Section Spacing (global wrappers)
    ========================================================= */
-
-/* General section wrapper */
 .section,
 .about-section {
   padding-block: clamp(2rem, 5vw, 4rem); /* responsive vertical padding */
@@ -180,6 +194,10 @@
   padding-inline: clamp(1rem, 4vw, 2rem);
 }
 
+
+/* =========================================================
+   4) VALUES Section — layout, title shine, grid, cards
+   ========================================================= */
 
 /* Light beige band behind the whole Values section */
 .section.section--values {
@@ -219,9 +237,7 @@
   letter-spacing: .2px;
 }
 
-/* =========================
-   Our Values Title Animation
-   ========================= */
+/* Our Values Title Animation — shine sweep */
 .section--values .h2 {
   font-size: clamp(1.8rem, 4vw, 2.5rem);
   font-weight: 800;
@@ -256,7 +272,6 @@
   100% { left: 125%; }
 }
 
-
 /* Subtitle paragraph */
 .section--values .section__inner--center .p{
   display: block;
@@ -273,7 +288,6 @@
     margin-bottom: 16px;
   }
 }
-
 
 /* Grid */
 .values-grid{
@@ -340,7 +354,6 @@
 }
 @media (max-width: 640px){
   .values-grid{ grid-template-columns: 1fr; gap: 16px; }
-  
 }
 
 
@@ -356,13 +369,13 @@
   animation: floatYQuick 1s ease-in-out infinite; /* much faster */
 }
 
-
 /* RTL niceties (keeps same look but respects direction) */
 [dir="rtl"] .values-grid{ direction: rtl; }
 
-/* ================================
-   GALLERY SECTION
-   ================================ */
+
+/* =========================================================
+   5) GALLERY SECTION (grid/cards + responsive)
+   ========================================================= */
 .section--gallery {
   background: #fff;
   padding-block: clamp(2rem, 6vw, 4rem);
@@ -415,21 +428,23 @@
   }
 }
 
-/* General section spacing */
+/* General section spacing (variant) */
 .section,
 .about-section {
   padding-block: clamp(1.5rem, 4vw, 3rem);   /* smaller padding */
   margin-block: clamp(1.5rem, 4vw, 3rem);    /* smaller margin */
 }
 
-/* Gallery specifically */
+/* Gallery specifically (tighter) */
 .section--gallery {
   padding-block: clamp(1.5rem, 4vw, 2.5rem); /* tighter */
   margin-bottom: 1rem;                       /* reduced gap below */
 }
 
 
-   
+/* =========================================================
+   6) About containers / headings / paragraphs / actions
+   ========================================================= */
 .about-container {
   max-width: 1200px;
   margin-inline: auto;
@@ -491,9 +506,10 @@
   gap: .75rem;
 }
 
-/* ================================
-   BUTTONS (pure CSS)
-   ================================ */
+
+/* =========================================================
+   7) Buttons (luxury/outline, focus & press)
+   ========================================================= */
 .btn-luxury,
 .btn-outline {
   display: inline-flex;
@@ -532,9 +548,10 @@
   color: #5C3D2E;
 }
 
-/* ================================
-   ANIMATIONS (pure CSS)
-   ================================ */
+
+/* =========================================================
+   8) Global Animations (utility classes + reduced motion)
+   ========================================================= */
 @keyframes kf-fade-up {
   from { opacity: 0; transform: translateY(16px) scale(.98); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
@@ -574,8 +591,10 @@
     transform: none !important;
   }
 }
+
+
 /* =========================================================
-   HERO: low-opacity banner image under your gradient
+   2) HERO (banner image variant + Ken Burns)
    ========================================================= */
 .about-hero.about-hero--banner {
   position: relative;
@@ -615,8 +634,9 @@
   .about-hero.about-hero--banner::before { animation: none; }
 }
 
+
 /* =========================================================
-   VALUES: professional staggered reveal & micro-interactions
+   4.1) VALUES: stagger reveal & micro-interactions
    ========================================================= */
 
 /* Base card fade-in (applies once on load) */
@@ -647,25 +667,9 @@
   transform: translateY(-2px);
 }
 
-/* =========================================================
-   Buttons: subtle “press” + focus ring
-   ========================================================= */
-.btn-luxury, .btn-outline{
-  transition: transform .18s ease, box-shadow .25s ease, background-color .25s ease, color .25s ease, border-color .25s ease;
-}
-.btn-luxury:active,
-.btn-outline:active{
-  transform: translateY(1px);
-}
-
-.btn-luxury:focus-visible,
-.btn-outline:focus-visible{
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(198,156,109,.35);
-}
 
 /* =========================================================
-   Section headings: graceful slide-up on entry
+   9) Section headings: graceful slide-up on entry
    ========================================================= */
 .about-h2, .h2{
   will-change: transform, opacity;
@@ -676,8 +680,9 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
+
 /* =========================================================
-   TITLES – premium fade + slight upward slide
+   9) TITLES – premium fade + slight upward slide
    ========================================================= */
 .about-h2,
 .h2 {
@@ -711,7 +716,7 @@
 
 
 /* =========================================================
-   HERO – subtitle + actions fade & slide
+   9) HERO – subtitle + actions fade & slide
    ========================================================= */
 .about-hero__subtitle {
   opacity: 0;
@@ -733,8 +738,9 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
+
 /* =========================================================
-   PARAGRAPHS inside sections – graceful fade-up
+   9) PARAGRAPHS inside sections – graceful fade-up
    ========================================================= */
 .about-p, 
 .section .p {
@@ -755,9 +761,9 @@
 .about-p:nth-of-type(3),
 .section .p:nth-of-type(3){ animation-delay: .34s; }
 
+
 /* =========================================================
-   VALUES CARDS – already staggered in previous snippet
-   Add gentle scale pop on hover
+   4.1) VALUES CARDS – hover scale pop (already staggered)
    ========================================================= */
 .value-card {
   transition: transform .22s ease, box-shadow .25s ease;
@@ -766,8 +772,9 @@
   transform: translateY(-4px) scale(1.015);
 }
 
+
 /* =========================================================
-   CTA BUTTONS – pulse & glow
+   10) CTA BUTTONS – pulse & glow (bottom)
    ========================================================= */
 .btn-luxury {
   position: relative;
@@ -799,8 +806,9 @@
   100% { transform: scale(1); }
 }
 
+
 /* =========================================================
-   MEDIA CARDS (gallery) – fade-in zoom
+   5) MEDIA CARDS (gallery) – fade-in zoom + autoplay variant
    ========================================================= */
 
 /* =========================
@@ -894,8 +902,7 @@
 }
 
 
-
-
+/* Media cards stagger fade-in */
 .media-card {
   opacity: 0;
   transform: scale(.96) translateY(12px);
@@ -911,7 +918,10 @@
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Small bottom button */
+
+/* =========================================================
+   10) Bottom CTA buttons (layout & styles)
+   ========================================================= */
 .about-actions .btn-outline.small-btn {
   min-width: 160px;          /* fixed smaller width */
   max-width: 200px;
@@ -922,10 +932,6 @@
   display: block;            /* force centering */
 }
 
-
-/* =====================
-   Bottom CTA buttons
-   ===================== */
 .about-cta {
   display: flex;
   justify-content: center;
