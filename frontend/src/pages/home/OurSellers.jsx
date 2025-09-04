@@ -120,13 +120,14 @@ const OurSellers = () => {
                     customLeftArrow={<Arrow type="prev" />}
                     customRightArrow={<Arrow type="next" />}
                   >
-                    {filteredProducts.map((product, index) => (
-                      <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>
-                        <div className="carousel-card-wrapper">
-                          <ProductCard product={product} />
-                        </div>
-                      </FadeInSection>
-                    ))}
+                   {filteredProducts.map((product, index) => (
+  <FadeInSection key={index} delay={index * 0.1} duration={0.6} yOffset={30}>
+    <div className="carousel-card-wrapper">
+      {/* 👇 NEW: use the compact stepper just for carousel */}
+      <ProductCard product={product} counterVariant="compact" />
+    </div>
+  </FadeInSection>
+))}
                   </Carousel>
                 </div>
               ) : (

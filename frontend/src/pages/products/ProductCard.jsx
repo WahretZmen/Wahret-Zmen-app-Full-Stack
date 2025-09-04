@@ -8,9 +8,16 @@ import { FiShoppingCart } from "react-icons/fi";
 import { addToCart } from "../../redux/features/cart/cartSlice";
 import { getImgUrl } from "../../utils/getImgUrl";
 
-import "../../Styles/StylesProductCard.css";
+import "../../Styles/StylesProductCard.css"; // card + both steppers
 
-const ProductCard = ({ product, showStockBadge = true }) => {
+/**
+ * Props:
+ *  - product (required)
+ *  - showStockBadge: boolean (default true)
+ *  - counterVariant: "default" | "compact" (default "default")
+ *      "compact" is used by OurSellers.jsx to render a smaller stepper.
+ */
+const ProductCard = ({ product, showStockBadge = true, counterVariant = "default" }) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   if (!i18n?.isInitialized) return null;
@@ -22,6 +29,7 @@ const ProductCard = ({ product, showStockBadge = true }) => {
     lang === "ar-SA" ||
     (typeof lang === "string" && lang.startsWith("ar"));
 
+  // Local state
   const [quantity, setQuantity] = useState(1);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
 
@@ -48,10 +56,11 @@ const ProductCard = ({ product, showStockBadge = true }) => {
     firstColor?.colorName?.en ||
     t("default", "Default");
 
-  // Stock (prefer first color stock, fall back to product-level)
+  // Stock from first color; fallback to product-level stock
   const displayedStock =
     firstColor?.stock ?? product?.stockQuantity ?? product?.stock ?? 0;
 
+  // Robust “trending” flag
   const isTrending = Boolean(
     product?.trending ||
       product?.isTrending ||
@@ -88,7 +97,7 @@ const ProductCard = ({ product, showStockBadge = true }) => {
 
   /* ---------- hover zoom (desktop only) ---------- */
   const handleMouseMove = (e) => {
-    if (window.matchMedia("(hover: none)").matches) return;
+    if (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -96,7 +105,10 @@ const ProductCard = ({ product, showStockBadge = true }) => {
   };
 
   return (
-    <div className="pc-card" dir={isRTL ? "rtl" : "ltr"}>
+    <div
+      className="pc-card group relative bg-white border border-gray-200 overflow-hidden w-full mx-auto"
+      dir={isRTL ? "rtl" : "ltr"}
+    >
       {/* ===== Image + Badges ===== */}
       <a
         href={`/products/${product._id}`}
@@ -123,7 +135,7 @@ const ProductCard = ({ product, showStockBadge = true }) => {
           </span>
         )}
 
-        {/* Stock (top-end) — render exactly once */}
+        {/* Stock (top-end) — only once */}
         {showStockBadge && (
           <span
             className={`product-badge badge-top-right stock-badge ${
@@ -174,7 +186,7 @@ const ProductCard = ({ product, showStockBadge = true }) => {
           <span className="pc-new">{Number(product?.newPrice || 0).toFixed(2)} $</span>
         </div>
 
-        {/* Reveal panel (always on touch) */}
+        {/* Reveal panel (always shown on mobile, hover on desktop) */}
         <div className="pc-extra">
           <p className="product-description text-sm text-gray-500">
             {description.length > 70 ? `${description.slice(0, 70)}…` : description}
@@ -206,40 +218,77 @@ const ProductCard = ({ product, showStockBadge = true }) => {
             </div>
           )}
 
-          {/* Quantity stepper — restored size & style */}
+          {/* ===== Quantity stepper (variant) ===== */}
           <div className="flex items-center justify-center mt-3 sp-cta-row">
-            <div className="sp-qty" role="group" aria-label={t("quantity")}>
-              <button
-                type="button"
-                className="sp-btn sp-minus"
-                onClick={decQty}
-                disabled={displayedStock === 0}
-                aria-label={t("decrease")}
-              >
-                –
-              </button>
+            {counterVariant === "compact" ? (
+              // Smaller, carousel-friendly stepper
+              <div className="qty-mini" role="group" aria-label={t("quantity")}>
+                <button
+                  type="button"
+                  className="qm-btn qm-minus"
+                  onClick={decQty}
+                  disabled={displayedStock === 0}
+                  aria-label={t("decrease")}
+                >
+                  –
+                </button>
 
-              <input
-                type="number"
-                min="1"
-                max={clampMax}
-                value={quantity}
-                onChange={handleQuantityChange}
-                disabled={displayedStock === 0}
-                aria-label={t("quantity")}
-                inputMode="numeric"
-              />
+                <input
+                  type="number"
+                  min="1"
+                  max={clampMax}
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                  disabled={displayedStock === 0}
+                  aria-label={t("quantity")}
+                  inputMode="numeric"
+                />
 
-              <button
-                type="button"
-                className="sp-btn sp-plus"
-                onClick={incQty}
-                disabled={displayedStock === 0 || quantity >= clampMax}
-                aria-label={t("increase")}
-              >
-                +
-              </button>
-            </div>
+                <button
+                  type="button"
+                  className="qm-btn qm-plus"
+                  onClick={incQty}
+                  disabled={displayedStock === 0 || quantity >= clampMax}
+                  aria-label={t("increase")}
+                >
+                  +
+                </button>
+              </div>
+            ) : (
+              // Default (bigger) stepper for product grid/detail
+              <div className="sp-qty" role="group" aria-label={t("quantity")}>
+                <button
+                  type="button"
+                  className="sp-btn sp-minus"
+                  onClick={decQty}
+                  disabled={displayedStock === 0}
+                  aria-label={t("decrease")}
+                >
+                  –
+                </button>
+
+                <input
+                  type="number"
+                  min="1"
+                  max={clampMax}
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                  disabled={displayedStock === 0}
+                  aria-label={t("quantity")}
+                  inputMode="numeric"
+                />
+
+                <button
+                  type="button"
+                  className="sp-btn sp-plus"
+                  onClick={incQty}
+                  disabled={displayedStock === 0 || quantity >= clampMax}
+                  aria-label={t("increase")}
+                >
+                  +
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Primary CTA */}
