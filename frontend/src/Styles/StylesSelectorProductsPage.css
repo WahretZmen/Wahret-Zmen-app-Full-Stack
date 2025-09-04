@@ -5,7 +5,7 @@
    - Sidebar card (padding, shadow, sticky on desktop)
    - Shared form controls (labels/selects)
    - Price fields
-   - Two-line range slider (thin neutral + thick gold with dual thumbs)
+   - Double range sliders (two separate bars)
    - Buttons (outline)
    - RTL tweaks
    - Responsive breakpoints
@@ -98,95 +98,97 @@
   .filter-select{ padding:13px 14px; }
 }
 
-/* ===================== Two-line Range Slider ===================== */
-/* Container for the two lines (thin neutral top + thick gold bottom) */
+/* ===================== Double Range Sliders (two lines) ===================== */
 .range-wrap { margin-top: 10px; }
 
-.range-wrap.twoline{
-  position:relative;
-  height:36px;                 /* room for both lines + thumbs */
-}
-
-/* Top thin decorative track (no thumbs) */
-.range-thin-track{
-  position:absolute;
-  left:0; right:0;
-  top:6px;                     /* sits above the thick line */
-  height:4px;
-  border-radius:999px;
-  background:#eae2d6;          /* neutral beige like your reference */
+/* Two distinct bars stacked vertically */
+.range-wrap.double{
+  position: relative;
+  height: 44px;                     /* room for 2 lines + thumbs */
 }
 
 /* Shared base for range inputs */
 .range{
-  -webkit-appearance:none;
-  appearance:none;
-  width:100%;
-  outline:none;
-  background:transparent;      /* we draw tracks below */
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  outline: none;
+  background: transparent;          /* we draw the track in vendor rules */
+  position: absolute;
+  left: 0; right: 0;
 }
 
-/* Bottom thick track: both ranges share the same center line */
-.range.thick{
-  position:absolute;
-  left:0; right:0;
-  top:18px;                    /* beneath the thin bar */
-  height:8px;
-  border-radius:999px;
+/* Top line (MIN) sits higher – neutral thin bar */
+.range.line.first{
+  top: 6px;                         /* position of top track */
+  height: 6px;
+}
+.range.line.first::-webkit-slider-runnable-track{
+  height: 6px; background:#eae2d6; border-radius:999px;
+}
+.range.line.first::-moz-range-track{
+  height: 6px; background:#eae2d6; border-radius:999px;
 }
 
-/* Base track paints the thick bar */
-.range.thick.base::-webkit-slider-runnable-track { height:8px; background:#c98a3c; border-radius:999px; }
-.range.thick.base::-moz-range-track               { height:8px; background:#c98a3c; border-radius:999px; }
+/* Bottom line (MAX) sits lower – thicker gold bar */
+.range.line.second{
+  top: 26px;                        /* position of bottom track */
+  height: 8px;
+}
+.range.line.second::-webkit-slider-runnable-track{
+  height: 8px; background:#c98a3c; border-radius:999px;
+}
+.range.line.second::-moz-range-track{
+  height: 8px; background:#c98a3c; border-radius:999px;
+}
 
-/* Second range has transparent track so base remains visible */
-.range.thick.second::-webkit-slider-runnable-track { height:8px; background:transparent; }
-.range.thick.second::-moz-range-track               { height:8px; background:transparent; }
-
-/* WebKit thumbs */
+/* Thumbs (WebKit) */
 .range::-webkit-slider-thumb{
-  -webkit-appearance:none; appearance:none;
-  width:20px; height:20px;
-  border-radius:50%;
-  border:2px solid #fff;
-  box-shadow:0 1px 6px rgba(0,0,0,.2);
-  cursor:pointer;
-  background:#a67c52;          /* min thumb */
-  margin-top:-6px;             /* vertically center over 8px track */
+  -webkit-appearance: none; appearance: none;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,.2);
+  cursor: pointer;
+  background: #a67c52;              /* default thumb (top MIN) */
+  margin-top: -7px;                  /* vertical centering on 6–8px tracks */
 }
-.range.thick.second::-webkit-slider-thumb{ background:#7a5a36; } /* max thumb */
+.range.line.second::-webkit-slider-thumb{
+  background:#7a5a36;               /* darker thumb for bottom MAX */
+  margin-top: -6px;
+}
 
-/* Firefox thumbs */
+/* Thumbs (Firefox) */
 .range::-moz-range-thumb{
-  width:20px; height:20px;
-  border-radius:50%;
-  border:2px solid #fff;
-  box-shadow:0 1px 6px rgba(0,0,0,.2);
-  cursor:pointer;
-  background:#a67c52;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 6px rgba(0,0,0,.2);
+  cursor: pointer;
+  background: #a67c52;
 }
-.range.thick.second::-moz-range-thumb{ background:#7a5a36; }
+.range.line.second::-moz-range-thumb{ background:#7a5a36; }
 
-/* Focus ring for accessibility */
+/* Focus ring */
 .range:focus-visible{
-  box-shadow:0 0 0 3px rgba(166,124,82,.18);
-  border-radius:12px;
+  box-shadow: 0 0 0 3px rgba(166,124,82,.18);
+  border-radius: 12px;
 }
 
-/* Optional end labels (min/max) under the bars */
+/* End labels under the bars */
 .range-ends{
   display:flex;
   justify-content:space-between;
   font-size:.92rem;
   color:#6f655a;
-  margin-top:6px;
+  margin-top: 4px;
 }
-.filters-sidebar[dir="rtl"] .range-ends{ direction: rtl; }
 
-@media (max-width:420px){
-  .range-wrap.twoline{ height:40px; }
-  .range-thin-track{ top:8px; }
-  .range.thick{ top:20px; }
+/* Tight phones: give a bit more height */
+@media (max-width: 420px){
+  .range-wrap.double{ height: 48px; }
+  .range.line.first{ top: 8px; }
+  .range.line.second{ top: 30px; }
 }
 
 /* ============= Button (outline) ============= */

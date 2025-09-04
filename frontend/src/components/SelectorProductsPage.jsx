@@ -1,10 +1,10 @@
 // src/pages/SelectorPageProducts.jsx
 // -------------------------------------------------------------
-// Plain-CSS filter sidebar (category + price range) with:
+// Plain-CSS filter sidebar (category + double price range) with:
 // - Canonicalized category aliases (EN/FR/AR)
 // - i18n fallbacks
 // - RTL support
-// - Two-line price range UI (thin neutral line + thick gold line)
+// - Double price range UI: two separate bars (MIN on top, MAX below)
 // -------------------------------------------------------------
 
 import React, { useMemo } from "react";
@@ -138,7 +138,7 @@ const SelectorPageProducts = ({
           </select>
         </div>
 
-        {/* ---------- Price Range (min/max inputs + two-line slider) ---------- */}
+        {/* ---------- Price Range (min/max inputs + double sliders) ---------- */}
         <div className="filter-group">
           <label className="filter-label">{t("price_range", "نطاق السعر")}</label>
 
@@ -177,14 +177,11 @@ const SelectorPageProducts = ({
             </div>
           </div>
 
-          {/* Two-line visual: thin neutral top + thick gold line with dual thumbs */}
-          <div className="range-wrap twoline" aria-hidden="false">
-            {/* top thin decoration */}
-            <div className="range-thin-track" />
-
-            {/* bottom thick track with both thumbs on same line */}
+          {/* Double sliders: one bar for MIN (top), one bar for MAX (bottom) */}
+          <div className="range-wrap double" aria-hidden="false">
+            {/* Top line controls the MIN */}
             <input
-              className="range thick base"
+              className="range line first"
               type="range"
               min={minPrice}
               max={maxPrice}
@@ -195,8 +192,9 @@ const SelectorPageProducts = ({
                 setPriceRange([nextMin, clampMax]);
               }}
             />
+            {/* Bottom line controls the MAX */}
             <input
-              className="range thick second"
+              className="range line second"
               type="range"
               min={minPrice}
               max={maxPrice}
@@ -209,7 +207,7 @@ const SelectorPageProducts = ({
             />
           </div>
 
-          {/* Optional min/max captions under the bars (like your reference) */}
+          {/* Optional min/max captions under the bars */}
           <div className="range-ends">
             <span>${Math.round(minPrice)}</span>
             <span>${Math.round(maxPrice)}</span>
@@ -231,3 +229,4 @@ const SelectorPageProducts = ({
 };
 
 export default SelectorPageProducts;
+c
