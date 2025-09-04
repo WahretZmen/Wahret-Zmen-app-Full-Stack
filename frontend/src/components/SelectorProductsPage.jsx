@@ -229,4 +229,3 @@ const SelectorPageProducts = ({
 };
 
 export default SelectorPageProducts;
-c
