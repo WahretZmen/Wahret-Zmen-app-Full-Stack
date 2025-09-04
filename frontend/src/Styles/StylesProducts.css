@@ -151,6 +151,36 @@
   box-shadow: 0 2px 14px rgba(212,175,55,.35);
 }
 
+/* --- Prevent gradient title from being cut on mobile --- */
+.wz-collections-header,
+.wz-collections-title.premium-gradient {
+  overflow: visible;         /* don’t clip tall glyphs */
+}
+
+/* Slight top padding inside the title avoids ascender clipping
+   with background-clip:text on some Android WebViews */
+.wz-collections-title.premium-gradient {
+  padding-top: 6px;          /* NEW: was 0 */
+  line-height: 1.2;          /* slightly taller line box */
+}
+
+/* Give extra space under the fixed navbar on phones */
+@media (max-width: 640px) {
+  .wz-collections-header {
+    margin-top: 6.25rem;     /* NEW: was 5rem; pushes title down */
+  }
+}
+
+/* If your navbar is taller on some devices, account for safe area too */
+@supports (padding: env(safe-area-inset-top)) {
+  @media (max-width: 640px) {
+    .wz-collections-header {
+      margin-top: calc(6.25rem + env(safe-area-inset-top));
+    }
+  }
+}
+
+
 /* Subtitle */
 .wz-collections-sub {
   margin: 14px auto 0;
