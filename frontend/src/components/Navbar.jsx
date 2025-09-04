@@ -1,3 +1,4 @@
+// Navbar.jsx
 import { FiShoppingBag, FiUser, FiMenu, FiX } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
@@ -9,23 +10,36 @@ import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import InputSearch from "./SearchInput";
 
+/* =============================================================================
+   🧭 Navbar
+   - Fixed header with brand, nav links, cart, and user menu
+   - RTL/LTR aware via i18n language
+   - Mobile menu toggle + outside click/ESC handling
+   - Exposes --navbar-height CSS var for fixed dropdown placement
+============================================================================= */
 const Navbar = () => {
+  // UI state
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [navQuery, setNavQuery] = useState(""); // kept
+  const [navQuery, setNavQuery] = useState(""); // (kept, even if not used yet)
 
+  // Refs
   const dropdownRef = useRef(null);
   const headerRef = useRef(null);
 
+  // Data sources
   const cartItems = useSelector((state) => state.cart.cartItems);
   const { currentUser, logout } = useAuth();
   const token = localStorage.getItem("token");
 
+  // i18n / router
   const { t, i18n } = useTranslation();
   const dir = i18n.language === "ar" ? "rtl" : "ltr";
   const navigate = useNavigate();
 
-  // Expose navbar height as a CSS variable so the fixed dropdown can sit below it
+  /* -----------------------------------------------------------------------------
+     Measure header height → set CSS var so fixed dropdown can align below navbar
+  ----------------------------------------------------------------------------- */
   useEffect(() => {
     const setNavHeightVar = () => {
       const h = headerRef.current?.offsetHeight || 60;
@@ -36,7 +50,9 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", setNavHeightVar);
   }, []);
 
-  // Click outside + close mobile menu when clicking outside navbar
+  /* -----------------------------------------------------------------------------
+     Close dropdowns on outside click or ESC, and close mobile menu on outside click
+  ----------------------------------------------------------------------------- */
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -63,10 +79,13 @@ const Navbar = () => {
     };
   }, [isMobileMenuOpen]);
 
+  /* -----------------------------------------------------------------------------
+     Render
+  ----------------------------------------------------------------------------- */
   return (
     <header className="navbar-container" ref={headerRef}>
       <nav className="navbar-content" dir={dir}>
-        {/* Logo Section */}
+        {/* -------------------------------- Brand / Logo -------------------------------- */}
         <div className="navbar-left">
           <Link
             to="/"
@@ -87,17 +106,22 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Mobile Toggle */}
+        {/* ------------------------------- Mobile Toggle ------------------------------- */}
         <button
           className="mobile-menu-btn"
           aria-label="Toggle menu"
+          aria-expanded={isMobileMenuOpen}
+          aria-controls="main-navigation"
           onClick={() => setIsMobileMenuOpen((s) => !s)}
         >
           {isMobileMenuOpen ? <FiX className="menu-icon" /> : <FiMenu className="menu-icon" />}
         </button>
 
-        {/* Center Navigation Links */}
-        <ul className={`nav-links ${isMobileMenuOpen ? "mobile-center open" : ""}`}>
+        {/* -------------------------- Center Navigation Links -------------------------- */}
+        <ul
+          id="main-navigation"
+          className={`nav-links ${isMobileMenuOpen ? "mobile-center open" : ""}`}
+        >
           <li>
             <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
               {t("home")}
@@ -127,8 +151,9 @@ const Navbar = () => {
           )}
         </ul>
 
-        {/* Right area: Search placed right before icons */}
+        {/* ---------------------------- Right (cart + user) ---------------------------- */}
         <div className="nav-icons">
+          {/* Cart */}
           <Link
             to="/cart"
             className="cart-icon"
@@ -139,6 +164,7 @@ const Navbar = () => {
             {cartItems.length > 0 && <span className="cart-badge">{cartItems.length}</span>}
           </Link>
 
+          {/* User */}
           {currentUser ? (
             <div className="user-menu" ref={dropdownRef}>
               <button
@@ -193,16 +219,18 @@ const Navbar = () => {
               </div>
             </div>
           ) : token ? (
+            // Admin token present but not in AuthContext (e.g., admin panel login)
             <Link to="/dashboard" className="dashboard-link admin-only">
               {t("admin_dashboard")}
             </Link>
           ) : (
+            // Guest
             <Link to="/login" className="login-icon" aria-label={t("login")}>
               <FiUser className="icon" />
             </Link>
           )}
 
-          {/* Optional: language switcher spot */}
+          {/* (Optional) language switcher slot */}
           {/* <div className="language-switcher-wrapper">
             <LanguageSwitcher />
           </div> */}
