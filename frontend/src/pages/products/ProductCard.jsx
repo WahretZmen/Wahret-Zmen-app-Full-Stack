@@ -239,7 +239,15 @@ const ProductCard = ({ product, viewMode = "card" }) => {
                 inputMode="numeric"
               />
 
-             
+              <button
+                type="button"
+                className="sp-btn sp-plus"
+                onClick={incQty}
+                disabled={displayedStock === 0 || quantity >= clampMax}
+                aria-label={t("increase", "Increase")}
+              >
+                +
+              </button>
             </div>
           </div>
 

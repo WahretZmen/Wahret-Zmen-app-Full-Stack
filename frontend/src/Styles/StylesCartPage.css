@@ -1,7 +1,7 @@
 
 /* ===========================================================
    StylesCartPage.css — Cart page (plain CSS, RTL-safe)
-   Matches the look of cart.tsx, no TAX, free shipping.
+   Buttons are fully namespaced to avoid hover/bg conflicts.
    =========================================================== */
 
 /* Safety */
@@ -59,9 +59,9 @@
   background: #fff;
   color: #374151;                    /* neutral-700 */
   box-shadow: 0 1px 2px rgba(0,0,0,.03);
-  transition: background .2s ease, transform .06s ease, opacity .2s ease;
+  transition: transform .06s ease, opacity .2s ease, box-shadow .2s ease;
 }
-.qty-btn:hover { background: #f9fafb; }
+.qty-btn:hover { box-shadow: 0 2px 6px rgba(0,0,0,.06); }
 .qty-btn:active { transform: scale(.98); }
 .qty-btn:disabled { opacity: .4; cursor: not-allowed; }
 
@@ -80,7 +80,8 @@
 }
 
 /* -----------------------------
-   Summary actions
+   Summary actions (namespaced)
+   Prevent hover BG conflicts
 ----------------------------- */
 .cart-buttons {
   display: flex;
@@ -88,44 +89,72 @@
   gap: 12px;
 }
 
-.btn-brown-gradient {
-  width: 100%;
+/* Normalize anchors around buttons */
+.cart-buttons a { display: block; }
+.cart-buttons a > * { display: block; width: 100%; }
+
+/* Reset utility leaks inside cart page */
+.cart-page .btn-brown-gradient,
+.cart-page .btn-outline {
+  position: relative;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
+  text-decoration: none;
+  line-height: 1;
+  z-index: 0;
+}
+
+/* Luxury/primary button (fixed gradient) */
+.cart-page .btn-brown-gradient {
   height: 56px;
   font-size: 1.05rem;
   font-weight: 700;
-  color: #fff;
-  cursor: pointer;
+  color: #fff !important;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(135deg, #6b3a1e, #4a2410);
+  background-image: linear-gradient(135deg, #6b3a1e, #4a2410) !important;
+  background-color: transparent !important;
   box-shadow: 0 6px 16px rgba(0,0,0,.15);
-  transition: filter .2s ease, transform .06s ease, box-shadow .2s ease;
+  transition: transform .06s ease, box-shadow .2s ease;
 }
-.btn-brown-gradient:hover { filter: brightness(1.02); }
-.btn-brown-gradient:active { transform: translateY(1px); }
+.cart-page .btn-brown-gradient:hover,
+.cart-page .btn-brown-gradient:focus,
+.cart-page .btn-brown-gradient:active {
+  /* keep the exact same gradient to avoid clashes */
+  background-image: linear-gradient(135deg, #6b3a1e, #4a2410) !important;
+  background-color: transparent !important;
+  color: #fff !important;
+  box-shadow: 0 8px 18px rgba(0,0,0,.2);
+}
+.cart-page .btn-brown-gradient:active { transform: translateY(1px); }
 
-.btn-outline {
-  width: 100%;
+/* Outline secondary (no bg change on hover) */
+.cart-page .btn-outline {
   height: 56px;
   font-size: 1.02rem;
   font-weight: 700;
-  background: #fff;
-  color: #111827;
-  border: 1px solid #e5e7eb;
+  color: #111827 !important;
+  background: #fff !important;             /* lock bg */
+  border: 1px solid #e5e7eb !important;    /* lock border */
   border-radius: 10px;
-  cursor: pointer;
-  transition: background .2s ease, box-shadow .2s ease, transform .06s ease;
+  transition: transform .06s ease, box-shadow .2s ease;
 }
-.btn-outline:hover {
-  background: #f9fafb;
+.cart-page .btn-outline:hover,
+.cart-page .btn-outline:focus,
+.cart-page .btn-outline:active {
+  background: #fff !important;             /* prevent any hover:bg-* override */
+  color: #111827 !important;
+  border-color: #e5e7eb !important;
   box-shadow: 0 4px 12px rgba(0,0,0,.08);
 }
-.btn-outline:active { transform: translateY(1px); }
+.cart-page .btn-outline:active { transform: translateY(1px); }
 
 /* Side-by-side on wider screens */
 @media (min-width: 640px) {
   .cart-buttons { flex-direction: row; }
-  .btn-brown-gradient, .btn-outline { width: 50%; }
+  .cart-page .btn-brown-gradient,
+  .cart-page .btn-outline { width: 50%; }
 }
 
 /* Sticky summary only at lg (keeps mobile natural flow) */
