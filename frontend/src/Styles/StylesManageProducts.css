@@ -1,27 +1,38 @@
+/* ============================================================================
+   StylesManageProducts.css
+   Purpose: Button styling for Manage Products actions
+   ========================================================================== */
+
+/* ============================
+   Base Action Button
+   ============================ */
 .action-button {
-    min-width: 100px;
-    white-space: nowrap;
-    text-align: center;
-    padding: 0.5rem 1rem;
-    font-weight: 500;
-    border-radius: 0.375rem;
-  }
-  
-  .btn-edit {
-    background-color: #facc15; /* Tailwind yellow-400 */
-    color: white;
-  }
-  
-  .btn-edit:hover {
-    background-color: #eab308; /* yellow-500 */
-  }
-  
-  .btn-delete {
-    background-color: #ef4444; /* Tailwind red-500 */
-    color: white;
-  }
-  
-  .btn-delete:hover {
-    background-color: #dc2626; /* red-700 */
-  }
-  
+  min-width: 100px;
+  white-space: nowrap;
+  text-align: center;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+}
+
+/* ============================
+   Edit Button
+   ============================ */
+.btn-edit {
+  background-color: #facc15; /* Tailwind yellow-400 */
+  color: #fff;
+}
+.btn-edit:hover {
+  background-color: #eab308; /* Tailwind yellow-500 */
+}
+
+/* ============================
+   Delete Button
+   ============================ */
+.btn-delete {
+  background-color: #ef4444; /* Tailwind red-500 */
+  color: #fff;
+}
+.btn-delete:hover {
+  background-color: #dc2626; /* Tailwind red-700 */
+}

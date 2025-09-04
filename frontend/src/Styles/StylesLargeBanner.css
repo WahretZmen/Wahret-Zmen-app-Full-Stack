@@ -1,3 +1,9 @@
+/* ============================================================================
+   StylesLargeBanner.css
+   Purpose: Hero/Large Banner layout, effects, and premium button styles
+   Notes  : Organization + comments only. No behavior changes.
+   ========================================================================== */
+
 /* ================== Design tokens ================== */
 :root{
   --foreground:#111827;

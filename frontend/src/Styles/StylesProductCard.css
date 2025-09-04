@@ -1,8 +1,27 @@
+/* ========================================================================== */
+/* 🛒 ProductCard.css — responsive/RTL-safe, desktop + Android friendly       */
+/* Organization:
+   1) Base Card
+   2) Media (image area)
+   3) Divider
+   4) Body (title, meta)
+   5) Shop line
+   6) Price row
+   7) Hover/Reveal extra
+   8) Premium badges
+   9) Description & color list
+  10) Quantity (card-safe overrides)
+  11) Add-to-cart button
+  12) List view layout
+  13) Mobile tweaks
+*/
+/* ========================================================================== */
+
+
 /* ==========================================================================
-   ProductCard.css — responsive/RTL-safe, desktop + Android friendly
+   1) Base Card
    ========================================================================== */
 
-/* ----- Base Card ----- */
 .pc-card {
   background: #fff;
   border: 1px solid #e6e6e6;
@@ -15,6 +34,7 @@
   flex-direction: column;
   box-shadow: 0 2px 10px rgba(0,0,0,.04);
 }
+
 .pc-card:hover {
   transform: translateY(-4px);
   border-color: #dcdcdc;
@@ -26,7 +46,11 @@
   .pc-card { max-width: 100%; width: 100%; }
 }
 
-/* ----- Image Area ----- */
+
+/* ==========================================================================
+   2) Media (image area)
+   ========================================================================== */
+
 .pc-imgwrap {
   display: block;
   width: 100%;
@@ -35,6 +59,7 @@
   position: relative;
   overflow: hidden;
 }
+
 .pc-img {
   width: 100%;
   height: 100%;
@@ -43,11 +68,20 @@
   padding: 16px;
 }
 
-/* ----- Divider ----- */
+
+/* ==========================================================================
+   3) Divider
+   ========================================================================== */
+
 .pc-divider { width: 100%; height: 1px; background: #eee9df; }
 
-/* ----- Body ----- */
+
+/* ==========================================================================
+   4) Body (title, meta)
+   ========================================================================== */
+
 .pc-body { padding: 14px 14px 16px; text-align: center; }
+
 .pc-title {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -60,13 +94,21 @@
   line-height: 1.35;
 }
 
-/* shop line */
+
+/* ==========================================================================
+   5) Shop line
+   ========================================================================== */
+
 .pc-shop { font-size: 12px; color: #6b7280; margin-top: 2px; }
 .pc-shop-label { color: #9aa0a6; }
 .pc-shop-name { color: #1e3a8a; text-decoration: none; }
 .pc-shop-name:hover { text-decoration: underline; }
 
-/* price row */
+
+/* ==========================================================================
+   6) Price row
+   ========================================================================== */
+
 .pc-price {
   margin-top: 8px;
   display: flex;
@@ -75,16 +117,23 @@
   gap: 10px;
   font-size: 14px;
 }
+
 .pc-old { color: #9aa0a6; text-decoration: line-through; font-weight: 600; }
 .pc-new { color: #111; font-weight: 900; }
 
-/* ----- Hover/Reveal Extra (desktop) ----- */
+
+/* ==========================================================================
+   7) Hover/Reveal Extra (desktop)
+   - On touch devices, it is always visible (see media query below)
+   ========================================================================== */
+
 .pc-extra {
   max-height: 0;
   overflow: hidden;
   opacity: 0;
   transition: max-height .3s ease, opacity .25s ease;
 }
+
 .pc-card:hover .pc-extra,
 .pc-card:focus-within .pc-extra {
   max-height: 420px;
@@ -96,7 +145,11 @@
   .pc-extra { max-height: none; opacity: 1; }
 }
 
-/* ----- PREMIUM Badges ----- */
+
+/* ==========================================================================
+   8) PREMIUM Badges
+   ========================================================================== */
+
 .product-badge {
   position: absolute;
   z-index: 20;
@@ -113,8 +166,10 @@
   backdrop-filter: saturate(120%) blur(2px);
   border: 1px solid rgba(255,255,255,.35);
 }
+
 .badge-top-left  { top: 10px; left: 10px; }
 .badge-top-right { top: 10px; right: 10px; }
+
 html[dir="rtl"] .badge-top-left  { left: auto; right: 10px; }
 html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
 
@@ -122,9 +177,22 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
 .stock-badge.in-stock { background: linear-gradient(135deg, #16a34a, #15803d); }
 .stock-badge.out-of-stock { background: linear-gradient(135deg, #ef4444, #b91c1c); }
 
-/* ----- Description + color list ----- */
+
+/* ==========================================================================
+   9) Description & color list
+   ========================================================================== */
+
 .product-description { font-size:.92rem; color:#6b7280; min-height:40px; }
-.color-list { display:flex; flex-wrap:wrap; gap:.25rem; justify-content:center; font-size:.75rem; margin-top:.3rem; }
+
+.color-list {
+  display:flex;
+  flex-wrap:wrap;
+  gap:.25rem;
+  justify-content:center;
+  font-size:.75rem;
+  margin-top:.3rem;
+}
+
 .color-list li {
   background:#f3f4f6;
   padding:.25rem .5rem;
@@ -132,12 +200,15 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   border-radius: 8px;
   transition: background .2s ease;
 }
+
 .color-list li:hover { background:#e7ebf0; }
 
-/* ------------------------------------------------------------------
-   Quantity (SingleProduct look, but CARD-SAFE OVERRIDES)
+
+/* ==========================================================================
+   10) Quantity (SingleProduct look, but CARD-SAFE OVERRIDES)
    Ensures BOTH – and + are always visible on Android + desktop.
-------------------------------------------------------------------- */
+   ========================================================================== */
+
 .pc-card .sp-qty {
   display: inline-flex;
   align-items: center;
@@ -146,6 +217,7 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   border-radius: 12px;
   overflow: visible;                 /* don't clip buttons on small screens */
 }
+
 .pc-card .sp-qty input {
   width: 56px;
   text-align: center;
@@ -156,6 +228,7 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   color: #2b2b2b;
   background: #fff;
 }
+
 .pc-card .sp-qty .sp-btn {
   display: inline-flex !important;   /* defeat any global rules that hide a side */
   min-width: 48px;                   /* good tap target on Android */
@@ -170,6 +243,7 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   padding: 10px 12px;
   cursor: pointer;
 }
+
 .pc-card .sp-qty .sp-minus { border-inline-end: 1px solid #000000; }
 .pc-card .sp-qty .sp-plus  { border-inline-start: 1px solid #000000; }
 .pc-card .sp-qty .sp-btn:hover { background: #000000 !important; }
@@ -181,7 +255,11 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   .pc-card .sp-qty .sp-btn { min-width: 44px; padding: 8px 10px; font-size: 17px; }
 }
 
-/* ----- Primary Add-to-Cart (Android tap friendly) ----- */
+
+/* ==========================================================================
+   11) Primary Add-to-Cart (Android tap friendly)
+   ========================================================================== */
+
 .add-to-cart-btn {
   width: 100%;
   min-height: 52px;
@@ -200,27 +278,50 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   cursor: pointer;
   transition: background .2s ease, transform .08s ease, box-shadow .2s ease;
 }
+
 .add-to-cart-btn:hover { background: #111; }
 .add-to-cart-btn:active { transform: translateY(1px); }
+
 .add-to-cart-btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(17,17,17,.6);
 }
+
 .add-to-cart-btn.is-disabled { background: #000000; cursor: not-allowed; }
 .add-to-cart-btn .icon { margin-inline-end: 6px; font-size: 1.1rem; }
+
 html[dir="rtl"] .add-to-cart-btn { text-transform: none; letter-spacing: 0; }
 
-/* ----- List View (if you render ProductCard in list mode) ----- */
+
+/* ==========================================================================
+   12) List View (if you render ProductCard in list mode)
+   ========================================================================== */
+
 .pc-list.pc-card { max-width: 100%; width: 100%; border-radius: 12px; }
-.pc-list { display: grid; grid-template-columns: 1fr; align-items: stretch; }
-@media (min-width: 768px) { .pc-list { grid-template-columns: 320px 1fr; } }
+
+.pc-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .pc-list { grid-template-columns: 320px 1fr; }
+}
+
 .pc-list .pc-list-imgwrap { aspect-ratio: auto; min-height: 220px; height: 100%; }
 .pc-list .pc-img { padding: 12px; object-fit: contain; }
+
 .pc-list .pc-list-body { padding: 16px 18px; text-align: start; }
 .pc-list .pc-title { min-height: auto; -webkit-line-clamp: unset; }
+
 .pc-list .pc-extra--always { max-height: none; opacity: 1; }
 
-/* ----- Mobile text tweaks ----- */
+
+/* ==========================================================================
+   13) Mobile text tweaks
+   ========================================================================== */
+
 @media (max-width: 768px) {
   .pc-title { font-size: 14px; min-height: 36px; }
   .pc-price { font-size: 13px; gap: 8px; }

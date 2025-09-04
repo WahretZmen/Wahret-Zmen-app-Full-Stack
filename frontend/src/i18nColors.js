@@ -1,13 +1,19 @@
+// ============================================================================
 // src/utils/i18nColors.js
 // A comprehensive (dictionary-first) color translator for EN ⇄ (FR, AR)
-// Usage:
+// Usage examples:
 //   translateColorName("jaune", "ar")           -> "أصفر"
 //   translateColorName("Bleu marine", "fr")     -> "Bleu marine"
-//   translateColorName("light grey", "ar")      -> "فاتح رمادي"
+//   translateColorName("light grey", "ar")      -> "رمادي فاتح"
 //   translateColorName("برتقالي محروق", "fr")   -> "Orange brûlé"
-// Fallback: returns "" if we can't confidently translate; you can then display the raw value.
+// Fallback: returns "" if we can't confidently translate; caller may show raw.
+// ============================================================================
 
-// ---------- helpers ----------
+
+/* ============================================================================
+   Helpers
+   - stripKey: normalize input for dictionary lookup
+   ========================================================================== */
 const stripKey = (s) =>
   String(s || "")
     .trim()
@@ -17,7 +23,12 @@ const stripKey = (s) =>
     .replace(/-/g, " ")
     .replace(/\s+/g, " ");
 
-// ---------- modifiers ----------
+
+/* ============================================================================
+   Modifiers
+   - MODIFIERS: EN modifier key -> localized strings
+   - MODIFIER_MAP_ANY_TO_EN: FR/AR/EN forms -> EN modifier key
+   ========================================================================== */
 export const MODIFIERS = {
   light:  { fr: "Clair",  ar: "فاتح" },
   dark:   { fr: "Foncé",  ar: "داكن" },
@@ -46,7 +57,12 @@ const MODIFIER_MAP_ANY_TO_EN = {
   "لامع": "glossy",
 };
 
-// ---------- core color dictionary (EN base -> { fr, ar }) ----------
+
+/* ============================================================================
+   Core color dictionary
+   - BASE_COLORS: EN base key -> { fr, ar }
+   - Dictionary-first approach ensures stable, human-friendly labels
+   ========================================================================== */
 export const BASE_COLORS = {
   // Neutrals / whites / blacks
   "white":        { fr: "Blanc",          ar: "أبيض" },
@@ -160,7 +176,12 @@ export const BASE_COLORS = {
   "multicolor":   { fr: "Multicolore",    ar: "متعدد الألوان" },
 };
 
-// ---------- aliases & normalization (FR/AR/EN → EN base key) ----------
+
+/* ============================================================================
+   Aliases & normalization maps
+   - EN_ALIASES: common EN phrases -> EN base
+   - ANY_TO_EN: FR/AR base names -> EN base
+   ========================================================================== */
 const EN_ALIASES = {
   "gray": "grey",
   "navy blue": "navy",
@@ -363,7 +384,13 @@ const ANY_TO_EN = {
   "متعدد الالوان": "multicolor",
 };
 
-// ---------- parsing & translation ----------
+
+/* ============================================================================
+   Parsing & translation
+   - normalizeToEN: reduce any FR/AR/EN phrase to { base: EN, mods: [] }
+   - translateColorName: produce a localized string
+   - translateColorPack: produce { en, fr, ar }
+   ========================================================================== */
 function normalizeToEN(raw) {
   // try full-phrase match first
   const phrase = stripKey(raw);

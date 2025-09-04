@@ -1,7 +1,22 @@
-/* Make everything inside this section box-size correctly */
-.our-sellers-wrapper, .our-sellers-wrapper * { box-sizing: border-box; }
+/* ============================================================================
+   StylesOurSellers.css
+   Purpose: Our Sellers section – layout, carousel containment, arrows, and UX
+   Notes  : Reorganized & commented only. No selector/value changes.
+   ========================================================================== */
 
-/* ===== OurSellers Wrapper ===== */
+
+/* ----------------------------------------------------------------------------
+   GLOBAL BOX-SIZING FOR THIS SECTION
+   -------------------------------------------------------------------------- */
+.our-sellers-wrapper,
+.our-sellers-wrapper * { box-sizing: border-box; }
+
+
+/* ----------------------------------------------------------------------------
+   SECTION WRAPPERS
+   - Full-width wrapper with safe overflow handling
+   - Inner container with content max-width
+   -------------------------------------------------------------------------- */
 .our-sellers-wrapper {
   width: 100%;
   max-width: 100vw;
@@ -11,58 +26,159 @@
   position: relative;
   overflow-x: hidden;
 }
-@supports (overflow: clip) { .our-sellers-wrapper { overflow-x: clip; } }
+@supports (overflow: clip) {
+  .our-sellers-wrapper { overflow-x: clip; }
+}
 
-/* ===== Section Container ===== */
-.our-sellers-section { width: 100%; padding: 2rem 1rem; background: transparent !important; }
-.our-sellers-container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+.our-sellers-section {
+  width: 100%;
+  padding: 2rem 1rem;
+  background: transparent !important;
+}
+.our-sellers-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
 
-/* ===== Title ===== */
-.our-sellers-title { font-size: 2rem; font-weight: bold; color: #4b2e2e; text-align: center; margin-bottom: 2rem; }
 
-/* ===== Premium Title Animations ===== */
-.os-title { position: relative; display: block; width: 100%; max-width: 100%; margin-inline: auto; text-align: center; isolation: isolate; padding-inline: 8px; }
+/* ----------------------------------------------------------------------------
+   TITLES
+   -------------------------------------------------------------------------- */
+.our-sellers-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #4b2e2e;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Premium title animations */
+.os-title {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin-inline: auto;
+  text-align: center;
+  isolation: isolate;
+  padding-inline: 8px;
+}
 .os-title__text {
   display: inline-block;
   background: linear-gradient(90deg,#5a382d 0%,#a67c52 20%,#5a382d 40%,#5a382d 60%,#a67c52 80%,#5a382d 100%);
-  background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
-  transition: background-position .55s ease, transform .25s ease; will-change: background-position, transform;
-  white-space: normal; overflow-wrap: anywhere;
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  transition: background-position .55s ease, transform .25s ease;
+  will-change: background-position, transform;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
-.os-title:hover .os-title__text { animation: osShimmer 1.4s linear infinite; transform: translateY(-1px); }
+.os-title:hover .os-title__text {
+  animation: osShimmer 1.4s linear infinite;
+  transform: translateY(-1px);
+}
 .os-title::after {
-  content: ""; position: absolute; left: 50%; bottom: -10px; width: 86%; height: 3px; transform: translateX(-50%) scaleX(0);
-  transform-origin: center; 
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  width: 86%;
+  height: 3px;
+  transform: translateX(-50%) scaleX(0);
+  transform-origin: center;
   background: linear-gradient(90deg, rgba(166,124,82,0), rgba(212,175,55,.95), rgba(166,124,82,0));
-  transition: transform 520ms cubic-bezier(.22,.61,.36,1); z-index: 0;
+  transition: transform 520ms cubic-bezier(.22,.61,.36,1);
+  z-index: 0;
 }
 .os-title:hover::after { transform: translateX(-50%) scaleX(1); }
-@keyframes osShimmer { 0% { background-position: 200% 0; } 100% { background-position: -20% 0; } }
 
-/* ===== Carousel containment ===== */
-.carousel-clip { position: relative; width: 100%; overflow-x: hidden; }
-@supports (overflow: clip) { .carousel-clip { overflow-x: clip; } }
+@keyframes osShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -20% 0; }
+}
+
+
+/* ----------------------------------------------------------------------------
+   CAROUSEL CONTAINMENT / TRACK
+   - Prevent horizontal scroll bleed
+   - Keep track transform performant
+   -------------------------------------------------------------------------- */
+.carousel-clip {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}
+@supports (overflow: clip) {
+  .carousel-clip { overflow-x: clip; }
+}
+
 .rmc-list { overflow: hidden !important; }
 .rmc-track { will-change: transform; }
 .rmc-item  { padding: 0; }
 
-/* ===== Carousel Items ===== */
-.react-multi-carousel-item { padding-top: 4rem; padding-bottom: 4rem; z-index: 1; position: relative; }
-.carousel-card-wrapper { padding: 0 12px; width: 100%; max-width: 100%; overflow: visible; display: flex; justify-content: center; }
 
-/* ===== Custom Arrows ===== */
-.wz-arrow {
-  position: absolute; top: 50%; transform: translateY(-50%);
-  inline-size: 56px; block-size: 56px; border: 1px solid rgba(255,255,255,.45);
-  background: linear-gradient(135deg, #000000, #000000); color: #fff; display: grid; place-items: center; cursor: pointer;
-  z-index: 20; box-shadow: 0 8px 22px rgba(0,0,0,.18); transition: transform .12s ease, filter .2s ease, opacity .2s ease;
+/* ----------------------------------------------------------------------------
+   CAROUSEL ITEMS & CARD WRAPPER
+   - Vertical rhythm for slides
+   - Centered cards with consistent horizontal padding
+   -------------------------------------------------------------------------- */
+.react-multi-carousel-item {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  z-index: 1;
+  position: relative;
 }
-.wz-arrow:hover { filter: brightness(1.02); }
-.wz-arrow:active { transform: translateY(-50%) scale(0.98); }
-.wz-arrow:focus-visible { outline: none; box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(122,90,54,.55); }
-.wz-arrow-icon { font-weight: 900; font-size: 28px; line-height: 1; pointer-events: none; }
-.wz-prev { inset-inline-start: 8px; } .wz-next { inset-inline-end: 8px; }
+.carousel-card-wrapper {
+  padding: 0 12px;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  display: flex;
+  justify-content: center;
+}
 
+
+/* ----------------------------------------------------------------------------
+   CUSTOM ARROWS (WZ)
+   -------------------------------------------------------------------------- */
+.wz-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  inline-size: 56px;
+  block-size: 56px;
+  border: 1px solid rgba(255,255,255,.45);
+  background: linear-gradient(135deg, #000000, #000000);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 20;
+  box-shadow: 0 8px 22px rgba(0,0,0,.18);
+  transition: transform .12s ease, filter .2s ease, opacity .2s ease;
+}
+.wz-arrow:hover  { filter: brightness(1.02); }
+.wz-arrow:active { transform: translateY(-50%) scale(0.98); }
+.wz-arrow:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(122,90,54,.55);
+}
+.wz-arrow-icon {
+  font-weight: 900;
+  font-size: 28px;
+  line-height: 1;
+  pointer-events: none;
+}
+.wz-prev { inset-inline-start: 8px; }
+.wz-next { inset-inline-end: 8px; }
+
+
+/* ----------------------------------------------------------------------------
+   RESPONSIVE ADJUSTMENTS (≤ 768px)
+   -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
   .wz-arrow { inline-size: 46px; block-size: 46px; }
   .wz-arrow-icon { font-size: 24px; }
@@ -71,31 +187,54 @@
   .react-multi-carousel-item { padding-top: 4.5rem; padding-bottom: 4.5rem; }
 }
 
-/* Fallback library arrows */
+
+/* ----------------------------------------------------------------------------
+   FALLBACK LIBRARY ARROWS (react-multiple-carousel defaults)
+   - Preserved as provided; RTL mirroring included
+   -------------------------------------------------------------------------- */
 .custom-carousel .react-multiple-carousel__arrow {
-  background: #010101; color: #fff; z-index: 10; width: 40px; height: 40px; top: 40%;
-  display: flex; align-items: center; justify-content: center; border: none; font-size: 18px; opacity: 0.9;
+  background: #010101;
+  color: #fff;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  top: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  font-size: 18px;
+  opacity: 0.9;
   transition: opacity .25s ease, transform .1s ease;
 }
 .custom-carousel .react-multiple-carousel__arrow:hover { opacity: 1; }
 .custom-carousel .react-multiple-carousel__arrow:active { transform: scale(0.98); }
-.custom-carousel .react-multiple-carousel__arrow--left { left: 10px; }
+.custom-carousel .react-multiple-carousel__arrow--left  { left: 10px; }
 .custom-carousel .react-multiple-carousel__arrow--right { right: 10px; }
-html[dir="rtl"] .react-multiple-carousel__arrow--left { right: 10px !important; left: auto !important; }
-html[dir="rtl"] .react-multiple-carousel__arrow--right { left: 10px !important; right: auto !important; }
 
-/* Keep badges visible inside cards */
+html[dir="rtl"] .react-multiple-carousel__arrow--left  { right: 10px !important; left: auto !important; }
+html[dir="rtl"] .react-multiple-carousel__arrow--right { left: 10px !important;  right: auto !important; }
+
+
+/* ----------------------------------------------------------------------------
+   MISC
+   -------------------------------------------------------------------------- */
+/* Keep product badges visible inside cards */
 .our-sellers-container .product-badge { display: inline-flex !important; }
 
-/* No horizontal scroll globally */
+/* Prevent global horizontal scroll */
 html, body { max-width: 100%; overflow-x: hidden; }
 
-/* Reduced motion */
+/* Reduced motion safety */
 @media (prefers-reduced-motion: reduce){
-  .os-title__text, .os-title::after { animation: none !important; transition: none !important; }
+  .os-title__text,
+  .os-title::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }
 
-/* Center wider cards and NEVER clip children inside the carousel */
+/* Ensure carousel track/items allow visible overflow for shadows, etc. */
 .react-multi-carousel-item,
 .react-multi-carousel-track,
-.rmc-track{ overflow:visible !important; }
+.rmc-track { overflow: visible !important; }

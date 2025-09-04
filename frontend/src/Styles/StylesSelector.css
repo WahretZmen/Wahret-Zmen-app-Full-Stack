@@ -1,16 +1,35 @@
-/* =========================================
-   Selector — Professional Boutique Style
-   File: src/Styles/StylesSelector.css
-   ========================================= */
+/* ========================================================================== */
+/* 🎛️ Selector — Professional Boutique Style                                  */
+/* File: src/Styles/StylesSelector.css                                        */
+/* Organization:
+   1) Wrapper
+   2) Label
+   3) Field wrapper + halo + underline
+   4) Control (select element)
+   5) Caret (LTR + RTL adjustments)
+   6) States (hover, focus, placeholder)
+   7) Options styling
+   8) Responsive tweaks
+   9) Reduced motion
+*/
+/* ========================================================================== */
 
-/* Wrapper */
+
+/* ==========================================================================
+   1) Wrapper
+   ========================================================================== */
+
 .selector {
   width: 100%;
   max-width: 520px;
   margin: 0.5rem auto 1.25rem;
 }
 
-/* Label */
+
+/* ==========================================================================
+   2) Label
+   ========================================================================== */
+
 .selector__label {
   display: block;
   font-weight: 700;
@@ -21,13 +40,18 @@
   text-align: center;
 }
 
-/* Field wrapper with soft halo + underline accent */
+
+/* ==========================================================================
+   3) Field wrapper + halo + underline
+   ========================================================================== */
+
+/* Container for halo & underline effects */
 .selector__field {
   position: relative;
   display: block;
 }
 
-/* Subtle gradient halo behind the control */
+/* Soft gradient halo around control */
 .selector__halo {
   position: absolute;
   inset: -6px -8px -10px;
@@ -56,40 +80,59 @@
   z-index: 1;
 }
 
-/* The select control */
+
+/* ==========================================================================
+   4) Control (select element)
+   ========================================================================== */
+
 .selector__control {
   position: relative;
   z-index: 2;
   width: 100%;
   box-sizing: border-box;
-  /* padding leaves room for the custom caret */
+
+  /* Padding allows space for custom caret */
   padding: 0.85rem 3rem 0.85rem 1rem;
   border-radius: 14px;
   border: 1px solid rgba(92,61,46,.25);
+
+  /* Gradient background + border */
   background:
     linear-gradient(180deg, rgba(255,255,255,.94), rgba(255,255,255,.94)) padding-box,
     linear-gradient(180deg, rgba(92,61,46,.25), rgba(210,166,121,.25)) border-box;
+
+  /* Subtle depth */
   box-shadow:
     0 10px 28px rgba(0,0,0,.06),
     inset 0 1px 0 rgba(255,255,255,.65);
+
   color: #2a2a2a;
   font-size: 1rem;
   font-weight: 600;
   letter-spacing: .01em;
-  appearance: none;           /* custom style */
+
+  appearance: none;   /* remove default arrow */
   -webkit-appearance: none;
   outline: none;
-  transition: border-color .25s ease, box-shadow .25s ease, background-color .25s ease;
   cursor: pointer;
+
+  transition: border-color .25s ease,
+              box-shadow .25s ease,
+              background-color .25s ease;
 }
 
-/* Placeholder (first option disabled) */
+/* Placeholder state (first option disabled) */
 .selector__control:required:invalid {
   color: #8a8a8a;
   font-weight: 600;
 }
 
-/* Custom caret (LTR) */
+
+/* ==========================================================================
+   5) Caret (LTR + RTL adjustments)
+   ========================================================================== */
+
+/* Custom dropdown caret (default LTR) */
 .selector__control {
   background-image:
     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%238a5d3b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
@@ -98,14 +141,18 @@
   background-size: 18px 18px;
 }
 
-/* RTL: move caret to the left side and flip */
+/* RTL: move caret to left side */
 [dir="rtl"] .selector__control {
   padding: 0.85rem 1rem 0.85rem 3rem;
   background-position: left 12px center;
   transform-origin: right center;
 }
 
-/* Hover / Focus */
+
+/* ==========================================================================
+   6) States (hover, focus, underline expand)
+   ========================================================================== */
+
 .selector__control:hover {
   border-color: rgba(166,124,82,.45);
   box-shadow:
@@ -120,35 +167,49 @@
     0 0 0 3px rgba(210,166,121,.28);
 }
 
-/* When focused, expand the underline */
+/* Expand underline when hovered or focused */
 .selector__control:focus-visible ~ .selector__underline,
 .selector__control:hover ~ .selector__underline {
   transform: scaleX(1);
 }
 
-/* Options — limited styling support across browsers */
+
+/* ==========================================================================
+   7) Options styling
+   ========================================================================== */
+
 .selector__control option {
   font-weight: 600;
   color: #2f2f2f;
   background: #fff;
 }
+
 .selector__control option:disabled {
   color: #9a9a9a;
 }
 
-/* Compact on small screens */
+
+/* ==========================================================================
+   8) Responsive tweaks (mobile)
+   ========================================================================== */
+
 @media (max-width: 480px) {
   .selector__control {
     padding: 0.78rem 2.75rem 0.78rem 0.9rem;
     border-radius: 12px;
     font-size: .97rem;
   }
+
   [dir="rtl"] .selector__control {
     padding: 0.78rem 0.9rem 0.78rem 2.75rem;
   }
 }
 
-/* Reduced motion */
+
+/* ==========================================================================
+   9) Reduced motion (accessibility)
+   ========================================================================== */
+
 @media (prefers-reduced-motion: reduce) {
   .selector__underline { transition: none !important; }
   .selector__control   { transition: none !important; }

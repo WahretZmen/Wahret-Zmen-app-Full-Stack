@@ -1,4 +1,24 @@
-/* === Section Wrapper === */
+/* ========================================================================== */
+/* 📰 News Section (Stylesnews.css)                                           */
+/* Organization:
+   1) Section & Container
+   2) Header (title, lines, subtitle)
+   3) Slider (wrap + dots)
+   4) Slide item (stagger reveal)
+   5) Card (base + hover)
+   6) Media (image, shine, gold border)
+   7) Body (heading, text, CTA)
+   8) Animations
+   9) Responsive (tablet / mobile)
+  10) Reduced Motion
+*/
+/* ========================================================================== */
+
+
+/* ==========================================================================
+   1) Section & Container
+   ========================================================================== */
+
 .news-section {
   position: relative;
   padding: 4rem 0 3rem;
@@ -14,7 +34,11 @@
   margin-inline: auto;
 }
 
-/* === Header === */
+
+/* ==========================================================================
+   2) Header (title, lines, subtitle)
+   ========================================================================== */
+
 .news-header {
   text-align: center;
   margin-bottom: 2.25rem;
@@ -35,6 +59,7 @@
   font-size: clamp(1.6rem, 2.2vw + 1rem, 2.5rem);
 }
 
+/* Decorative lines for title */
 .news-title-topline,
 .news-title-underline {
   content: "";
@@ -46,9 +71,11 @@
   border-radius: 999px;
   background: linear-gradient(90deg, rgba(212,175,55,0) 0%, rgba(212,175,55,0.9) 50%, rgba(212,175,55,0) 100%);
 }
+
 .news-title-topline { top: -10px; opacity: 0.6; }
 .news-title-underline { bottom: -10px; opacity: 0.9; }
 
+/* Subtitle */
 .news-sub {
   margin: 0.8rem auto 0;
   max-width: 780px;
@@ -56,7 +83,11 @@
   font-size: clamp(0.95rem, 0.6vw + 0.75rem, 1.05rem);
 }
 
-/* === Slider Container === */
+
+/* ==========================================================================
+   3) Slider (wrap + slick dots)
+   ========================================================================== */
+
 .news-slider-wrap {
   margin-top: 1.25rem;
 }
@@ -67,28 +98,40 @@
   opacity: 0.35;
   color: #bfa265;
 }
+
 .slick-dots li.slick-active button:before {
   opacity: 1;
   color: #d4af37;
 }
+
 .slick-dots {
   bottom: -36px;
 }
 
-/* === Slide container (for stagger) === */
+
+/* ==========================================================================
+   4) Slide item (stagger reveal)
+   ========================================================================== */
+
 .news-slide {
   padding: 0.9rem 0.8rem;
   animation: news-fade-up 800ms ease forwards;
   opacity: 0;
   transform: translateY(18px);
 }
+
+/* Stagger delays */
 .news-slide:nth-child(1) { animation-delay: 120ms; }
 .news-slide:nth-child(2) { animation-delay: 220ms; }
 .news-slide:nth-child(3) { animation-delay: 320ms; }
 .news-slide:nth-child(4) { animation-delay: 420ms; }
 .news-slide:nth-child(5) { animation-delay: 520ms; }
 
-/* === Card === */
+
+/* ==========================================================================
+   5) Card (base + hover effects)
+   ========================================================================== */
+
 .news-card-pro {
   position: relative;
   display: block;
@@ -112,7 +155,11 @@
   border-color: rgba(212,175,55,0.42);
 }
 
-/* === Media === */
+
+/* ==========================================================================
+   6) Media (image, shine pass, gold border accent)
+   ========================================================================== */
+
 .news-media {
   position: relative;
   aspect-ratio: 16/9;
@@ -127,10 +174,13 @@
   transform-origin: center;
   transition: transform 700ms cubic-bezier(.2,.8,.2,1);
 }
+
+/* Subtle zoom/tilt on hover */
 .news-card-pro:hover .news-img {
   transform: scale(1.06) rotate(0.25deg);
 }
 
+/* Shine sweep overlay */
 .news-media-shine {
   position: absolute;
   inset: 0;
@@ -139,10 +189,12 @@
   transform: translateX(-120%);
   transition: transform 900ms ease;
 }
+
 .news-card-pro:hover .news-media-shine {
   transform: translateX(120%);
 }
 
+/* Gold border accent (visible on hover) */
 .news-gold-border {
   content: "";
   position: absolute;
@@ -163,9 +215,14 @@
   opacity: 0.0;
   transition: opacity 400ms ease;
 }
+
 .news-card-pro:hover .news-gold-border { opacity: 0.75; }
 
-/* === Body === */
+
+/* ==========================================================================
+   7) Body (heading, paragraph, CTA)
+   ========================================================================== */
+
 .news-body {
   padding: 1rem 1rem 1.2rem;
 }
@@ -193,36 +250,55 @@
   color: #8f6b1f;
   transition: transform 220ms ease, color 220ms ease;
 }
+
 .news-card-pro:hover .news-cta {
   color: #b88a2b;
   transform: translateX(4px);
 }
 
-/* === Animations === */
+
+/* ==========================================================================
+   8) Animations
+   ========================================================================== */
+
 @keyframes news-fade-up {
   from { opacity: 0; transform: translateY(18px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* === Mobile / Tablet === */
+
+/* ==========================================================================
+   9) Responsive (tablet / mobile breakpoints)
+   ========================================================================== */
+
+/* Tablet */
 @media (max-width: 1024px) {
   .news-section { padding: 3.25rem 0 3.25rem; }
   .news-sub { max-width: 720px; }
 }
+
+/* Phablet */
 @media (max-width: 768px) {
   .news-section { padding: 2.5rem 0 3.5rem; }
   .news-slide { padding: 0.7rem; }
   .news-body { padding: 0.9rem 0.9rem 1.1rem; }
 }
+
+/* Mobile */
 @media (max-width: 480px) {
   .news-sub { font-size: 0.9rem; }
   .slick-dots { bottom: -28px; }
 }
 
-/* === Reduced motion === */
+
+/* ==========================================================================
+   10) Reduced Motion (accessibility)
+   ========================================================================== */
+
 @media (prefers-reduced-motion: reduce) {
   .news-slide,
   .news-header { animation: none !important; opacity: 1; transform: none; }
+
   .news-card-pro,
   .news-img,
   .news-media-shine { transition: none !important; }

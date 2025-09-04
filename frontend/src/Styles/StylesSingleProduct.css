@@ -1,3 +1,29 @@
+/* ========================================================================== */
+/* 🧾 StylesSingleProduct.css — Single Product (clean white)                  */
+/* Organization (comments only; rule order preserved to avoid cascade changes)
+   1) Container + intro animation
+   2) Main gallery container + image
+   3) Premium badges (same as ProductCard)
+   4) Gallery arrows
+   5) Legacy badges on main image
+   6) Price row
+   7) Thumbnails (+ small stock counters)
+   8) Quantity stepper (v1: black/white)
+   9) Typography & layout polish
+  10) Add-to-cart button overrides
+  11) Responsive/RTL basics
+  12) Square theme
+  13) Quantity stepper (v2: always-visible icons + RTL corners)
+  14) CTA row
+  15) Quantity stepper (v3: single source of truth + mobile sizing)
+*/
+/* ========================================================================== */
+
+
+/* ==========================================================================
+   1) Container + intro animation
+   ========================================================================== */
+
 /* === Single Product (clean white) === */
 .product-cart {
   margin-top: 85px !important;
@@ -10,6 +36,11 @@
   transition: background 0.5s ease;
 }
 @keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+
+/* ==========================================================================
+   2) Main gallery container + image
+   ========================================================================== */
 
 /* -------- Main gallery container (no inner white padding now) -------- */
 .sp-mainimg {
@@ -34,6 +65,11 @@
   object-fit: contain;
   display: block;
 }
+
+
+/* ==========================================================================
+   3) Premium badges (same palette & positions as ProductCard)
+   ========================================================================== */
 
 /* ===============================
    Premium Badges (same as ProductCard)
@@ -77,6 +113,10 @@ html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
 }
 
 
+/* ==========================================================================
+   4) Gallery arrows
+   ========================================================================== */
+
 /* -------- Premium arrows -------- */
 .sp-arrow {
   position: absolute;
@@ -100,6 +140,11 @@ html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
 .sp-arrow-left { left: 12px; }
 .sp-arrow-right { right: 12px; }
 
+
+/* ==========================================================================
+   5) Legacy badges on main image
+   ========================================================================== */
+
 /* -------- Badges on main image -------- */
 .sp-badge {
   position: absolute;
@@ -116,12 +161,22 @@ html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
 .sp-badge--trend { left: 10px; background: #ef4444; }  /* red, as requested earlier */
 .sp-badge--stock { right: 10px; background: #000; }    /* black/white stock counter */
 
+
+/* ==========================================================================
+   6) Price row
+   ========================================================================== */
+
 /* -------- Price row (incl. save & % off) -------- */
 .sp-price-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:6px 0 4px; }
 .sp-old { text-decoration: line-through; color:#9ca3af; font-weight:600; }
 .sp-new { color:#111827; font-weight:800; }
 .sp-save { background:#dc2626; color:#fff; font-weight:800; padding:6px 10px; border-radius:6px; font-size:13px; }
 .sp-off  { background:#111; color:#fff; font-weight:800; padding:6px 8px; font-size:12px; border-radius:4px; }
+
+
+/* ==========================================================================
+   7) Thumbnails (+ small stock counters)
+   ========================================================================== */
 
 /* -------- Thumbnails (tight gaps / square) -------- */
 .thumb-rail { gap: 8px !important; } /* forcibly keep them tight */
@@ -144,6 +199,11 @@ html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
   box-shadow: 0 2px 6px rgba(0,0,0,.15);
 }
 
+
+/* ==========================================================================
+   8) Quantity stepper (v1: black/white)
+   ========================================================================== */
+
 /* -------- Quantity stepper → BLACK / WHITE -------- */
 .sp-qty{
   display:inline-flex; align-items:center;
@@ -164,6 +224,11 @@ html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
   border-inline: 1px solid #111 !important;
 }
 
+
+/* ==========================================================================
+   9) Typography & layout polish
+   ========================================================================== */
+
 /* -------- Typography & layout polish (kept) -------- */
 .sp-title, .single-product-title { color:#1f2937 !important; font-weight:800 !important; letter-spacing:-.015em; line-height:1.2; margin:6px 0 18px !important; }
 .sp-desc { color:#374151 !important; font-size:16px; line-height:1.9; overflow-wrap:anywhere; word-break:break-word; hyphens:auto; }
@@ -173,6 +238,11 @@ html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
 /* Grid children should shrink properly (avoid overflow) */
 .sp-card > * { min-width:0; }
 .sp-right { min-width:0; padding-inline: clamp(8px, 2vw, 16px); }
+
+
+/* ==========================================================================
+   10) Add-to-cart button overrides
+   ========================================================================== */
 
 /* in StylesSingleProduct.css or a shared CSS */
 .sp-add {
@@ -184,6 +254,9 @@ html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
 }
 
 
+/* ==========================================================================
+   11) Responsive/RTL basics
+   ========================================================================== */
 
 /* Desktop: keep only left thumbs column visible in RTL as well */
 @media (min-width: 768px){
@@ -193,10 +266,19 @@ html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
 /* RTL niceties */
 [dir="rtl"] .sp-media { flex-direction: row-reverse; }
 
-/* Square theme (keep corners sharp) */
+
+/* ==========================================================================
+   12) Square theme
+   ========================================================================== */
+
+ /* Square theme (keep corners sharp) */
 .sp-square, .sp-square * { border-radius: 0 !important; }
 .sp-square .sp-add, .sp-square .add-to-cart-btn { box-shadow: none !important; }
 
+
+/* ==========================================================================
+   13) Quantity stepper (v2): Always-visible + / – icons, desktop + Android
+   ========================================================================== */
 
 /* ===============================
    FIX: Always-visible + / – icons
@@ -274,7 +356,12 @@ html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
   border-bottom-right-radius: 12px;
 }
 
-/* ===============================
+
+/* ==========================================================================
+   14) CTA row (stepper above button, centered)
+   ========================================================================== */
+
+ /* ===============================
    CTA ROW — centered, stacked
    =============================== */
 .sp-cta-row {
@@ -284,6 +371,11 @@ html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
   gap: 12px;
   margin-top: 8px;
 }
+
+
+/* ==========================================================================
+   15) Quantity stepper (v3): single source of truth + mobile sizing + RTL
+   ========================================================================== */
 
 /* ===============================
    Quantity Stepper (single source of truth)

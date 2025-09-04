@@ -1,17 +1,24 @@
-/* ===========================================
-   Styles/StylesSelectorProductsPage.css
-   Filters UI – Sidebar (Plain CSS)
-   -------------------------------------------
-   - Sidebar card (padding, shadow, sticky on desktop)
-   - Shared form controls (labels/selects)
-   - Price fields
-   - Double range sliders (two separate bars)
-   - Buttons (outline)
-   - RTL tweaks
-   - Responsive breakpoints
-   =========================================== */
+/* ========================================================================== */
+/* 🧰 Styles/StylesSelectorProductsPage.css                                    */
+/* Filters UI – Sidebar (Plain CSS)
+   Sections:
+   1) Sidebar shell & card
+   2) Header
+   3) Groups (labels/selects)
+   4) Price fields
+   5) Double range sliders (two lines)
+   6) Buttons (outline)
+   7) Inline/grid hooks (optional)
+   8) RTL tweaks
+   9) Responsive breakpoints
+*/
+/* ========================================================================== */
 
-/* ============= Sidebar shell ============= */
+
+/* ==========================================================================
+   1) Sidebar shell & card
+   ========================================================================== */
+
 .filters-sidebar { width: 100%; }
 
 .filters-card{
@@ -27,30 +34,42 @@
   .filters-card{ position:sticky; top:92px; } /* under fixed header */
 }
 
-/* ============= Header ============= */
+
+/* ==========================================================================
+   2) Header
+   ========================================================================== */
+
 .filters-header{
   display:flex; align-items:center; justify-content:space-between;
   margin-bottom:.75rem;
 }
+
 .filters-title{
   margin:0;
   font-size:clamp(1.05rem,2.2vw,1.25rem);
   font-weight:800;
   color:#2c2c2c;
 }
+
 .filters-header .icon{ width:22px; height:22px; color:#a67c52; opacity:.85; }
 
-/* ============= Groups ============= */
+
+/* ==========================================================================
+   3) Groups (labels/selects)
+   ========================================================================== */
+
 .filter-group{
   display:flex; flex-direction:column; gap:8px;
   padding: clamp(6px, 1.2vw, 10px) 0;
 }
+
 .filter-label{
   display:block;
   font-size:.98rem;
   font-weight:800;
   color:#3d2c1e;
 }
+
 .filter-select{
   width:100%;
   border:1px solid #d9d3c9;
@@ -63,16 +82,22 @@
   transition:border-color .2s ease, box-shadow .2s ease;
   -webkit-tap-highlight-color:transparent;
 }
+
 .filter-select:focus{
   border-color:#A67C52;
   box-shadow:0 0 0 3px rgba(166,124,82,.12);
 }
 
-/* ============= Price fields ============= */
+
+/* ==========================================================================
+   4) Price fields
+   ========================================================================== */
+
 .price-row{
   display:flex; align-items:center; justify-content:space-between;
   gap:10px;
 }
+
 .filters-sidebar[dir="rtl"] .price-row{ direction: rtl; }
 
 .price-field{
@@ -83,6 +108,7 @@
   padding:10px 12px;
   background:#fff;
 }
+
 .price-field input{
   width:100%;
   min-width:0;
@@ -90,6 +116,7 @@
   font-size:1rem; color:#2b2b2b;
   background:transparent;
 }
+
 .price-field .currency,
 .dash{ color:#7a6a5a; }
 
@@ -98,7 +125,11 @@
   .filter-select{ padding:13px 14px; }
 }
 
-/* ===================== Double Range Sliders (two lines) ===================== */
+
+/* ==========================================================================
+   5) Double range sliders (two lines)
+   ========================================================================== */
+
 .range-wrap { margin-top: 10px; }
 
 /* Two distinct bars stacked vertically */
@@ -123,9 +154,11 @@
   top: 6px;                         /* position of top track */
   height: 6px;
 }
+
 .range.line.first::-webkit-slider-runnable-track{
   height: 6px; background:#eae2d6; border-radius:999px;
 }
+
 .range.line.first::-moz-range-track{
   height: 6px; background:#eae2d6; border-radius:999px;
 }
@@ -135,9 +168,11 @@
   top: 26px;                        /* position of bottom track */
   height: 8px;
 }
+
 .range.line.second::-webkit-slider-runnable-track{
   height: 8px; background:#c98a3c; border-radius:999px;
 }
+
 .range.line.second::-moz-range-track{
   height: 8px; background:#c98a3c; border-radius:999px;
 }
@@ -153,6 +188,7 @@
   background: #a67c52;              /* default thumb (top MIN) */
   margin-top: -7px;                  /* vertical centering on 6–8px tracks */
 }
+
 .range.line.second::-webkit-slider-thumb{
   background:#7a5a36;               /* darker thumb for bottom MAX */
   margin-top: -6px;
@@ -167,6 +203,7 @@
   cursor: pointer;
   background: #a67c52;
 }
+
 .range.line.second::-moz-range-thumb{ background:#7a5a36; }
 
 /* Focus ring */
@@ -191,7 +228,11 @@
   .range.line.second{ top: 30px; }
 }
 
-/* ============= Button (outline) ============= */
+
+/* ==========================================================================
+   6) Button (outline)
+   ========================================================================== */
+
 .btn-outline{
   display:inline-flex; align-items:center; justify-content:center;
   gap:8px; width:100%;
@@ -202,16 +243,22 @@
   cursor:pointer;
   transition:background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
+
 .btn-outline:hover{
   background:#f5f1ea; border-color:#A67C52;
   box-shadow:0 6px 14px rgba(0,0,0,.06);
 }
 
-/* ============= Inline version grid hooks (optional) ============= */
+
+/* ==========================================================================
+   7) Inline version grid hooks (optional)
+   ========================================================================== */
+
 .selector-products-container{
   display:grid; grid-template-columns:repeat(12,1fr);
   gap:12px; align-items:end; margin-bottom:1.25rem; padding:0 1rem;
 }
+
 .filters-inline .filter-item{ grid-column:span 3; display:flex; flex-direction:column; gap:6px; }
 .filters-inline .price{ grid-column:span 4; }
 .clear-btn{ grid-column:span 2; height:40px; align-self:center; }
@@ -222,9 +269,31 @@
   .filters-inline .price{ grid-column:span 6; }
   .clear-btn{ grid-column:span 6; }
 }
+
 @media (max-width:640px){
   .selector-products-container{ grid-template-columns:repeat(4,1fr); gap:10px; }
   .filters-inline .filter-item,
   .filters-inline .price,
   .clear-btn{ grid-column:span 4; }
 }
+
+
+/* ==========================================================================
+   8) RTL tweaks
+   ========================================================================== */
+
+/* (Already included above for price row direction)
+   .filters-sidebar[dir="rtl"] .price-row { direction: rtl; }
+*/
+
+
+/* ==========================================================================
+   9) Responsive breakpoints
+   ========================================================================== */
+
+/* (All responsive rules remain in-place in their sections:
+   - Sidebar sticky @1024px (above)
+   - Price fields & selects @420px (above)
+   - Range slider tight phones @420px (above)
+   - Inline grid @1024px & @640px (above)
+*/

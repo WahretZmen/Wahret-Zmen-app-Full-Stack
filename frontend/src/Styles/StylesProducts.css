@@ -3,27 +3,16 @@
    — Plain CSS, organized & commented
    =========================== */
 
-/* ===========================
-   Base Layout Helpers
-   =========================== */
+
+/* =========================================================
+   BASE LAYOUT HELPERS
+   ========================================================= */
 
 /* Full-width container */
 .container-Products { width: 100%; }
 
 /* Ensure content area has enough height (prevents footer jump) */
 .main-content { min-height: 80vh; }
-
-/* Brand button (already in use) */
-.wahret-zmen-btn {
-  background-color: #a67c52;
-  color: white;
-  padding: 0.75rem 2rem;
-  border-radius: 9999px;
-  font-size: 1rem;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
-}
-.wahret-zmen-btn:hover { background-color: #8a5d3b; }
 
 /* Loader block spacing under navbar */
 .loader-wrapper {
@@ -35,11 +24,25 @@
 }
 
 
-/* ...keep your existing CSS above... */
+/* =========================================================
+   BRAND BUTTON (REUSED ACROSS PAGES)
+   ========================================================= */
+.wahret-zmen-btn {
+  background-color: #a67c52;
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+.wahret-zmen-btn:hover { background-color: #8a5d3b; }
 
-/* ===========================
-   NEW: Plain Buttons / Toolbar
-   =========================== */
+
+/* =========================================================
+   NEW: PLAIN BUTTONS / TOOLBAR (SECTION #1)
+   (Kept exactly as provided)
+   ========================================================= */
 .btn-outline {
   display: inline-flex;
   align-items: center;
@@ -69,20 +72,24 @@
 .w240 { width: 240px; }
 .w-full { width: 100%; }
 
-/* ...keep the rest of your file unchanged... */
 
-/* ===========================
-   Typography & Spacing (Responsive)
-   =========================== */
+/* =========================================================
+   TYPOGRAPHY & SPACING (RESPONSIVE)
+   ========================================================= */
 
 /* Desktop: extra top margin for page title */
 @media (min-width: 1024px) {
   .page-title-desktop { margin-top: 3.5rem; /* ~ mt-14 */ }
 }
 
-/* =============================
-   Bounce Fade Animation
-   ============================= */
+
+/* =========================================================
+   ANIMATIONS — TITLES & BOUNCE
+   (Includes both original bounceFade keyframes;
+   duplicates preserved intentionally)
+   ========================================================= */
+
+/* Bounce Fade Animation (version A) */
 @keyframes bounceFade {
   0%, 100% { transform: translateY(0); opacity: 0.7; }
   25%      { transform: translateY(-8px); opacity: 1; }
@@ -91,7 +98,7 @@
 }
 .products-title.bounce { display: inline-block; animation: bounceFade 4s ease-in-out infinite; }
 
-/* ===== Title animations (auto-replay) ===== */
+/* Title shimmer (auto-replay) */
 @keyframes shineSweep {
   0%   { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -105,6 +112,8 @@
   animation: shineSweep 3.2s linear infinite;
   will-change: background-position;
 }
+
+/* Bounce Fade Animation (version B – duplicate kept) */
 @keyframes bounceFade { 0%,100%{transform:translateY(0);opacity:.9} 50%{transform:translateY(-6px);opacity:1} }
 .wz-title-bounce { animation: bounceFade 5.2s ease-in-out infinite; will-change: transform, opacity; }
 
@@ -112,9 +121,10 @@
   .wz-title-shine, .wz-title-bounce { animation: none !important; }
 }
 
-/* ===========================
-   Premium Collections Header
-   =========================== */
+
+/* =========================================================
+   PREMIUM COLLECTIONS HEADER + RESPONSIVE OFFSETS
+   ========================================================= */
 
 /* ↑↑ Increased top margin here to push the title further down from navbar */
 .wz-collections-header {
@@ -157,8 +167,7 @@
   overflow: visible;         /* don’t clip tall glyphs */
 }
 
-/* Slight top padding inside the title avoids ascender clipping
-   with background-clip:text on some Android WebViews */
+/* Slight top padding inside the title avoids ascender clipping */
 .wz-collections-title.premium-gradient {
   padding-top: 6px;          /* NEW: was 0 */
   line-height: 1.2;          /* slightly taller line box */
@@ -171,7 +180,7 @@
   }
 }
 
-/* If your navbar is taller on some devices, account for safe area too */
+/* Account for safe-area (notch) */
 @supports (padding: env(safe-area-inset-top)) {
   @media (max-width: 640px) {
     .wz-collections-header {
@@ -179,7 +188,6 @@
     }
   }
 }
-
 
 /* Subtitle */
 .wz-collections-sub {
@@ -196,18 +204,20 @@
   .wz-collections-header { margin-top: 6rem; } /* was 4rem */
 }
 
-/* ===========================
-   Mobile adjustments
-   =========================== */
+
+/* =========================================================
+   MOBILE ADJUSTMENTS (GENERAL)
+   ========================================================= */
 @media (max-width: 768px) {
   .category-title { font-size: 1.1rem; }
   .wahret-zmen-btn { padding: 0.6rem 1.5rem; font-size: 0.95rem; }
 }
 label input[type="checkbox"]:checked + span { font-weight: bold; }
 
-/* ===========================
-   Loader Responsiveness
-   =========================== */
+
+/* =========================================================
+   LOADER RESPONSIVENESS
+   ========================================================= */
 @media (max-width: 768px) {
   .main-content { min-height: 50vh; }
   .loader-wrapper { margin-top: 40px; }
@@ -220,9 +230,10 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
   .loader-wrapper { margin-top: 60px; }
 }
 
-/* ===========================
-   Grid: Center cards on narrow layouts
-   =========================== */
+
+/* =========================================================
+   GRID: CENTER CARDS ON NARROW LAYOUTS
+   ========================================================= */
 @media (max-width: 768px) {
   .grid {
     display: grid;
@@ -235,16 +246,18 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
 .product-card { margin: 0 auto; margin-top: 50px !important; }
 @media (max-width: 480px) { .products-title { margin-top: 2.5rem !important; } }
 
-/* ===========================
-   Sidebar spacing on mobile
-   =========================== */
+
+/* =========================================================
+   SIDEBAR SPACING ON MOBILE
+   ========================================================= */
 @media (max-width: 1024px) {
   aside .card, aside .filters-card { margin-bottom: 1rem; }
 }
 
-/* ===========================
-   NEW: Plain-CSS Filters UI
-   =========================== */
+
+/* =========================================================
+   NEW: PLAIN-CSS FILTERS UI
+   ========================================================= */
 .filters-card {
   background: #fff;
   border: 1px solid #e6e1d8;
@@ -287,9 +300,11 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
 }
 .range.second::-webkit-slider-thumb { background: #D4AF37; }
 
-/* ===========================
-   NEW: Plain Buttons / Toolbar
-   =========================== */
+
+/* =========================================================
+   NEW: PLAIN BUTTONS / TOOLBAR (SECTION #2 - DUPLICATE)
+   (Intentionally preserved: .btn-outline, .w240, .w-full)
+   ========================================================= */
 .btn-outline {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   background: #fff; color: #2b2b2b; border: 1px solid #d9d3c9; border-radius: 10px;
@@ -309,9 +324,10 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
 .btn-toggle { background: #fff; padding: 8px 12px; border: none; outline: none; cursor: pointer; }
 .btn-toggle.active { background: #f5f1ea; }
 
-/* ===========================
-   NEW: List-Mode Plain Card
-   =========================== */
+
+/* =========================================================
+   NEW: LIST-MODE PLAIN CARD
+   ========================================================= */
 .plain-card { border: 1px solid #ece7dd; border-radius: 12px; overflow: hidden; background: #fff; }
 .plain-card__img img { width: 100%; height: 260px; object-fit: cover; display: block; }
 @media (min-width: 768px) {
@@ -330,9 +346,10 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
 }
 .btn-gold:hover { filter: brightness(0.95); }
 
-/* ===========================
-   Spacing helper
-   =========================== */
+
+/* =========================================================
+   SPACING HELPER
+   ========================================================= */
 .products-grid { margin-top: 2rem; }
 
 .products-list { justify-items: center; }
