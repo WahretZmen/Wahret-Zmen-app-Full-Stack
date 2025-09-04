@@ -126,9 +126,7 @@ const Products = () => {
     refetchOnReconnect: true,
   });
 
-  const shouldRefetch = useSelector(
-    (state) => state.productEvents.shouldRefetch
-  );
+  const shouldRefetch = useSelector((state) => state.productEvents.shouldRefetch);
 
   useEffect(() => {
     if (shouldRefetch) {
@@ -197,11 +195,10 @@ const Products = () => {
     return () => clearTimeout(id);
   };
 
-  /* --- Filtering & slice for Load more --- */
-  const filtered = useMemo(() => {
+  /* --- Filtering --- */
+  const matched = useMemo(() => {
     const q = normalize(searchTerm);
-
-    const list = products.filter((p) => {
+    return products.filter((p) => {
       // Category
       const catOk =
         categorySel === "All" ||
@@ -225,9 +222,10 @@ const Products = () => {
 
       return catOk && colorOk && priceOk && searchOk;
     });
+  }, [products, categorySel, colorSel, priceRange, searchTerm]);
 
-    return list.slice(0, loadMore);
-  }, [products, categorySel, colorSel, priceRange, searchTerm, loadMore]);
+  /* --- Slice for "Load more" --- */
+  const filtered = useMemo(() => matched.slice(0, loadMore), [matched, loadMore]);
 
   const handleLoadMore = () => {
     setIsLoadingMore(true);
@@ -260,10 +258,7 @@ const Products = () => {
 
           {/* Title + Overview */}
           <FadeInSection duration={0.6}>
-            <header
-              className="wz-collections-header"
-              dir={isRTL ? "rtl" : "ltr"}
-            >
+            <header className="wz-collections-header" dir={isRTL ? "rtl" : "ltr"}>
               <h1 className="wz-collections-title premium-gradient">
                 {t("products_page.title")}
               </h1>
@@ -323,20 +318,25 @@ const Products = () => {
                 )}
               </div>
 
-              {/* Load More */}
-              {filtered.length < products.length && !searchLoading && (
-                <div className="text-center mt-10">
-                  {isLoadingMore ? (
-                    <div className="flex justify-center items-center h-24">
-                      <InlineWahretZmenLoader />
-                    </div>
-                  ) : (
-                    <button className="btn-outline w240" onClick={handleLoadMore}>
-                      {t("load_more")}
-                    </button>
-                  )}
-                </div>
-              )}
+              {/* Load More (only when there are matches AND more pages) */}
+              {matched.length > 0 &&
+                filtered.length < matched.length &&
+                !searchLoading && (
+                  <div className="text-center mt-10">
+                    {isLoadingMore ? (
+                      <div className="flex justify-center items-center h-24">
+                        <InlineWahretZmenLoader />
+                      </div>
+                    ) : (
+                      <button
+                        className="btn-outline btn-narrow"
+                        onClick={handleLoadMore}
+                      >
+                        {t("load_more")}
+                      </button>
+                    )}
+                  </div>
+                )}
             </div>
 
             {/* LTR: render sidebar second so it appears on the RIGHT */}

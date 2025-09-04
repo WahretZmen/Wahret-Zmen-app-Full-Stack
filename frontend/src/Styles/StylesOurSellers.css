@@ -123,7 +123,16 @@
 }
 
 /* Ensure nothing inside the carousel clips the counter */
-.carousel-card-wrapper { padding: 0 12px; width: 100%; max-width: 100%; overflow: visible; }
+/* Center the now-wider card inside each carousel item and keep it unclipped */
+.carousel-card-wrapper {
+  padding: 0 12px;
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  display: flex;                 /* ⬅️ center the card */
+  justify-content: center;       /* ⬅️ */
+}
+
 .rmc-list { overflow: hidden !important; } /* keep horizontal overflow in check */
 
 

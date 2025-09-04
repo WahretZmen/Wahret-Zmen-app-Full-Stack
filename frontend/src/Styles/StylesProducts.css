@@ -34,6 +34,43 @@
   margin-top: 100px;
 }
 
+
+/* ...keep your existing CSS above... */
+
+/* ===========================
+   NEW: Plain Buttons / Toolbar
+   =========================== */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #fff;
+  color: #2b2b2b;
+  border: 1px solid #d9d3c9;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease;
+}
+.btn-outline:hover { background: #f5f1ea; border-color: #A67C52; }
+
+/* Narrow, responsive button for Load More */
+.btn-narrow {
+  min-width: 140px;         /* smaller on mobile */
+  padding: 10px 16px;
+}
+@media (min-width: 768px) {
+  .btn-narrow { min-width: 180px; }
+}
+
+/* (Optional) old width helpers; can be removed if unused */
+.w240 { width: 240px; }
+.w-full { width: 100%; }
+
+/* ...keep the rest of your file unchanged... */
+
 /* ===========================
    Typography & Spacing (Responsive)
    =========================== */

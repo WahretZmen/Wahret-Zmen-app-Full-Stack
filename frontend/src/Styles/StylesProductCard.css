@@ -7,9 +7,9 @@
   background: #fff;
   border: 1px solid #e6e6e6;
   border-radius: 12px;
-  overflow: visible;              /* ✅ let the counter render fully */
+  overflow: visible;              /* let the counter render fully */
   width: 100%;
-  max-width: 360px;
+  max-width: 420px;               /* ⬆️ was 360px */
   margin: 0 auto;
   transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
   display: flex;
@@ -24,7 +24,10 @@
 
 /* Full width inside narrow/mobile containers */
 @media (max-width: 1024px) {
-  .pc-card { max-width: 100%; width: 100%; }
+  .pc-card { max-width: 92vw; }   /* ⬆️ room on tablets/phones */
+}
+@media (max-width: 380px) {
+  .pc-card { max-width: 95vw; }   /* extra breathing room on very small phones */
 }
 
 /* ----- Image Area ----- */
@@ -48,7 +51,7 @@
 .pc-divider { width: 100%; height: 1px; background: #eee9df; }
 
 /* ----- Body ----- */
-.pc-body { padding: 14px 14px 16px; text-align: center; }
+.pc-body { padding: 14px 16px 18px; text-align: center; } /* ⬆️ a touch more padding */
 .pc-title {
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -88,7 +91,7 @@
 }
 .pc-card:hover .pc-extra,
 .pc-card:focus-within .pc-extra {
-  max-height: 420px;
+  max-height: 460px;
   opacity: 1;
 }
 
@@ -145,7 +148,7 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   background: #fff;
   border: 1px solid #e6e1d8;
   border-radius: 12px;
-  overflow: visible;                 /* ✅ don't clip on small screens */
+  overflow: visible;
 }
 .pc-card .sp-qty input {
   width: 56px;
@@ -158,13 +161,13 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   background: #fff;
 }
 .pc-card .sp-qty .sp-btn {
-  display: inline-flex !important;   /* defeat any global rules that hide a side */
-  min-width: 48px;                   /* good tap target on Android */
+  display: inline-flex !important;
+  min-width: 48px;
   height: 100%;
   justify-content: center;
   align-items: center;
-  background: #000 !important;       /* solid black buttons */
-  color: #fff !important;            /* ✅ visible symbols on black */
+  background: #000 !important;
+  color: #fff !important;
   border: none;
   font-size: 18px;
   font-weight: 800;
@@ -177,10 +180,10 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
 .pc-card .sp-qty .sp-btn:hover { filter: brightness(1.05); }
 .pc-card .sp-qty .sp-btn:disabled { opacity: .5; cursor: not-allowed; }
 
-/* smaller phones */
-@media (max-width: 420px) {
-  .pc-card .sp-qty input { width: 48px; padding: 8px 6px; }
-  .pc-card .sp-qty .sp-btn { min-width: 44px; padding: 8px 10px; font-size: 17px; }
+/* smaller phones – compact stepper so nothing clips */
+@media (max-width: 380px) {
+  .pc-card .sp-qty input { width: 44px; padding: 8px 6px; }
+  .pc-card .sp-qty .sp-btn { min-width: 42px; padding: 8px 10px; font-size: 17px; }
 }
 
 /* ----- Primary Add-to-Cart (Android tap friendly) ----- */
