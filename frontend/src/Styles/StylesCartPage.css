@@ -1,12 +1,22 @@
 
 /* ===========================================================
    StylesCartPage.css — Cart page (plain CSS, RTL-safe)
-   Buttons are fully namespaced to avoid hover/bg conflicts.
+   Premium hover animations; no Tailwind/shadcn bg conflicts.
    =========================================================== */
 
-/* Safety */
-.cart-page { overflow-x: hidden; }
-.cart-page * { box-sizing: border-box; }
+/* Safety + theme vars (one place to tweak the “luxury” feel) */
+.cart-page {
+  overflow-x: hidden;
+  --wz-grad: linear-gradient(135deg, #6b3a1e, #4a2410);
+  --wz-grad-strong: linear-gradient(135deg, #7a4122, #3b1d0e);
+  --wz-ring: rgba(107, 58, 30, .55);
+  --wz-shadow: 0 10px 22px rgba(0,0,0,.18);
+  --wz-shadow-hover: 0 14px 28px rgba(0,0,0,.22);
+  --wz-outline: #e5e7eb;
+  --wz-text: #111827;
+  --wz-muted: #6b7280;
+}
+.cart-page * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 /* -----------------------------
    Cards / subtle elevation
@@ -19,32 +29,30 @@
 }
 
 /* -----------------------------
-   Item Row
+   Item Row — thumbnail like cart.tsx
 ----------------------------- */
 .cart-img-box {
-  flex: 0 0 clamp(220px, 26vw, 300px);
-  height: clamp(160px, 22vw, 220px);
+  width: 100%;
+  height: 8rem;             /* 128px like h-32 */
+  max-width: 100%;
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
 }
-.cart-img-box .cart-img {
+@media (min-width: 768px) { .cart-img-box { width: 8rem; } }   /* md:w-32 */
+.cart-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;       /* fill like cart.tsx */
+  object-fit: cover;
   object-position: center;
   display: block;
-}
-
-@media (max-width: 768px) {
-  .cart-img-box { flex: 1 1 100%; width: 100%; height: 200px; }
 }
 
 /* Remove button tap-area friendly */
 .remove-btn { touch-action: manipulation; }
 
 /* -----------------------------
-   Qty group (cart.tsx style)
+   Qty group — shadcn outline look
 ----------------------------- */
 .qty-group { gap: 12px; }
 
@@ -52,12 +60,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;              /* rounded square like shadcn outline */
-  border: 1px solid #d1d5db;        /* neutral-300 */
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  border: 1px solid #d1d5db;       /* neutral-300 */
   background: #fff;
-  color: #374151;                    /* neutral-700 */
+  color: #374151;                  /* neutral-700 */
   box-shadow: 0 1px 2px rgba(0,0,0,.03);
   transition: transform .06s ease, opacity .2s ease, box-shadow .2s ease;
 }
@@ -67,7 +75,7 @@
 
 .qty-val {
   display: inline-block;
-  min-width: 2.25rem;               /* ~w-9 */
+  min-width: 2rem;                 /* ~w-8 */
   text-align: center;
   font-weight: 600;
   font-size: 1rem;
@@ -75,90 +83,155 @@
 }
 
 @media (max-width: 640px) {
-  .qty-btn { width: 44px; height: 44px; border-radius: 12px; }
-  .qty-val { font-size: 1.05rem; min-width: 2.2rem; }
+  .qty-btn { width: 40px; height: 40px; }
+  .qty-val { font-size: 1.05rem; min-width: 2.25rem; }
 }
 
-/* -----------------------------
-   Summary actions (namespaced)
-   Prevent hover BG conflicts
------------------------------ */
+/* ===========================================================
+   PREMIUM BUTTONS (stacked, same width, large)
+   – No background hover conflicts with Tailwind/shadcn
+   – Fancy shimmer sweep + soft glow + lift
+   =========================================================== */
 .cart-buttons {
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  flex-direction: column;   /* always stacked */
+  gap: 16px;
 }
-
-/* Normalize anchors around buttons */
 .cart-buttons a { display: block; }
 .cart-buttons a > * { display: block; width: 100%; }
 
-/* Reset utility leaks inside cart page */
+/* Common base for both buttons */
 .cart-page .btn-brown-gradient,
 .cart-page .btn-outline {
   position: relative;
+  isolation: isolate;           /* contain pseudo-elements */
   -webkit-appearance: none;
   appearance: none;
   outline: none;
-  text-decoration: none;
+  border-radius: 12px;
+  height: 64px;
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: .2px;
   line-height: 1;
-  z-index: 0;
+  cursor: pointer;
+  transform: translateZ(0);     /* enable GPU for smoothness */
+  transition:
+    transform .18s cubic-bezier(.22,.61,.36,1),
+    box-shadow .22s ease;
+  box-shadow: var(--wz-shadow);
 }
 
-/* Luxury/primary button (fixed gradient) */
+/* Shimmer sweep (pseudo-element) */
+.cart-page .btn-brown-gradient::after,
+.cart-page .btn-outline::after {
+  content: "";
+  position: absolute;
+  inset: -1px;                  /* tiny overscan to avoid outline gaps */
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(120deg,
+      transparent 0%,
+      rgba(255,255,255, .35) 18%,
+      rgba(255,255,255, .55) 24%,
+      transparent 36%);
+  transform: translateX(-140%) skewX(-12deg);
+  transition: transform .65s cubic-bezier(.22,.61,.36,1);
+  will-change: transform;
+  mix-blend-mode: soft-light;
+}
+
+/* Press ripple (soft radial glow on press) */
+.cart-page .btn-brown-gradient::before,
+.cart-page .btn-outline::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  transform: translate(-50%,-50%) scale(0);
+  background: radial-gradient(closest-side, rgba(255,255,255,.32), transparent 70%);
+  opacity: 0;
+  transition: transform .28s ease, opacity .28s ease;
+  pointer-events: none;
+}
+
+/* Hover / focus state: lift + sweep + ring */
+.cart-page .btn-brown-gradient:hover,
+.cart-page .btn-brown-gradient:focus,
+.cart-page .btn-outline:hover,
+.cart-page .btn-outline:focus {
+  transform: translateY(-2px);
+  box-shadow: var(--wz-shadow-hover), 0 0 0 4px rgba(255,255,255,.4), 0 0 0 6px var(--wz-ring);
+}
+.cart-page .btn-brown-gradient:hover::after,
+.cart-page .btn-brown-gradient:focus::after,
+.cart-page .btn-outline:hover::after,
+.cart-page .btn-outline:focus::after {
+  transform: translateX(140%) skewX(-12deg);
+}
+
+/* Active: gentle sink + ripple show */
+.cart-page .btn-brown-gradient:active,
+.cart-page .btn-outline:active {
+  transform: translateY(0);
+  box-shadow: var(--wz-shadow);
+}
+.cart-page .btn-brown-gradient:active::before,
+.cart-page .btn-outline:active::before {
+  opacity: .4;
+  transform: translate(-50%,-50%) scale(1.5);
+}
+
+/* Primary button — solid gradient idle, locked (no utility override) */
 .cart-page .btn-brown-gradient {
-  height: 56px;
-  font-size: 1.05rem;
-  font-weight: 700;
   color: #fff !important;
   border: none;
-  border-radius: 10px;
-  background-image: linear-gradient(135deg, #6b3a1e, #4a2410) !important;
+  background-image: var(--wz-grad) !important;
   background-color: transparent !important;
-  box-shadow: 0 6px 16px rgba(0,0,0,.15);
-  transition: transform .06s ease, box-shadow .2s ease;
 }
 .cart-page .btn-brown-gradient:hover,
 .cart-page .btn-brown-gradient:focus,
 .cart-page .btn-brown-gradient:active {
-  /* keep the exact same gradient to avoid clashes */
-  background-image: linear-gradient(135deg, #6b3a1e, #4a2410) !important;
+  background-image: var(--wz-grad) !important;   /* prevent bg clashes */
   background-color: transparent !important;
   color: #fff !important;
-  box-shadow: 0 8px 18px rgba(0,0,0,.2);
 }
-.cart-page .btn-brown-gradient:active { transform: translateY(1px); }
 
-/* Outline secondary (no bg change on hover) */
+/* Outline button — white idle, SWITCHES to same gradient on hover */
 .cart-page .btn-outline {
-  height: 56px;
-  font-size: 1.02rem;
-  font-weight: 700;
-  color: #111827 !important;
-  background: #fff !important;             /* lock bg */
-  border: 1px solid #e5e7eb !important;    /* lock border */
-  border-radius: 10px;
-  transition: transform .06s ease, box-shadow .2s ease;
+  color: var(--wz-text) !important;
+  background: #fff !important;
+  border: 1px solid var(--wz-outline) !important;
 }
 .cart-page .btn-outline:hover,
 .cart-page .btn-outline:focus,
 .cart-page .btn-outline:active {
-  background: #fff !important;             /* prevent any hover:bg-* override */
-  color: #111827 !important;
-  border-color: #e5e7eb !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  background-image: var(--wz-grad) !important;   /* identical hover look */
+  background-color: transparent !important;
+  color: #fff !important;
+  border-color: transparent !important;
 }
-.cart-page .btn-outline:active { transform: translateY(1px); }
 
-/* Side-by-side on wider screens */
-@media (min-width: 640px) {
-  .cart-buttons { flex-direction: row; }
+/* Motion-safe: reduce motion honors user preference */
+@media (prefers-reduced-motion: reduce) {
   .cart-page .btn-brown-gradient,
-  .cart-page .btn-outline { width: 50%; }
+  .cart-page .btn-outline {
+    transition: none;
+    box-shadow: var(--wz-shadow);
+  }
+  .cart-page .btn-brown-gradient::after,
+  .cart-page .btn-outline::after,
+  .cart-page .btn-brown-gradient::before,
+  .cart-page .btn-outline::before { display: none; }
 }
 
-/* Sticky summary only at lg (keeps mobile natural flow) */
-.order-summary { position: static; }
+/* Keep summary non-sticky on small screens (shadcn uses lg:sticky) */
+@media (max-width: 1023.98px) { .order-summary { position: static; } }
 
 /* -----------------------------
    Empty state button
