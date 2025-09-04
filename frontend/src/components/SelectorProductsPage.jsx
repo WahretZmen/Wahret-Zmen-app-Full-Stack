@@ -139,44 +139,80 @@ const SelectorPageProducts = ({
         </div>
 
         {/* ---------- Price Range (min/max inputs + dual range) ---------- */}
-        <div className="filter-group">
-          <label className="filter-label">{t("price_range", "نطاق السعر")}</label>
+       {/* ---------- Price Range (min/max inputs + dual range) ---------- */}
+<div className="filter-group">
+  <label className="filter-label">{t("price_range", "نطاق السعر")}</label>
 
-          <div className="price-row" role="group" aria-label={t("price_range", "نطاق السعر")}>
-            <div className="price-field">
-              <span className="currency">$</span>
-              <input
-                aria-label={t("min_price", "أقل سعر")}
-                type="number"
-                min={minPrice}
-                max={clampMax}
-                value={Math.round(clampMin)}
-                onChange={(e) =>
-                  setPriceRange([Number(e.target.value) || minPrice, clampMax])
-                }
-                inputMode="decimal"
-              />
-            </div>
+  {/* Min/Max inputs (stay as editable fields) */}
+  <div className="price-row" role="group" aria-label={t("price_range", "نطاق السعر")}>
+    <div className="price-field">
+      <span className="currency">$</span>
+      <input
+        aria-label={t("min_price", "أقل سعر")}
+        type="number"
+        min={minPrice}
+        max={clampMax}
+        value={Math.round(clampMin)}
+        onChange={(e) => setPriceRange([Number(e.target.value) || minPrice, clampMax])}
+        inputMode="decimal"
+      />
+    </div>
 
-            <span className="dash" aria-hidden="true">
-              —
-            </span>
+    <span className="dash" aria-hidden="true">—</span>
 
-            <div className="price-field">
-              <span className="currency">$</span>
-              <input
-                aria-label={t("max_price", "أعلى سعر")}
-                type="number"
-                min={clampMin}
-                max={maxPrice}
-                value={Math.round(clampMax)}
-                onChange={(e) =>
-                  setPriceRange([clampMin, Number(e.target.value) || maxPrice])
-                }
-                inputMode="decimal"
-              />
-            </div>
-          </div>
+    <div className="price-field">
+      <span className="currency">$</span>
+      <input
+        aria-label={t("max_price", "أعلى سعر")}
+        type="number"
+        min={clampMin}
+        max={maxPrice}
+        value={Math.round(clampMax)}
+        onChange={(e) => setPriceRange([clampMin, Number(e.target.value) || maxPrice])}
+        inputMode="decimal"
+      />
+    </div>
+  </div>
+
+  {/* Two-line visual: thin neutral bar (top) + thick gold bar with dual thumbs (bottom) */}
+  <div className="range-wrap twoline" aria-hidden="false">
+    {/* Top thin bar (decorative only) */}
+    <div className="range-thin-track" />
+
+    {/* Bottom thick bar with both thumbs sharing one line */}
+    <input
+      className="range thick base"
+      type="range"
+      min={minPrice}
+      max={maxPrice}
+      step="1"
+      value={clampMin}
+      onChange={(e) => {
+        const nextMin = Math.min(Number(e.target.value), clampMax);
+        setPriceRange([nextMin, clampMax]);
+      }}
+    />
+    <input
+      className="range thick second"
+      type="range"
+      min={minPrice}
+      max={maxPrice}
+      step="1"
+      value={clampMax}
+      onChange={(e) => {
+        const nextMax = Math.max(Number(e.target.value), clampMin);
+        setPriceRange([clampMin, nextMax]);
+      }}
+    />
+  </div>
+
+  {/* Optional little end labels under the bar (matches the look in your ref) */}
+  <div className="range-ends">
+    <span>${Math.round(minPrice)}</span>
+    <span>${Math.round(maxPrice)}</span>
+  </div>
+</div>
+
 
           {/* Dual sliders – stacked so thumbs never overlap visually */}
           <div className="range-wrap" aria-hidden="false">

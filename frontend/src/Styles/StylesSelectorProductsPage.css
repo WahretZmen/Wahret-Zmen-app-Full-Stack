@@ -1,49 +1,41 @@
 /* ===========================================
    Styles/StylesSelectorProductsPage.css
-   Filters UI (inline + sidebar)
+   Filters UI – Sidebar (Plain CSS)
    -------------------------------------------
    - Sidebar card (padding, shadow, sticky on desktop)
    - Shared form controls (labels/selects)
-   - Price fields & dual range sliders
+   - Price fields
+   - Two-line range slider (thin neutral + thick gold with dual thumbs)
    - Buttons (outline)
    - RTL tweaks
-   - Responsive breakpoints (Android-friendly)
+   - Responsive breakpoints
    =========================================== */
 
 /* ============= Sidebar shell ============= */
-.filters-sidebar{
-  width: 100%;
-}
+.filters-sidebar { width: 100%; }
 
-/* Card look used in your screenshot */
 .filters-card{
   background:#fff;
   border:1px solid #eee7dc;
-  border-radius: 18px;
-  box-shadow: 0 10px 26px rgba(0,0,0,.06);
+  border-radius:18px;
+  box-shadow:0 10px 26px rgba(0,0,0,.06);
   padding: clamp(14px, 2.4vw, 22px);
 }
 
-/* Desktop: keep it visible while scrolling */
-@media (min-width: 1024px){
-  .filters-sidebar{
-    width: 20rem; /* ~320px */
-  }
-  .filters-card{
-    position: sticky;
-    top: 92px;              /* under your fixed header */
-  }
+@media (min-width:1024px){
+  .filters-sidebar{ width:20rem; } /* ~320px */
+  .filters-card{ position:sticky; top:92px; } /* under fixed header */
 }
 
 /* ============= Header ============= */
 .filters-header{
   display:flex; align-items:center; justify-content:space-between;
-  margin-bottom: .75rem;
+  margin-bottom:.75rem;
 }
 .filters-title{
   margin:0;
-  font-size: clamp(1.05rem, 2.2vw, 1.25rem);
-  font-weight: 800;
+  font-size:clamp(1.05rem,2.2vw,1.25rem);
+  font-weight:800;
   color:#2c2c2c;
 }
 .filters-header .icon{ width:22px; height:22px; color:#a67c52; opacity:.85; }
@@ -53,8 +45,6 @@
   display:flex; flex-direction:column; gap:8px;
   padding: clamp(6px, 1.2vw, 10px) 0;
 }
-
-/* Labels + selects (class names now match JSX) */
 .filter-label{
   display:block;
   font-size:.98rem;
@@ -64,24 +54,24 @@
 .filter-select{
   width:100%;
   border:1px solid #d9d3c9;
-  border-radius: 12px;
-  padding: 12px 14px;
-  font-size: 1rem;
+  border-radius:12px;
+  padding:12px 14px;
+  font-size:1rem;
   background:#fff;
   color:#2b2b2b;
   outline:none;
-  transition: border-color .2s ease, box-shadow .2s ease;
-  -webkit-tap-highlight-color: transparent;
+  transition:border-color .2s ease, box-shadow .2s ease;
+  -webkit-tap-highlight-color:transparent;
 }
 .filter-select:focus{
   border-color:#A67C52;
-  box-shadow: 0 0 0 3px rgba(166,124,82,.12);
+  box-shadow:0 0 0 3px rgba(166,124,82,.12);
 }
 
 /* ============= Price fields ============= */
 .price-row{
   display:flex; align-items:center; justify-content:space-between;
-  gap: 10px;
+  gap:10px;
 }
 .filters-sidebar[dir="rtl"] .price-row{ direction: rtl; }
 
@@ -89,13 +79,13 @@
   flex:1 1 auto;
   display:flex; align-items:center; gap:8px;
   border:1px solid #d9d3c9;
-  border-radius: 12px;
-  padding: 10px 12px;
+  border-radius:12px;
+  padding:10px 12px;
   background:#fff;
 }
 .price-field input{
   width:100%;
-  min-width: 0;
+  min-width:0;
   border:none; outline:none;
   font-size:1rem; color:#2b2b2b;
   background:transparent;
@@ -103,73 +93,136 @@
 .price-field .currency,
 .dash{ color:#7a6a5a; }
 
-/* Increase tap target size on phones */
-@media (max-width: 420px){
-  .price-field{ padding: 12px 14px; }
-  .filter-select{ padding: 13px 14px; }
+@media (max-width:420px){
+  .price-field{ padding:12px 14px; }
+  .filter-select{ padding:13px 14px; }
 }
 
-/* ============= Sliders ============= */
-.range-wrap{ margin-top: 10px; display:flex; flex-direction:column; gap:8px; }
+/* ===================== Two-line Range Slider ===================== */
+/* Container for the two lines (thin neutral top + thick gold bottom) */
+.range-wrap { margin-top: 10px; }
+
+.range-wrap.twoline{
+  position:relative;
+  height:36px;                 /* room for both lines + thumbs */
+}
+
+/* Top thin decorative track (no thumbs) */
+.range-thin-track{
+  position:absolute;
+  left:0; right:0;
+  top:6px;                     /* sits above the thick line */
+  height:4px;
+  border-radius:999px;
+  background:#eae2d6;          /* neutral beige like your reference */
+}
+
+/* Shared base for range inputs */
 .range{
   -webkit-appearance:none;
+  appearance:none;
   width:100%;
-  height: 6px;               /* slightly thicker for touch */
-  background:#eee9df;
   outline:none;
+  background:transparent;      /* we draw tracks below */
+}
+
+/* Bottom thick track: both ranges share the same center line */
+.range.thick{
+  position:absolute;
+  left:0; right:0;
+  top:18px;                    /* beneath the thin bar */
+  height:8px;
   border-radius:999px;
 }
+
+/* Base track paints the thick bar */
+.range.thick.base::-webkit-slider-runnable-track { height:8px; background:#c98a3c; border-radius:999px; }
+.range.thick.base::-moz-range-track               { height:8px; background:#c98a3c; border-radius:999px; }
+
+/* Second range has transparent track so base remains visible */
+.range.thick.second::-webkit-slider-runnable-track { height:8px; background:transparent; }
+.range.thick.second::-moz-range-track               { height:8px; background:transparent; }
+
+/* WebKit thumbs */
 .range::-webkit-slider-thumb{
   -webkit-appearance:none; appearance:none;
-  width: 20px; height: 20px;
-  border-radius:999px; background:#A67C52;
-  cursor:pointer; border: 2px solid #fff;
-  box-shadow: 0 1px 6px rgba(0,0,0,.2);
+  width:20px; height:20px;
+  border-radius:50%;
+  border:2px solid #fff;
+  box-shadow:0 1px 6px rgba(0,0,0,.2);
+  cursor:pointer;
+  background:#a67c52;          /* min thumb */
+  margin-top:-6px;             /* vertically center over 8px track */
 }
-.range.second::-webkit-slider-thumb{ background:#D4AF37; }
+.range.thick.second::-webkit-slider-thumb{ background:#7a5a36; } /* max thumb */
 
-/* Firefox */
+/* Firefox thumbs */
 .range::-moz-range-thumb{
-  width:20px; height:20px; border-radius:999px;
-  background:#A67C52; border: 2px solid #fff;
-  box-shadow: 0 1px 6px rgba(0,0,0,.2);
+  width:20px; height:20px;
+  border-radius:50%;
+  border:2px solid #fff;
+  box-shadow:0 1px 6px rgba(0,0,0,.2);
+  cursor:pointer;
+  background:#a67c52;
 }
-.range.second::-moz-range-thumb{ background:#D4AF37; }
+.range.thick.second::-moz-range-thumb{ background:#7a5a36; }
+
+/* Focus ring for accessibility */
+.range:focus-visible{
+  box-shadow:0 0 0 3px rgba(166,124,82,.18);
+  border-radius:12px;
+}
+
+/* Optional end labels (min/max) under the bars */
+.range-ends{
+  display:flex;
+  justify-content:space-between;
+  font-size:.92rem;
+  color:#6f655a;
+  margin-top:6px;
+}
+.filters-sidebar[dir="rtl"] .range-ends{ direction: rtl; }
+
+@media (max-width:420px){
+  .range-wrap.twoline{ height:40px; }
+  .range-thin-track{ top:8px; }
+  .range.thick{ top:20px; }
+}
 
 /* ============= Button (outline) ============= */
 .btn-outline{
   display:inline-flex; align-items:center; justify-content:center;
   gap:8px; width:100%;
   background:#fff; color:#2b2b2b;
-  border:1px solid #d9d3c9; border-radius: 999px;
-  padding: 12px 16px;
+  border:1px solid #d9d3c9; border-radius:999px;
+  padding:12px 16px;
   font-weight:800; letter-spacing:.02em;
-  cursor:pointer; transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
+  cursor:pointer;
+  transition:background .2s ease, border-color .2s ease, box-shadow .2s ease;
 }
 .btn-outline:hover{
   background:#f5f1ea; border-color:#A67C52;
-  box-shadow: 0 6px 14px rgba(0,0,0,.06);
+  box-shadow:0 6px 14px rgba(0,0,0,.06);
 }
 
-/* ============= Inline version grid (if you later use it) ============= */
+/* ============= Inline version grid hooks (optional) ============= */
 .selector-products-container{
-  display:grid; grid-template-columns: repeat(12, 1fr);
-  gap:12px; align-items:end; margin-bottom: 1.25rem; padding: 0 1rem;
+  display:grid; grid-template-columns:repeat(12,1fr);
+  gap:12px; align-items:end; margin-bottom:1.25rem; padding:0 1rem;
 }
-.filters-inline .filter-item{ grid-column: span 3; display:flex; flex-direction:column; gap:6px; }
-.filters-inline .price{ grid-column: span 4; }
-.clear-btn{ grid-column: span 2; height:40px; align-self:center; }
+.filters-inline .filter-item{ grid-column:span 3; display:flex; flex-direction:column; gap:6px; }
+.filters-inline .price{ grid-column:span 4; }
+.clear-btn{ grid-column:span 2; height:40px; align-self:center; }
 
-/* Breakpoints */
-@media (max-width: 1024px){
-  .selector-products-container{ grid-template-columns: repeat(6, 1fr); gap:10px; }
-  .filters-inline .filter-item{ grid-column: span 3; }
-  .filters-inline .price{ grid-column: span 6; }
-  .clear-btn{ grid-column: span 6; }
+@media (max-width:1024px){
+  .selector-products-container{ grid-template-columns:repeat(6,1fr); gap:10px; }
+  .filters-inline .filter-item{ grid-column:span 3; }
+  .filters-inline .price{ grid-column:span 6; }
+  .clear-btn{ grid-column:span 6; }
 }
-@media (max-width: 640px){
-  .selector-products-container{ grid-template-columns: repeat(4, 1fr); gap:10px; }
+@media (max-width:640px){
+  .selector-products-container{ grid-template-columns:repeat(4,1fr); gap:10px; }
   .filters-inline .filter-item,
   .filters-inline .price,
-  .clear-btn{ grid-column: span 4; }
+  .clear-btn{ grid-column:span 4; }
 }
