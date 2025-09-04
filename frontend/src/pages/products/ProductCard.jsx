@@ -22,7 +22,6 @@ const ProductCard = ({ product }) => {
     lang === "ar-SA" ||
     (typeof lang === "string" && lang.startsWith("ar"));
 
-  // Local UI state
   const [quantity, setQuantity] = useState(1);
   const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 });
 
@@ -49,11 +48,9 @@ const ProductCard = ({ product }) => {
     firstColor?.colorName?.en ||
     t("default", "Default");
 
-  // Stock from first color; fallback to product-level stock
   const displayedStock =
     firstColor?.stock ?? product?.stockQuantity ?? product?.stock ?? 0;
 
-  // Robust “trending” flag
   const isTrending = Boolean(
     product?.trending ||
       product?.isTrending ||
@@ -99,7 +96,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div
-      className="pc-card group relative bg-white border border-gray-200 overflow-hidden w-full mx-auto"
+      className="pc-card group relative bg-white border border-gray-200 overflow-visible w-full mx-auto"
       dir={isRTL ? "rtl" : "ltr"}
     >
       {/* ===== Image + Badges ===== */}
@@ -170,22 +167,32 @@ const ProductCard = ({ product }) => {
         )}
 
         {/* Price row */}
-        <div className="pc-price text-sm font-bold text-gray-900 mt-1" aria-label={t("price")}>
+        <div
+          className="pc-price text-sm font-bold text-gray-900 mt-1"
+          aria-label={t("price")}
+        >
           {hasOld && (
-            <span className="pc-old">{Number(product?.oldPrice).toFixed(2)} $</span>
+            <span className="pc-old">
+              {Number(product?.oldPrice).toFixed(2)} $
+            </span>
           )}
-          <span className="pc-new">{Number(product?.newPrice || 0).toFixed(2)} $</span>
+          <span className="pc-new">
+            {Number(product?.newPrice || 0).toFixed(2)} $
+          </span>
         </div>
 
         {/* Reveal panel (always shown on mobile, hover on desktop) */}
         <div className="pc-extra">
           <p className="product-description text-sm text-gray-500">
-            {description.length > 70 ? `${description.slice(0, 70)}…` : description}
+            {description.length > 70
+              ? `${description.slice(0, 70)}…`
+              : description}
           </p>
 
           {displayedColor && (
             <p className="text-sm italic text-gray-500">
-              {t("color")}: <span className="text-gray-700 font-medium">{displayedColor}</span>
+              {t("color")}:{" "}
+              <span className="text-gray-700 font-medium">{displayedColor}</span>
             </p>
           )}
 
@@ -200,7 +207,10 @@ const ProductCard = ({ product }) => {
                     c?.colorName?.en ||
                     `#${idx + 1}`;
                   return (
-                    <li key={`${name}-${idx}`} className="px-2 py-1 border text-xs bg-gray-100">
+                    <li
+                      key={`${name}-${idx}`}
+                      className="px-2 py-1 border text-xs bg-gray-100"
+                    >
                       {name}
                     </li>
                   );
@@ -209,7 +219,7 @@ const ProductCard = ({ product }) => {
             </div>
           )}
 
-          {/* Quantity stepper (Card-safe overrides so + is always visible) */}
+          {/* Quantity stepper */}
           <div className="flex items-center justify-center mt-3 sp-cta-row">
             <div className="sp-qty">
               <button
@@ -245,16 +255,16 @@ const ProductCard = ({ product }) => {
             </div>
           </div>
 
-          {/* Primary CTA (Android-friendly tap target) */}
+          {/* Primary CTA */}
           <div className="mt-3">
             <button
               onClick={handleAddToCart}
               disabled={displayedStock === 0}
-              className={`sp-add w-full ${
-                displayedStock === 0 ? "cursor-not-allowed opacity-70" : ""
+              className={`add-to-cart-btn ${
+                displayedStock === 0 ? "is-disabled" : ""
               }`}
             >
-              <FiShoppingCart className="inline mr-2" />
+              <FiShoppingCart className="icon" />
               {displayedStock > 0 ? t("add_to_cart") : t("out_of_stock")}
             </button>
           </div>

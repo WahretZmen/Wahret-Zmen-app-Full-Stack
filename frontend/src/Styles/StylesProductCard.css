@@ -7,7 +7,7 @@
   background: #fff;
   border: 1px solid #e6e6e6;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;              /* ✅ let the counter render fully */
   width: 100%;
   max-width: 360px;
   margin: 0 auto;
@@ -136,7 +136,7 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
 .color-list li:hover { background:#e7ebf0; }
 
 /* ------------------------------------------------------------------
-   Quantity (SingleProduct look, but CARD-SAFE OVERRIDES)
+   Quantity (CARD-SAFE OVERRIDES)
    Ensures BOTH – and + are always visible on Android + desktop.
 ------------------------------------------------------------------- */
 .pc-card .sp-qty {
@@ -145,7 +145,7 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   background: #fff;
   border: 1px solid #e6e1d8;
   border-radius: 12px;
-  overflow: visible;                 /* don't clip buttons on small screens */
+  overflow: visible;                 /* ✅ don't clip on small screens */
 }
 .pc-card .sp-qty input {
   width: 56px;
@@ -163,17 +163,18 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   height: 100%;
   justify-content: center;
   align-items: center;
-  background: #000000 !important;    /* override dark last-child from SingleProduct */
-  color: #2b2b2b;
+  background: #000 !important;       /* solid black buttons */
+  color: #fff !important;            /* ✅ visible symbols on black */
   border: none;
   font-size: 18px;
+  font-weight: 800;
   line-height: 1;
   padding: 10px 12px;
   cursor: pointer;
 }
-.pc-card .sp-qty .sp-minus { border-inline-end: 1px solid #000000; }
-.pc-card .sp-qty .sp-plus  { border-inline-start: 1px solid #000000; }
-.pc-card .sp-qty .sp-btn:hover { background: #000000 !important; }
+.pc-card .sp-qty .sp-minus { border-inline-end: 1px solid #000; }
+.pc-card .sp-qty .sp-plus  { border-inline-start: 1px solid #000; }
+.pc-card .sp-qty .sp-btn:hover { filter: brightness(1.05); }
 .pc-card .sp-qty .sp-btn:disabled { opacity: .5; cursor: not-allowed; }
 
 /* smaller phones */
@@ -207,7 +208,7 @@ html[dir="rtl"] .badge-top-right { right: auto; left: 10px; }
   outline: none;
   box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(17,17,17,.6);
 }
-.add-to-cart-btn.is-disabled { background: #000000; cursor: not-allowed; }
+.add-to-cart-btn.is-disabled { background: #222; cursor: not-allowed; }
 .add-to-cart-btn .icon { margin-inline-end: 6px; font-size: 1.1rem; }
 html[dir="rtl"] .add-to-cart-btn { text-transform: none; letter-spacing: 0; }
 

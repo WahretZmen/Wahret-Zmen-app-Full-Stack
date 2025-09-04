@@ -122,6 +122,11 @@
   max-width: 100%;
 }
 
+/* Ensure nothing inside the carousel clips the counter */
+.carousel-card-wrapper { padding: 0 12px; width: 100%; max-width: 100%; overflow: visible; }
+.rmc-list { overflow: hidden !important; } /* keep horizontal overflow in check */
+
+
 /* ===== Custom Arrows (desktop + Android) ===== */
 .wz-arrow {
   position: absolute;
