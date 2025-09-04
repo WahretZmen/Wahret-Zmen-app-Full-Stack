@@ -136,7 +136,7 @@
   block-size: 56px;             /* logical height */
   border-radius: 999px;
   border: 1px solid rgba(255,255,255,.45);
-  background: linear-gradient(135deg, #7a5a36, #a67c52);
+  background: linear-gradient(135deg, #000000, #000000);
   color: #fff;
   display: grid;
   place-items: center;
@@ -176,7 +176,7 @@
 
 /* ===== If library default arrows ever render (fallback) ===== */
 .custom-carousel .react-multiple-carousel__arrow {
-  background: #8B5C3E;
+  background: #010101;
   color: #fff;
   z-index: 10;
   width: 40px;

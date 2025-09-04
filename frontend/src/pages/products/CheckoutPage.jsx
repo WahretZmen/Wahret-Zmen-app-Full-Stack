@@ -17,7 +17,9 @@ const CheckoutPage = () => {
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
 
-  useEffect(() => { window.scrollTo(0, 0); }, []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const cartItems = useSelector((s) => s.cart.cartItems || []);
   const totalItems = cartItems.reduce((acc, item) => acc + Number(item.quantity || 0), 0);
@@ -81,8 +83,7 @@ const CheckoutPage = () => {
             ar: "أصلي",
           };
 
-      const image =
-        item?.color?.image || item?.coverImage || "/assets/default-image.png";
+      const image = item?.color?.image || item?.coverImage || "/assets/default-image.png";
 
       return {
         productId: item._id,
@@ -119,10 +120,7 @@ const CheckoutPage = () => {
     } catch (error) {
       Swal.fire({
         title: t("checkout.error_title"),
-        text:
-          error?.data?.message ||
-          error?.message ||
-          t("checkout.error_message"),
+        text: error?.data?.message || error?.message || t("checkout.error_message"),
         icon: "error",
         confirmButtonColor: "#d33",
       });
@@ -170,6 +168,7 @@ const CheckoutPage = () => {
 
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* FULL NAME */}
                   <div>
                     <label className="block text-sm font-medium mb-1">
                       {t("checkout.full_name")}
@@ -178,13 +177,13 @@ const CheckoutPage = () => {
                       {...register("name", { required: true })}
                       type="text"
                       placeholder="Ahmed Ben Ali"
-                      className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
+                      className={`w-full px-4 py-3 text-base rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
                         errors.name ? "border-red-400" : "border-[#E6D3BF]"
                       }`}
                     />
                   </div>
 
-                  {/* EMAIL – forced LTR + readOnly for correct display on RTL/mobile */}
+                  {/* EMAIL – fully viewable */}
                   <div>
                     <label className="block text-sm font-medium mb-1">
                       {t("checkout.email")}
@@ -194,14 +193,23 @@ const CheckoutPage = () => {
                       readOnly
                       aria-readonly="true"
                       inputMode="email"
+                      type="email"
                       dir="ltr"
                       onFocus={(e) => e.target.select()}
-                      className="w-full px-4 py-2 rounded-lg border border-[#E6D3BF] bg-gray-100 email-plain"
+                      className="w-full px-4 py-3 text-base rounded-lg border border-[#E6D3BF] bg-gray-100 email-plain overflow-x-auto whitespace-nowrap"
                       title={currentUser?.email || ""}
                     />
+                    {/* Mobile-only helper: show full email wrapped */}
+                    <div
+                      className="md:hidden mt-1 text-xs text-gray-600 email-full-line"
+                      dir="ltr"
+                    >
+                      {currentUser?.email || ""}
+                    </div>
                   </div>
                 </div>
 
+                {/* PHONE */}
                 <div>
                   <label className="block text-sm font-medium mb-1">
                     {t("checkout.phone")}
@@ -210,12 +218,13 @@ const CheckoutPage = () => {
                     {...register("phone", { required: true })}
                     type="tel"
                     placeholder="+216 XX XXX XXX"
-                    className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
+                    className={`w-full px-4 py-3 text-base rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
                       errors.phone ? "border-red-400" : "border-[#E6D3BF]"
                     }`}
                   />
                 </div>
 
+                {/* ADDRESS */}
                 <div>
                   <label className="block text-sm font-medium mb-1">
                     {t("checkout.address")}
@@ -224,12 +233,13 @@ const CheckoutPage = () => {
                     {...register("address", { required: true })}
                     type="text"
                     placeholder={isRTL ? "شارع..." : "Street address"}
-                    className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
+                    className={`w-full px-4 py-3 text-base rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
                       errors.address ? "border-red-400" : "border-[#E6D3BF]"
                     }`}
                   />
                 </div>
 
+                {/* CITY / STATE / ZIP */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-1">
@@ -239,7 +249,7 @@ const CheckoutPage = () => {
                       {...register("city", { required: true })}
                       type="text"
                       placeholder={isRTL ? "المدينة" : "City"}
-                      className={`w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
+                      className={`w-full px-4 py-3 text-base rounded-lg border focus:outline-none focus:ring-2 focus:ring-[#E6D3BF] ${
                         errors.city ? "border-red-400" : "border-[#E6D3BF]"
                       }`}
                     />
@@ -252,7 +262,7 @@ const CheckoutPage = () => {
                       {...register("state")}
                       type="text"
                       placeholder={isRTL ? "المنطقة" : "State/Region"}
-                      className="w-full px-4 py-2 rounded-lg border border-[#E6D3BF] focus:outline-none focus:ring-2 focus:ring-[#E6D3BF]"
+                      className="w-full px-4 py-3 text-base rounded-lg border border-[#E6D3BF] focus:outline-none focus:ring-2 focus:ring-[#E6D3BF]"
                     />
                   </div>
                   <div>
@@ -263,11 +273,12 @@ const CheckoutPage = () => {
                       {...register("zipcode")}
                       type="text"
                       placeholder="0000"
-                      className="w-full px-4 py-2 rounded-lg border border-[#E6D3BF] focus:outline-none focus:ring-2 focus:ring-[#E6D3BF]"
+                      className="w-full px-4 py-3 text-base rounded-lg border border-[#E6D3BF] focus:outline-none focus:ring-2 focus:ring-[#E6D3BF]"
                     />
                   </div>
                 </div>
 
+                {/* COUNTRY */}
                 <div>
                   <label className="block text-sm font-medium mb-1">
                     {t("checkout.country")}
@@ -276,7 +287,7 @@ const CheckoutPage = () => {
                     {...register("country")}
                     type="text"
                     placeholder={isRTL ? "تونس" : "Tunisia"}
-                    className="w-full px-4 py-2 rounded-lg border border-[#E6D3BF] focus:outline-none focus:ring-2 focus:ring-[#E6D3BF]"
+                    className="w-full px-4 py-3 text-base rounded-lg border border-[#E6D3BF] focus:outline-none focus:ring-2 focus:ring-[#E6D3BF]"
                   />
                 </div>
               </div>
@@ -284,9 +295,7 @@ const CheckoutPage = () => {
 
             {/* Terms + Submit */}
             <div className="rounded-2xl border border-[#E5D9C9] bg-white shadow-sm p-6">
-              <div
-                className={`flex ${isRTL ? "flex-row-reverse" : "flex-row"} items-start gap-3`}
-              >
+              <div className={`flex ${isRTL ? "flex-row-reverse" : "flex-row"} items-start gap-3`}>
                 <input
                   id="agree"
                   type="checkbox"
@@ -344,24 +353,20 @@ const CheckoutPage = () => {
                 </p>
                 <ul className="list-disc ps-5 space-y-1">
                   <li>
-                    {t("checkout.cod_point1") ||
-                      "Please prepare the exact amount if possible."}
+                    {t("checkout.cod_point1") || "Please prepare the exact amount if possible."}
                   </li>
                   <li>
-                    {t("checkout.cod_point2") ||
-                      "Our delivery agent will contact you before arrival."}
+                    {t("checkout.cod_point2") || "Our delivery agent will contact you before arrival."}
                   </li>
                   <li>
-                    {t("checkout.cod_point3") ||
-                      "Returns and exchanges follow our standard policy."}
+                    {t("checkout.cod_point3") || "Returns and exchanges follow our standard policy."}
                   </li>
                 </ul>
                 <div className="rounded-lg bg-[#F8F4EF] border border-[#E6D3BF] p-4 text-sm">
                   <span className="font-medium">
                     {t("checkout.security_note") || "Secure & Encrypted:"}
                   </span>{" "}
-                  {t("checkout.security_desc") ||
-                    "Your personal information is transmitted securely."}
+                  {t("checkout.security_desc") || "Your personal information is transmitted securely."}
                 </div>
               </div>
             </div>

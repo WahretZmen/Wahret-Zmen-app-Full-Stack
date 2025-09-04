@@ -1,8 +1,45 @@
-.screen-CheckoutPage {margin-top: 8%;} 
+.screen-CheckoutPage { margin-top: 8%; }
+
+/* Make inputs comfortable on mobile (prevents browser auto-zoom) */
+input, select, textarea, button {
+  font-size: 16px; /* iOS/Android zoom prevention */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 
 /* Force emails to render left-to-right even on RTL pages */
 .email-plain {
   direction: ltr !important;
   text-align: left !important;
   unicode-bidi: plaintext;
+  /* Keep padding big enough so long emails aren't visually clipped by the border radius */
+  padding-right: 1rem;
+  padding-left: 1rem;
+  /* If the email is longer than the input width, allow horizontal scroll */
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile helper that shows the full email wrapped (below the input) */
+.email-full-line {
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+/* Small fade-in helper (used by cards) */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 300ms ease-out both;
+}
+.animate-fade-in.delay-100 { animation-delay: 100ms; }
+
+/* Improve tap targets on mobile */
+input, .email-plain {
+  min-height: 44px;
+  line-height: 1.25;
+  border-radius: 0.5rem;
 }
