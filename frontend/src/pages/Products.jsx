@@ -1,3 +1,4 @@
+// src/pages/Products.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import ProductCard from "./products/ProductCard.jsx";
 import { useGetAllProductsQuery } from "../redux/features/products/productsApi.js";
@@ -94,8 +95,6 @@ const productColorNames = (p) => {
 
 /* ============================ Component ============================ */
 const Products = () => {
-  const [showFilters, setShowFilters] = useState(false);
-
   // filters (no size)
   const [categorySel, setCategorySel] = useState("All");
   const [colorSel, setColorSel] = useState("All");
@@ -120,7 +119,6 @@ const Products = () => {
     isLoading,
     isFetching,
     refetch,
-    isError,
   } = useGetAllProductsQuery(undefined, {
     refetchOnMountOrArgChange: true,
     refetchOnReconnect: true,
@@ -297,9 +295,10 @@ const Products = () => {
               />
             )}
 
-            {/* MAIN: products (list-only) */}
+            {/* MAIN: products */}
             <div className="flex-1">
-              <div className="grid gap-6 grid-cols-1">
+              {/* ⬇️ Center cards on mobile, normal flow on md+ */}
+              <div className="products-list grid gap-6 grid-cols-1 place-items-center md:place-items-stretch">
                 {filtered.length > 0 ? (
                   filtered.map((product, index) => (
                     <FadeInSection
@@ -308,7 +307,7 @@ const Products = () => {
                       duration={0.5}
                       yOffset={24}
                     >
-                      <ProductCard product={product} viewMode="list" />
+                      <ProductCard product={product} />
                     </FadeInSection>
                   ))
                 ) : (

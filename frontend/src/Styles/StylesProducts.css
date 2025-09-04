@@ -334,3 +334,10 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
    Spacing helper
    =========================== */
 .products-grid { margin-top: 2rem; }
+
+.products-list { justify-items: center; }
+.products-list .pc-card { margin-left: auto; margin-right: auto; }
+
+@media (min-width: 768px){
+  .products-list { justify-items: stretch; }
+}
