@@ -4,22 +4,20 @@
    Premium hover animations; no Tailwind/shadcn bg conflicts.
    =========================================================== */
 
-/* Safety + theme vars (one place to tweak the “luxury” feel) */
+/* Safety + theme vars */
 .cart-page {
   overflow-x: hidden;
   --wz-grad: linear-gradient(135deg, #6b3a1e, #4a2410);
-  --wz-grad-strong: linear-gradient(135deg, #7a4122, #3b1d0e);
   --wz-ring: rgba(107, 58, 30, .55);
   --wz-shadow: 0 10px 22px rgba(0,0,0,.18);
   --wz-shadow-hover: 0 14px 28px rgba(0,0,0,.22);
   --wz-outline: #e5e7eb;
   --wz-text: #111827;
-  --wz-muted: #6b7280;
 }
 .cart-page * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
 /* -----------------------------
-   Cards / subtle elevation
+   Cards / elevation
 ----------------------------- */
 .cart-card {
   border-radius: 14px;
@@ -29,17 +27,17 @@
 }
 
 /* -----------------------------
-   Item Row — thumbnail like cart.tsx
+   Item thumbnail (cart.tsx-like)
 ----------------------------- */
 .cart-img-box {
   width: 100%;
-  height: 8rem;             /* 128px like h-32 */
+  height: 8rem;                  /* ~ h-32 */
   max-width: 100%;
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
 }
-@media (min-width: 768px) { .cart-img-box { width: 8rem; } }   /* md:w-32 */
+@media (min-width: 768px) { .cart-img-box { width: 8rem; } } /* md:w-32 */
 .cart-img {
   width: 100%;
   height: 100%;
@@ -52,7 +50,7 @@
 .remove-btn { touch-action: manipulation; }
 
 /* -----------------------------
-   Qty group — shadcn outline look
+   Qty group — outline look
 ----------------------------- */
 .qty-group { gap: 12px; }
 
@@ -63,9 +61,9 @@
   width: 32px;
   height: 32px;
   border-radius: 9999px;
-  border: 1px solid #d1d5db;       /* neutral-300 */
+  border: 1px solid #d1d5db;
   background: #fff;
-  color: #374151;                  /* neutral-700 */
+  color: #374151;
   box-shadow: 0 1px 2px rgba(0,0,0,.03);
   transition: transform .06s ease, opacity .2s ease, box-shadow .2s ease;
 }
@@ -75,92 +73,94 @@
 
 .qty-val {
   display: inline-block;
-  min-width: 2rem;                 /* ~w-8 */
+  min-width: 2rem;
   text-align: center;
   font-weight: 600;
   font-size: 1rem;
   user-select: none;
 }
-
 @media (max-width: 640px) {
   .qty-btn { width: 40px; height: 40px; }
   .qty-val { font-size: 1.05rem; min-width: 2.25rem; }
 }
 
 /* ===========================================================
-   PREMIUM BUTTONS (stacked, same width, large)
-   – No background hover conflicts with Tailwind/shadcn
-   – Fancy shimmer sweep + soft glow + lift
+   PREMIUM BUTTONS (stacked, same width, large, shimmer)
+   — Both buttons share identical hover bg (like cart.tsx)
+   — No Tailwind/shadcn bg hover conflicts
    =========================================================== */
 .cart-buttons {
   display: flex;
-  flex-direction: column;   /* always stacked */
+  flex-direction: column;   /* one on one (stacked) */
   gap: 16px;
 }
 .cart-buttons a { display: block; }
 .cart-buttons a > * { display: block; width: 100%; }
 
-/* Common base for both buttons */
+/* Common base */
 .cart-page .btn-brown-gradient,
 .cart-page .btn-outline {
   position: relative;
-  isolation: isolate;           /* contain pseudo-elements */
+  isolation: isolate;           /* confine pseudo-elements */
   -webkit-appearance: none;
   appearance: none;
   outline: none;
   border-radius: 12px;
-  height: 64px;
+  height: 64px;                 /* larger */
   width: 100%;
   font-size: 1.1rem;
   font-weight: 800;
   letter-spacing: .2px;
   line-height: 1;
   cursor: pointer;
-  transform: translateZ(0);     /* enable GPU for smoothness */
+  transform: translateZ(0);
   transition:
     transform .18s cubic-bezier(.22,.61,.36,1),
     box-shadow .22s ease;
   box-shadow: var(--wz-shadow);
 }
 
-/* Shimmer sweep (pseudo-element) */
+/* SHIMMER sweep */
+@keyframes wz-sheen {
+  0%   { transform: translateX(-140%) skewX(-12deg); }
+  100% { transform: translateX(140%)  skewX(-12deg); }
+}
 .cart-page .btn-brown-gradient::after,
 .cart-page .btn-outline::after {
   content: "";
   position: absolute;
-  inset: -1px;                  /* tiny overscan to avoid outline gaps */
+  inset: -1px;
   border-radius: inherit;
   pointer-events: none;
   background:
     linear-gradient(120deg,
       transparent 0%,
-      rgba(255,255,255, .35) 18%,
-      rgba(255,255,255, .55) 24%,
-      transparent 36%);
+      rgba(255,255,255,.25) 14%,
+      rgba(255,255,255,.55) 22%,
+      rgba(255,255,255,.25) 30%,
+      transparent 40%);
   transform: translateX(-140%) skewX(-12deg);
-  transition: transform .65s cubic-bezier(.22,.61,.36,1);
-  will-change: transform;
+  opacity: 0;
+  transition: opacity .25s ease;
   mix-blend-mode: soft-light;
 }
 
-/* Press ripple (soft radial glow on press) */
+/* Press ripple */
 .cart-page .btn-brown-gradient::before,
 .cart-page .btn-outline::before {
   content: "";
   position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 40%;
-  height: 40%;
+  left: 50%; top: 50%;
+  width: 40%; height: 40%;
   border-radius: 50%;
   transform: translate(-50%,-50%) scale(0);
-  background: radial-gradient(closest-side, rgba(255,255,255,.32), transparent 70%);
+  background: radial-gradient(closest-side, rgba(255,255,255,.32), transparent 72%);
   opacity: 0;
   transition: transform .28s ease, opacity .28s ease;
   pointer-events: none;
 }
 
-/* Hover / focus state: lift + sweep + ring */
+/* Hover / focus = lift + glow + shimmer */
 .cart-page .btn-brown-gradient:hover,
 .cart-page .btn-brown-gradient:focus,
 .cart-page .btn-outline:hover,
@@ -172,10 +172,11 @@
 .cart-page .btn-brown-gradient:focus::after,
 .cart-page .btn-outline:hover::after,
 .cart-page .btn-outline:focus::after {
-  transform: translateX(140%) skewX(-12deg);
+  opacity: 1;
+  animation: wz-sheen .9s cubic-bezier(.22,.61,.36,1);
 }
 
-/* Active: gentle sink + ripple show */
+/* Active: subtle sink + ripple */
 .cart-page .btn-brown-gradient:active,
 .cart-page .btn-outline:active {
   transform: translateY(0);
@@ -183,11 +184,11 @@
 }
 .cart-page .btn-brown-gradient:active::before,
 .cart-page .btn-outline:active::before {
-  opacity: .4;
+  opacity: .45;
   transform: translate(-50%,-50%) scale(1.5);
 }
 
-/* Primary button — solid gradient idle, locked (no utility override) */
+/* Primary (solid gradient) — LOCK bg to avoid utility clashes */
 .cart-page .btn-brown-gradient {
   color: #fff !important;
   border: none;
@@ -197,12 +198,12 @@
 .cart-page .btn-brown-gradient:hover,
 .cart-page .btn-brown-gradient:focus,
 .cart-page .btn-brown-gradient:active {
-  background-image: var(--wz-grad) !important;   /* prevent bg clashes */
+  background-image: var(--wz-grad) !important;
   background-color: transparent !important;
   color: #fff !important;
 }
 
-/* Outline button — white idle, SWITCHES to same gradient on hover */
+/* Outline — WHITE idle, SWITCHES to SAME gradient on hover */
 .cart-page .btn-outline {
   color: var(--wz-text) !important;
   background: #fff !important;
@@ -211,26 +212,23 @@
 .cart-page .btn-outline:hover,
 .cart-page .btn-outline:focus,
 .cart-page .btn-outline:active {
-  background-image: var(--wz-grad) !important;   /* identical hover look */
+  background-image: var(--wz-grad) !important;   /* identical hover bg */
   background-color: transparent !important;
   color: #fff !important;
   border-color: transparent !important;
 }
 
-/* Motion-safe: reduce motion honors user preference */
+/* Motion-safe */
 @media (prefers-reduced-motion: reduce) {
   .cart-page .btn-brown-gradient,
-  .cart-page .btn-outline {
-    transition: none;
-    box-shadow: var(--wz-shadow);
-  }
+  .cart-page .btn-outline { transition: none; box-shadow: var(--wz-shadow); }
   .cart-page .btn-brown-gradient::after,
   .cart-page .btn-outline::after,
   .cart-page .btn-brown-gradient::before,
   .cart-page .btn-outline::before { display: none; }
 }
 
-/* Keep summary non-sticky on small screens (shadcn uses lg:sticky) */
+/* Summary not sticky on small screens (lg:sticky in JSX) */
 @media (max-width: 1023.98px) { .order-summary { position: static; } }
 
 /* -----------------------------

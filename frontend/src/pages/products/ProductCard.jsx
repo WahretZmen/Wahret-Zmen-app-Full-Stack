@@ -10,13 +10,7 @@ import { getImgUrl } from "../../utils/getImgUrl";
 
 import "../../Styles/StylesProductCard.css";
 
-/**
- * Props:
- *  - product (required)
- *  - size: "regular" | "compact"  (compact = smaller counter for list/cards)
- *  - showStockBadge: boolean
- */
-const ProductCard = ({ product, size = "compact", showStockBadge = true }) => {
+const ProductCard = ({ product, showStockBadge = true }) => {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   if (!i18n?.isInitialized) return null;
@@ -101,10 +95,8 @@ const ProductCard = ({ product, size = "compact", showStockBadge = true }) => {
     setZoomPosition({ x, y });
   };
 
-  const rootClass = `pc-card ${size === "compact" ? "pc-compact" : ""}`;
-
   return (
-    <div className={rootClass} dir={isRTL ? "rtl" : "ltr"}>
+    <div className="pc-card" dir={isRTL ? "rtl" : "ltr"}>
       {/* ===== Image + Badges ===== */}
       <a
         href={`/products/${product._id}`}
@@ -175,34 +167,22 @@ const ProductCard = ({ product, size = "compact", showStockBadge = true }) => {
         )}
 
         {/* Price row */}
-        <div
-          className="pc-price text-sm font-bold text-gray-900 mt-1"
-          aria-label={t("price")}
-        >
+        <div className="pc-price text-sm font-bold text-gray-900 mt-1" aria-label={t("price")}>
           {hasOld && (
-            <span className="pc-old">
-              {Number(product?.oldPrice).toFixed(2)} $
-            </span>
+            <span className="pc-old">{Number(product?.oldPrice).toFixed(2)} $</span>
           )}
-          <span className="pc-new">
-            {Number(product?.newPrice || 0).toFixed(2)} $
-          </span>
+          <span className="pc-new">{Number(product?.newPrice || 0).toFixed(2)} $</span>
         </div>
 
         {/* Reveal panel (always on touch) */}
         <div className="pc-extra">
           <p className="product-description text-sm text-gray-500">
-            {description.length > 70
-              ? `${description.slice(0, 70)}…`
-              : description}
+            {description.length > 70 ? `${description.slice(0, 70)}…` : description}
           </p>
 
           {displayedColor && (
             <p className="text-sm italic text-gray-500">
-              {t("color")}:{" "}
-              <span className="text-gray-700 font-medium">
-                {displayedColor}
-              </span>
+              {t("color")}: <span className="text-gray-700 font-medium">{displayedColor}</span>
             </p>
           )}
 
@@ -217,10 +197,7 @@ const ProductCard = ({ product, size = "compact", showStockBadge = true }) => {
                     c?.colorName?.en ||
                     `#${idx + 1}`;
                   return (
-                    <li
-                      key={`${name}-${idx}`}
-                      className="px-2 py-1 border text-xs bg-gray-100"
-                    >
+                    <li key={`${name}-${idx}`} className="px-2 py-1 border text-xs bg-gray-100">
                       {name}
                     </li>
                   );
@@ -229,7 +206,7 @@ const ProductCard = ({ product, size = "compact", showStockBadge = true }) => {
             </div>
           )}
 
-          {/* Quantity stepper — single instance, size controlled by root class */}
+          {/* Quantity stepper — restored size & style */}
           <div className="flex items-center justify-center mt-3 sp-cta-row">
             <div className="sp-qty" role="group" aria-label={t("quantity")}>
               <button
