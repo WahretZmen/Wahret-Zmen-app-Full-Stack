@@ -1,3 +1,4 @@
+// src/components/ShopByCategory.jsx
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Sparkles } from "lucide-react";
@@ -36,7 +37,7 @@ function extractFirstString(x) {
 
 /* ---------- Animated title ---------- */
 const AnimatedTitle = ({ text }) => {
-  const safe = (extractFirstString(text) || "اختر الفئة").trim();
+  const safe = (extractFirstString(text) || "كل الفئات").trim();
   const isArabic = /[\u0600-\u06FF]/.test(safe);
   const words = isArabic ? [safe] : safe.split(/\s+/);
 
@@ -67,25 +68,21 @@ const AnimatedTitle = ({ text }) => {
 const ShopByCategory = ({ items = DEFAULT_ITEMS, title }) => {
   const { t } = useTranslation();
 
-  // Always request STRINGS (no returnObjects).
-  const selectStr   = t("select_category",        { defaultValue: "اختر الفئة",      returnObjects: false });
+  // Prefer a dedicated section title, then prop, then select_category as fallback.
   const categoryStr = t("shop_by_category.title", { defaultValue: "تسوّق حسب الفئة", returnObjects: false });
+  const selectStr   = t("select_category",        { defaultValue: "كل الفئات",       returnObjects: false });
 
-  // Priority: prop title → select_category → shop_by_category.title → literal.
-  let rawTitle = "";
-  if (typeof title === "string" && title.trim()) {
-    rawTitle = title.trim();
-  } else if (typeof selectStr === "string" && selectStr.trim()) {
-    rawTitle = selectStr.trim();
-  } else if (typeof categoryStr === "string" && categoryStr.trim()) {
-    rawTitle = categoryStr.trim();
-  } else {
-    rawTitle = "اختر الفئة";
-  }
+  // Priority: shop_by_category.title → prop title → select_category → literal
+  let rawTitle =
+    (typeof categoryStr === "string" && categoryStr.trim()) ? categoryStr.trim()
+    : (typeof title       === "string" && title.trim())      ? title.trim()
+    : (typeof selectStr   === "string" && selectStr.trim())  ? selectStr.trim()
+    : "كل الفئات";
 
-  // 🚫 Ensure we never show "الرئيسية" (Home) as the section title.
+  // 🚫 Never show "الرئيسية"; normalize "الكل" → "كل الفئات"
   const blocked = new Set(["الرئيسية", "Home", "Accueil"]);
-  if (blocked.has(rawTitle)) rawTitle = "اختر الفئة";
+  if (blocked.has(rawTitle)) rawTitle = "كل الفئات";
+  if (rawTitle === "الكل") rawTitle = "كل الفئات";
 
   return (
     <section className="mx-auto max-w-7xl px-4 sm:px-6 md:px-8 my-16">
@@ -118,8 +115,8 @@ const ShopByCategory = ({ items = DEFAULT_ITEMS, title }) => {
             </span>
 
             <span className={`cat-label cat-${it.key}`}>
-  {it.label}
-</span>
+              {it.label}
+            </span>
           </a>
         ))}
       </div>

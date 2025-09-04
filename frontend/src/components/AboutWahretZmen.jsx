@@ -1,19 +1,39 @@
+// src/components/AboutWahretZmen.jsx
 import React from "react";
 import { Award, Heart, Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import "../Styles/StylesAboutWahretZmen.css";
 
+/**
+ * 🧵 AboutWahretZmen
+ * ---------------------------------------
+ * Section introducing Wahret Zmen brand values:
+ * - Story & heritage (left column)
+ * - Feature cards (right column with icons)
+ *
+ * i18n:
+ * - All texts come from translation keys (fallbacks provided).
+ * - Direction (RTL/LTR) is automatically handled.
+ *
+ * Structure:
+ * - Wrapper section → container → 2-column grid
+ * - Left: title, paragraphs, CTA button
+ * - Right: 3 cards with icons (Award, Heart, Sparkles)
+ */
 const AboutWahretZmen = () => {
   const { t, i18n } = useTranslation();
   if (!i18n.isInitialized) return null;
 
+  // Detect RTL based on language
   const isRTL = i18n.language?.startsWith("ar");
 
   return (
     <section className="wz-about-basic" dir={isRTL ? "rtl" : "ltr"}>
       <div className="wz-container">
         <div className="wz-grid">
-          {/* Left column */}
+          {/* =========================
+              Left Column (Story / Text)
+          ========================== */}
           <div className="wz-left wz-anim-slide-left">
             <h2 className="wz-title wz-anim-fade-up">
               {t("AboutWahretZmen.title", "The Art of Traditional Elegance")}
@@ -38,16 +58,21 @@ const AboutWahretZmen = () => {
             </a>
           </div>
 
-          {/* Right column */}
+          {/* =========================
+              Right Column (Feature Cards)
+          ========================== */}
           <div className="wz-right wz-anim-slide-right">
-            {/* Card 1 */}
+            {/* Card 1: Craftsmanship */}
             <div className="wz-card wz-anim-delay-200">
               <div className="wz-icon">
                 <Award />
               </div>
               <div className="wz-card-content">
                 <h3 className="wz-card-title">
-                  {t("AboutWahretZmen.features.craftsmanship.title", "Master Craftsmanship")}
+                  {t(
+                    "AboutWahretZmen.features.craftsmanship.title",
+                    "Master Craftsmanship"
+                  )}
                 </h3>
                 <p className="wz-card-text">
                   {t(
@@ -58,7 +83,7 @@ const AboutWahretZmen = () => {
               </div>
             </div>
 
-            {/* Card 2 */}
+            {/* Card 2: Heritage */}
             <div className="wz-card wz-anim-delay-300">
               <div className="wz-icon">
                 <Heart />
@@ -76,7 +101,7 @@ const AboutWahretZmen = () => {
               </div>
             </div>
 
-            {/* Card 3 */}
+            {/* Card 3: Quality */}
             <div className="wz-card wz-anim-delay-400">
               <div className="wz-icon">
                 <Sparkles />
@@ -94,7 +119,7 @@ const AboutWahretZmen = () => {
               </div>
             </div>
           </div>
-          {/* /right */}
+          {/* /Right Column */}
         </div>
       </div>
     </section>
