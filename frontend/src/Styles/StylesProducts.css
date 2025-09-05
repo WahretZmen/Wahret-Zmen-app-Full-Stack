@@ -20,7 +20,7 @@
   justify-content: center;
   align-items: center;
   height: 100px;
-  margin-top: 32px; /* ↓ was 100px */
+  margin-top: 100px;
 }
 
 
@@ -126,12 +126,15 @@
    PREMIUM COLLECTIONS HEADER + RESPONSIVE OFFSETS
    ========================================================= */
 
-/* ↓ Reduced top margin to tighten the gap under navbar */
+/* ↑↑ Increased top margin here to push the title further down from navbar */
+
+
 .wz-collections-header {
   text-align: center;
   max-width: 980px;
-  margin: 2rem auto 1.5rem;   /* was 5rem auto 2rem */
+  margin: 5rem auto 2rem;   /* was ~3.25rem */
   padding: 0 1rem;
+  
 }
 
 .wz-collections-title.premium-gradient {
@@ -149,7 +152,6 @@
   text-shadow: 0 1px 2px rgba(0,0,0,0.25);
   display: inline-block;
   padding-bottom: 12px;
-  margin-top: 600 px !important;
 }
 .wz-collections-title.premium-gradient::after {
   content: "";
@@ -170,14 +172,14 @@
 
 /* Slight top padding inside the title avoids ascender clipping */
 .wz-collections-title.premium-gradient {
-  padding-top: 6px;          /* was 0 */
+  padding-top: 6px;          /* NEW: was 0 */
   line-height: 1.2;          /* slightly taller line box */
 }
 
-/* ↓ Give modest space under fixed navbar on phones (smaller than before) */
+/* Give extra space under the fixed navbar on phones */
 @media (max-width: 640px) {
   .wz-collections-header {
-    margin-top: 8rem;     /* was 6.25rem */
+    margin-top: 6.25rem;     /* NEW: was 5rem; pushes title down */
   }
 }
 
@@ -185,7 +187,7 @@
 @supports (padding: env(safe-area-inset-top)) {
   @media (max-width: 640px) {
     .wz-collections-header {
-      margin-top: calc(1.25rem + env(safe-area-inset-top));
+      margin-top: calc(6.25rem + env(safe-area-inset-top));
     }
   }
 }
@@ -200,9 +202,9 @@
   text-align: center;
 }
 
-/* ↓ Even on desktop, keep header closer */
+/* Even more breathing room on desktop */
 @media (min-width: 1024px) {
-  .wz-collections-header { margin-top: 2.25rem; } /* was 6rem */
+  .wz-collections-header { margin-top: 6rem; } /* was 4rem */
 }
 
 
@@ -221,11 +223,14 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
    ========================================================= */
 @media (max-width: 768px) {
   .main-content { min-height: 50vh; }
-  .loader-wrapper { margin-top: 24px; } /* was 40px */
+  .loader-wrapper { margin-top: 40px; }
 }
 @media (max-width: 480px) {
-  .main-content { padding-top: 0.75rem; }
-  .loader-wrapper { margin-top: 16px; } /* unified (was 20px/60px duplicated) */
+  .main-content { padding-top: 1rem; }
+  .loader-wrapper { margin-top: 20px; }
+}
+@media (max-width: 480px) {
+  .loader-wrapper { margin-top: 60px; }
 }
 
 
@@ -355,20 +360,4 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
 
 @media (min-width: 768px){
   .products-list { justify-items: stretch; }
-}
-
-
-/* =========================================================
-   SPACING OVERRIDES — tighten gap under navbar on Products
-   ========================================================= */
-
-/* ↓ Reduce the container's top padding added by Tailwind classes (pt-*) */
-.container.mx-auto {
-  padding-top: 1rem !important; /* was ~2–4rem via pt-8/sm/md */
-}
-@media (max-width: 640px) {
-  .container.mx-auto { padding-top: 0.75rem !important; }
-}
-@media (min-width: 1024px) {
-  .container.mx-auto { padding-top: 1.25rem !important; }
 }

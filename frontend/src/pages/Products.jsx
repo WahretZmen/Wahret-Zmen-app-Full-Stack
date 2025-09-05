@@ -20,17 +20,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 import SelectorPageProducts from "./../components/SelectorProductsPage";
 
 // -----------------------------------------------------------------------------
-// Loaders
+// Loaders (brand-styled)
 // -----------------------------------------------------------------------------
-const HeaderSpinner = () => (
-  <div
-    className="flex items-center justify-center mt-3"
-    aria-label="Loading products"
-  >
-    <div className="relative w-10 h-10">
-      <div className="absolute inset-0 rounded-full border-4 border-t-transparent border-[#D4AF37] animate-spin" />
-      <div className="absolute inset-1 rounded-full border-2 border-[#A67C52] opacity-40" />
-      <span className="absolute inset-0 flex items-center justify-center font-serif text-[#D4AF37] text-xs font-bold">
+const WahretZmenLoader = () => (
+  <div className="loader-wrapper w-full">
+    <div className="relative w-16 h-16">
+      <div className="absolute inset-0 rounded-full border-4 border-t-transparent border-[#D4AF37] animate-spin"></div>
+      <div className="absolute inset-2 rounded-full border-2 border-[#A67C52] opacity-40"></div>
+      <span className="absolute inset-0 flex items-center justify-center font-serif text-[#D4AF37] text-xl font-bold animate-pulse">
         WZ
       </span>
     </div>
@@ -94,6 +91,7 @@ const canonicalCategory = (raw) => {
 
 const mapURLCategoryToUI = (raw) => CATEGORY_ALIAS_TO_UI[normalize(raw)] || "All";
 
+// extract numeric price across possible shapes
 const numericPrice = (p) => {
   const raw =
     p?.newPrice ??
@@ -104,6 +102,7 @@ const numericPrice = (p) => {
   return Number.isFinite(n) ? n : 0;
 };
 
+// collect color names across possible schemas
 const productColorNames = (p) => {
   if (Array.isArray(p?.colors)) {
     return p.colors
@@ -126,7 +125,7 @@ const productColorNames = (p) => {
 // Component
 // -----------------------------------------------------------------------------
 const Products = () => {
-  // 1) Local UI state
+  // 1) Local UI state: filters, search, pagination
   const [categorySel, setCategorySel] = useState("All");
   const [colorSel, setColorSel] = useState("All");
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -135,15 +134,6 @@ const Products = () => {
   const [loadMore, setLoadMore] = useState(12);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
-
-  // Android-only margin helper (we’ll also show the spinner under the title)
-  const [isAndroid, setIsAndroid] = useState(false);
-  useEffect(() => {
-    const ua =
-      (typeof navigator !== "undefined" && (navigator.userAgent || navigator.vendor)) ||
-      "";
-    setIsAndroid(/Android/i.test(ua));
-  }, []);
 
   // 2) i18n, router, redux
   const dispatch = useDispatch();
@@ -154,7 +144,7 @@ const Products = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 3) Data: products
+  // 3) Data: products (RTK Query) + auto refetch on events
   const {
     data: products = [],
     isLoading,
@@ -180,8 +170,9 @@ const Products = () => {
     setCategorySel(mapURLCategoryToUI(raw));
   }, [location.search]);
 
-  // 5) Build filter options & price bounds
+  // 5) Build filter options & price bounds from live data
   const { categories, colors, minPrice, maxPrice } = useMemo(() => {
+    // Start with canonical set so UI is stable
     const catSet = new Set(["All", "Men", "Women", "Children"]);
     const colorSet = new Set(["All"]);
     let minP = Number.POSITIVE_INFINITY;
@@ -224,7 +215,7 @@ const Products = () => {
     });
   }, [minPrice, maxPrice]);
 
-  // 6) Search debounce
+  // 6) Search with debounce-like delay + inline loader
   const handleSearchChange = (term) => {
     setSearchLoading(true);
     const id = setTimeout(() => {
@@ -240,15 +231,19 @@ const Products = () => {
     const sel = canonicalCategory(categorySel) || "All";
 
     return products.filter((p) => {
+      // Category (canonicalized on both sides)
       const catOfProduct = canonicalCategory(p?.category);
       const catOk = sel === "All" || catOfProduct === sel;
 
+      // Color
       const pColors = productColorNames(p).map((c) => normalize(c));
       const colorOk = colorSel === "All" || pColors.includes(normalize(colorSel));
 
+      // Price
       const pr = numericPrice(p);
       const priceOk = pr >= priceRange[0] && pr <= priceRange[1];
 
+      // Text search across title variants
       const titleVariants = [
         p?.title,
         p?.translations?.fr?.title,
@@ -264,7 +259,7 @@ const Products = () => {
   // Paginated slice
   const filtered = useMemo(() => matched.slice(0, loadMore), [matched, loadMore]);
 
-  // Load more
+  // Load more button behavior (with small delay for UX)
   const handleLoadMore = () => {
     setIsLoadingMore(true);
     setTimeout(() => {
@@ -283,16 +278,16 @@ const Products = () => {
     navigate({ search: params.toString() }, { replace: true });
   };
 
-  // Early guard only for i18n
-  if (!i18nReady) {
-    return <HeaderSpinner />;
+  // 8) Early loader (i18n or data)
+  if (!i18nReady || isLoading || isFetching) {
+    return <WahretZmenLoader />;
   }
 
-  // Render
+  // 9) Render
   return (
     <FadeInSection>
       <div className="main-content">
-        <div className="container mx-auto pt-0 sm:pt-0 md:pt-0 pb-4 px-4 sm:px-6 md:px-10 lg:px-20 max-w-[1440px]">
+        <div className="container mx-auto pt-8 sm:pt-12 md:pt-16 pb-4 px-4 sm:px-6 md:px-10 lg:px-20 max-w-[1440px]">
           {/* SEO */}
           <Helmet>
             <title>{t("products_page.title")} - Wahret Zmen</title>
@@ -300,18 +295,11 @@ const Products = () => {
 
           {/* Title + Overview */}
           <FadeInSection duration={0.6}>
-            <header
-              className="wz-collections-header"
-              style={{ marginTop: isAndroid ? "2rem" : "0.75rem" }}
-              dir={isRTL ? "rtl" : "ltr"}
-            >
+            <header className="wz-collections-header" dir={isRTL ? "rtl" : "ltr"}>
               <h1 className="wz-collections-title premium-gradient">
                 {t("products_page.title")}
               </h1>
               <p className="wz-collections-sub">{t("products_page.overview")}</p>
-
-              {/* 🔁 Show a compact spinner under the title while data is loading */}
-              {(isLoading || isFetching) && <HeaderSpinner />}
             </header>
           </FadeInSection>
 
@@ -326,8 +314,9 @@ const Products = () => {
             </div>
           </FadeInSection>
 
-          {/* Layout */}
-          <div className="flex flex-col lg:flex-row gap-8 mt-2">
+          {/* ===== Two-column layout (sidebar must be on the right) ===== */}
+          <div className="flex flex-col lg:flex-row gap-8 mt-4">
+            {/* RTL: render sidebar first so it ends up visually on the RIGHT */}
             {isRTL && (
               <SelectorPageProducts
                 categorySel={categorySel}
@@ -346,6 +335,7 @@ const Products = () => {
 
             {/* MAIN: products */}
             <div className="flex-1">
+              {/* Center cards on mobile, normal flow on md+ */}
               <div className="products-list grid gap-6 grid-cols-1 place-items-center md:place-items-stretch">
                 {filtered.length > 0 ? (
                   filtered.map((product, index) => (
@@ -359,17 +349,13 @@ const Products = () => {
                     </FadeInSection>
                   ))
                 ) : (
-                  // 👉 Only show "no products" once we're not loading anymore
-                  !isLoading &&
-                  !isFetching && (
-                    <p className="col-span-full text-center text-gray-500">
-                      {t("no_products_found")}
-                    </p>
-                  )
+                  <p className="col-span-full text-center text-gray-500">
+                    {t("no_products_found")}
+                  </p>
                 )}
               </div>
 
-              {/* Load More */}
+              {/* Load More (only if there are more matches) */}
               {matched.length > 0 &&
                 filtered.length < matched.length &&
                 !searchLoading && (
@@ -387,6 +373,7 @@ const Products = () => {
                 )}
             </div>
 
+            {/* LTR: render sidebar second so it appears on the RIGHT */}
             {!isRTL && (
               <SelectorPageProducts
                 categorySel={categorySel}
