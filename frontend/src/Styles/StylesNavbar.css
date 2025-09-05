@@ -803,3 +803,12 @@ html[dir="rtl"] .mobile-menu-btn {
 
 /* Separate explicit placement helper */
 .nav-search { display:flex; align-items:center; margin-inline-end: 12px; }
+
+
+/* keep the search a reasonable width on desktop */
+.nav-search { max-width: 360px; }
+
+/* make sure the input doesn’t squeeze away on smaller desktops */
+@media (max-width: 1100px) {
+  .nav-search { max-width: 280px; }
+}
