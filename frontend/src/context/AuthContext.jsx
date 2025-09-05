@@ -23,49 +23,31 @@ import { useTranslation } from "react-i18next";
 const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
 
-// Password-reset redirect URL (handled by your app’s route)
 const RESET_URL =
   import.meta.env.VITE_RESET_URL || "http://localhost:5173/reset-password";
 
-// Single shared Google provider instance
 const googleProvider = new GoogleAuthProvider();
-// Optional: force account picker
 // googleProvider.setCustomParameters({ prompt: "select_account" });
 
-/** Detect contexts where popups are unreliable:
- *  - In-app browsers (FB/IG/Twitter, etc.)
- *  - COOP/COEP active (crossOriginIsolated = true)
- */
 function mustUseRedirect() {
   const ua = navigator.userAgent || "";
   const isInApp = /FBAN|FBAV|Instagram|Line\/|Twitter|FB_IAB|Pinterest|LinkedIn/i.test(ua);
-  const coopCoepActive = !!window.crossOriginIsolated;
+  const coopCoepActive = !!window.crossOriginIsolated; // true when COOP+COEP isolates the page
   return isInApp || coopCoepActive;
 }
 
 export const AuthProvider = ({ children }) => {
-  // ---------------------------------------------------------------------------
-  // State
-  // ---------------------------------------------------------------------------
   const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true); // hydration flag
-  const [isGoogleSigningIn, setIsGoogleSigningIn] = useState(false); // popup guard
+  const [loading, setLoading] = useState(true);
+  const [isGoogleSigningIn, setIsGoogleSigningIn] = useState(false);
   const { t, i18n } = useTranslation();
 
-  // ---------------------------------------------------------------------------
-  // Basic email/password auth
-  // ---------------------------------------------------------------------------
   const registerUser = async (email, password) =>
     await createUserWithEmailAndPassword(auth, email, password);
 
   const loginUser = async (email, password) =>
     await signInWithEmailAndPassword(auth, email, password);
 
-  // ---------------------------------------------------------------------------
-  // Google OAuth with smart popup → redirect strategy
-  // - Uses redirect automatically in COOP/COEP or in-app browsers
-  // - Falls back to redirect on popup failures
-  // ---------------------------------------------------------------------------
   const signInWithGoogle = async () => {
     if (isGoogleSigningIn) return;
     setIsGoogleSigningIn(true);
@@ -74,32 +56,21 @@ export const AuthProvider = ({ children }) => {
         await signInWithRedirect(auth, googleProvider);
         return;
       }
-
-      // Try popup first for best UX on normal browsers
       const res = await signInWithPopup(auth, googleProvider);
       return res;
     } catch (err) {
-      // Expected user-cancel flows
-      if (err?.code === "auth/popup-closed-by-user") {
-        console.warn("[Auth] Google popup closed by user.");
-        return;
-      }
-      if (err?.code === "auth/cancelled-popup-request") {
-        console.warn("[Auth] Another sign-in already in progress.");
-        return;
-      }
+      if (err?.code === "auth/popup-closed-by-user") return;
+      if (err?.code === "auth/cancelled-popup-request") return;
 
-      // Domain misconfig (keep loud for debugging)
       if (err?.code === "auth/auth-domain-config-required") {
         console.error(
           "[Auth] authDomain missing or host not authorized.\n" +
             "Fix: Firebase Console → Authentication → Settings → Authorized domains.\n" +
             "Also ensure Vercel env VITE_AUTH_DOMAIN is set and redeploy."
         );
-        throw err; // surface to UI toast
+        throw err;
       }
 
-      // Any other popup failure → fallback to redirect
       console.warn(
         "[Auth] signInWithPopup failed; falling back to signInWithRedirect. Reason:",
         err?.code || err
@@ -110,9 +81,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ---------------------------------------------------------------------------
-  // Logout with localized confirmation
-  // ---------------------------------------------------------------------------
   const logout = async () => {
     const result = await Swal.fire({
       title:
@@ -161,9 +129,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // ---------------------------------------------------------------------------
-  // Forgot / Reset password
-  // ---------------------------------------------------------------------------
   const sendResetEmail = async (email) => {
     const actionCodeSettings = { url: RESET_URL, handleCodeInApp: true };
     return await sendPasswordResetEmail(auth, email, actionCodeSettings);
@@ -175,10 +140,6 @@ export const AuthProvider = ({ children }) => {
   const confirmPasswordResetWrapper = async (oobCode, newPassword) =>
     await confirmPasswordReset(auth, oobCode, newPassword);
 
-  // ---------------------------------------------------------------------------
-  // Change password (reauthenticate required)
-  // Only for users with "password" provider
-  // ---------------------------------------------------------------------------
   const changePassword = async ({ currentPassword, newPassword }) => {
     const user = auth.currentUser;
     if (!user) {
@@ -204,9 +165,6 @@ export const AuthProvider = ({ children }) => {
     await updatePassword(user, newPassword);
   };
 
-  // ---------------------------------------------------------------------------
-  // Auth state hydration
-  // ---------------------------------------------------------------------------
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
@@ -215,14 +173,12 @@ export const AuthProvider = ({ children }) => {
     return () => unsub();
   }, []);
 
-  // If the app returned from signInWithRedirect, resolve result once.
   useEffect(() => {
     (async () => {
       try {
         const result = await getRedirectResult(auth);
         if (result?.user) {
-          // Optional: toast success here if you want
-          // console.log("[Auth] Google redirect sign-in success:", result.user.email);
+          // Optionally toast success here
         }
       } catch (err) {
         if (err?.code === "auth/auth-domain-config-required") {
@@ -236,25 +192,17 @@ export const AuthProvider = ({ children }) => {
     })();
   }, []);
 
-  // ---------------------------------------------------------------------------
-  // Context value
-  // ---------------------------------------------------------------------------
   const value = {
     currentUser,
     loading,
-    // email/password
     registerUser,
     loginUser,
-    // google
     signInWithGoogle,
     isGoogleSigningIn,
-    // logout
     logout,
-    // reset password
     sendResetEmail,
     verifyResetCodeWrapper,
     confirmPasswordResetWrapper,
-    // change password
     changePassword,
   };
 
