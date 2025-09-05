@@ -149,6 +149,7 @@
   text-shadow: 0 1px 2px rgba(0,0,0,0.25);
   display: inline-block;
   padding-bottom: 12px;
+  margin-top: 600 px !important;
 }
 .wz-collections-title.premium-gradient::after {
   content: "";
@@ -176,7 +177,7 @@
 /* ↓ Give modest space under fixed navbar on phones (smaller than before) */
 @media (max-width: 640px) {
   .wz-collections-header {
-    margin-top: 1.25rem;     /* was 6.25rem */
+    margin-top: 8rem;     /* was 6.25rem */
   }
 }
 
