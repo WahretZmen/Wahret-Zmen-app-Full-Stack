@@ -1,4 +1,4 @@
-// AuthContext.jsx
+// src/context/AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase/firebase.config";
 import {
@@ -7,6 +7,8 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   signOut,
   sendPasswordResetEmail,
   verifyPasswordResetCode,
@@ -18,74 +20,72 @@ import {
 import Swal from "sweetalert2";
 import { useTranslation } from "react-i18next";
 
-/* =============================================================================
-   🔐 Auth Context
-   - Centralizes Firebase Auth flows (email/pass, Google, reset/change password)
-   - Tracks currentUser and loading hydration state
-   - Exposes a guard (isGoogleSigningIn) to prevent concurrent popups
-============================================================================= */
-
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 export const useAuth = () => useContext(AuthContext);
 
-// Password-reset redirect URL (handled by your app’s route)
 const RESET_URL =
   import.meta.env.VITE_RESET_URL || "http://localhost:5173/reset-password";
 
-// Single shared Google provider instance
 const googleProvider = new GoogleAuthProvider();
+// googleProvider.setCustomParameters({ prompt: "select_account" });
+
+function mustUseRedirect() {
+  const ua = navigator.userAgent || "";
+  const isInApp = /FBAN|FBAV|Instagram|Line\/|Twitter|FB_IAB|Pinterest|LinkedIn/i.test(ua);
+  const coopCoepActive = !!window.crossOriginIsolated; // COOP+COEP
+  return isInApp || coopCoepActive;
+}
 
 export const AuthProvider = ({ children }) => {
-  /* -----------------------------------------------------------------------------
-     State
-  ----------------------------------------------------------------------------- */
-  const [currentUser, setCurrentUser] = useState(null); // hydrated by onAuthStateChanged
-  const [loading, setLoading] = useState(true);         // blocks UI until auth state resolves
-
-  // Prevents multiple popups or race conditions on Google OAuth
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [isGoogleSigningIn, setIsGoogleSigningIn] = useState(false);
-
   const { t, i18n } = useTranslation();
 
-  /* -----------------------------------------------------------------------------
-     Basic email/password auth
-  ----------------------------------------------------------------------------- */
   const registerUser = async (email, password) =>
     await createUserWithEmailAndPassword(auth, email, password);
 
   const loginUser = async (email, password) =>
     await signInWithEmailAndPassword(auth, email, password);
 
-  /* -----------------------------------------------------------------------------
-     Google OAuth
-     - Guard against concurrent popups
-     - Swallow "expected" cancellation errors, rethrow unexpected ones
-  ----------------------------------------------------------------------------- */
+  /** Google OAuth with explicit status contract */
   const signInWithGoogle = async () => {
-    if (isGoogleSigningIn) return; // guard
+    if (isGoogleSigningIn) return { status: "cancel" };
     setIsGoogleSigningIn(true);
     try {
-      // Example UX tweak if desired:
-      // googleProvider.setCustomParameters({ prompt: "select_account" });
-      const res = await signInWithPopup(auth, googleProvider);
-      return res;
-    } catch (err) {
-      if (err?.code === "auth/popup-closed-by-user") {
-        console.warn("Google popup closed by the user.");
-      } else if (err?.code === "auth/cancelled-popup-request") {
-        console.warn("Another sign-in was already in progress.");
-      } else {
-        console.error("Google sign-in failed:", err);
-        throw err; // let UI show a toast/alert
+      if (mustUseRedirect()) {
+        await signInWithRedirect(auth, googleProvider);
+        return { status: "redirect" };
       }
+
+      const res = await signInWithPopup(auth, googleProvider);
+      return { status: "ok", user: res.user };
+    } catch (err) {
+      // User closed the popup or another popup already in progress
+      if (err?.code === "auth/popup-closed-by-user" || err?.code === "auth/cancelled-popup-request") {
+        console.warn("[Auth] Google popup canceled/closed.");
+        return { status: "cancel" };
+      }
+
+      // Config issue → let UI show an error
+      if (err?.code === "auth/auth-domain-config-required") {
+        console.error(
+          "[Auth] authDomain missing or host not authorized.\n" +
+            "Fix: Firebase Console → Authentication → Settings → Authorized domains.\n" +
+            "Also ensure Vercel env VITE_AUTH_DOMAIN is set and redeploy."
+        );
+        throw err;
+      }
+
+      // Other popup failures → redirect fallback
+      console.warn("[Auth] Popup failed, using redirect. Reason:", err?.code || err);
+      await signInWithRedirect(auth, googleProvider);
+      return { status: "redirect" };
     } finally {
       setIsGoogleSigningIn(false);
     }
   };
 
-  /* -----------------------------------------------------------------------------
-     Logout (with confirmation + localized copy)
-  ----------------------------------------------------------------------------- */
   const logout = async () => {
     const result = await Swal.fire({
       title:
@@ -134,11 +134,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  /* -----------------------------------------------------------------------------
-     Forgot / Reset password
-     - sendResetEmail uses an action link back to your app (RESET_URL)
-     - verify + confirm wrappers expose Firebase flows to UI
-  ----------------------------------------------------------------------------- */
   const sendResetEmail = async (email) => {
     const actionCodeSettings = { url: RESET_URL, handleCodeInApp: true };
     return await sendPasswordResetEmail(auth, email, actionCodeSettings);
@@ -150,10 +145,6 @@ export const AuthProvider = ({ children }) => {
   const confirmPasswordResetWrapper = async (oobCode, newPassword) =>
     await confirmPasswordReset(auth, oobCode, newPassword);
 
-  /* -----------------------------------------------------------------------------
-     Change password (reauthenticate required for sensitive operations)
-     - Only allowed for "password" provider accounts
-  ----------------------------------------------------------------------------- */
   const changePassword = async ({ currentPassword, newPassword }) => {
     const user = auth.currentUser;
     if (!user) {
@@ -179,39 +170,46 @@ export const AuthProvider = ({ children }) => {
     await updatePassword(user, newPassword);
   };
 
-  /* -----------------------------------------------------------------------------
-     Auth state hydration
-     - Subscribes to Firebase auth state
-     - Ensures app knows when user is resolved (loading=false)
-  ----------------------------------------------------------------------------- */
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsub = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setLoading(false);
     });
-    return () => unsubscribe();
+    return () => unsub();
   }, []);
 
-  /* -----------------------------------------------------------------------------
-     Context value
-  ----------------------------------------------------------------------------- */
+  useEffect(() => {
+    (async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result?.user) {
+          // Optional: toast here if you want
+        }
+      } catch (err) {
+        if (err?.code === "auth/auth-domain-config-required") {
+          console.error("[Auth] Redirect result failed: domain not authorized / authDomain missing.");
+        } else if (err) {
+          console.error("[Auth] getRedirectResult error:", err);
+        }
+      }
+    })();
+  }, []);
+
   const value = {
     currentUser,
     loading,
-    // basic
     registerUser,
     loginUser,
     signInWithGoogle,
+    isGoogleSigningIn,
     logout,
-    // reset password
     sendResetEmail,
     verifyResetCodeWrapper,
     confirmPasswordResetWrapper,
-    // change password
     changePassword,
-    // UI guard
-    isGoogleSigningIn,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+
+export default AuthContext;
