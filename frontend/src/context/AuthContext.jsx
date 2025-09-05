@@ -27,9 +27,21 @@ export const useAuth = () => useContext(AuthContext);
 const RESET_URL =
   import.meta.env.VITE_RESET_URL || "http://localhost:5173/reset-password";
 
-// Single shared Google provider instance (optionally force account picker)
+// Single shared Google provider instance
 const googleProvider = new GoogleAuthProvider();
+// Optional: force account picker
 // googleProvider.setCustomParameters({ prompt: "select_account" });
+
+/** Detect contexts where popups are unreliable:
+ *  - In-app browsers (FB/IG/Twitter, etc.)
+ *  - COOP/COEP active (crossOriginIsolated = true)
+ */
+function mustUseRedirect() {
+  const ua = navigator.userAgent || "";
+  const isInApp = /FBAN|FBAV|Instagram|Line\/|Twitter|FB_IAB|Pinterest|LinkedIn/i.test(ua);
+  const coopCoepActive = !!window.crossOriginIsolated;
+  return isInApp || coopCoepActive;
+}
 
 export const AuthProvider = ({ children }) => {
   // ---------------------------------------------------------------------------
@@ -50,15 +62,20 @@ export const AuthProvider = ({ children }) => {
     await signInWithEmailAndPassword(auth, email, password);
 
   // ---------------------------------------------------------------------------
-  // Google OAuth with popup → redirect fallback
-  // - Handles in-app browsers (Messenger/IG) that block popups
-  // - Surfaces specific error for authDomain not configured
+  // Google OAuth with smart popup → redirect strategy
+  // - Uses redirect automatically in COOP/COEP or in-app browsers
+  // - Falls back to redirect on popup failures
   // ---------------------------------------------------------------------------
   const signInWithGoogle = async () => {
     if (isGoogleSigningIn) return;
     setIsGoogleSigningIn(true);
     try {
-      // 1) Try popup first for best UX on normal browsers
+      if (mustUseRedirect()) {
+        await signInWithRedirect(auth, googleProvider);
+        return;
+      }
+
+      // Try popup first for best UX on normal browsers
       const res = await signInWithPopup(auth, googleProvider);
       return res;
     } catch (err) {
@@ -72,23 +89,22 @@ export const AuthProvider = ({ children }) => {
         return;
       }
 
-      // ❗ authDomain not configured / current host not in Authorized domains
+      // Domain misconfig (keep loud for debugging)
       if (err?.code === "auth/auth-domain-config-required") {
         console.error(
           "[Auth] authDomain missing or host not authorized.\n" +
-            "Fix in Firebase Console → Authentication → Settings → Authorized domains.\n" +
+            "Fix: Firebase Console → Authentication → Settings → Authorized domains.\n" +
             "Also ensure Vercel env VITE_AUTH_DOMAIN is set and redeploy."
         );
-        throw err; // Let UI show a proper alert
+        throw err; // surface to UI toast
       }
 
-      // 2) Fallback to redirect (works in in-app browsers that block popups)
+      // Any other popup failure → fallback to redirect
       console.warn(
-        "[Auth] signInWithPopup failed, falling back to signInWithRedirect due to:",
+        "[Auth] signInWithPopup failed; falling back to signInWithRedirect. Reason:",
         err?.code || err
       );
       await signInWithRedirect(auth, googleProvider);
-      // After redirect back, getRedirectResult can be handled in useEffect below.
     } finally {
       setIsGoogleSigningIn(false);
     }
@@ -189,7 +205,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   // ---------------------------------------------------------------------------
-  // Auth state hydration + optional redirect result handling
+  // Auth state hydration
   // ---------------------------------------------------------------------------
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -199,18 +215,16 @@ export const AuthProvider = ({ children }) => {
     return () => unsub();
   }, []);
 
-  // If the app returned from signInWithRedirect, this resolves the result.
-  // You can hook a toast here if you want, but we keep it silent to avoid duplicate toasts.
+  // If the app returned from signInWithRedirect, resolve result once.
   useEffect(() => {
     (async () => {
       try {
         const result = await getRedirectResult(auth);
         if (result?.user) {
-          // Optionally display a success toast here if desired
+          // Optional: toast success here if you want
           // console.log("[Auth] Google redirect sign-in success:", result.user.email);
         }
       } catch (err) {
-        // Surface specific domain error if it happens after redirect (rare)
         if (err?.code === "auth/auth-domain-config-required") {
           console.error(
             "[Auth] Redirect result failed: domain not authorized / authDomain missing."

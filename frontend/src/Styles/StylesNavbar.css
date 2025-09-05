@@ -243,21 +243,17 @@
 /* ========================== */
 /* 📁 Navigation Links        */
 /* ========================== */
-/* Make links visible in normal flow (no absolute positioning) */
 .nav-links {
   list-style: none;
   display: flex;
   gap: 2rem;
   padding: 0;
-  margin: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   align-items: center;
   transition: all 0.3s ease-in-out;
-
-  /* Push links to the far side so they won't hide behind search */
-  margin-inline-start: auto; /* works LTR & RTL */
-  position: static;          /* remove absolute */
-  transform: none;           /* ensure no offset */
-  z-index: 6;                /* above the search box if they overlap */
 }
 
 .nav-links li { display: inline-block; }
