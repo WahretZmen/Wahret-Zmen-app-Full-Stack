@@ -1,6 +1,6 @@
 // src/firebase/firebase.config.js
-import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { initializeApp, getApps } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -11,10 +11,14 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_APPID,
 };
 
+// Helpful diagnostics in case envs are missing in a deployed build
 if (!firebaseConfig.authDomain) {
-  console.error("Missing VITE_AUTH_DOMAIN env var");
+  console.warn(
+    "[Firebase] Missing VITE_AUTH_DOMAIN. Current host:",
+    window?.location?.host
+  );
 }
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
+export default app;

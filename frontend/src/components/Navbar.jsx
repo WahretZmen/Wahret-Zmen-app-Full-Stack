@@ -7,39 +7,40 @@ import logoImg from "../../src/assets/Logo/Logo Boutique Wahret Zmen.jpg";
 import "../Styles/StylesNavbar.css";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import InputSearch from "./SearchInput";
 
 /* =============================================================================
-   🧭 Navbar
-   - Fixed header with brand, nav links, cart, and user menu
-   - RTL/LTR aware via i18n language
-   - Mobile menu toggle + outside click/ESC handling
-   - Exposes --navbar-height CSS var for fixed dropdown placement
+   🧭 Navbar (Wahret Zmen)
+   - Fixed, lightweight, accessible
+   - RTL/LTR aware
+   - Prevents background scroll when mobile menu is open
+   - Stable user dropdown that never runs off-screen
+   - Adds .scrolled class when page scrolls for subtle elevation
 ============================================================================= */
 const Navbar = () => {
   // UI state
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [navQuery, setNavQuery] = useState(""); // (kept, even if not used yet)
 
   // Refs
   const dropdownRef = useRef(null);
   const headerRef = useRef(null);
 
   // Data sources
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const cartItems = useSelector((state) => state.cart.cartItems || []);
   const { currentUser, logout } = useAuth();
-  const token = localStorage.getItem("token");
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   // i18n / router
   const { t, i18n } = useTranslation();
   const dir = i18n.language === "ar" ? "rtl" : "ltr";
   const navigate = useNavigate();
+  const location = useLocation();
 
-  /* -----------------------------------------------------------------------------
-     Measure header height → set CSS var so fixed dropdown can align below navbar
-  ----------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------
+     A. Expose --navbar-height CSS var for precise positioning
+  --------------------------------------------------------------------------- */
   useEffect(() => {
     const setNavHeightVar = () => {
       const h = headerRef.current?.offsetHeight || 60;
@@ -50,9 +51,9 @@ const Navbar = () => {
     return () => window.removeEventListener("resize", setNavHeightVar);
   }, []);
 
-  /* -----------------------------------------------------------------------------
-     Close dropdowns on outside click or ESC, and close mobile menu on outside click
-  ----------------------------------------------------------------------------- */
+  /* ---------------------------------------------------------------------------
+     B. Close popovers on outside click / ESC
+  --------------------------------------------------------------------------- */
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -63,14 +64,12 @@ const Navbar = () => {
         setIsMobileMenuOpen(false);
       }
     };
-
     const handleKeyDown = (e) => {
       if (e.key === "Escape") {
         setIsDropdownOpen(false);
         setIsMobileMenuOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("keydown", handleKeyDown);
     return () => {
@@ -79,37 +78,81 @@ const Navbar = () => {
     };
   }, [isMobileMenuOpen]);
 
-  /* -----------------------------------------------------------------------------
+  /* ---------------------------------------------------------------------------
+     C. Lock body scroll when mobile menu is open
+  --------------------------------------------------------------------------- */
+  useEffect(() => {
+    const body = document.body;
+    if (isMobileMenuOpen) {
+      body.classList.add("menu-open");
+    } else {
+      body.classList.remove("menu-open");
+    }
+    return () => body.classList.remove("menu-open");
+  }, [isMobileMenuOpen]);
+
+  /* ---------------------------------------------------------------------------
+     D. Close menus on route change; also close on large-screen resize
+  --------------------------------------------------------------------------- */
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+    setIsDropdownOpen(false);
+    // scroll to top when changing route via navbar links
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 1025) setIsMobileMenuOpen(false);
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  /* ---------------------------------------------------------------------------
+     E. Add 'scrolled' class after small scroll for subtle elevation
+  --------------------------------------------------------------------------- */
+  useEffect(() => {
+    const onScroll = () => {
+      const scrolled = window.scrollY > 4;
+      const root = document.documentElement;
+      if (scrolled) root.classList.add("navbar-scrolled");
+      else root.classList.remove("navbar-scrolled");
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  /* ---------------------------------------------------------------------------
      Render
-  ----------------------------------------------------------------------------- */
+  --------------------------------------------------------------------------- */
   return (
     <header className="navbar-container" ref={headerRef}>
-      <nav className="navbar-content" dir={dir}>
-        {/* -------------------------------- Brand / Logo -------------------------------- */}
+      <nav className="navbar-content" dir={dir} aria-label={t("navbar.brand") || "Wahret Zmen"}>
+        {/* ---------------------------- Brand / Logo ---------------------------- */}
         <div className="navbar-left">
           <Link
             to="/"
             className="logo premium-logo"
             onClick={() => setIsMobileMenuOpen(false)}
+            aria-label={t("navbar.brand")}
           >
-            {/* Emblem with halo + shimmer overlay (decorative) */}
             <span className="logo-emblem" aria-hidden="true">
               <img src={logoImg} alt="Wahret Zmen Logo" className="logo-img" />
               <span className="logo-halo" aria-hidden="true"></span>
               <span className="logo-shimmer" aria-hidden="true"></span>
             </span>
-
-            {/* Brand text with gentle shine */}
             <span className="logo-text">
               <span className="logo-text-shine">{t("navbar.brand")}</span>
             </span>
           </Link>
         </div>
 
-        {/* ------------------------------- Mobile Toggle ------------------------------- */}
+        {/* -------------------------- Mobile Toggle ---------------------------- */}
         <button
           className="mobile-menu-btn"
-          aria-label="Toggle menu"
+          aria-label={isMobileMenuOpen ? t("close_menu") || "Close menu" : t("open_menu") || "Open menu"}
           aria-expanded={isMobileMenuOpen}
           aria-controls="main-navigation"
           onClick={() => setIsMobileMenuOpen((s) => !s)}
@@ -117,42 +160,49 @@ const Navbar = () => {
           {isMobileMenuOpen ? <FiX className="menu-icon" /> : <FiMenu className="menu-icon" />}
         </button>
 
-        {/* -------------------------- Center Navigation Links -------------------------- */}
+        {/* ------------------------------ Search (optional) -------------------- */}
+        <div className="nav-search" aria-hidden="false">
+          {/* You can remove this block if you don't want search in the navbar */}
+          <InputSearch />
+        </div>
+
+        {/* ----------------------- Center Navigation Links --------------------- */}
         <ul
           id="main-navigation"
           className={`nav-links ${isMobileMenuOpen ? "mobile-center open" : ""}`}
+          role="menubar"
         >
-          <li>
-            <Link to="/" onClick={() => setIsMobileMenuOpen(false)}>
+          <li role="none">
+            <Link role="menuitem" to="/" onClick={() => setIsMobileMenuOpen(false)}>
               {t("home")}
             </Link>
           </li>
-          <li>
-            <Link to="/products" onClick={() => setIsMobileMenuOpen(false)}>
+          <li role="none">
+            <Link role="menuitem" to="/products" onClick={() => setIsMobileMenuOpen(false)}>
               {t("products")}
             </Link>
           </li>
-          <li>
-            <Link to="/about" onClick={() => setIsMobileMenuOpen(false)}>
+          <li role="none">
+            <Link role="menuitem" to="/about" onClick={() => setIsMobileMenuOpen(false)}>
               {t("about-menu")}
             </Link>
           </li>
-          <li>
-            <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
+          <li role="none">
+            <Link role="menuitem" to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
               {t("contact-menu")}
             </Link>
           </li>
           {token && (
-            <li>
-              <Link to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
+            <li role="none">
+              <Link role="menuitem" to="/dashboard" onClick={() => setIsMobileMenuOpen(false)}>
                 {t("admin_dashboard")}
               </Link>
             </li>
           )}
         </ul>
 
-        {/* ---------------------------- Right (cart + user) ---------------------------- */}
-        <div className="nav-icons">
+        {/* --------------------------- Right (icons) --------------------------- */}
+        <div className="nav-icons" aria-label="User and cart">
           {/* Cart */}
           <Link
             to="/cart"
@@ -176,11 +226,12 @@ const Navbar = () => {
                   e.stopPropagation();
                   setIsDropdownOpen((s) => !s);
                 }}
+                title={currentUser?.email || "Account"}
               >
                 <FiUser className="user-icon logged-in" />
               </button>
 
-              {/* Fixed, high z-index, scrollable dropdown */}
+              {/* Fixed dropdown */}
               <div
                 id="profile-menu"
                 className={`user-dropdown ${isDropdownOpen ? "active" : ""} ${dir === "rtl" ? "rtl" : "ltr"}`}
@@ -188,18 +239,12 @@ const Navbar = () => {
               >
                 <ul>
                   <li role="menuitem">
-                    <Link
-                      to="/user-dashboard"
-                      onClick={() => setIsDropdownOpen(false)}
-                    >
+                    <Link to="/user-dashboard" onClick={() => setIsDropdownOpen(false)}>
                       {t("dashboard")}
                     </Link>
                   </li>
                   <li role="menuitem">
-                    <Link
-                      to="/orders"
-                      onClick={() => setIsDropdownOpen(false)}
-                    >
+                    <Link to="/orders" onClick={() => setIsDropdownOpen(false)}>
                       {t("orders")}
                     </Link>
                   </li>
@@ -219,21 +264,21 @@ const Navbar = () => {
               </div>
             </div>
           ) : token ? (
-            // Admin token present but not in AuthContext (e.g., admin panel login)
             <Link to="/dashboard" className="dashboard-link admin-only">
               {t("admin_dashboard")}
             </Link>
           ) : (
-            // Guest
             <Link to="/login" className="login-icon" aria-label={t("login")}>
               <FiUser className="icon" />
             </Link>
           )}
 
-          {/* (Optional) language switcher slot */}
-          {/* <div className="language-switcher-wrapper">
+          {/* If you want language switcher inside navbar, un-comment */}
+          {/*
+          <div className="language-switcher-wrapper">
             <LanguageSwitcher />
-          </div> */}
+          </div>
+          */}
         </div>
       </nav>
     </header>
