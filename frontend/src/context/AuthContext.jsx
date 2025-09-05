@@ -32,7 +32,7 @@ const googleProvider = new GoogleAuthProvider();
 function mustUseRedirect() {
   const ua = navigator.userAgent || "";
   const isInApp = /FBAN|FBAV|Instagram|Line\/|Twitter|FB_IAB|Pinterest|LinkedIn/i.test(ua);
-  const coopCoepActive = !!window.crossOriginIsolated; // true when COOP+COEP isolates the page
+  const coopCoepActive = !!window.crossOriginIsolated; // COOP+COEP
   return isInApp || coopCoepActive;
 }
 
@@ -48,20 +48,26 @@ export const AuthProvider = ({ children }) => {
   const loginUser = async (email, password) =>
     await signInWithEmailAndPassword(auth, email, password);
 
+  /** Google OAuth with explicit status contract */
   const signInWithGoogle = async () => {
-    if (isGoogleSigningIn) return;
+    if (isGoogleSigningIn) return { status: "cancel" };
     setIsGoogleSigningIn(true);
     try {
       if (mustUseRedirect()) {
         await signInWithRedirect(auth, googleProvider);
-        return;
+        return { status: "redirect" };
       }
-      const res = await signInWithPopup(auth, googleProvider);
-      return res;
-    } catch (err) {
-      if (err?.code === "auth/popup-closed-by-user") return;
-      if (err?.code === "auth/cancelled-popup-request") return;
 
+      const res = await signInWithPopup(auth, googleProvider);
+      return { status: "ok", user: res.user };
+    } catch (err) {
+      // User closed the popup or another popup already in progress
+      if (err?.code === "auth/popup-closed-by-user" || err?.code === "auth/cancelled-popup-request") {
+        console.warn("[Auth] Google popup canceled/closed.");
+        return { status: "cancel" };
+      }
+
+      // Config issue → let UI show an error
       if (err?.code === "auth/auth-domain-config-required") {
         console.error(
           "[Auth] authDomain missing or host not authorized.\n" +
@@ -71,11 +77,10 @@ export const AuthProvider = ({ children }) => {
         throw err;
       }
 
-      console.warn(
-        "[Auth] signInWithPopup failed; falling back to signInWithRedirect. Reason:",
-        err?.code || err
-      );
+      // Other popup failures → redirect fallback
+      console.warn("[Auth] Popup failed, using redirect. Reason:", err?.code || err);
       await signInWithRedirect(auth, googleProvider);
+      return { status: "redirect" };
     } finally {
       setIsGoogleSigningIn(false);
     }
@@ -178,13 +183,11 @@ export const AuthProvider = ({ children }) => {
       try {
         const result = await getRedirectResult(auth);
         if (result?.user) {
-          // Optionally toast success here
+          // Optional: toast here if you want
         }
       } catch (err) {
         if (err?.code === "auth/auth-domain-config-required") {
-          console.error(
-            "[Auth] Redirect result failed: domain not authorized / authDomain missing."
-          );
+          console.error("[Auth] Redirect result failed: domain not authorized / authDomain missing.");
         } else if (err) {
           console.error("[Auth] getRedirectResult error:", err);
         }
