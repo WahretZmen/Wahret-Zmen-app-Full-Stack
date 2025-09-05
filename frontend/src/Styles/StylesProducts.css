@@ -3,7 +3,6 @@
    — Plain CSS, organized & commented
    =========================== */
 
-
 /* =========================================================
    BASE LAYOUT HELPERS
    ========================================================= */
@@ -14,7 +13,23 @@
 /* Ensure content area has enough height (prevents footer jump) */
 .main-content { min-height: 80vh; }
 
-/* Loader block spacing under navbar */
+/* Mobile-safe page loader (shown while fetching before page mounts) */
+.page-loader {
+  /* Assume a fixed navbar; reserve its height and center the spinner */
+  --nav-h: 64px;                /* default for small screens */
+  min-height: calc(100vh - var(--nav-h));
+  padding-top: var(--nav-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Slightly taller nav on tablets/desktop */
+@media (min-width: 768px) {
+  .page-loader { --nav-h: 80px; }
+}
+
+/* Older inline loader block (used for search & load-more areas) */
 .loader-wrapper {
   display: flex;
   justify-content: center;
@@ -22,7 +37,6 @@
   height: 100px;
   margin-top: 100px;
 }
-
 
 /* =========================================================
    BRAND BUTTON (REUSED ACROSS PAGES)
@@ -37,7 +51,6 @@
   transition: background-color 0.3s ease;
 }
 .wahret-zmen-btn:hover { background-color: #8a5d3b; }
-
 
 /* =========================================================
    NEW: PLAIN BUTTONS / TOOLBAR (SECTION #1)
@@ -72,7 +85,6 @@
 .w240 { width: 240px; }
 .w-full { width: 100%; }
 
-
 /* =========================================================
    TYPOGRAPHY & SPACING (RESPONSIVE)
    ========================================================= */
@@ -81,7 +93,6 @@
 @media (min-width: 1024px) {
   .page-title-desktop { margin-top: 3.5rem; /* ~ mt-14 */ }
 }
-
 
 /* =========================================================
    ANIMATIONS — TITLES & BOUNCE
@@ -121,20 +132,16 @@
   .wz-title-shine, .wz-title-bounce { animation: none !important; }
 }
 
-
 /* =========================================================
    PREMIUM COLLECTIONS HEADER + RESPONSIVE OFFSETS
    ========================================================= */
 
 /* ↑↑ Increased top margin here to push the title further down from navbar */
-
-
 .wz-collections-header {
   text-align: center;
   max-width: 980px;
   margin: 5rem auto 2rem;   /* was ~3.25rem */
   padding: 0 1rem;
-  
 }
 
 .wz-collections-title.premium-gradient {
@@ -179,7 +186,7 @@
 /* Give extra space under the fixed navbar on phones */
 @media (max-width: 640px) {
   .wz-collections-header {
-    margin-top: 6.25rem;     /* NEW: was 5rem; pushes title down */
+    margin-top: 6.25rem;     /* was 5rem; pushes title down */
   }
 }
 
@@ -207,7 +214,6 @@
   .wz-collections-header { margin-top: 6rem; } /* was 4rem */
 }
 
-
 /* =========================================================
    MOBILE ADJUSTMENTS (GENERAL)
    ========================================================= */
@@ -216,7 +222,6 @@
   .wahret-zmen-btn { padding: 0.6rem 1.5rem; font-size: 0.95rem; }
 }
 label input[type="checkbox"]:checked + span { font-weight: bold; }
-
 
 /* =========================================================
    LOADER RESPONSIVENESS
@@ -233,7 +238,6 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
   .loader-wrapper { margin-top: 60px; }
 }
 
-
 /* =========================================================
    GRID: CENTER CARDS ON NARROW LAYOUTS
    ========================================================= */
@@ -249,14 +253,12 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
 .product-card { margin: 0 auto; margin-top: 50px !important; }
 @media (max-width: 480px) { .products-title { margin-top: 2.5rem !important; } }
 
-
 /* =========================================================
    SIDEBAR SPACING ON MOBILE
    ========================================================= */
 @media (max-width: 1024px) {
   aside .card, aside .filters-card { margin-bottom: 1rem; }
 }
-
 
 /* =========================================================
    NEW: PLAIN-CSS FILTERS UI
@@ -303,7 +305,6 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
 }
 .range.second::-webkit-slider-thumb { background: #D4AF37; }
 
-
 /* =========================================================
    NEW: PLAIN BUTTONS / TOOLBAR (SECTION #2 - DUPLICATE)
    (Intentionally preserved: .btn-outline, .w240, .w-full)
@@ -327,7 +328,6 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
 .btn-toggle { background: #fff; padding: 8px 12px; border: none; outline: none; cursor: pointer; }
 .btn-toggle.active { background: #f5f1ea; }
 
-
 /* =========================================================
    NEW: LIST-MODE PLAIN CARD
    ========================================================= */
@@ -348,7 +348,6 @@ label input[type="checkbox"]:checked + span { font-weight: bold; }
   padding: 10px 14px; font-weight: 700; cursor: pointer; transition: filter .2s ease;
 }
 .btn-gold:hover { filter: brightness(0.95); }
-
 
 /* =========================================================
    SPACING HELPER

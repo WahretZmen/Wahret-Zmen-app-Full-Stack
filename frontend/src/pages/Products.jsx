@@ -22,6 +22,18 @@ import SelectorPageProducts from "./../components/SelectorProductsPage";
 // -----------------------------------------------------------------------------
 // Loaders (brand-styled)
 // -----------------------------------------------------------------------------
+const PageLoader = () => (
+  <div className="page-loader" role="status" aria-live="polite">
+    <div className="relative w-16 h-16">
+      <div className="absolute inset-0 rounded-full border-4 border-t-transparent border-[#D4AF37] animate-spin"></div>
+      <div className="absolute inset-2 rounded-full border-2 border-[#A67C52] opacity-40"></div>
+      <span className="absolute inset-0 flex items-center justify-center font-serif text-[#D4AF37] text-xl font-bold">
+        WZ
+      </span>
+    </div>
+  </div>
+);
+
 const WahretZmenLoader = () => (
   <div className="loader-wrapper w-full">
     <div className="relative w-16 h-16">
@@ -278,9 +290,9 @@ const Products = () => {
     navigate({ search: params.toString() }, { replace: true });
   };
 
-  // 8) Early loader (i18n or data)
+  // 8) Early loader (i18n or data) — now uses PageLoader, which is mobile-safe
   if (!i18nReady || isLoading || isFetching) {
-    return <WahretZmenLoader />;
+    return <PageLoader />;
   }
 
   // 9) Render
