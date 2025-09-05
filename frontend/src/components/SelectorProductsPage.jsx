@@ -13,17 +13,21 @@ import { Filter } from "lucide-react";
 import "../Styles/StylesSelectorProductsPage.css";
 
 /* =============================================================================
-   🔤 Canonicalization: map any alias → canonical key
+   🔤 Canonicalization: map any alias → canonical key used in state/UI
 ============================================================================= */
 const CANONICAL = {
+  // All
   all: "All",
   tous: "All",
+  "الكل": "All",
+
   // EN
   men: "Men",
   women: "Women",
   children: "Children",
   kids: "Children",
   kid: "Children",
+
   // FR
   hommes: "Men",
   homme: "Men",
@@ -31,32 +35,31 @@ const CANONICAL = {
   femme: "Women",
   enfants: "Children",
   enfant: "Children",
+
   // AR
-  "الكل": "All",
   "رجال": "Men",
   "نساء": "Women",
   "أطفال": "Children",
 };
 
-/* =============================================================================
-   🌐 i18n fallbacks when translations are missing
-============================================================================= */
 const FALLBACKS = {
   ar: { all: "الكل", men: "رجال", women: "نساء", children: "أطفال" },
   fr: { all: "Tous", men: "Hommes", women: "Femmes", children: "Enfants" },
   en: { all: "All", men: "Men", women: "Women", children: "Children" },
 };
 
-function localFallback(opt, lang) {
-  const key = String(opt).toLowerCase();
-  const short = (lang || "en").split("-")[0];
-  return FALLBACKS[short]?.[key] ?? FALLBACKS.en[key] ?? String(opt);
-}
+const normalize = (v) => (v || "").toString().trim().toLowerCase();
 
 function canonicalizeCategory(raw) {
   if (raw == null) return "";
-  const k = String(raw).trim().toLowerCase();
+  const k = normalize(raw);
   return CANONICAL[k] || raw;
+}
+
+function localFallback(opt, lang) {
+  const key = normalize(opt);
+  const short = (lang || "en").split("-")[0];
+  return FALLBACKS[short]?.[key] ?? FALLBACKS.en[key] ?? String(opt);
 }
 
 /* =============================================================================
@@ -66,6 +69,9 @@ const SelectorPageProducts = ({
   categorySel,
   setCategorySel,
   categories,
+  colorSel,
+  setColorSel,
+  colors,
   priceRange,
   setPriceRange,
   minPrice,
@@ -76,9 +82,9 @@ const SelectorPageProducts = ({
   const lang = i18n?.language || "en";
   const isRTL = lang === "ar" || lang === "ar-SA" || lang.startsWith("ar");
 
-  /* -----------------------------------------------------------------------------
+  /* ---------------------------------------------------------------------------
      Normalize & dedupe categories, ensure "All" exists and is first
-  ----------------------------------------------------------------------------- */
+  --------------------------------------------------------------------------- */
   const normalizedCategories = useMemo(() => {
     const seen = new Set();
     const canonList = [];
@@ -108,33 +114,34 @@ const SelectorPageProducts = ({
       defaultValue: localFallback(c, lang),
     });
 
-  // UI should display "All" when external filter state is empty
-  const selectedCategoryForUI = categorySel ? canonicalizeCategory(categorySel) : "All";
+  // Always show canonical selection (default to "All")
+  const selectedCategoryForUI = canonicalizeCategory(categorySel || "All");
 
   const onCategoryChange = (e) => {
-    const picked = e.target.value;
-    setCategorySel(picked === "All" ? "" : picked); // "" means no filter
+    const picked = canonicalizeCategory(e.target.value);
+    // IMPORTANT: keep canonical value in state; don't set "" for All
+    setCategorySel(picked);
   };
 
-  /* -----------------------------------------------------------------------------
+  /* ---------------------------------------------------------------------------
      Clamp ranges to avoid min > max during quick drags
-  ----------------------------------------------------------------------------- */
+  --------------------------------------------------------------------------- */
   const clampMin = Math.min(Math.max(minPrice, priceRange[0]), priceRange[1]);
   const clampMax = Math.max(Math.min(maxPrice, priceRange[1]), priceRange[0]);
 
-  /* -----------------------------------------------------------------------------
+  /* ---------------------------------------------------------------------------
      Render
-  ----------------------------------------------------------------------------- */
+  --------------------------------------------------------------------------- */
   return (
     <aside className="filters-sidebar" dir={isRTL ? "rtl" : "ltr"}>
       <div className="filters-card">
-        {/* ---------- Header ---------- */}
+        {/* Header */}
         <div className="filters-header">
           <h3 className="filters-title">{t("filters", "الفلاتر")}</h3>
           <Filter className="icon" aria-hidden="true" />
         </div>
 
-        {/* ---------- Category Select ---------- */}
+        {/* Category */}
         <div className="filter-group">
           <label className="filter-label" htmlFor="category-select">
             {t("category", "الفئة")}
@@ -153,13 +160,12 @@ const SelectorPageProducts = ({
           </select>
         </div>
 
-        {/* ---------- Price Range (min/max inputs + double sliders) ---------- */}
+        {/* Price Range */}
         <div className="filter-group">
           <label className="filter-label">{t("price_range", "نطاق السعر")}</label>
 
-          {/* Numeric inputs for precise control */}
+          {/* Numeric inputs */}
           <div className="price-row" role="group" aria-label={t("price_range", "نطاق السعر")}>
-            {/* Min input */}
             <div className="price-field">
               <span className="currency">$</span>
               <input
@@ -177,7 +183,6 @@ const SelectorPageProducts = ({
 
             <span className="dash" aria-hidden="true">—</span>
 
-            {/* Max input */}
             <div className="price-field">
               <span className="currency">$</span>
               <input
@@ -194,9 +199,8 @@ const SelectorPageProducts = ({
             </div>
           </div>
 
-          {/* Dual sliders: top controls MIN, bottom controls MAX */}
+          {/* Dual sliders */}
           <div className="range-wrap double" aria-hidden="false">
-            {/* MIN slider */}
             <input
               className="range line first"
               type="range"
@@ -209,7 +213,6 @@ const SelectorPageProducts = ({
                 setPriceRange([nextMin, clampMax]);
               }}
             />
-            {/* MAX slider */}
             <input
               className="range line second"
               type="range"
@@ -231,7 +234,7 @@ const SelectorPageProducts = ({
           </div>
         </div>
 
-        {/* ---------- Clear Filters ---------- */}
+        {/* Clear Filters */}
         <button
           type="button"
           className="btn-outline w-full"

@@ -3,12 +3,8 @@
 // Purpose : Products catalog page with search, filters (category, color, price),
 //           and "load more" pagination. Uses RTK Query for data fetching,
 //           Redux for refetch triggers, and i18n for RTL support.
-// Notes   : Only organization and comments added. No logic/JSX/text changes.
 // -----------------------------------------------------------------------------
 
-// -----------------------------------------------------------------------------
-// Imports
-// -----------------------------------------------------------------------------
 import React, { useEffect, useMemo, useState } from "react";
 import ProductCard from "./products/ProductCard.jsx";
 import { useGetAllProductsQuery } from "../redux/features/products/productsApi.js";
@@ -54,29 +50,46 @@ const InlineWahretZmenLoader = () => (
 // Helpers
 // -----------------------------------------------------------------------------
 const normalize = (v) => (v || "").toString().trim().toLowerCase();
+const capitalize = (s) => {
+  const n = String(s || "");
+  if (!n) return n;
+  return n.charAt(0).toUpperCase() + n.slice(1);
+};
 
-// map many aliases → unified UI labels
+// Canonical map for category aliases (EN/FR/AR) ⇒ "Men"|"Women"|"Children"|"All"
 const CATEGORY_ALIAS_TO_UI = {
-  // FR
-  hommes: "Men",
-  femmes: "Women",
-  enfants: "Children",
+  // All
+  all: "All",
+  tous: "All",
+  "الكل": "All",
+
   // EN
   men: "Men",
   women: "Women",
   children: "Children",
   kids: "Children",
   kid: "Children",
-  // Singular FR
+
+  // FR
+  hommes: "Men",
   homme: "Men",
+  femmes: "Women",
   femme: "Women",
+  enfants: "Children",
   enfant: "Children",
+
   // AR
   رجال: "Men",
   نساء: "Women",
   أطفال: "Children",
 };
-const mapURLCategoryToUI = (raw) => CATEGORY_ALIAS_TO_UI[normalize(raw)] || "";
+
+const canonicalCategory = (raw) => {
+  const n = normalize(raw);
+  return CATEGORY_ALIAS_TO_UI[n] || capitalize(n) || "";
+};
+
+const mapURLCategoryToUI = (raw) => CATEGORY_ALIAS_TO_UI[normalize(raw)] || "All";
 
 // extract numeric price across possible shapes
 const numericPrice = (p) => {
@@ -112,9 +125,7 @@ const productColorNames = (p) => {
 // Component
 // -----------------------------------------------------------------------------
 const Products = () => {
-  // ---------------------------------------------------------------------------
   // 1) Local UI state: filters, search, pagination
-  // ---------------------------------------------------------------------------
   const [categorySel, setCategorySel] = useState("All");
   const [colorSel, setColorSel] = useState("All");
   const [priceRange, setPriceRange] = useState([0, 1000]);
@@ -124,9 +135,7 @@ const Products = () => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchLoading, setSearchLoading] = useState(false);
 
-  // ---------------------------------------------------------------------------
   // 2) i18n, router, redux
-  // ---------------------------------------------------------------------------
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const isRTL = i18n?.language === "ar" || i18n?.language === "ar-SA";
@@ -135,9 +144,7 @@ const Products = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // ---------------------------------------------------------------------------
   // 3) Data: products (RTK Query) + auto refetch on events
-  // ---------------------------------------------------------------------------
   const {
     data: products = [],
     isLoading,
@@ -149,7 +156,6 @@ const Products = () => {
   });
 
   const shouldRefetch = useSelector((state) => state.productEvents.shouldRefetch);
-
   useEffect(() => {
     if (shouldRefetch) {
       refetch();
@@ -157,27 +163,25 @@ const Products = () => {
     }
   }, [shouldRefetch, refetch, dispatch]);
 
-  // ---------------------------------------------------------------------------
   // 4) Initialize category filter from URL (?category=)
-  // ---------------------------------------------------------------------------
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const raw = params.get("category");
-    const mapped = mapURLCategoryToUI(raw);
-    setCategorySel(mapped || "All");
+    setCategorySel(mapURLCategoryToUI(raw));
   }, [location.search]);
 
-  // ---------------------------------------------------------------------------
   // 5) Build filter options & price bounds from live data
-  // ---------------------------------------------------------------------------
   const { categories, colors, minPrice, maxPrice } = useMemo(() => {
+    // Start with canonical set so UI is stable
     const catSet = new Set(["All", "Men", "Women", "Children"]);
     const colorSet = new Set(["All"]);
     let minP = Number.POSITIVE_INFINITY;
     let maxP = 0;
 
     for (const p of products) {
-      if (p?.category) catSet.add(capitalize(normalize(p.category)));
+      const canon = canonicalCategory(p?.category);
+      if (canon) catSet.add(canon);
+
       for (const c of productColorNames(p)) {
         if (c) colorSet.add(capitalize(normalize(c)));
       }
@@ -211,9 +215,7 @@ const Products = () => {
     });
   }, [minPrice, maxPrice]);
 
-  // ---------------------------------------------------------------------------
   // 6) Search with debounce-like delay + inline loader
-  // ---------------------------------------------------------------------------
   const handleSearchChange = (term) => {
     setSearchLoading(true);
     const id = setTimeout(() => {
@@ -223,16 +225,15 @@ const Products = () => {
     return () => clearTimeout(id);
   };
 
-  // ---------------------------------------------------------------------------
   // 7) Filtering pipeline
-  // ---------------------------------------------------------------------------
   const matched = useMemo(() => {
     const q = normalize(searchTerm);
+    const sel = canonicalCategory(categorySel) || "All";
+
     return products.filter((p) => {
-      // Category
-      const catOk =
-        categorySel === "All" ||
-        normalize(p?.category) === normalize(categorySel);
+      // Category (canonicalized on both sides)
+      const catOfProduct = canonicalCategory(p?.category);
+      const catOk = sel === "All" || catOfProduct === sel;
 
       // Color
       const pColors = productColorNames(p).map((c) => normalize(c));
@@ -247,6 +248,7 @@ const Products = () => {
         p?.title,
         p?.translations?.fr?.title,
         p?.translations?.ar?.title,
+        p?.translations?.en?.title,
       ].filter(Boolean);
       const searchOk = !q || titleVariants.some((t) => normalize(t).includes(q));
 
@@ -276,20 +278,17 @@ const Products = () => {
     navigate({ search: params.toString() }, { replace: true });
   };
 
-  // ---------------------------------------------------------------------------
   // 8) Early loader (i18n or data)
-  // ---------------------------------------------------------------------------
   if (!i18nReady || isLoading || isFetching) {
     return <WahretZmenLoader />;
   }
 
-  // ---------------------------------------------------------------------------
   // 9) Render
-  // ---------------------------------------------------------------------------
   return (
     <FadeInSection>
       <div className="main-content">
-        <div className="container mx-auto pt-8 sm:pt-12 md:pt-16 pb-4 px-4 sm:px-6 md:px-10 lg:px-20 max-w-[1440px]">
+        {/* ↓ reduced top padding to tighten space under navbar */}
+        <div className="container mx-auto pt-3 sm:pt-4 md:pt-5 pb-4 px-4 sm:px-6 md:px-10 lg:px-20 max-w-[1440px]">
           {/* SEO */}
           <Helmet>
             <title>{t("products_page.title")} - Wahret Zmen</title>
@@ -301,9 +300,7 @@ const Products = () => {
               <h1 className="wz-collections-title premium-gradient">
                 {t("products_page.title")}
               </h1>
-              <p className="wz-collections-sub">
-                {t("products_page.overview")}
-              </p>
+              <p className="wz-collections-sub">{t("products_page.overview")}</p>
             </header>
           </FadeInSection>
 
@@ -319,7 +316,8 @@ const Products = () => {
           </FadeInSection>
 
           {/* ===== Two-column layout (sidebar must be on the right) ===== */}
-          <div className="flex flex-col lg:flex-row gap-8 mt-4">
+          {/* ↓ reduced top margin slightly */}
+          <div className="flex flex-col lg:flex-row gap-8 mt-2">
             {/* RTL: render sidebar first so it ends up visually on the RIGHT */}
             {isRTL && (
               <SelectorPageProducts
@@ -369,10 +367,7 @@ const Products = () => {
                         <InlineWahretZmenLoader />
                       </div>
                     ) : (
-                      <button
-                        className="btn-outline btn-narrow"
-                        onClick={handleLoadMore}
-                      >
+                      <button className="btn-outline btn-narrow" onClick={handleLoadMore}>
                         {t("load_more")}
                       </button>
                     )}
@@ -404,12 +399,3 @@ const Products = () => {
 };
 
 export default Products;
-
-// -----------------------------------------------------------------------------
-// Small util
-// -----------------------------------------------------------------------------
-function capitalize(s) {
-  const n = String(s || "");
-  if (!n) return n;
-  return n.charAt(0).toUpperCase() + n.slice(1);
-}
