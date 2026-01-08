@@ -1,0 +1,394 @@
+/* ============================================================================
+   StylesLogin.css — Wahret Zmen Login Page
+   Pure CSS, scoped to .login-page to avoid Tailwind / shadcn conflicts
+   ========================================================================== */
+
+/* Brand variables */
+:root {
+  --hz-brown: #8b5c3e;
+  --hz-brown-dark: #74452d;
+  --hz-bg: #f4eee0;
+  --hz-card-bg: #ffffff;
+  --hz-border: #e5e7eb;
+  --hz-muted: #6b7280;
+  --hz-error: #dc2626;
+}
+
+/* Light reset (safe) */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ============================
+   Page layout (space under navbar)
+   ============================ */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  /* desktop + large screens: enough space below navbar */
+  padding: 7rem 1rem 3rem;
+
+  background: var(--hz-bg);
+  direction: rtl;
+}
+
+/* Extra top space on Android / small screens */
+@media (max-width: 768px) {
+  .login-page {
+    padding-top: 10rem;
+  }
+}
+
+.login-page .login-card {
+  width: 100%;
+  max-width: 420px;
+  background-color: var(--hz-card-bg);
+  padding: 28px 24px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+  animation: login-fade-in 0.4s ease-out;
+}
+
+@media (min-width: 640px) {
+  .login-page .login-card {
+    padding: 32px 28px;
+    
+  }
+}
+
+/* ============================
+   Header
+   ============================ */
+.login-page .login-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.login-page .login-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.35rem;
+}
+
+.login-page .login-subtitle {
+  font-size: 0.9rem;
+  color: var(--hz-muted);
+}
+
+/* ============================
+   Error message
+   ============================ */
+.login-page .login-error {
+  color: var(--hz-error);
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
+/* ============================
+   Form
+   ============================ */
+.login-page .login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.login-page .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-page .form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.25rem;
+}
+
+/* Inputs */
+.login-page .input-field {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--hz-border);
+  background-color: #ffffff;
+  color: #111827;
+  font-size: 0.9rem;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.login-page .input-field::placeholder {
+  color: #9ca3af;
+}
+
+.login-page .input-field:focus,
+.login-page .input-field:focus-visible {
+  outline: none;
+  border-color: var(--hz-brown);
+  box-shadow: 0 0 0 3px rgba(139, 92, 62, 0.18);
+  background-color: #fefdfb;
+}
+
+/* Autofill cleanup */
+.login-page .input-field:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #fff inset;
+  -webkit-text-fill-color: #111827;
+}
+
+/* Error under input */
+.login-page .error-text {
+  color: var(--hz-error);
+  font-size: 0.78rem;
+  margin-top: 0.25rem;
+}
+
+/* ============================
+   Primary login button
+   ============================ */
+.login-page .login-button {
+  display: block;
+  width: 100%;
+  max-width: 360px;            /* <— slightly narrower than card */
+  box-sizing: border-box;
+  margin: 1rem auto 0.6rem;    /* <— centered horizontally */
+
+  text-align: center;
+
+  padding: 10px 14px;
+  border: none;
+
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  color: #ffffff;
+
+  background: linear-gradient(135deg, var(--hz-brown), var(--hz-brown-dark));
+  box-shadow: 0 10px 18px rgba(68, 32, 12, 0.35);
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.08s ease-out,
+    box-shadow 0.16s ease-out,
+    background-position 0.16s ease-out,
+    opacity 0.16s ease-out;
+  background-size: 135% 135%;
+  background-position: 0% 50%;
+}
+
+/* Hover / focus – keep brown */
+.login-page .login-button:hover,
+.login-page .login-button:focus {
+  background: linear-gradient(135deg, #9b6b4a, #6a3f28);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px rgba(68, 32, 12, 0.4);
+}
+
+.login-page .login-button:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 14px rgba(68, 32, 12, 0.32);
+}
+
+.login-page .login-button:focus-visible {
+  outline: 2px solid rgba(139, 92, 62, 0.8);
+  outline-offset: 3px;
+}
+
+/* Disabled state (only inside login-page) */
+.login-page .login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ============================
+   Links
+   ============================ */
+.login-page .login-link {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #4b5563;
+  margin-top: 0.3rem;
+}
+
+.login-page .link-primary {
+  color: var(--hz-brown);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-page .link-primary:hover {
+  text-decoration: underline;
+}
+
+/* ============================
+   Divider "or continue with"
+   ============================ */
+.login-page .login-divider {
+  position: relative;
+  margin: 1.3rem 0 0.8rem;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--hz-muted);
+}
+
+.login-page .login-divider::before,
+.login-page .login-divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 36%;
+  height: 1px;
+  background-color: var(--hz-border);
+}
+
+.login-page[dir="rtl"] .login-divider::before {
+  right: 12%;
+}
+
+.login-page[dir="rtl"] .login-divider::after {
+  left: 12%;
+}
+
+.login-page .login-divider-text {
+  background-color: var(--hz-card-bg);
+  padding: 0 0.6rem;
+}
+
+/* ============================
+   Google button
+   ============================ */
+.login-page .google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  max-width: 360px;            /* same width as main button */
+  box-sizing: border-box;
+  margin: 0.4rem auto 0;       /* centered horizontally */
+
+  padding: 9px 14px;
+  
+
+  background-color: #ffffff;
+  color: #374151;
+  border: 1px solid var(--hz-border);
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 8px 14px rgba(15, 23, 42, 0.08);
+  transition:
+    background-color 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.06s ease,
+    opacity 0.16s ease;
+}
+
+.login-page .google-button:hover {
+  background-color: #f9fafb;
+  box-shadow: 0 12px 20px rgba(15, 23, 42, 0.12);
+}
+
+.login-page .google-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 6px 12px rgba(15, 23, 42, 0.12);
+}
+
+.login-page .google-button.is-busy,
+.login-page .google-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.login-page .google-icon {
+  width: 18px;
+  height: 18px;
+  color: #ef4444;
+  margin-inline-start: 4px;
+  margin-inline-end: 4px;
+}
+
+/* ============================
+   Footer text
+   ============================ */
+.login-page .footer-text {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 1.2rem;
+}
+
+/* ============================
+   SweetAlert2 theme (Wahret Zmen)
+   ============================ */
+.swal2-styled.swal2-confirm {
+  background-color: var(--hz-brown) !important;
+  color: #fff !important;
+  border: 0 !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  transition: background-color 0.25s ease !important;
+}
+.swal2-styled.swal2-confirm:hover,
+.swal2-styled.swal2-confirm:focus,
+.swal2-styled.swal2-confirm:active {
+  background-color: var(--hz-brown-dark) !important;
+  box-shadow: none !important;
+}
+
+.swal2-styled.swal2-cancel {
+  background-color: #e5e7eb !important;
+  color: #111827 !important;
+  border: 1px solid #d1d5db !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  transition: background-color 0.25s ease !important;
+}
+.swal2-styled.swal2-cancel:hover,
+.swal2-styled.swal2-cancel:focus,
+.swal2-styled.swal2-cancel:active {
+  background-color: #d1d5db !important;
+  box-shadow: none !important;
+}
+
+/* Remove default SweetAlert focus ring */
+.swal2-styled:focus {
+  box-shadow: none !important;
+}
+
+/* ============================
+   Reduced motion
+   ============================ */
+@media (prefers-reduced-motion: reduce) {
+  .login-page .login-button,
+  .login-page .google-button {
+    transition: none;
+  }
+}
+
+/* ============================
+   Animations
+   ============================ */
+@keyframes login-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,361 @@
+/* ============================================================
+   StylesCheckoutPage.css — Checkout page styles
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Root tokens
+------------------------------------------------------------ */
+:root {
+  --wz-radius-2xl: 1rem;
+  --wz-color-brown: #A67C52;
+  --wz-color-brown-dark: #8E683F;
+  --wz-color-ink: #2b2b2b;
+  --wz-color-muted: #6b7280;
+  --wz-color-border: #E5D9C9;
+  --wz-color-border-soft: #F0E7DA;
+  --wz-color-cream: #F8F4EF;
+  --wz-color-cream-soft: #F7F4EE;
+  --wz-focus: #E6D3BF;
+}
+
+/* ------------------------------------------------------------
+   Layout
+------------------------------------------------------------ */
+.screen-CheckoutPage {
+  margin-top: 8%;
+}
+
+/* ------------------------------------------------------------
+   Form controls (mobile-safe)
+------------------------------------------------------------ */
+input,
+select,
+textarea,
+button {
+  font-size: 16px; /* prevent mobile zoom */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  min-height: 44px;           /* comfy tap targets */
+  line-height: 1.25;
+  border-radius: 0.5rem;      /* rounded inputs/buttons */
+}
+
+/* ------------------------------------------------------------
+   Email field helpers
+------------------------------------------------------------ */
+.email-plain {
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: plaintext;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+}
+.email-full-line {
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------
+   Inline checkout (when embedded in SingleProduct)
+------------------------------------------------------------ */
+.wz-inline-checkout {
+  background: var(--wz-color-cream);
+  border: 1px solid var(--wz-color-border);
+  border-radius: 16px;
+}
+.wz-inline-checkout .rounded-2xl { border-color: var(--wz-color-border); }
+.wz-inline-checkout .email-plain { direction: ltr; }
+
+@media (max-width: 640px) {
+  .wz-inline-checkout { padding: 1rem; }
+}
+
+/* Keep inline checkout corners identical to CheckoutPage */
+.sp-page .wz-inline-checkout {
+  border-radius: var(--wz-radius-2xl) !important;
+}
+.sp-page .wz-inline-checkout .rounded-2xl,
+.sp-page .wz-inline-checkout .rounded-xl,
+.sp-page .wz-inline-checkout .rounded-lg {
+  border-radius: var(--wz-radius-2xl) !important;
+}
+
+/* ------------------------------------------------------------
+   Consent row (Terms / Privacy) — premium chip links
+------------------------------------------------------------ */
+
+/* Wrapper to help center the sentence */
+.wz-consent-wrapper { flex: 1; }
+
+/* The inline sentence with two links; always centered */
+.wz-consent-line {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  width: 100%;
+  line-height: 1.7;
+  color: var(--wz-color-ink);
+  text-align: center;
+  white-space: normal;
+}
+
+/* RTL tweak so the sentence direction feels natural */
+[dir="rtl"] .wz-consent-line {
+  direction: rtl;
+}
+
+/* Prevent lonely Arabic “و” or similar parts wrapping badly */
+.wz-consent-and,
+.wz-consent-dot,
+.wz-consent-chunk {
+  white-space: nowrap;
+}
+
+/* Premium chip-like inline links */
+.wz-inline-link {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: var(--wz-color-brown);
+  font-weight: 600;
+  padding: 6px 10px;
+  line-height: 1.2;
+  border-radius: 9999px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: box-shadow 150ms ease, background-color 150ms ease, transform 120ms ease;
+  white-space: nowrap;
+  box-shadow: 0 0 0 1px rgba(166, 124, 82, 0.12) inset;
+}
+.wz-inline-link:hover {
+  background: #F5EFE7;
+  box-shadow: 0 0 0 1px rgba(166, 124, 82, 0.25) inset;
+}
+.wz-inline-link:active { transform: translateY(1px); }
+.wz-inline-link:focus-visible {
+  outline: 2px solid var(--wz-focus);
+  outline-offset: 2px;
+}
+[dir="rtl"] .wz-inline-link { letter-spacing: 0.1px; }
+
+/* Centered checkbox row under the links */
+.wz-checkbox-center {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.wz-checkbox-label {
+  font-size: 0.95rem;
+  color: var(--wz-color-ink);
+  user-select: none;
+}
+
+/* Narrow phones: keep sentence perfectly centered */
+@media (max-width: 420px) {
+  .wz-consent-line { justify-content: center; text-align: center; }
+}
+
+/* ------------------------------------------------------------
+   Modal typography (Terms/Privacy content area)
+------------------------------------------------------------ */
+.prose-wz {
+  font-size: 0.95rem;
+  color: var(--wz-color-ink);
+}
+.prose-wz p { margin: 0 0 0.75rem; }
+.wz-bullets { padding-inline-start: 1.15rem; margin: 0; }
+.wz-bullets li { margin: 0.35rem 0; }
+
+/* ------------------------------------------------------------
+   Modal shell + Premium Close Button
+   (paired with JSX class toggle: .wz-modal--closing)
+------------------------------------------------------------ */
+
+/* Backdrop — default fade-in when mounted */
+.wz-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(17, 24, 39, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 9999;              /* ⬆ above navbar & other fixed elements */
+  padding: 1rem;
+  animation: wzBackdropIn 200ms ease both;
+}
+
+/* If the panel is closing, softly fade the backdrop out too */
+.wz-modal-backdrop:has(.wz-modal--closing) {
+  animation: wzBackdropOut 200ms ease both;
+}
+
+/* Modal panel */
+.wz-modal {
+  position: relative;          /* create new stacking context */
+  z-index: 10000;              /* ensure panel is above backdrop/nav */
+  width: min(680px, 100%);
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid var(--wz-color-border);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+
+  /* Premium appear animation */
+  animation: wzModalIn 260ms cubic-bezier(.2,.7,.25,1) both;
+}
+
+/* Make sure modal stays comfy on very small screens */
+@media (max-width: 480px) {
+  .wz-modal {
+    width: 100%;
+    max-height: 90vh;
+  }
+}
+
+/* Closing animation state (set by JSX: className includes wz-modal--closing) */
+.wz-modal--closing {
+  animation: wzModalOut 220ms cubic-bezier(.2,.7,.25,1) both;
+}
+
+/* Header */
+.wz-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--wz-color-border-soft);
+}
+
+/* RTL: header content reversed (title on the right, close on the left) */
+[dir="rtl"] .wz-modal-header {
+  flex-direction: row-reverse;
+}
+
+.wz-modal-title {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--wz-color-ink);
+}
+
+/* Premium Close Button */
+.wz-modal-close {
+  appearance: none;
+  border: none;
+  background: linear-gradient(135deg, #f8f4ef, #f0e8dc);
+  border-radius: 50%;
+  height: 38px;
+  width: 38px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: all 0.25s ease;
+  color: #7b5b39;
+}
+.wz-modal-close:hover {
+  background: linear-gradient(135deg, #f4e8d9, #e8dccb);
+  transform: rotate(90deg) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  color: var(--wz-color-brown);
+}
+.wz-modal-close:active {
+  transform: rotate(88deg) scale(0.95);
+  background: linear-gradient(135deg, #eaddcb, #e0d1bc);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+.wz-modal-close:focus-visible {
+  outline: 2px solid var(--wz-focus);
+  outline-offset: 3px;
+}
+.wz-modal-close svg {
+  height: 18px;
+  width: 18px;
+  stroke-width: 2.5;
+  transition: stroke 0.2s ease;
+}
+.wz-modal-close:hover svg { stroke: var(--wz-color-brown); }
+
+/* Body + Footer */
+.wz-modal-body {
+  padding: 18px;
+  overflow: auto;
+}
+.wz-modal-footer {
+  padding: 14px 18px 18px;
+  border-top: 1px solid var(--wz-color-border-soft);
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* RTL: footer buttons aligned left (visually nicer in RTL) */
+[dir="rtl"] .wz-modal-footer {
+  justify-content: flex-start;
+}
+
+.wz-btn {
+  appearance: none;
+  background: var(--wz-color-brown);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, transform 120ms ease;
+}
+.wz-btn:hover { background: var(--wz-color-brown-dark); }
+.wz-btn:active { transform: translateY(1px); }
+.wz-btn:focus-visible { outline: 2px solid var(--wz-focus); outline-offset: 2px; }
+
+/* ------------------------------------------------------------
+   Page-level micro animation (cards on first paint)
+------------------------------------------------------------ */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 300ms ease-out both; }
+.animate-fade-in.delay-100 { animation-delay: 100ms; }
+
+/* ------------------------------------------------------------
+   Modal animations (backdrop + panel)
+------------------------------------------------------------ */
+@keyframes wzBackdropIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes wzBackdropOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes wzModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes wzModalOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+}

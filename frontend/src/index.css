@@ -1,0 +1,183 @@
+/* =========================================================
+   GOOGLE FONTS — Premium Arabic Brand Fonts
+   - Body / descriptions: Cairo
+   - Titles / headings:   El Messiri
+========================================================= */
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=El+Messiri:wght@400;500;600;700&display=swap");
+
+
+/* =========================================================
+   🧪 Tailwind Layers (must stay at the top after @import)
+========================================================= */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* =========================================================
+   🎨 Design Tokens (1st set)
+   (Some values will be overridden below)
+========================================================= */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 47.4% 11.2%;
+  --primary: 35 80% 52%;
+  --primary-foreground: 0 0% 100%;
+  --primary-glow: 35 80% 55%;
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+  --ring: 215 20.2% 65.1%;
+  --input: 214.3 31.8% 91.4%;
+  --border: 214.3 31.8% 91.4%;
+
+  /* Secondary font (Arabic-friendly) */
+  --font-secondary: "Cairo", "Inter", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+    "Segoe UI Emoji";
+}
+
+
+/* =========================================================
+   🎞️ Motion (Keyframes + Helpers)
+========================================================= */
+@keyframes iconBounceFast {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  35% {
+    transform: translateY(-8px) scale(1.03);
+  }
+  70% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.icon-bounce {
+  animation: iconBounceFast 1.1s ease-in-out infinite;
+  will-change: transform;
+}
+
+.icon-delay {
+  animation-delay: var(--d, 0ms);
+}
+
+
+/* =========================================================
+   🎨 Design Tokens (2nd set overrides some above)
+   (RGB triplets used via rgb(var(--token)))
+========================================================= */
+:root {
+  --background: 248 246 242;             /* parchment */
+  --foreground: 33 24 18;                /* deep brown */
+  --primary: 162 100 63;                 /* brand */
+  --primary-foreground: 255 255 255;     /* white */
+  --secondary: 216 168 101;              /* warm gold */
+  --secondary-foreground: 33 24 18;      /* dark text on gold */
+  --muted-foreground: 110 86 66;         /* softer brown */
+}
+
+/* Optional dark theme overrides */
+.dark {
+  --background: 18 14 10;
+  --foreground: 247 243 236;
+  --primary: 216 168 101;
+  --primary-foreground: 33 24 18;
+  --secondary: 162 100 63;
+  --secondary-foreground: 255 255 255;
+  --muted-foreground: 201 177 150;
+}
+
+
+/* =========================================================
+   📐 Base Element Styling (Tailwind base layer)
+========================================================= */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Explicit dir for LTR if needed */
+  body[dir="ltr"] {
+    direction: ltr;
+  }
+
+  /* BODY TEXT / DESCRIPTIONS = CAIRO */
+  body,
+  .font-body {
+    font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+      Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji",
+      sans-serif;
+    background-color: rgb(var(--background));
+    color: rgb(var(--foreground));
+    min-height: 100vh;
+  }
+
+  /* TITLES / HEADINGS = EL MESSIRI (with Cairo fallback) */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-heading {
+    font-family: "El Messiri", "Cairo", ui-sans-serif, system-ui, -apple-system,
+      "Segoe UI", Roboto, Arial, serif;
+  }
+}
+
+
+/* =========================================================
+   🧩 Components (safe @apply)
+========================================================= */
+@layer components {
+  /* Shared large button */
+  .btn-lg {
+    @apply inline-flex items-center justify-center h-12 px-6 rounded-xl
+      font-semibold tracking-wide transition-colors duration-200
+      focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  /* Orange gradient button (Explore Collection) */
+  .btn-primary-gradient {
+    background-image: linear-gradient(135deg, #c9853f 0%, #dca35b 100%);
+    @apply text-white shadow-md focus:ring-[#e9d4b8]/50 ring-offset-transparent
+      transition-all duration-300 transform;
+  }
+
+  .btn-primary-gradient:hover {
+    background-image: linear-gradient(135deg, #dca35b 0%, #e6b97a 100%);
+    @apply scale-105 shadow-lg;
+  }
+
+  /* White outline button (Learn Our Story) */
+  .btn-outline-light {
+    @apply bg-white/90 text-[#8b5c3e] border-2 border-[#cfa255] shadow-sm;
+  }
+
+  .btn-outline-light:hover {
+    @apply bg-[#cfa255] text-white;
+  }
+}
+
+
+/* =========================================================
+   ↔️ RTL / LTR Support (global)
+========================================================= */
+body[dir="rtl"] {
+  direction: rtl;
+}
+
+body[dir="ltr"] {
+  direction: ltr;
+}
+
+[dir="rtl"] .text-start {
+  text-align: right;
+}
+[dir="rtl"] .text-end {
+  text-align: left;
+}

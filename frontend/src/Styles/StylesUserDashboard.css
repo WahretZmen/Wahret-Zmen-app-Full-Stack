@@ -1,0 +1,86 @@
+/* --- User Dashboard responsive layout (scoped & safe-area) --- */
+
+/* Safe-area + navbar height */
+:root {
+  --navbar-h: 64px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Page background wrapper */
+.UserDashboard-screen {
+  min-height: 100vh;
+  background: #F8F1E9;
+  padding-top: calc(var(--navbar-h) + var(--safe-top));
+  padding-left: calc(16px + var(--safe-left));
+  padding-right: calc(16px + var(--safe-right));
+  padding-bottom: calc(24px + var(--safe-bottom));
+}
+
+/* Inner container spacing */
+.screen-User-Dashboard {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+/* ------ Phones (≤ 480px) ------ */
+@media (max-width: 480px) {
+  :root { --navbar-h: 56px; } /* many Android toolbars ~56px */
+
+  .UserDashboard-screen {
+    padding-left: calc(12px + var(--safe-left));
+    padding-right: calc(12px + var(--safe-right));
+    padding-bottom: calc(16px + var(--safe-bottom));
+  }
+
+  .screen-User-Dashboard {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding: 12px;
+  }
+}
+
+/* ------ Small tablets / large phones (481–768px) ------ */
+@media (min-width: 481px) and (max-width: 768px) {
+  :root { --navbar-h: 64px; }
+
+  .UserDashboard-screen {
+    padding-left: calc(16px + var(--safe-left));
+    padding-right: calc(16px + var(--safe-right));
+    padding-bottom: calc(20px + var(--safe-bottom));
+  }
+
+  .screen-User-Dashboard {
+    margin-top: 14px;
+    margin-bottom: 14px;
+    padding: 16px;
+  }
+}
+
+/* ------ Tablets and up (≥ 769px) ------ */
+@media (min-width: 769px) {
+  :root { --navbar-h: 72px; }
+
+  .UserDashboard-screen {
+    padding-left: calc(24px + var(--safe-left));
+    padding-right: calc(24px + var(--safe-right));
+    padding-bottom: calc(28px + var(--safe-bottom));
+  }
+
+  .screen-User-Dashboard {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+}
+
+/* ===== Ordered item layout helpers (scoped to dashboard to avoid collisions) ===== */
+.UserDashboard-screen .order-item { background: #fff; }
+.UserDashboard-screen .order-item__img { aspect-ratio: 1 / 1; }
+.UserDashboard-screen .order-item__body { min-width: 0; } /* allow text to wrap */
+.UserDashboard-screen .order-item__body h4 { word-break: break-word; }
+
+/* (optional) max-width wrapper for comfortable reading on wide screens */
+.UserDashboard-screen .ud-container { max-width: 1200px; margin-inline: auto; }

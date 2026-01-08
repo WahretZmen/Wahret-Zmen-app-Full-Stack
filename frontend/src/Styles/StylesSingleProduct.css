@@ -1,0 +1,801 @@
+/* ========================================================================== */
+/* 🧾 StylesSingleProduct.css — Single Product (clean white)                  */
+/* Organization (comments only; rule order preserved to avoid cascade changes)
+   1) Container + intro animation
+   2) Main gallery container + image
+   3) Premium badges (same as ProductCard)
+   4) Gallery arrows
+   5) Legacy badges on main image
+   6) Price row
+   7) Thumbnails (+ small stock counters)
+   8) Quantity stepper (v1: black/white)
+   9) Typography & layout polish
+  10) Add-to-cart button overrides
+  11) Responsive/RTL basics
+  12) Square theme
+  13) Quantity stepper (v2: always-visible icons + RTL corners)
+  14) CTA row
+  15) Quantity stepper (v3: single source of truth + mobile sizing)
+  16) Boutique rating section
+  17) Similar products by embroidery type
+*/
+/* ========================================================================== */
+
+
+/* ========================================================================== */
+ /* 1) Container + intro animation */
+/* ========================================================================== */
+
+/* === Single Product (clean white) === */
+.product-cart {
+  margin-top: 150px !important;
+  margin: 8% auto 5%;
+  padding-bottom: 2rem;
+  animation: fadeInUp 0.8s ease-in-out;
+  background: #ffffff;
+  border: 1px solid #a67c52;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  transition: background 0.5s ease;
+}
+@keyframes fadeInUp {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+
+/* ========================================================================== */
+/* 2) Main gallery container + image */
+/* ========================================================================== */
+
+/* -------- Main gallery container (no inner white padding now) -------- */
+.sp-mainimg {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e5e7eb;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 0;
+  width: 100%;
+  max-height: 420px;
+  min-height: 320px;
+}
+.sp-mainimg img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+
+/* ========================================================================== */
+/* 3) Premium badges (same palette & positions as ProductCard) */
+/* ========================================================================== */
+
+.sp-mainimg { position: relative; }
+
+.sp-mainimg .product-badge {
+  position: absolute;
+  z-index: 30;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+  backdrop-filter: saturate(120%) blur(2px);
+  border: 1px solid rgba(255,255,255,.35);
+  user-select: none;
+}
+
+.sp-mainimg .badge-top-left  { top: 10px; left: 10px; }
+.sp-mainimg .badge-top-right { top: 10px; right: 10px; }
+
+/* RTL flip */
+html[dir="rtl"] .sp-mainimg .badge-top-left  { left: auto; right: 10px; }
+html[dir="rtl"] .sp-mainimg .badge-top-right { right: auto; left: 10px; }
+
+/* Colors */
+.sp-mainimg .trending-badge            { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+.sp-mainimg .stock-badge.in-stock      { background: linear-gradient(135deg, #16a34a, #15803d); }
+.sp-mainimg .stock-badge.out-of-stock  { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+
+@media (min-width: 768px) {
+  .sp-mainimg .product-badge { font-size: 13px; padding: 7px 12px; }
+}
+
+
+/* ========================================================================== */
+/* 4) Gallery arrows */
+/* ========================================================================== */
+
+.sp-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.9);
+  color: #333;
+  font-size: 1.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: all .3s ease;
+}
+.sp-arrow:hover {
+  background: #000;
+  color: #fff;
+  transform: translateY(-50%) scale(1.1);
+}
+.sp-arrow-left { left: 12px; }
+.sp-arrow-right { right: 12px; }
+
+
+/* ========================================================================== */
+/* 5) Legacy badges on main image */
+/* ========================================================================== */
+
+.sp-badge {
+  position: absolute;
+  z-index: 30;
+  top: 10px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  border-radius: 0;
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+}
+.sp-badge--trend { left: 10px; background: #ef4444; }
+.sp-badge--stock { right: 10px; background: #000; }
+
+
+/* ========================================================================== */
+/* 6) Price row */
+/* ========================================================================== */
+
+.sp-price-row {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:6px 0 4px;
+}
+.sp-old {
+  text-decoration: line-through;
+  color:#9ca3af;
+  font-weight:600;
+}
+.sp-new {
+  color:#111827;
+  font-weight:800;
+}
+.sp-save {
+  background:#dc2626;
+  color:#fff;
+  font-weight:800;
+  padding:6px 10px;
+  border-radius:6px;
+  font-size:13px;
+}
+.sp-off  {
+  background:#111;
+  color:#fff;
+  font-weight:800;
+  padding:6px 8px;
+  font-size:12px;
+  border-radius:4px;
+}
+
+
+/* ========================================================================== */
+/* 7) Thumbnails (+ small stock counters) */
+/* ========================================================================== */
+
+.thumb-rail { gap: 8px !important; }
+.sp-thumbs {
+  display:flex;
+  gap:8px;
+  margin-top:8px;
+  flex-wrap:wrap;
+}
+.sp-thumb {
+  border:1px solid #e5e7eb !important;
+  border-radius:0 !important;
+  background:#fff;
+}
+.sp-thumb.is-active {
+  outline:2px solid #111827;
+  outline-offset:2px;
+}
+
+.sp-thumb-count{
+  position:absolute;
+  top: 4px;
+  right: 4px;
+  background:#000;
+  color:#fff;
+  font-weight:800;
+  font-size:11px;
+  padding: 2px 6px;
+  border:1px solid #fff;
+  border-radius: 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+
+
+/* ========================================================================== */
+/* 8) Quantity stepper (v1: black/white) */
+/* ========================================================================== */
+
+.sp-qty{
+  display:inline-flex;
+  align-items:center;
+  height: 40px;
+  border: 1px solid #111;
+  background:#fff;
+}
+.sp-qty > button{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  border:none;
+  background:#111;
+  color:#fff;
+  font-size:20px;
+  line-height:1;
+  cursor:pointer;
+  transition:opacity .2s ease;
+}
+.sp-qty > button:hover { opacity:.9; }
+.sp-qty > button:disabled { opacity:.5; cursor:not-allowed; }
+.sp-qty input{
+  width:64px;
+  height:40px;
+  text-align:center;
+  font-weight:700;
+  outline:none;
+  border: none !important;
+  background:#fff;
+  color:#111;
+  border-inline: 1px solid #111 !important;
+}
+
+
+/* ========================================================================== */
+/* 9) Typography & layout polish */
+/* ========================================================================== */
+
+.sp-title,
+.single-product-title {
+  color:#1f2937 !important;
+  font-weight:800 !important;
+  letter-spacing:-.015em;
+  line-height:1.2;
+  margin:6px 0 18px !important;
+  /* Heading font (El Messiri) */
+  font-family: "El Messiri", "Cairo", ui-sans-serif, system-ui, -apple-system,
+               "Segoe UI", Roboto, Arial, serif;
+}
+
+.sp-desc {
+  color:#374151 !important;
+  font-size:16px;
+  line-height:1.9;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+  hyphens:auto;
+  /* Body font (Cairo) */
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+
+.sp-right .text-base {
+  color:#6b7280 !important;
+  font-size:14px;
+  line-height:1.6;
+  /* Body font */
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+.sp-right strong {
+  color:#111827;
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+
+.sp-card > * { min-width:0; }
+.sp-right {
+  min-width:0;
+  padding-inline: clamp(8px, 2vw, 16px);
+}
+
+
+/* ========================================================================== */
+/* 10) Add-to-cart button overrides */
+/* ========================================================================== */
+
+.sp-add {
+  background: #000 !important;
+  color: #fff !important;
+}
+.sp-add:hover {
+  background: #111 !important;
+}
+
+
+/* ========================================================================== */
+/* 11) Responsive/RTL basics */
+/* ========================================================================== */
+
+@media (min-width: 768px){
+  .sp-thumbs { display:none !important; }
+}
+
+[dir="rtl"] .sp-media { flex-direction: row-reverse; }
+
+
+/* ========================================================================== */
+/* 12) Square theme */
+/* ========================================================================== */
+
+.sp-square,
+.sp-square * { border-radius: 0 !important; }
+.sp-square .sp-add,
+.sp-square .add-to-cart-btn {
+  box-shadow: none !important;
+}
+
+
+/* ========================================================================== */
+/* 13) Quantity stepper (v2): Always-visible + / – icons */
+/* ========================================================================== */
+
+.sp-qty {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid #e6e1d8;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.sp-qty button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  width: 48px;
+  height: 48px;
+  background: #111;
+  border: 0;
+  cursor: pointer;
+  color: transparent !important;
+  font-size: 0;
+  line-height: 1;
+  transition: background .15s, transform .05s, opacity .15s;
+}
+.sp-qty button:hover { background: #000; }
+.sp-qty button:active { transform: translateY(1px); }
+.sp-qty button[disabled] {
+  background: #c7c7c7;
+  cursor: not-allowed;
+  opacity: .75;
+}
+
+.sp-qty button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font: 800 22px/1 system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+}
+
+.sp-qty button:first-child::before { content: "–"; }
+.sp-qty button:last-child::before  { content: "+"; }
+
+.sp-qty input {
+  width: 72px;
+  height: 48px;
+  text-align: center;
+  border: 0;
+  outline: none;
+  font-weight: 800;
+  font-size: 16px;
+  color: #2b2b2b;
+  background: #fff;
+}
+
+
+/* ========================================================================== */
+/* 14) CTA row */
+/* ========================================================================== */
+
+.sp-cta-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+
+/* ========================================================================== */
+/* 15) Quantity stepper (v3): single source of truth + mobile sizing */
+/* ========================================================================== */
+
+.sp-qty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  background: #fff;
+  border: 1px solid #111;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sp-qty > button {
+  min-width: 44px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  background: #111;
+  color: #fff;
+  border: 0;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity .15s ease, transform .05s ease;
+}
+.sp-qty > button:hover { opacity: .92; }
+.sp-qty > button:active { transform: translateY(1px); }
+.sp-qty > button:disabled { opacity: .5; cursor: not-allowed; }
+
+.sp-qty input {
+  width: 68px;
+  height: 44px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
+  color: #111;
+  background: #fff;
+  border: 0;
+  outline: none;
+  border-left: 1px solid #111;
+  border-right: 1px solid #111;
+}
+
+@media (max-width: 768px) {
+  .sp-qty > button {
+    min-width: 44px;
+    width: 44px;
+    height: 44px;
+  }
+  .sp-qty input {
+    width: 64px;
+    height: 44px;
+    font-size: 15px;
+  }
+}
+
+.sp-qty > button:first-child {
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+.sp-qty > button:last-child {
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+[dir="rtl"] .sp-qty > button:first-child {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+[dir="rtl"] .sp-qty > button:last-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+}
+
+.sp-qty button:focus-visible,
+.sp-qty input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 5px rgba(17,17,17,.6);
+}
+
+
+/* ============================ */
+/* Email field visibility */
+/* ============================ */
+
+.email-plain{
+  direction: ltr;
+  unicode-bidi: plaintext;
+  color: #111 !important;
+  -webkit-text-fill-color: #111 !important;
+  background: #f9fafb !important;
+  font-weight: 600;
+  font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,
+               "Liberation Mono","Courier New",monospace;
+  border-radius: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.email-full-line{
+  word-break: break-all;
+  direction: ltr;
+}
+@media (max-width: 640px){
+  .email-plain{ font-size: 16px; }
+}
+input.email-plain:-webkit-autofill,
+input.email-plain:-webkit-autofill:read-only {
+  -webkit-text-fill-color: #111 !important;
+  caret-color: transparent;
+  transition: background-color 9999s ease-out;
+}
+input.email-plain[readonly] {
+  opacity: 1 !important;
+}
+
+
+/* ========================================================================== */
+/* 16) Boutique premium rating section */
+/* ========================================================================== */
+
+.wz-premium-rating {
+  margin-top: 3rem;
+  padding: 2rem 1.5rem 2.5rem;
+  border-radius: 1.25rem;
+  border: 1px solid #e5d9c9;
+  background: linear-gradient(to bottom, #fdfaf5, #f8f4ef);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+}
+
+.wz-premium-title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 0.75rem;
+  /* Heading font */
+  font-family: "El Messiri", "Cairo", ui-sans-serif, system-ui, -apple-system,
+               "Segoe UI", Roboto, Arial, serif;
+}
+.wz-premium-title span {
+  color: #a67c52;
+}
+
+.wz-premium-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1.4fr 1.5fr;
+  gap: 1.75rem;
+}
+@media (max-width: 1024px) {
+  .wz-premium-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wz-premium-overall {
+  text-align: center;
+  background: #111827;
+  color: #f9fafb;
+  padding: 1.4rem 1rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+.wz-premium-score {
+  font-size: 2.6rem;
+  font-weight: 900;
+  line-height: 1;
+  font-family: "El Messiri", "Cairo", ui-sans-serif, system-ui, -apple-system,
+               "Segoe UI", Roboto, Arial, serif;
+}
+.wz-premium-star {
+  font-size: 1.4rem;
+  margin-top: 0.25rem;
+  color: #fbbf24;
+}
+.wz-premium-label {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+.wz-premium-sub {
+  margin-top: 0.25rem;
+  font-size: 0.8rem;
+  opacity: 0.8;
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+
+.wz-premium-distribution {
+  padding: 1rem 1.25rem;
+  border-radius: 1.1rem;
+  background: #ffffff;
+  border: 1px solid #ece3d5;
+}
+.wz-premium-subtitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 0.75rem;
+  font-family: "El Messiri", "Cairo", ui-sans-serif, system-ui, -apple-system,
+               "Segoe UI", Roboto, Arial, serif;
+}
+
+.wz-premium-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.45rem;
+}
+.wz-premium-row-label {
+  font-size: 0.8rem;
+  color: #4b5563;
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+.wz-premium-row-bar {
+  position: relative;
+  height: 7px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+.wz-premium-row-fill {
+  --wz-bar: 0%;
+  position: absolute;
+  inset: 0;
+  width: var(--wz-bar);
+  max-width: 100%;
+  background: linear-gradient(90deg,#f59e0b,#eab308);
+  border-radius: inherit;
+}
+.wz-premium-row-percent {
+  font-size: 0.8rem;
+  color: #4b5563;
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+
+.wz-premium-footnote {
+  margin-top: 0.6rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+
+.wz-premium-quality {
+  padding: 1rem 1.25rem;
+  border-radius: 1.1rem;
+  background: #ffffff;
+  border: 1px solid #ece3d5;
+}
+.wz-premium-quality-row {
+  display: grid;
+  grid-template-columns: 1.8fr 2.4fr auto;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.wz-premium-quality-label {
+  font-size: 0.8rem;
+  color: #374151;
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+.wz-premium-quality-label span {
+  display: block;
+  font-size: 0.72rem;
+  color: #9ca3af;
+}
+.wz-premium-quality-track {
+  position: relative;
+  height: 7px;
+  border-radius: 999px;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+.wz-premium-quality-fill {
+  --wz-bar: 0%;
+  position: absolute;
+  inset: 0;
+  width: var(--wz-bar);
+  max-width: 100%;
+  background: linear-gradient(90deg,#16a34a,#22c55e);
+  border-radius: inherit;
+}
+.wz-premium-quality-percent {
+  font-size: 0.8rem;
+  color: #374151;
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+
+
+/* ========================================================================== */
+/* 17) Similar products by embroidery type                                   */
+/* ========================================================================== */
+
+/* Section wrapper under the product card */
+.product-cart section.mt-12.pt-8.border-t.border-gray-200 {
+  width: 100%;
+  margin-top: 3rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Title & subtitle */
+.product-cart section.mt-12.pt-8.border-t.border-gray-200 h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+  color: #1f2937;
+  text-align: center;
+  font-family: "El Messiri", "Cairo", ui-sans-serif, system-ui, -apple-system,
+               "Segoe UI", Roboto, Arial, serif;
+}
+.product-cart section.mt-12.pt-8.border-t.border-gray-200 p {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #4b5563;
+  font-family: "Cairo", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+               Roboto, "Helvetica Neue", Arial, "Apple Color Emoji",
+               "Segoe UI Emoji", sans-serif;
+}
+
+/* Grid spacing */
+.product-cart section.mt-12.pt-8.border-t.border-gray-200 .grid {
+  margin-top: 1.75rem;
+}
+
+/* Card fallback polish (in case Tailwind doesn’t apply for some reason) */
+.product-cart section.mt-12.pt-8.border-t.border-gray-200 a {
+  text-decoration: none;
+}
+
+/* Make sure the section doesn’t stick to the boutique rating block */
+.wz-premium-rating {
+  margin-top: 2.5rem;
+}

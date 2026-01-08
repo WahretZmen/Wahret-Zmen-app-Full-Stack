@@ -1,0 +1,533 @@
+/* ============================================================================
+   StylesBanner.css
+   - Secondary banner carousel: image, text, gold title, CTA, arrows, dots
+============================================================================= */
+
+/* Basic color variables for gold button and accents */
+:root {
+  --btn-gold-1: #caa156;
+  --btn-gold-2: #e7c879;
+  --btn-gold-3: #fae39a;
+  --btn-gold-4: #b8863b;
+  --btn-text:   #23180b;
+  --btn-glow:   rgba(212,175,55,.45);
+  --btn-shadow: rgba(193,138,59,.26);
+}
+
+/* Main banner layout */
+.banner-container-enhanced {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5%;
+  padding: 4rem 1rem;
+  background: transparent;
+  text-align: center;
+  gap: 2rem;
+  box-shadow: none;
+}
+.link-wrapper { text-decoration: none; color: inherit; }
+
+@media (min-width: 768px) {
+  .banner-container-enhanced {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 6rem 3rem;
+    text-align: left;
+  }
+}
+
+/* Image wrapper */
+.banner-image-wrapper {
+  flex: 1;
+  max-width: 560px;
+  width: min(92vw, 560px);
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  line-height: 0; /* remove inline gap */
+}
+
+/* Image card */
+.wz-media {
+  width: 100%;
+  aspect-ratio: 1;            /* Banner.jsx can override */
+  border-radius: 12px;
+  overflow: hidden;
+  overflow: clip;
+  background: transparent;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
+/* Banner image */
+.banner-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  transition: transform .6s ease, box-shadow .6s ease, filter .6s ease;
+  will-change: transform, box-shadow, filter;
+  backface-visibility: hidden;
+}
+
+/* Hover effect on image */
+.wz-media:hover .banner-img {
+  transform: scale(1.045);
+  filter: brightness(1.04) contrast(1.02);
+  box-shadow:
+    0 12px 28px rgba(0,0,0,.25),
+    0 0 22px rgba(212,175,55,.45),
+    0 0 48px rgba(212,175,55,.25);
+  cursor: pointer;
+}
+
+/* Text area */
+.banner-text-wrapper {
+  flex: 1;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem;
+  color: #3b2404;
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .banner-text-wrapper {
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* Banner title */
+.banner-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  line-height: 1.1;
+  text-align: center;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: visible;
+  color: #8B5C3E; /* fallback */
+}
+
+/* Gold gradient title */
+.wz-royal-title {
+  display: inline-block;
+  margin-inline: auto;
+  font-weight: 800;
+  font-size: clamp(1.6rem, 4.5vw, 3rem);
+  background: linear-gradient(92deg,#8a5d3b 0%,#d4af37 28%,#fff4c6 52%,#d4af37 74%,#8a5d3b 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  animation:
+    wzGoldRise 900ms cubic-bezier(.2,.8,.2,1) forwards,
+    wzGoldDrift 6s linear 1.2s infinite;
+}
+
+/* Small underline under title */
+.wz-royal-title::after {
+  content: "";
+  display: block;
+  height: 6px;
+  width: 0;
+  margin: .65rem auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg,#c9853f,#e4c27f,#c9853f);
+  animation: wzGoldUnderline 3.8s ease-in-out 200ms infinite;
+}
+
+/* Sparkle overlay */
+.wz-royal-title::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(6px 6px at 15% 60%, rgba(255,255,255,.55) 0%, transparent 70%),
+    radial-gradient(5px 5px at 45% 35%, rgba(255,255,255,.45) 0%, transparent 70%),
+    radial-gradient(4px 4px at 72% 68%, rgba(255,255,255,.5) 0%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+  pointer-events: none;
+  animation: wzSparkle 3.6s ease-in-out 1.4s infinite;
+}
+
+@keyframes wzGoldRise {
+  0%   { opacity: 0; transform: translateY(10px) scale(.98); filter: blur(2px); letter-spacing: .02em; }
+  35%  { opacity: 1; transform: translateY(0)   scale(1);    filter: blur(0);   letter-spacing: .014em; }
+  100% { letter-spacing: .006em; }
+}
+@keyframes wzGoldDrift { 0% { background-position: 0% 50% } 100% { background-position: 200% 50% } }
+@keyframes wzGoldUnderline {
+  0%,100% { width: 0;  box-shadow: 0 0 0 rgba(212,175,55,0) }
+  25%,75% { width: 64%; box-shadow: 0 6px 18px rgba(212,175,55,.25) }
+}
+@keyframes wzSparkle {
+  0%,100% { opacity: 0;  transform: translateX(-4%) }
+  40%     { opacity: .55; transform: translateX(4%)  }
+  60%     { opacity: .35; transform: translateX(6%)  }
+}
+
+.wz-royal-title:hover { transform: translateY(-2px) scale(1.02); }
+
+/* Description text */
+.banner-description {
+  font-size: 1.2rem;
+  color: #222 !important;
+  font-weight: 500;
+  line-height: 1.8;
+  max-width: 100%;
+  text-align: center;
+  margin: 0 auto 1.5rem;
+}
+
+/* Gold CTA button */
+.btn-premium {
+  all: unset;
+  -webkit-appearance: none;
+          appearance: none;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .55rem;
+
+  padding: 1rem 2.2rem;
+  border-radius: 14px;
+  cursor: pointer;
+  user-select: none;
+
+  font: 800 1rem/1.05 "Cairo", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  letter-spacing: .035em;
+  color: var(--btn-text);
+
+  background-image: linear-gradient(135deg,
+    var(--btn-gold-1) 0%,
+    var(--btn-gold-2) 35%,
+    var(--btn-gold-3) 65%,
+    var(--btn-gold-4) 100%) !important;
+  background-size: 200% 100% !important;
+  background-color: transparent !important;
+
+  box-shadow: 0 10px 22px var(--btn-shadow),
+              inset 0 1px 0 rgba(255,255,255,.55) !important;
+
+  transition:
+    transform .28s ease,
+    box-shadow .28s ease,
+    background-position .6s ease,
+    filter .28s ease;
+
+  animation: btnIdleShift 7s linear infinite;
+}
+
+@keyframes btnIdleShift { 0% { background-position: 0% 0 } 100% { background-position: 100% 0 } }
+
+/* Glossy sweep on hover */
+.btn-premium::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 0%, rgba(255,255,255,.35) 50%, transparent 100%);
+  transform: translateX(-120%) skewX(-18deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease, transform .9s ease;
+}
+
+.btn-premium:hover {
+  transform: translateY(-2px) scale(1.03);
+  background-position: 100% 0 !important;
+  background-image: linear-gradient(135deg,
+    var(--btn-gold-1) 0%,
+    var(--btn-gold-2) 35%,
+    var(--btn-gold-3) 65%,
+    var(--btn-gold-4) 100%) !important;
+  background-color: transparent !important;
+  filter: none !important;
+  box-shadow: 0 18px 44px rgba(193,138,59,.38),
+              0 0 26px var(--btn-glow),
+              0 1px 0 rgba(255,255,255,.70) !important;
+}
+.btn-premium:hover::after { opacity: .9; transform: translateX(120%) skewX(-18deg); }
+
+.btn-premium:active {
+  transform: translateY(0) scale(.985);
+  background-image: linear-gradient(135deg,
+    var(--btn-gold-1) 0%,
+    var(--btn-gold-2) 35%,
+    var(--btn-gold-3) 65%,
+    var(--btn-gold-4) 100%) !important;
+  background-color: transparent !important;
+  filter: none !important;
+  box-shadow: 0 8px 18px rgba(193,138,59,.28),
+              inset 0 1px 0 rgba(255,255,255,.55) !important;
+}
+
+.btn-premium:focus-visible {
+  outline: none;
+  background-image: linear-gradient(135deg,
+    var(--btn-gold-1) 0%,
+    var(--btn-gold-2) 35%,
+    var(--btn-gold-3) 65%,
+    var(--btn-gold-4) 100%) !important;
+  background-color: transparent !important;
+  box-shadow:
+    0 0 0 3px #fff,
+    0 0 0 6px rgba(212,175,55,.55),
+    0 18px 44px rgba(193,138,59,.38) !important;
+}
+
+/* Safety against global button:hover */
+button.btn-premium:hover { background: #0000 !important; }
+
+/* Remove extra pseudo-elements from frameworks */
+.btn-premium::before { content: none !important; }
+
+/* Carousel wrapper */
+.wz-carousel {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  outline: none;
+}
+
+/* Progress bar */
+.wz-progress {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: rgba(0,0,0,0.06);
+  z-index: 5;
+  margin-top: 8%;
+}
+.wz-progress__bar {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#c79a4a,#e6c27a,#f3d58c,#b8863b);
+}
+
+/* Slides track */
+.wz-track { position: relative; width: 100%; height: 100%; }
+.wz-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 700ms ease, transform 700ms ease;
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+.wz-slide.is-active {
+  position: relative;
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* Inner slide layout */
+.wz-slide__inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  text-decoration: none;
+  color: inherit;
+}
+@media (min-width: 768px) {
+  .wz-slide__inner { flex-direction: row; align-items: center; justify-content: space-between; }
+}
+
+/* Ken Burns effect for active image */
+.wz-kenburns {
+  animation: wzKenBurns 12s ease-in-out both;
+  transform-origin: center center;
+}
+@keyframes wzKenBurns {
+  0%   { transform: scale(1)    translateZ(0); filter: brightness(0.98) contrast(1); }
+  50%  { transform: scale(1.06);                 filter: brightness(1)    contrast(1.02); }
+  100% { transform: scale(1.10);                 filter: brightness(1.02) contrast(1.03); }
+}
+
+/* Controls area */
+.wz-controls {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* Reset any framework arrow backgrounds */
+.wz-arrow,
+.wz-arrow::before,
+.wz-arrow::after { background-image: none !important; box-shadow: none; }
+.wz-arrow::before,
+.wz-arrow::after { content: none !important; }
+
+/* Arrow buttons */
+.wz-arrow {
+  pointer-events: auto;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid rgba(212,175,55,0.25);
+  background-color: #ffffff !important;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: transform .25s ease, background-color .25s ease, box-shadow .25s ease, border-color .25s ease;
+  z-index: 10;
+}
+.wz-arrow:hover {
+  transform: translateY(-50%) scale(1.08);
+  background-color: #fffdf6;
+  border-color: rgba(212,175,55,0.6);
+  box-shadow: 0 12px 26px rgba(212,175,55,0.3);
+}
+.wz-arrow--prev { left: 14px; }
+.wz-arrow--next { right: 14px; }
+
+/* Chevron shape */
+.wz-arrow > span {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 12px; height: 12px;
+  border-top: 3px solid #b27d39;
+  border-right: 3px solid #b27d39;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+.wz-arrow--prev > span { transform: translate(-50%, -50%) rotate(-135deg); }
+.wz-arrow--next > span { transform: translate(-50%, -50%) rotate(45deg); }
+
+/* RTL arrow directions */
+html[dir="rtl"] .wz-arrow--prev > span { transform: translate(-50%, -50%) rotate(45deg); }
+html[dir="rtl"] .wz-arrow--next > span { transform: translate(-50%, -50%) rotate(-135deg); }
+
+/* Pause/play button */
+.wz-pause {
+  all: unset;
+  pointer-events: auto;
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #ffffff;
+  border: 2px solid rgba(212,175,55,.25);
+  box-shadow: 0 8px 18px rgba(0,0,0,.16);
+  cursor: pointer;
+  transition: transform .25s ease, background-color .25s ease, box-shadow .25s ease, border-color .25s ease;
+  --icon-color: #b27d39;
+}
+.wz-pause:hover {
+  transform: translateY(-2px) scale(1.04);
+  background: #fffdf6;
+  border-color: rgba(212,175,55,.55);
+  box-shadow: 0 14px 26px rgba(212,175,55,.28);
+}
+.wz-pause:active { transform: translateY(0) scale(.98); }
+.wz-pause:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px #fff,
+    0 0 0 6px rgba(212,175,55,.55),
+    0 14px 26px rgba(212,175,55,.28);
+}
+
+/* Pause icon (two bars) */
+.wz-pause__icon {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 18px; height: 18px;
+  transform: translate(-50%, -50%);
+}
+.wz-pause__icon.is-pause {
+  background-color: var(--icon-color);
+  -webkit-mask: linear-gradient(#000 0 0) left, linear-gradient(#000 0 0) right;
+  -webkit-mask-size: 5px 18px;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: left center, right center;
+          mask: linear-gradient(#000 0 0) left, linear-gradient(#000 0 0) right;
+          mask-size: 5px 18px;
+          mask-repeat: no-repeat;
+          mask-position: left center, right center;
+}
+
+/* Play icon (triangle) */
+.wz-pause__icon.is-play {
+  width: 0; height: 0;
+  border-left: 18px solid var(--icon-color);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+}
+.wz-pause:hover .wz-pause__icon.is-pause { background-color: #d4af37; }
+.wz-pause:hover .wz-pause__icon.is-play  { border-left-color: #d4af37; }
+
+/* Dots under carousel */
+.wz-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+  z-index: 6;
+}
+.wz-dot {
+  --size: 12px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 999px;
+  border: 0;
+  background: rgba(0,0,0,0.18);
+  cursor: pointer;
+  position: relative;
+  outline-offset: 2px;
+  transition: transform .2s ease, background .2s ease;
+}
+.wz-dot:hover { transform: scale(1.15); background: rgba(0,0,0,0.28); }
+.wz-dot.is-active { background: #8B5C3E; }
+.wz-dot__ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 999px;
+  border: 2px solid rgba(212,175,55,.45);
+  opacity: 0;
+  transition: opacity .25s ease;
+}
+.wz-dot.is-active .wz-dot__ring { opacity: 1; }
+
+/* Z-index tweaks */
+.wz-royal-title::after { z-index: 1; position: relative; }
+.btn-premium { position: relative; z-index: 1; }
+
+/* Reduced motion: keep things simple */
+@media (prefers-reduced-motion: reduce) {
+  .wz-royal-title,
+  .btn-premium { animation: none !important; }
+
+  .wz-royal-title:hover,
+  .btn-premium:hover { transform: none !important; }
+
+  .wz-royal-title::before { display: none !important; }
+  .wz-kenburns { animation: none !important; }
+  .wz-slide { transition: opacity 250ms ease !important; transform: none !important; }
+}

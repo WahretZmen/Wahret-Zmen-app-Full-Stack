@@ -1,0 +1,132 @@
+/* ===========================================================
+   StylesDashboardLayout.css — Admin Dashboard Layout (RTL)
+   =========================================================== */
+
+/* ---------- App container ---------- */
+.dashboard-container {
+  display: flex;           /* row: sidebar + main */
+  min-height: 100vh;
+  background-color: #f7f7f7;
+  direction: rtl;
+}
+
+/* ===========================================================
+   SIDEBAR
+   - Collapsed by default (64px) on desktop
+   - Expands text on hover
+   - Slides in on mobile when `.open` is applied (from the RIGHT)
+   =========================================================== */
+/* ===========================================================
+   MOBILE SIDEBAR (RTL)
+   =========================================================== */
+/* ===========================================================
+   MOBILE SIDEBAR (RTL ONLY)
+   =========================================================== */
+@media (max-width: 767px) {
+
+  /* 🔥 Sidebar mobile mode only */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: -280px;     /* يبدأ خارج الشاشة */
+    width: 280px;      /* نفس العرض مثل الكابتشر */
+    height: 100vh;
+    transition: right 0.35s ease-in-out;
+    z-index: 50;
+  }
+
+  /* عند الفتح */
+  .sidebar.open {
+    right: 0;
+  }
+
+  /* النص يظهر دائمًا في الموبايل */
+  .sidebar-text {
+    display: inline;
+  }
+}
+
+
+
+/* Logo */
+.sidebar-logo img {
+  width: 40px;
+  height: 40px;
+}
+
+/* Vertical nav links */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+/* Link appearance */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px;
+  color: #ccc;
+  transition: background 0.3s, color 0.3s;
+  border-radius: 8px;
+}
+
+/* Label is hidden by default (collapsed state) */
+.sidebar-text {
+  display: none;
+  font-size: 0.85rem;
+}
+
+/* On hover, reveal labels (desktop) */
+.sidebar:hover .sidebar-text {
+  display: inline;
+}
+
+/* Hover highlight */
+.sidebar-link:hover {
+  background-color: #8b5c3e; /* brand brown */
+  color: #fff;
+}
+
+/* ===========================================================
+   MOBILE SIDEBAR (RTL)
+   - Hidden off-canvas by default (to the right)
+   - `.open` brings it into view
+   =========================================================== */
+@media (max-width: 767px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    right: -100%;          /* fully off-screen to the RIGHT */
+    width: 190px;          /* wider on mobile for readable labels */
+    transition: right 0.3s ease-in-out;
+    z-index: 40;
+  }
+
+  .sidebar.open {
+    right: 0;              /* slide in from the right */
+  }
+
+  /* On mobile, always show labels */
+  .sidebar-text {
+    display: inline;
+  }
+}
+
+/* ===========================================================
+   MOBILE MENU BUTTON (RTL)
+   - Fixed trigger to open/close the off-canvas sidebar
+   =========================================================== */
+.mobile-menu-button {
+  position: fixed;
+  top: 10px;
+  right: 10px;            /* RTL: button on the RIGHT */
+  z-index: 100;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #8b5c3e;
+  color: #fff;
+}

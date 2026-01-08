@@ -1,0 +1,51 @@
+/* StylesFooter.css
+   Basic helper styles for footer layout on non-Tailwind elements.
+   The main design is controlled with Tailwind classes in Footer.jsx. */
+
+/* Generic footer container (only used if you add className="footer") */
+.footer {
+  background-color: #222;
+  color: #fff;
+  padding: 20px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Logo text inside a .footer if needed */
+.footer .logo {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Social icons row */
+.footer .social-icons {
+  display: flex;
+  gap: 15px;
+}
+
+/* Simple link row */
+.footer .links {
+  display: flex;
+  gap: 20px;
+}
+
+/* Mobile stack for the generic .footer block */
+@media (max-width: 768px) {
+  .footer {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .footer .links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer .social-icons {
+    justify-content: center;
+    margin-top: 10px;
+  }
+}
